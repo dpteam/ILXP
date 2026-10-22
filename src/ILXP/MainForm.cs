@@ -20,6 +20,7 @@ namespace ILXP
     {
         private LanguageWriter writer;
         private bool suppressHistory;
+        private string searchText = string.Empty;
         private readonly NavigationHistory navigationHistory;
 
         /// <summary>Set by automation (screenshots, tests) to avoid modal startup dialogs.</summary>
@@ -253,6 +254,226 @@ namespace ILXP
                 {
                     Log.Error("Unable to clean the assembly.", ex);
                     MessageBox.Show(this, ex.Message, "Clean assembly", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void OnExpandAll(object sender, EventArgs e)
+        {
+            treeView.ExpandAll();
+        }
+
+        private void OnCollapseAll(object sender, EventArgs e)
+        {
+            treeView.CollapseAll();
+        }
+
+        private void OnFindInTree(object sender, EventArgs e)
+        {
+            searchBox.Focus();
+            searchBox.SelectAll();
+        }
+
+        private void OnSearchBoxTextChanged(object sender, EventArgs e)
+        {
+            searchText = searchBox.Text;
+        }
+
+        private void OnSearchBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                FindNext();
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                searchBox.Text = string.Empty;
+                treeView.Focus();
+            }
+        }
+
+        /// <summary>Selects the next node whose text contains the search text.</summary>
+        private void FindNext()
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return;
+            }
+
+            TreeNode start = treeView.SelectedNode;
+            TreeNode found = FindNextNode(start, searchText, true);
+            if (found == null && start != null)
+            {
+                // Wrap around to the beginning.
+                found = FindNextNode(null, searchText, true);
+            }
+
+            if (found == null)
+            {
+                statusLabel.Text = "Not found: " + searchText;
+                return;
+            }
+
+            found.EnsureVisible();
+            treeView.SelectedNode = found;
+            statusLabel.Text = "Found: " + found.Text;
+        }
+
+        private static TreeNode FindNextNode(TreeNode from, string text, bool afterFrom)
+        {
+            // Depth-first walk with a simple "seen the starting node" flag.
+            bool started = !afterFrom || from == null;
+            return Walk(from == null ? null : from.TreeView.Nodes, text, ref started, from);
+        }
+
+        private static TreeNode Walk(TreeNodeCollection nodes, string text, ref bool started, TreeNode from)
+        {
+            if (nodes == null)
+            {
+                return null;
+            }
+
+            foreach (TreeNode node in nodes)
+            {
+                if (!started)
+                {
+                    if (node == from)
+                    {
+                        started = true;
+                    }
+                }
+                else if (node.Text.IndexOf(text, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                {
+                    return node;
+                }
+
+                TreeNode found = Walk(node.Nodes, text, ref started, from);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+            return null;
+        }
+
+        private void OnOutputMenuOpening(object sender, EventArgs e)
+        {
+            outputMenu.DropDownItems.Clear();
+
+            foreach (OutputDialect dialect in OutputDialect.All)
+            {
+                OutputDialect current = dialect;
+                ToolStripMenuItem item = new ToolStripMenuItem(dialect.DisplayName + "  (" + dialect.Toolchain + ")");
+                item.Checked = IsDialectSelected(current);
+                item.Tag = current;
+                item.Click += delegate
+                {
+                    ApplyDialect(current);
+                };
+                outputMenu.DropDownItems.Add(item);
+            }
+
+            outputMenu.DropDownItems.Add(new ToolStripSeparator());
+            ToolStripMenuItem decompile = new ToolStripMenuItem("Decompile to folder...");
+            decompile.Click += OnDecompileToFolder;
+            outputMenu.DropDownItems.Add(decompile);
+        }
+
+        private bool IsDialectSelected(OutputDialect dialect)
+        {
+            string id = AppSettings.Default.DecompilerTarget;
+            if (string.Equals(id, "auto", StringComparison.OrdinalIgnoreCase))
+            {
+                // "auto" means: whatever the language combo implies.
+                if (dialect == OutputDialect.Il) return writer is IlWriter;
+                if (dialect == OutputDialect.VisualBasic) return writer is VbWriter;
+                if (dialect == OutputDialect.CSharp4) return writer is CSharpWriter;
+                return false;
+            }
+            return string.Equals(dialect.Id, id, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void ApplyDialect(OutputDialect dialect)
+        {
+            if (dialect == null)
+            {
+                return;
+            }
+
+            if (dialect.IsCSharp)
+            {
+                languageCombo.SelectedItem = FindWriterItem(typeof(CSharpWriter));
+            }
+            else if (dialect == OutputDialect.VisualBasic)
+            {
+                languageCombo.SelectedItem = FindWriterItem(typeof(VbWriter));
+            }
+            else
+            {
+                languageCombo.SelectedItem = FindWriterItem(typeof(IlWriter));
+            }
+
+            if (writer != null)
+            {
+                writer.Dialect = dialect;
+            }
+
+            AppSettings.Default.DecompilerTarget = dialect.Id;
+            AppSettings.Default.Save();
+            statusLabel.Text = "Output: " + dialect.DisplayName;
+
+            if (treeView.SelectedNode != null)
+            {
+                DisplayNode(treeView.SelectedNode);
+            }
+        }
+
+        private object FindWriterItem(Type writerType)
+        {
+            foreach (object item in languageCombo.Items)
+            {
+                if (writerType.IsInstanceOfType(item))
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        private void OnDecompileToFolder(object sender, EventArgs e)
+        {
+            TreeNode node = treeView.SelectedNode;
+            while (node != null && node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            AssemblyItem item = node == null ? null : node.Tag as AssemblyItem;
+            if (item == null)
+            {
+                MessageBox.Show(this, "Open an assembly first.", AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = "Select the output folder";
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                try
+                {
+                    int count = Decompiler.ExportTypes(item.Assembly, writer, dialog.SelectedPath);
+                    MessageBox.Show(this, "Wrote " + count + " files to " + dialog.SelectedPath,
+                        AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unable to decompile the assembly.", ex);
+                    MessageBox.Show(this, ex.Message, "Decompile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

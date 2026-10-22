@@ -16,6 +16,13 @@ namespace ILXP
         private ToolStripMenuItem exportIlMenuItem;
         private ToolStripMenuItem assembleIlMenuItem;
         private ToolStripMenuItem cleanAssemblyMenuItem;
+        private ToolStripMenuItem editMenu;
+        private ToolStripMenuItem findMenuItem;
+        private ToolStripMenuItem copyMenuItem;
+        private ToolStripMenuItem outputMenu;
+        private ToolStripMenuItem expandAllMenuItem;
+        private ToolStripMenuItem collapseAllMenuItem;
+        private ToolStripTextBox searchBox;
         private ToolStripMenuItem viewMenu;
         private ToolStripMenuItem refreshMenuItem;
         private ToolStripSeparator viewSeparator;
@@ -61,6 +68,13 @@ namespace ILXP
             this.exportIlMenuItem = new ToolStripMenuItem();
             this.assembleIlMenuItem = new ToolStripMenuItem();
             this.cleanAssemblyMenuItem = new ToolStripMenuItem();
+            this.editMenu = new ToolStripMenuItem();
+            this.findMenuItem = new ToolStripMenuItem();
+            this.copyMenuItem = new ToolStripMenuItem();
+            this.outputMenu = new ToolStripMenuItem();
+            this.expandAllMenuItem = new ToolStripMenuItem();
+            this.collapseAllMenuItem = new ToolStripMenuItem();
+            this.searchBox = new ToolStripTextBox();
             this.viewMenu = new ToolStripMenuItem();
             this.refreshMenuItem = new ToolStripMenuItem();
             this.viewSeparator = new ToolStripSeparator();
@@ -106,7 +120,7 @@ namespace ILXP
             this.SuspendLayout();
 
             // main menu
-            this.mainMenu.Items.AddRange(new ToolStripItem[] { this.fileMenu, this.viewMenu, this.helpMenu });
+            this.mainMenu.Items.AddRange(new ToolStripItem[] { this.fileMenu, this.editMenu, this.viewMenu, this.outputMenu, this.helpMenu });
             this.mainMenu.Location = new Point(0, 0);
             this.mainMenu.Name = "MenuStrip1";
             this.mainMenu.Size = new Size(828, 24);
@@ -168,7 +182,15 @@ namespace ILXP
             this.exitMenuItem.Text = "E&xit";
             this.exitMenuItem.Click += this.OnExit;
 
-            this.viewMenu.DropDownItems.AddRange(new ToolStripItem[] { this.refreshMenuItem, this.viewSeparator, this.backMenuItem, this.forwardMenuItem });
+            this.viewMenu.DropDownItems.AddRange(new ToolStripItem[]
+            {
+                this.refreshMenuItem,
+                this.expandAllMenuItem,
+                this.collapseAllMenuItem,
+                this.viewSeparator,
+                this.backMenuItem,
+                this.forwardMenuItem
+            });
             this.viewMenu.DropDownOpening += this.OnViewMenuOpening;
             this.viewMenu.DropDownClosed += this.OnViewMenuClosed;
             this.viewMenu.Name = "ViewToolStripMenuItem";
@@ -199,8 +221,7 @@ namespace ILXP
             this.forwardMenuItem.Text = "&Forward";
             this.forwardMenuItem.Click += this.OnGoForward;
 
-            this.helpMenu.DropDownItems.AddRange(new ToolStripItem[] { this.aboutMenuItem });
-            this.helpMenu.Name = "HelpToolStripMenuItem";
+            this.helpMenu.DropDownItems.AddRange(new ToolStripItem[] { this.aboutMenuItem });            this.helpMenu.Name = "HelpToolStripMenuItem";
             this.helpMenu.Size = new Size(44, 20);
             this.helpMenu.Text = "&Help";
 
@@ -208,6 +229,47 @@ namespace ILXP
             this.aboutMenuItem.Size = new Size(107, 22);
             this.aboutMenuItem.Text = "&About";
             this.aboutMenuItem.Click += this.OnAbout;
+
+            // edit menu
+            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.findMenuItem, this.copyMenuItem });
+            this.editMenu.Name = "EditToolStripMenuItem";
+            this.editMenu.Size = new Size(39, 20);
+            this.editMenu.Text = "&Edit";
+
+            this.findMenuItem.Name = "MenuItemEditFind";
+            this.findMenuItem.ShortcutKeys = Keys.Control | Keys.F;
+            this.findMenuItem.Size = new Size(160, 22);
+            this.findMenuItem.Text = "&Find in tree";
+            this.findMenuItem.Click += this.OnFindInTree;
+
+            this.copyMenuItem.Name = "MenuItemEditCopy";
+            this.copyMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
+            this.copyMenuItem.Size = new Size(160, 22);
+            this.copyMenuItem.Text = "&Copy name";
+            this.copyMenuItem.Click += this.OnCopyNodeText;
+
+            // output menu
+            this.outputMenu.Name = "OutputToolStripMenuItem";
+            this.outputMenu.Size = new Size(57, 20);
+            this.outputMenu.Text = "&Output";
+            this.outputMenu.DropDownOpening += this.OnOutputMenuOpening;
+
+            this.expandAllMenuItem.Name = "MenuItemViewExpandAll";
+            this.expandAllMenuItem.Size = new Size(180, 22);
+            this.expandAllMenuItem.Text = "&Expand all";
+            this.expandAllMenuItem.Click += this.OnExpandAll;
+
+            this.collapseAllMenuItem.Name = "MenuItemViewCollapseAll";
+            this.collapseAllMenuItem.Size = new Size(180, 22);
+            this.collapseAllMenuItem.Text = "&Collapse all";
+            this.collapseAllMenuItem.Click += this.OnCollapseAll;
+
+            // search box in the toolbar
+            this.searchBox.Name = "ToolStripSearchBox";
+            this.searchBox.Size = new Size(160, 25);
+            this.searchBox.ToolTipText = "Find in tree (Enter for next match)";
+            this.searchBox.KeyDown += this.OnSearchBoxKeyDown;
+            this.searchBox.TextChanged += this.OnSearchBoxTextChanged;
 
             // toolbar
             this.toolBar.Items.AddRange(new ToolStripItem[]
@@ -218,7 +280,8 @@ namespace ILXP
                 this.backButton,
                 this.forwardButton,
                 this.toolbarSeparator2,
-                this.languageCombo
+                this.languageCombo,
+                this.searchBox
             });
             this.toolBar.Location = new Point(0, 24);
             this.toolBar.Name = "ToolStrip1";
