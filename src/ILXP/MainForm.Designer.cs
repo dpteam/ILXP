@@ -21,6 +21,9 @@ namespace ILXP
         private ToolStripMenuItem goToIlMenuItem;
         private ToolStripMenuItem searchIlMenuItem;
         private ToolStripMenuItem copyAsMenuItem;
+        private ToolStripMenuItem healthMenuItem;
+        private ToolStripMenuItem compareMenuItem;
+        private ToolStripMenuItem bundleMenuItem;
         private ToolStripMenuItem findMenuItem;
         private ToolStripMenuItem copyMenuItem;
         private ToolStripMenuItem outputMenu;
@@ -79,6 +82,9 @@ namespace ILXP
             this.goToIlMenuItem = new ToolStripMenuItem();
             this.searchIlMenuItem = new ToolStripMenuItem();
             this.copyAsMenuItem = new ToolStripMenuItem();
+            this.healthMenuItem = new ToolStripMenuItem();
+            this.compareMenuItem = new ToolStripMenuItem();
+            this.bundleMenuItem = new ToolStripMenuItem();
             this.findMenuItem = new ToolStripMenuItem();
             this.copyMenuItem = new ToolStripMenuItem();
             this.outputMenu = new ToolStripMenuItem();
@@ -146,6 +152,8 @@ namespace ILXP
                 this.exportIlMenuItem,
                 this.assembleIlMenuItem,
                 this.cleanAssemblyMenuItem,
+                this.compareMenuItem,
+                this.bundleMenuItem,
                 this.fileSeparator,
                 this.exitMenuItem
             });
@@ -246,7 +254,7 @@ namespace ILXP
             this.aboutMenuItem.Click += this.OnAbout;
 
             // edit menu
-            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.goToIlMenuItem, this.searchIlMenuItem, this.findMenuItem, this.copyMenuItem, this.copyAsMenuItem });
+            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.goToIlMenuItem, this.searchIlMenuItem, this.findMenuItem, this.copyMenuItem, this.copyAsMenuItem, this.healthMenuItem });
             this.editMenu.Name = "EditToolStripMenuItem";
             this.editMenu.Size = new Size(39, 20);
             this.editMenu.Text = "&Edit";
@@ -273,6 +281,21 @@ namespace ILXP
             this.copyAsMenuItem.Size = new Size(160, 22);
             this.copyAsMenuItem.Text = "Copy &as...";
             this.copyAsMenuItem.Click += this.OnCopyAs;
+
+            this.healthMenuItem.Name = "MenuItemEditHealth";
+            this.healthMenuItem.Size = new Size(160, 22);
+            this.healthMenuItem.Text = "Assembly &health...";
+            this.healthMenuItem.Click += this.OnAssemblyHealth;
+
+            this.compareMenuItem.Name = "MenuItemFileCompare";
+            this.compareMenuItem.Size = new Size(155, 22);
+            this.compareMenuItem.Text = "&Compare versions...";
+            this.compareMenuItem.Click += this.OnCompareAssemblies;
+
+            this.bundleMenuItem.Name = "MenuItemFileBundle";
+            this.bundleMenuItem.Size = new Size(155, 22);
+            this.bundleMenuItem.Text = "Export preservation &bundle...";
+            this.bundleMenuItem.Click += this.OnExportBundle;
 
             this.findMenuItem.Name = "MenuItemEditFind";
             this.findMenuItem.ShortcutKeys = Keys.Control | Keys.F;

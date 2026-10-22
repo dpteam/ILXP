@@ -94,6 +94,9 @@ namespace ILXP.Tests
                 TestExpansion();
                 TestIlNavigation();
                 TestIlSearch();
+                TestHealth();
+                TestDiff();
+                TestBundle();
             }
             finally
             {
@@ -370,6 +373,105 @@ namespace ILXP.Tests
 
             CommandResult broken = RunIlxp("--ilsearch", ilxpPath, "([unclosed");
             Check("invalid regex is rejected", broken.ExitCode == 2, broken.ToString());
+        }
+
+        private static void TestHealth()
+        {
+            Section("Assembly health");
+
+            CommandResult clean = RunIlxp("--health", ilxpPath);
+            Check("health runs", clean.ExitCode == 0, clean.ToString());
+            Check("health reports a score", clean.Output.Contains("/100"), clean.Output);
+            Check("health lists references", clean.Output.Contains("references"), clean.Output);
+            Check("health reports PE facts", clean.Output.Contains("entropy"), clean.Output);
+
+            string obfuscated = Path.Combine(workspace, "health.obf.exe");
+            TestObfuscator.Obfuscate(ilxpPath, obfuscated, 4242);
+
+            CommandResult dirty = RunIlxp("--health", obfuscated);
+            Check("health runs on obfuscated input", dirty.ExitCode == 0, dirty.ToString());
+            Check("fingerprint flags the obfuscation", dirty.Output.Contains("obfuscation score"), dirty.Output);
+
+            int cleanScore = ExtractScore(clean.Output, "obfuscation score");
+            int dirtyScore = ExtractScore(dirty.Output, "obfuscation score");
+            Check("obfuscated scores higher than clean",
+                dirtyScore > cleanScore,
+                string.Format("clean={0} obfuscated={1}", cleanScore, dirtyScore));
+            Console.WriteLine(string.Format("    obfuscation score: clean {0}, obfuscated {1}", cleanScore, dirtyScore));
+        }
+
+        private static void TestDiff()
+        {
+            Section("Version diff");
+
+            CommandResult same = RunIlxp("--diff", ilxpPath, ilxpPath);
+            Check("diff of identical files exits 0", same.ExitCode == 0, same.ToString());
+            Check("diff reports no changes", same.Output.Contains("added 0, removed 0, changed 0"), same.Output);
+
+            string obfuscated = Path.Combine(workspace, "diff.obf.exe");
+            TestObfuscator.Obfuscate(ilxpPath, obfuscated, 777);
+
+            CommandResult changed = RunIlxp("--diff", ilxpPath, obfuscated);
+            Check("diff of different files exits 1", changed.ExitCode == 1, changed.ToString());
+            Check("diff lists added members", changed.Output.Contains("+ [method"), changed.Output);
+        }
+
+        private static void TestBundle()
+        {
+            Section("Preservation bundle");
+
+            string output = Path.Combine(workspace, "bundle");
+            Directory.CreateDirectory(output);
+
+            CommandResult result = RunIlxp("--bundle", ilxpPath, "--output", output);
+            Check("bundle runs", result.ExitCode == 0, result.ToString());
+
+            string[] directories = Directory.GetDirectories(output);
+            Check("bundle directory created", directories.Length == 1, "found " + directories.Length);
+
+            if (directories.Length == 1)
+            {
+                string bundle = directories[0];
+                Check("original bytes saved", File.Exists(Path.Combine(bundle, "original.exe")), "no original.exe");
+                Check("IL listing saved", File.Exists(Path.Combine(bundle, "assembly.il")), "no assembly.il");
+                Check("health report saved", File.Exists(Path.Combine(bundle, "health.txt")), "no health.txt");
+                Check("manifest saved", File.Exists(Path.Combine(bundle, "manifest.txt")), "no manifest.txt");
+                Check("resources extracted", Directory.Exists(Path.Combine(bundle, "resources")), "no resources");
+
+                string manifest = File.ReadAllText(Path.Combine(bundle, "manifest.txt"));
+                Check("manifest has SHA-256 hashes", manifest.Contains("original.exe") && manifest.Length > 200, "manifest too small");
+            }
+        }
+
+        private static int ExtractScore(string output, string label)
+        {
+            foreach (string line in output.Split('\n'))
+            {
+                if (line.IndexOf(label, StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                int colon = line.IndexOf(':');
+                if (colon < 0)
+                {
+                    continue;
+                }
+
+                string tail = line.Substring(colon + 1).Trim();
+                int slash = tail.IndexOf('/');
+                if (slash < 0)
+                {
+                    continue;
+                }
+
+                int value;
+                if (int.TryParse(tail.Substring(0, slash).Trim(), out value))
+                {
+                    return value;
+                }
+            }
+            return -1;
         }
 
         // ------------------------------------------------------------------

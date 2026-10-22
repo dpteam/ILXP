@@ -76,6 +76,12 @@ namespace ILXP
                         return IlMapCommand(options);
                     case "ilsearch":
                         return IlSearchCommand(options);
+                    case "health":
+                        return HealthCommand(options);
+                    case "diff":
+                        return DiffCommand(options);
+                    case "bundle":
+                        return BundleCommand(options);
                     case "headless":
                         return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
@@ -697,6 +703,74 @@ namespace ILXP
             return 0;
         }
 
+        /// <summary>Writes a preservation bundle (original bytes, IL, sources, resources).</summary>
+        private static int BundleCommand(Options options)
+        {
+            string output = options.Output;
+            if (string.IsNullOrEmpty(output))
+            {
+                Console.Error.WriteLine("error: --bundle <assembly> --output <directory>");
+                return 2;
+            }
+
+            LoadedAssembly loaded = AssemblyLoader.Load(options.Input);
+            PreservationBundle.Result result = PreservationBundle.Export(
+                new AssemblyItem(options.Input, loaded.Assembly), output);
+
+            Console.WriteLine("bundle : " + result.Directory);
+            Console.WriteLine("files  : " + result.Files);
+            Console.WriteLine("bytes  : " + result.Bytes);
+            return 0;
+        }
+
+        /// <summary>Compares two assemblies by metadata identity and IL hash.</summary>
+        private static int DiffCommand(Options options)
+        {
+            if (string.IsNullOrEmpty(options.Output))
+            {
+                Console.Error.WriteLine("error: --diff <left> <right>  (pass the second file with --output)");
+                return 2;
+            }
+
+            AssemblyDefinition left = ReadAssembly(options.Input);
+            AssemblyDefinition right = ReadAssembly(options.Output);
+            DiffReport report = AssemblyDiff.Compare(left, right);
+
+            Console.Write(AssemblyDiff.Format(report));
+
+            if (options.VerboseOutput)
+            {
+                Console.WriteLine();
+                Console.WriteLine("unchanged members: " +
+                    (CountUnchanged(left, right)).ToString(CultureInfo.InvariantCulture));
+            }
+
+            return report.HasChanges ? 1 : 0;
+        }
+
+        private static int CountUnchanged(AssemblyDefinition left, AssemblyDefinition right)
+        {
+            // Cheap approximation used only for the verbose footer.
+            int leftCount = 0;
+            foreach (ModuleDefinition module in left.Modules)
+            {
+                foreach (TypeDefinition type in module.Types)
+                {
+                    leftCount += type.Methods.Count + type.Fields.Count;
+                }
+            }
+            return leftCount;
+        }
+
+        /// <summary>Assembly health report: PE facts, dependencies, obfuscation fingerprint.</summary>
+        private static int HealthCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            AssemblyHealthReport report = AssemblyHealth.Analyse(assembly, options.Input);
+            Console.Write(AssemblyHealth.Format(report));
+            return report.HealthScore >= 40 ? 0 : 1;
+        }
+
         /// <summary>Regex search over the IL of every method (the Ctrl+Shift+F engine).</summary>
         private static int IlSearchCommand(Options options)
         {
@@ -1005,6 +1079,9 @@ namespace ILXP
             Console.WriteLine("  ILXP --ilmap <assembly> <type> <method>  line -> IL offset map (Ctrl+G source)");
             Console.WriteLine("  ILXP --ilsearch <assembly> <pattern> [--literal] [--ignore-case] [--max <n>]");
             Console.WriteLine("                                           regex search over rendered IL (case-insensitive)");
+            Console.WriteLine("  ILXP --health <assembly>                 PE facts, dependencies, obfuscation fingerprint");
+            Console.WriteLine("  ILXP --diff <left> <right>               compare two versions (IL hashes)");
+            Console.WriteLine("  ILXP --bundle <assembly> --output <dir>  write a preservation bundle");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -1169,6 +1246,19 @@ namespace ILXP
                             options.Command = "ilsearch";
                             options.Input = Next(args, ref i, argument);
                             options.Query = Next(args, ref i, argument);
+                            break;
+                        case "--health":
+                            options.Command = "health";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--diff":
+                            options.Command = "diff";
+                            options.Input = Next(args, ref i, argument);
+                            options.Output = Next(args, ref i, argument);
+                            break;
+                        case "--bundle":
+                            options.Command = "bundle";
+                            options.Input = Next(args, ref i, argument);
                             break;
                         case "--ignore-case":
                             options.IgnoreCase = true;

@@ -20,7 +20,7 @@ date whenever a milestone is reached.
 dotnet build ILXP.slnx                              # 0 errors, single-file output
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x86
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x64
-tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 60/60 checks pass
+tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 79/79 checks pass
 powershell -File tools/Smoke-Test.ps1               # 11/11 checks pass
 ```
 
@@ -53,6 +53,8 @@ Verified manually:
 * IL search: `Ctrl+Shift+F` regex over every method's IL, results with `IL_xxxx` offsets,
   double-click navigation; CLI `--ilsearch`.
 * Edit → Copy as… (name, signature, IL, C#, VB, references, target framework, nav key).
+* Analysis tools: assembly health report with obfuscator fingerprint, version diff,
+  preservation bundle (CLI + GUI).
 * Platform builds are verified (`tools/Test-Platform.ps1`): x64 → machine 0x8664,
   x86 → 32BitRequired, AnyCPU → neither.
 * Damaged-input baseline: PE carving from larger blobs; random garbage fails cleanly.
@@ -89,6 +91,11 @@ src\ILXP\bin\Debug\net40\ILXP.exe
 # full test suite / smoke test
 tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run
 powershell -File tools\Smoke-Test.ps1
+
+# analysis commands
+src\ILXP\bin\Debug\net40\ILXP.exe --health src\ILXP\bin\Debug\net40\ILXP.exe
+src\ILXP\bin\Debug\net40\ILXP.exe --diff old.dll new.dll
+src\ILXP\bin\Debug\net40\ILXP.exe --bundle src\ILXP\bin\Debug\net40\ILXP.exe --output out
 
 # quick open search from the command line
 src\ILXP\bin\Debug\net40\ILXP.exe --search src\ILXP\bin\Debug\net40\ILXP.exe waterlogo

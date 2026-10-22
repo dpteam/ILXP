@@ -101,6 +101,47 @@ namespace ILXP
         }
 
         // ------------------------------------------------------------------
+        // Assembly health
+        // ------------------------------------------------------------------
+
+        private void OnAssemblyHealth(object sender, EventArgs e)
+        {
+            TreeNode node = treeView.SelectedNode;
+            while (node != null && node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            AssemblyItem item = node == null ? null : node.Tag as AssemblyItem;
+            if (item == null)
+            {
+                MessageBox.Show(this, "Open an assembly first.", AppInfo.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Cursor previous = Cursor;
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                AssemblyHealthReport report = AssemblyHealth.Analyse(item.Assembly, item.FilePath);
+                using (HealthForm form = new HealthForm(item.Assembly.Name.Name, AssemblyHealth.Format(report)))
+                {
+                    form.ShowDialog(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to build the health report.", ex);
+                MessageBox.Show(this, ex.Message, "Assembly health", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                Cursor = previous;
+            }
+        }
+
+        // ------------------------------------------------------------------
         // Copy as…
         // ------------------------------------------------------------------
 

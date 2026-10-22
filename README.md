@@ -67,6 +67,9 @@ ILXP --search <assembly> <query>
 ILXP --expand <assembly> [--depth <n>]
 ILXP --ilmap <assembly> <type> <method>
 ILXP --ilsearch <assembly> <pattern> [--literal] [--max <n>]
+ILXP --health <assembly>
+ILXP --diff <left> <right>
+ILXP --bundle <assembly> --output <dir>
 ILXP --headless
 ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
@@ -184,6 +187,23 @@ Reference nodes are skipped by bulk expansion (resolving every dependency from d
 cause of multi-minute freezes); open them individually when you need them.
 
 Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 nodes / 3.4 s.
+
+## Analysis tools
+
+* **Assembly health** (`Edit → Assembly health…`, `--health`) — PE facts (machine, sections with
+  entropy, deterministic-build marker, CLR header, CorFlags, strong name), metadata counts,
+  resolution of every reference, a 0–100 health score and a list of findings.
+* **Obfuscator fingerprint** (part of the health report) — scored signatures for Confuser /
+  ConfuserEx, .NET Reactor, Eazfuscator, SmartAssembly, Dotfuscator, Babel, Crypto Obfuscator,
+  Agile.NET, Xenocode, ILProtector, MaxtoCode, Goliath, Skater, CodeWall, Spices.NET, MPRESS,
+  UPX, Themida, plus generic indicators (name readability, section entropy, NOP density,
+  base64 literals, proxy methods). Measured: clean build 8/100, obfuscated 56/100.
+* **Version diff** (`File → Compare versions…`, `--diff`) — matches members by identity and
+  compares IL hashes, so offsets and branch targets do not create false positives. Reports
+  added / removed / changed with `body added`, `body removed`, `body differs`.
+* **Preservation bundle** (`File → Export preservation bundle…`, `--bundle`) — one folder with
+  the original bytes and PDB, the IL listing, decompiled IL/C#/VB, every embedded resource,
+  the health report and a `manifest.txt` with a SHA-256 for each file.
 
 ## Repository layout
 
