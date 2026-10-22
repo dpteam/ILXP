@@ -39,6 +39,7 @@ namespace ILXP.Deobfuscation
             {
                 new SizeOfReplacePass(),
                 new EmptyTypesPass(),
+                new MathReplacePass(),
                 new NopRemoverPass()
             };
         }

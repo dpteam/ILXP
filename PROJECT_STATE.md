@@ -1,4 +1,4 @@
-# Project state (for continuing work)
+﻿# Project state (for continuing work)
 
 This file is the hand-off note for future sessions and for context compaction. Keep it up to
 date whenever a milestone is reached.
@@ -29,7 +29,10 @@ Verified manually:
 * `--ildasm` produces IL for `ILXP.exe`; `--ilasm` reassembles ILDasm output into a working
   DLL (round-trip verified with Mono.Cecil).
 * `--disasm-x86` decodes bytes with BeaEngine in the **x86** build.
-* `--clean` removes NOPs and folds `sizeof`/`Type.EmptyTypes.Length`.
+* `--clean` removes NOPs and folds `sizeof`, `Type.EmptyTypes.Length` and constant
+  `System.Math` calls (verified with `tools/Test-MathPass.ps1`).
+* Damaged-input baseline: a PE image is carved out of a larger blob
+  (`tools/Test-Carving.ps1`).
 
 ## Known issues / next fixes
 
@@ -71,13 +74,13 @@ src\ILXP\bin\x86\Debug\net40\ILXP.exe --disasm-x86 native\BeaEngine.dll --offset
 
 ## Maintenance scripts (`tools/`)
 
-* `Decrypt-Strings.ps1` – original string-table decryption (already applied; kept for history).
-* `Extract-Resx.ps1`, `Extract-IcoFrames.ps1`, `New-CompanyLogo.ps1` – resource recovery.
+* `Decrypt-Strings.ps1` вЂ“ original string-table decryption (already applied; kept for history).
+* `Extract-Resx.ps1`, `Extract-IcoFrames.ps1`, `New-CompanyLogo.ps1` вЂ“ resource recovery.
 * `Add-Namespaces.ps1`, `Rename-Types.ps1`, `Rename-Writers.ps1`,
-  `Rename-StatementDecompiler.ps1` – the rename passes that were applied.
-* `Cleanup-Sources.ps1`, `Fix-*.ps1` – repairs for decompiler artifacts.
-* `Inspect-NativeArtifacts.ps1` – PE header/export/version/string inspection for `native/`.
-* `List-Usage.ps1`, `List-EventWiring.ps1` – helper reports used while renaming.
+  `Rename-StatementDecompiler.ps1` вЂ“ the rename passes that were applied.
+* `Cleanup-Sources.ps1`, `Fix-*.ps1` вЂ“ repairs for decompiler artifacts.
+* `Inspect-NativeArtifacts.ps1` вЂ“ PE header/export/version/string inspection for `native/`.
+* `List-Usage.ps1`, `List-EventWiring.ps1` вЂ“ helper reports used while renaming.
 
 The scripts are not part of the build; they document how the restoration was done and can be
 re-run on a fresh decompiled snapshot.

@@ -593,25 +593,34 @@ namespace ILXP
                 return null;
             }
 
-            AssemblyDefinition assembly;
+            LoadedAssembly loaded;
             try
             {
-                assembly = AssemblyDefinition.ReadAssembly(path);
+                loaded = AssemblyLoader.Load(path);
             }
             catch (Exception ex)
             {
-                Log.Error("Cecil cannot read '" + path + "'.", ex);
+                Log.Error("Cannot read '" + path + "'.", ex);
                 return null;
             }
 
+            AssemblyDefinition assembly = loaded.Assembly;
             if (assembly == null)
             {
                 return null;
             }
 
-            TryReadSymbols(assembly, path);
+            if (!loaded.CarvedFromBlob)
+            {
+                TryReadSymbols(assembly, path);
+            }
 
             TreeNode root = new TreeNode(assembly.Name.Name);
+            if (loaded.CarvedFromBlob)
+            {
+                root.Text += " (carved)";
+                root.ToolTipText = "PE image carved from " + loaded.SourcePath + " at offset 0x" + loaded.BlobOffset.ToString("x");
+            }
             root.Tag = new AssemblyItem(path, assembly);
             SetImage(root, "0VSObject_Assembly.bmp");
 

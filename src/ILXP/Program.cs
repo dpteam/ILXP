@@ -20,6 +20,7 @@ namespace ILXP
                 Log.Initialize();
                 int exitCode = CommandLine.Run(args);
                 Log.Info("Command line finished with exit code " + exitCode);
+                AssemblyLoader.CleanupTemporaryFiles();
                 Environment.ExitCode = exitCode;
                 return;
             }
@@ -44,6 +45,7 @@ namespace ILXP
             }
             finally
             {
+                AssemblyLoader.CleanupTemporaryFiles();
                 Log.Info("ILXP shutting down");
             }
         }

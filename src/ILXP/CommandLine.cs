@@ -183,28 +183,29 @@ namespace ILXP
                 throw new FileNotFoundException("file not found", path);
             }
 
-            ReaderParameters parameters = new ReaderParameters
+            LoadedAssembly loaded = AssemblyLoader.Load(path);
+            AssemblyDefinition assembly = loaded.Assembly;
+            if (loaded.CarvedFromBlob)
             {
-                ReadingMode = ReadingMode.Immediate,
-                ReadSymbols = false
-            };
-
-            AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(path, parameters);
-
-            // Symbols are optional: a missing, portable or damaged PDB must never
-            // prevent the assembly itself from being read.
-            try
-            {
-                string pdb = Path.ChangeExtension(path, ".pdb");
-                if (File.Exists(pdb))
-                {
-                    Mono.Cecil.Pdb.PdbReaderProvider provider = new Mono.Cecil.Pdb.PdbReaderProvider();
-                    assembly.MainModule.ReadSymbols(provider.GetSymbolReader(assembly.MainModule, pdb));
-                }
+                Console.WriteLine("carved PE image from " + path + " at offset 0x" + loaded.BlobOffset.ToString("x"));
             }
-            catch (Exception ex)
+            else
             {
-                Log.Warn("Unable to read symbols for '" + path + "'.", ex);
+                // Symbols are optional: a missing, portable or damaged PDB must never
+                // prevent the assembly itself from being read.
+                try
+                {
+                    string pdb = Path.ChangeExtension(path, ".pdb");
+                    if (File.Exists(pdb))
+                    {
+                        Mono.Cecil.Pdb.PdbReaderProvider provider = new Mono.Cecil.Pdb.PdbReaderProvider();
+                        assembly.MainModule.ReadSymbols(provider.GetSymbolReader(assembly.MainModule, pdb));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn("Unable to read symbols for '" + path + "'.", ex);
+                }
             }
 
             return assembly;

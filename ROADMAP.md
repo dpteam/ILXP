@@ -1,17 +1,17 @@
-# Roadmap
+﻿# Roadmap
 
 Status legend: `[x]` done, `[~]` in progress / partially done, `[ ]` planned.
 
-## Phase 1 – restore the original application (done)
+## Phase 1 вЂ“ restore the original application (done)
 
 - [x] Initialise git and a Visual Studio `.gitignore`.
 - [x] Decrypt and inline the obfuscated string table (354 strings, `tools/Decrypt-Strings.ps1`).
 - [x] Reconstruct the project as an SDK-style solution targeting `net40`.
-- [x] Recover the application icon from `refs/239.ico` → `ILXP.ico`.
+- [x] Recover the application icon from `refs/239.ico` в†’ `ILXP.ico`.
 - [x] Extract the designer resources from the lost `.resx` files into `src/ILXP/Resources`.
 - [x] Replace the missing `My.Settings`/`My.Resources` with `AppSettings`/`AppResources`.
 - [x] Reconstruct the missing token list type and the VB application framework.
-- [x] Rename all types and files (`GClassN` → meaningful names).
+- [x] Rename all types and files (`GClassN` в†’ meaningful names).
 - [x] Rewrite the UI layer (`MainForm`, `AboutForm`, `CodeEditor`, `BorderPanel`,
       `UiThread`) with named members, properties and event handlers.
 - [x] Logging through `Trace` with a UTF-8 file listener and an optional console listener.
@@ -20,8 +20,10 @@ Status legend: `[x]` done, `[~]` in progress / partially done, `[ ]` planned.
 - [x] Embed Mono.Cecil 0.9.6.4 and Mono.Cecil.Pdb as decompiled source projects.
 - [x] Reverse engineer and integrate the four binaries from `refs/_MayBeNeedReverse`
       (see `REVERSE_ENGINEERING.md`).
+- [x] Baseline support for damaged inputs: `AssemblyLoader` carves a valid PE image out of a
+      larger blob (memory dump, appended data) and retries (verified with `tools/Test-Carving.ps1`).
 
-## Phase 2 – finish the deobfuscation of the source (in progress)
+## Phase 2 вЂ“ finish the deobfuscation of the source (in progress)
 
 - [~] Rename the remaining `smethod_N` helpers in `StatementDecompiler` (public entry points
       are done; internal helpers still use decompiler names).
@@ -31,9 +33,9 @@ Status legend: `[x]` done, `[~]` in progress / partially done, `[ ]` planned.
       where it is not required for behaviour.
 - [ ] Remove dead code left by the VB compiler (`_003C`/`_0024` method names, unreachable
       branches).
-- [ ] Normalise formatting (tabs → spaces, file headers) once the member names are final.
+- [ ] Normalise formatting (tabs в†’ spaces, file headers) once the member names are final.
 
-## Phase 3 – merge functionality from `refs`
+## Phase 3 вЂ“ merge functionality from `refs`
 
 Dependency order matters: de4dot-family sources need **dnlib**; Unscrambler needs
 **AsmResolver**; dnSpy needs a modern WPF/.NET stack and must be ported selectively.
@@ -60,7 +62,8 @@ Dependency order matters: de4dot-family sources need **dnlib**; Unscrambler need
 ### 3.3 Unscrambler
 
 - [x] Port `SizeOfReplace`, `EmptyTypeReplace`, `NopRemover` as Cecil passes.
-- [ ] Port `MathReplace` (constant folding of `System.Math` calls).
+- [x] Port `MathReplace` (constant folding of `System.Math` calls); verified with
+      `tools/Test-MathPass.ps1` (`Math.Abs(-5)` → `5`, `Math.Sqrt(16.0)` → `4.0`).
 - [ ] Port `ConvertToIntReplace`, `DoubleParseReplace`, `CalliReplace`, `HideCallsRemover`,
       `LocalsToFieldRemover`, `InterfaceLoopRemover`.
 - [ ] Add a GUI "Clean assembly" action with a pass selection dialog.
@@ -73,8 +76,9 @@ Dependency order matters: de4dot-family sources need **dnlib**; Unscrambler need
 - [ ] Port dnSpy's assembly explorer features (search, bookmarks, tabs).
 - [ ] Port dnSpy's BAML/resources viewers where they fit the `net40`/WinForms architecture.
 
-## Phase 4 – robustness and damaged inputs
+## Phase 4 вЂ“ robustness and damaged inputs
 
+- [x] Baseline PE carving: `AssemblyLoader` searches a blob for a valid PE header and retries.
 - [ ] Read assemblies from raw memory dumps (search for the `MZ`/PE header inside a blob).
 - [ ] Read assemblies with a damaged metadata root (partial tables, bad RVAs).
 - [ ] Fall back to a raw PE/IL reader when Cecil refuses to open the file.
@@ -82,7 +86,7 @@ Dependency order matters: de4dot-family sources need **dnlib**; Unscrambler need
 - [ ] Fuzz the tree builder and the writers with truncated/corrupted assemblies.
 - [ ] Preserve the original file bytes and expose them in the hex viewer.
 
-## Phase 5 – quality
+## Phase 5 вЂ“ quality
 
 - [ ] Add automated tests (golden IL output, string decryption, PE parsing, passes).
 - [ ] Add a smoke test that loads a set of assemblies and renders every node.
@@ -90,7 +94,7 @@ Dependency order matters: de4dot-family sources need **dnlib**; Unscrambler need
 - [ ] Localisation-ready UI strings.
 - [ ] Verify Windows XP compatibility (no APIs newer than .NET 4.0, no DPI-only APIs).
 
-## Phase 6 – preservation extras
+## Phase 6 вЂ“ preservation extras
 
 - [ ] Batch mode: decompile a directory tree into IL/C#/VB.
 - [ ] Diff two assembly versions (metadata + IL).

@@ -38,6 +38,7 @@ or renders the `.resources` table.
 | `VbWriter` | VB outline + method bodies via `StatementDecompiler` |
 | `StatementDecompiler` | IL → C#/VB statement translator (largest component) |
 | `FileContentInspector` | resource classification and text rendering |
+| `AssemblyLoader` | reads assemblies, carving a PE image from larger blobs if needed |
 | `CodeEditor` | markup-aware read-only code view with selection, copy and links |
 | `MainForm` | tree, toolbar, menus, status bar, navigation history |
 | `AppSettings` | INI-style settings in `%APPDATA%\ILXP\settings.ini` |
