@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using ILXP.Deobfuscation;
+using ILXP.Interop;
 using Mono.Cecil;
 
 namespace ILXP
@@ -48,6 +50,14 @@ namespace ILXP
                         return Decompile(options);
                     case "resources":
                         return ExtractResources(options.Input, options.Output);
+                    case "ildasm":
+                        return DisassembleIl(options);
+                    case "ilasm":
+                        return AssembleIl(options);
+                    case "disasm-x86":
+                        return DisassembleX86(options);
+                    case "clean":
+                        return Clean(options);
                     default:
                         Console.Error.WriteLine("error: unknown command '" + options.Command + "'");
                         return 2;
@@ -200,6 +210,79 @@ namespace ILXP
             return assembly;
         }
 
+        private static int DisassembleIl(Options options)
+        {
+            string text = IlTools.Disassemble(options.Input, options.Output, options.KeepBytes);
+            if (string.IsNullOrEmpty(options.Output))
+            {
+                Console.Write(text);
+            }
+            else
+            {
+                Console.WriteLine("IL written to " + options.Output);
+            }
+            return 0;
+        }
+
+        private static int AssembleIl(Options options)
+        {
+            string output = options.Output;
+            if (string.IsNullOrEmpty(output))
+            {
+                output = Path.ChangeExtension(options.Input, options.IsDll ? ".dll" : ".exe");
+            }
+            IlTools.Assemble(options.Input, output, options.IsDll, options.Is64Bit, options.Is32Bit);
+            Console.WriteLine("assembly written to " + output);
+            return 0;
+        }
+
+        private static int Clean(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            DeobfuscationReport report = DeobfuscationPipeline.Run(assembly, DeobfuscationPipeline.CreateDefault());
+
+            string output = options.Output;
+            if (string.IsNullOrEmpty(output))
+            {
+                string directory = Path.GetDirectoryName(Path.GetFullPath(options.Input)) ?? ".";
+                output = Path.Combine(directory, Path.GetFileNameWithoutExtension(options.Input) + ".cleaned" + Path.GetExtension(options.Input));
+            }
+
+            WriterParameters parameters = new WriterParameters { WriteSymbols = false };
+            assembly.Write(output, parameters);
+
+            Console.WriteLine("cleaned assembly written to " + output);
+            foreach (System.Collections.Generic.KeyValuePair<string, int> pair in report.Results)
+            {
+                Console.WriteLine("  " + pair.Key + ": " + pair.Value);
+            }
+            return 0;
+        }
+
+        private static int DisassembleX86(Options options)
+        {
+            if (!BeaEngine.IsAvailable)
+            {
+                Console.Error.WriteLine("error: BeaEngine.dll is not available (it is a 32-bit native library).");
+                return 2;
+            }
+
+            byte[] data = File.ReadAllBytes(options.Input);
+            int offset = options.Offset;
+            int length = options.Length > 0 ? options.Length : data.Length - offset;
+            string text = BeaEngine.DisassembleBlock(data, offset, length, options.Is64Bit, (ulong)Math.Max(offset, 0));
+            if (!string.IsNullOrEmpty(options.Output))
+            {
+                File.WriteAllText(options.Output, text);
+                Console.WriteLine("disassembly written to " + options.Output);
+            }
+            else
+            {
+                Console.Write(text);
+            }
+            return 0;
+        }
+
         private static string SanitizeFileName(string name)
         {
             StringBuilder text = new StringBuilder(name.Length);
@@ -222,6 +305,10 @@ namespace ILXP
             Console.WriteLine("  ILXP --list <assembly>                   list types in an assembly");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
+            Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
+            Console.WriteLine("  ILXP --ilasm <file.il> [--output <assembly>] [--dll] [--x86|--x64]");
+            Console.WriteLine("  ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]");
+            Console.WriteLine("  ILXP --clean <assembly> [--output <assembly>]   run IL cleanup passes");
             Console.WriteLine();
             Console.WriteLine("Decompile options:");
             Console.WriteLine("  --language <il|cs|vb>   output language (default: il)");
@@ -237,6 +324,12 @@ namespace ILXP
             public string Output { get; private set; }
             public string Language { get; private set; }
             public bool Help { get; private set; }
+            public bool KeepBytes { get; private set; }
+            public bool IsDll { get; private set; }
+            public bool Is64Bit { get; private set; }
+            public bool Is32Bit { get; private set; }
+            public int Offset { get; private set; }
+            public int Length { get; private set; }
 
             public static Options Parse(string[] args)
             {
@@ -266,6 +359,40 @@ namespace ILXP
                         case "--resources":
                             options.Command = "resources";
                             options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--ildasm":
+                            options.Command = "ildasm";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--ilasm":
+                            options.Command = "ilasm";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--disasm-x86":
+                            options.Command = "disasm-x86";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--clean":
+                            options.Command = "clean";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--bytes":
+                            options.KeepBytes = true;
+                            break;
+                        case "--dll":
+                            options.IsDll = true;
+                            break;
+                        case "--x64":
+                            options.Is64Bit = true;
+                            break;
+                        case "--x86":
+                            options.Is32Bit = true;
+                            break;
+                        case "--offset":
+                            options.Offset = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
+                            break;
+                        case "--length":
+                            options.Length = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
                             break;
                         case "--language":
                             options.Language = Next(args, ref i, argument).ToLowerInvariant();

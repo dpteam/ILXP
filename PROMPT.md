@@ -17,3 +17,22 @@
 
 Можешь создать нужные тебе .md файлы для ведения проекта + на всякий всякие там ROADMAP.md и прочие, на случай компактизаций.
 И обновлять их включая этот.
+
+---
+
+## Состояние проекта (обновляется)
+
+Подробности: PROJECT_STATE.md, ROADMAP.md, ARCHITECTURE.md, REVERSE_ENGINEERING.md, README.md.
+
+- [x] git и .gitignore (Visual Studio + refs/)
+- [x] строка-шифр (354 строки) дешифрована и встроена в код
+- [x] все типы и файлы переименованы, UI переписан на именованные члены
+- [x] сборка net40 (AnyCPU/x86/x64), GUI запускается
+- [x] иконка ILXP.ico из refs/239.ico
+- [x] ресурсы восстановлены из потерянных .resx
+- [x] refs/_MayBeNeedReverse реверснут через REA; ILDasm/ILAsm/BeaEngine встроены (native/ + Interop)
+- [x] CLI: --list/--decompile/--resources/--ildasm/--ilasm/--disasm-x86/--clean
+- [x] первые пассы деобфускации (NOP, sizeof, Type.EmptyTypes) из Unscrambler
+- [~] слияние ILSpy/dnSpy/de4dot: нужны dnlib и AsmResolver как исходники
+- [ ] полное переименование внутренних smethod_N в StatementDecompiler
+- [ ] поддержка повреждённых MSIL и дампов памяти

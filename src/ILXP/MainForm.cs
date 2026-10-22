@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using ILXP.Interop;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 
@@ -118,6 +119,77 @@ namespace ILXP
         private void OnExit(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void OnExportIl(object sender, EventArgs e)
+        {
+            TreeNode node = treeView.SelectedNode;
+            while (node != null && node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            AssemblyItem item = node == null ? null : node.Tag as AssemblyItem;
+            if (item == null)
+            {
+                MessageBox.Show(this, "Open an assembly first.", AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            try
+            {
+                using (SaveFileDialog dialog = new SaveFileDialog())
+                {
+                    dialog.Filter = "IL files (*.il)|*.il|All Files (*.*)|*.*";
+                    dialog.FileName = Path.GetFileNameWithoutExtension(item.FilePath) + ".il";
+                    if (dialog.ShowDialog(this) != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    IlTools.Disassemble(item.FilePath, dialog.FileName);
+                    MessageBox.Show(this, "IL written to " + dialog.FileName, AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to export IL.", ex);
+                MessageBox.Show(this, ex.Message, "IL Disassembler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void OnAssembleIl(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog input = new OpenFileDialog())
+                {
+                    input.Filter = "IL files (*.il)|*.il|All Files (*.*)|*.*";
+                    if (input.ShowDialog(this) != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    using (SaveFileDialog output = new SaveFileDialog())
+                    {
+                        output.Filter = "Assembly (*.dll)|*.dll|Executable (*.exe)|*.exe";
+                        output.FileName = Path.GetFileNameWithoutExtension(input.FileName) + ".dll";
+                        if (output.ShowDialog(this) != DialogResult.OK)
+                        {
+                            return;
+                        }
+
+                        bool isDll = string.Equals(Path.GetExtension(output.FileName), ".dll", StringComparison.OrdinalIgnoreCase);
+                        IlTools.Assemble(input.FileName, output.FileName, isDll, false, false);
+                        MessageBox.Show(this, "Assembly written to " + output.FileName, AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to assemble IL.", ex);
+                MessageBox.Show(this, ex.Message, "IL Assembler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void OnAbout(object sender, EventArgs e)

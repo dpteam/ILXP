@@ -11,6 +11,8 @@ namespace ILXP
         private ToolStripMenuItem openMenuItem;
         private ToolStripSeparator fileSeparator;
         private ToolStripMenuItem exitMenuItem;
+        private ToolStripMenuItem exportIlMenuItem;
+        private ToolStripMenuItem assembleIlMenuItem;
         private ToolStripMenuItem viewMenu;
         private ToolStripMenuItem refreshMenuItem;
         private ToolStripSeparator viewSeparator;
@@ -51,6 +53,8 @@ namespace ILXP
             this.openMenuItem = new ToolStripMenuItem();
             this.fileSeparator = new ToolStripSeparator();
             this.exitMenuItem = new ToolStripMenuItem();
+            this.exportIlMenuItem = new ToolStripMenuItem();
+            this.assembleIlMenuItem = new ToolStripMenuItem();
             this.viewMenu = new ToolStripMenuItem();
             this.refreshMenuItem = new ToolStripMenuItem();
             this.viewSeparator = new ToolStripSeparator();
@@ -102,7 +106,7 @@ namespace ILXP
             this.mainMenu.Size = new Size(828, 24);
             this.mainMenu.TabIndex = 0;
 
-            this.fileMenu.DropDownItems.AddRange(new ToolStripItem[] { this.openMenuItem, this.fileSeparator, this.exitMenuItem });
+            this.fileMenu.DropDownItems.AddRange(new ToolStripItem[] { this.openMenuItem, this.exportIlMenuItem, this.assembleIlMenuItem, this.fileSeparator, this.exitMenuItem });
             this.fileMenu.Name = "FileToolStripMenuItem";
             this.fileMenu.Size = new Size(37, 20);
             this.fileMenu.Text = "&File";
@@ -114,9 +118,18 @@ namespace ILXP
             this.openMenuItem.Text = "&Open...";
             this.openMenuItem.Click += this.OnOpenFile;
 
+            this.exportIlMenuItem.Name = "MenuItemFileExportIl";
+            this.exportIlMenuItem.Size = new Size(155, 22);
+            this.exportIlMenuItem.Text = "Export &IL...";
+            this.exportIlMenuItem.Click += this.OnExportIl;
+
+            this.assembleIlMenuItem.Name = "MenuItemFileAssembleIl";
+            this.assembleIlMenuItem.Size = new Size(155, 22);
+            this.assembleIlMenuItem.Text = "&Assemble IL...";
+            this.assembleIlMenuItem.Click += this.OnAssembleIl;
+
             this.fileSeparator.Name = "ToolStripMenuItem1";
             this.fileSeparator.Size = new Size(152, 6);
-
             this.exitMenuItem.Name = "MenuItemFileExit";
             this.exitMenuItem.Size = new Size(155, 22);
             this.exitMenuItem.Text = "E&xit";
