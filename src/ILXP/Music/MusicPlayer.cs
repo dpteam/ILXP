@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Media;
 using System.Threading;
 
 namespace ILXP.Music
@@ -14,20 +13,23 @@ namespace ILXP.Music
     }
 
     /// <summary>
-    /// Plays <see cref="MusicTrack"/> instances. Rendering happens on a worker thread so
-    /// the UI never blocks; playback uses <see cref="SoundPlayer"/> on a rendered WAV
-    /// image, which works without any additional runtime dependency.
+    /// Plays <see cref="MusicTrack"/> instances. Rendering happens on a worker thread (the
+    /// synthesizer streams into a temporary WAV file) and playback uses
+    /// <see cref="System.Media.SoundPlayer"/>, which needs no additional runtime
+    /// dependency and works on Windows XP.
     /// </summary>
     internal static class MusicPlayer
     {
         private static readonly object SyncRoot = new object();
-        private static SoundPlayer player;
-        private static MemoryStream currentStream;
+        private static System.Media.SoundPlayer player;
+        private static string currentFile;
         private static MusicTrack currentTrack;
         private static MusicState state = MusicState.Stopped;
         private static int generation;
         private static bool muted;
         private static float volume = 0.55f;
+
+        private static bool ownsFile;
 
         public static event EventHandler StateChanged;
 
@@ -62,14 +64,10 @@ namespace ILXP.Music
                 {
                     if (muted)
                     {
-                        SoundPlayer active = player;
-                        if (active != null)
-                        {
-                            active.Stop();
-                        }
+                        StopPlayback();
                         SetState(MusicState.Stopped);
                     }
-                    else if (currentStream != null)
+                    else if (currentFile != null)
                     {
                         StartPlayback();
                     }
@@ -109,21 +107,23 @@ namespace ILXP.Music
             }
 
             int token;
+            float currentVolume;
             lock (SyncRoot)
             {
                 token = ++generation;
                 currentTrack = track;
+                currentVolume = volume;
                 state = MusicState.Preparing;
-                DisposePlayer();
+                StopPlayback();
             }
             RaiseStateChanged();
 
             ThreadPool.QueueUserWorkItem(delegate
             {
+                string file = null;
                 try
                 {
-                    MidiSequence sequence = MidiTextFormat.Parse(track.Text);
-                    byte[] wav = ChiptuneSynth.RenderWav(sequence, volume);
+                    file = Synthesizer.RenderToCache(track.Id, track.Text, currentVolume);
 
                     lock (SyncRoot)
                     {
@@ -132,8 +132,9 @@ namespace ILXP.Music
                             return;
                         }
 
-                        currentStream = new MemoryStream(wav, false);
-                        player = new SoundPlayer(currentStream);
+                        currentFile = file;
+                        ownsFile = false;
+                        player = new System.Media.SoundPlayer(file);
                         if (muted)
                         {
                             state = MusicState.Stopped;
@@ -157,6 +158,10 @@ namespace ILXP.Music
                 catch (Exception ex)
                 {
                     Log.Error("Unable to render tune '" + track.DisplayName + "'.", ex);
+                    if (file != null)
+                    {
+                        TryDelete(file);
+                    }
                     lock (SyncRoot)
                     {
                         if (token == generation)
@@ -174,9 +179,8 @@ namespace ILXP.Music
             lock (SyncRoot)
             {
                 generation++;
-                DisposePlayer();
+                StopPlayback();
                 currentTrack = null;
-                currentStream = null;
                 state = MusicState.Stopped;
             }
             RaiseStateChanged();
@@ -188,16 +192,7 @@ namespace ILXP.Music
             lock (SyncRoot)
             {
                 generation++;
-                if (player != null)
-                {
-                    try
-                    {
-                        player.Stop();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
+                StopPlayback();
                 state = MusicState.Stopped;
             }
             RaiseStateChanged();
@@ -207,13 +202,16 @@ namespace ILXP.Music
         {
             lock (SyncRoot)
             {
-                if (player == null || currentStream == null || muted)
+                if (currentFile == null || muted)
                 {
                     return;
                 }
                 try
                 {
-                    currentStream.Position = 0;
+                    if (player == null)
+                    {
+                        player = new System.Media.SoundPlayer(currentFile);
+                    }
                     player.PlayLooping();
                     state = MusicState.Playing;
                 }
@@ -226,7 +224,7 @@ namespace ILXP.Music
             RaiseStateChanged();
         }
 
-        private static void DisposePlayer()
+        private static void StopPlayback()
         {
             if (player != null)
             {
@@ -241,16 +239,27 @@ namespace ILXP.Music
                 player = null;
             }
 
-            if (currentStream != null)
+            if (currentFile != null)
             {
-                try
+                if (ownsFile)
                 {
-                    currentStream.Dispose();
+                    TryDelete(currentFile);
                 }
-                catch (Exception)
+                currentFile = null;
+            }
+        }
+
+        private static void TryDelete(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
                 {
+                    File.Delete(path);
                 }
-                currentStream = null;
+            }
+            catch (Exception)
+            {
             }
         }
 

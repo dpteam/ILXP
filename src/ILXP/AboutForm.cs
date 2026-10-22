@@ -29,6 +29,8 @@ namespace ILXP
 
         private bool suppressTrackChange;
         private bool musicRequested;
+        private readonly Timer ambientTimer;
+        private readonly Random ambientRandom = new Random();
 
         /// <summary>
         /// Adds a few ripples and advances the water simulation. Used by the
@@ -160,6 +162,22 @@ namespace ILXP
             Shown += OnShown;
             FormClosed += OnFormClosed;
             KeyDown += OnKeyDown;
+
+            // Occasional ambient ripple so the water is visibly alive even without input.
+            ambientTimer = new Timer { Interval = 1700 };
+            ambientTimer.Tick += OnAmbientTick;
+        }
+
+        private void OnAmbientTick(object sender, EventArgs e)
+        {
+            if (waterLogo.Width <= 1 || waterLogo.Height <= 1)
+            {
+                return;
+            }
+
+            int x = ambientRandom.Next(waterLogo.Width / 6, waterLogo.Width - waterLogo.Width / 6);
+            int y = ambientRandom.Next(waterLogo.Height / 4, waterLogo.Height - waterLogo.Height / 4);
+            waterLogo.AddDrop(x, y, ambientRandom.Next(14, 24));
         }
 
         private void OnShown(object sender, EventArgs e)
@@ -182,10 +200,12 @@ namespace ILXP
             UpdateMusicButton();
             waterLogo.Splash();
             waterLogo.Focus();
+            ambientTimer.Start();
         }
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
+            ambientTimer.Stop();
             MusicPlayer.StateChanged -= OnMusicStateChanged;
             MusicPlayer.Pause();
             AppSettings.Default.Save();

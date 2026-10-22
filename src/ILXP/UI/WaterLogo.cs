@@ -13,11 +13,12 @@ namespace ILXP.UI
     /// </summary>
     internal sealed class WaterLogo : Control
     {
-        private const float Damping = 0.965f;
-        private const float Displacement = 0.75f;
-        private const float Highlight = 0.012f;
+        private const float Damping = 0.994f;
+        private const float Displacement = 0.9f;
+        private const float Highlight = 0.055f;
+        private const float TintStrength = 1.5f;
         private const int FrameInterval = 33;
-        private const float RestThreshold = 0.35f;
+        private const float RestThreshold = 0.03f;
 
         private readonly Timer timer;
         private Bitmap sourceBitmap;
@@ -69,10 +70,12 @@ namespace ILXP.UI
             y = Math.Max(1, Math.Min(height - 2, y));
             float value = Math.Max(1, strength);
 
-            // A small gaussian-ish splash looks better than a single spike.
-            for (int dy = -2; dy <= 2; dy++)
+            // A wide, soft splash reads much better than a single spike: it produces a
+            // visible ring that travels across the whole surface.
+            const int radius = 7;
+            for (int dy = -radius; dy <= radius; dy++)
             {
-                for (int dx = -2; dx <= 2; dx++)
+                for (int dx = -radius; dx <= radius; dx++)
                 {
                     int px = x + dx;
                     int py = y + dy;
@@ -80,12 +83,19 @@ namespace ILXP.UI
                     {
                         continue;
                     }
-                    float falloff = 1f / (1 + dx * dx + dy * dy);
-                    current[py * width + px] += value * falloff * 1.4f;
+
+                    float distanceSquared = dx * dx + dy * dy;
+                    if (distanceSquared > radius * radius)
+                    {
+                        continue;
+                    }
+
+                    float falloff = 1f / (1f + distanceSquared * 0.45f);
+                    current[py * width + px] += value * falloff * 2.2f;
                 }
             }
 
-            energy = Math.Max(energy, value * 2.5f);
+            energy = Math.Max(energy, value * 3f);
             EnsureRunning();
         }
 
@@ -336,14 +346,20 @@ namespace ILXP.UI
                     int right = x < width - 1 ? index + 1 : index;
 
                     float height0 = current[index];
-                    if (height0 > -0.01f && height0 < 0.01f)
+                    float gradientX = current[left] - current[right];
+                    float gradientY = current[up] - current[down];
+                    float laplacian = height0 - (current[up] + current[down] + current[left] + current[right]) * 0.25f;
+
+                    if (gradientX > -0.02f && gradientX < 0.02f &&
+                        gradientY > -0.02f && gradientY < 0.02f &&
+                        laplacian > -0.02f && laplacian < 0.02f)
                     {
                         targetPixels[index] = sourcePixels[index];
                         continue;
                     }
 
-                    int dx = (int)((current[left] - current[right]) * Displacement);
-                    int dy = (int)((current[up] - current[down]) * Displacement);
+                    int dx = (int)(gradientX * Displacement);
+                    int dy = (int)(gradientY * Displacement);
 
                     int sx = x + dx;
                     int sy = y + dy;
@@ -366,21 +382,29 @@ namespace ILXP.UI
 
                     int color = sourcePixels[sy * stride + sx];
 
-                    // Shading from the surface slope (not from the absolute height, which
-                    // would paint flat gray blobs).
-                    float slope = (current[index] - (current[up] + current[down] + current[left] + current[right]) * 0.25f);
-                    int light = (int)(slope * Highlight * 255f);
-                    if (light > 60)
+                    // The laplacian is ring shaped around a drop, so using it for both the
+                    // shading and the tint produces visible concentric ripples instead of
+                    // flat blobs.
+                    int light = (int)(laplacian * Highlight * 255f);
+                    if (light > 130)
                     {
-                        light = 60;
+                        light = 130;
                     }
-                    else if (light < -60)
+                    else if (light < -130)
                     {
-                        light = -60;
+                        light = -130;
                     }
-                    if (light != 0)
+
+                    float magnitude = laplacian < 0 ? -laplacian : laplacian;
+                    int tint = (int)(magnitude * TintStrength * 16f);
+                    if (tint > 150)
                     {
-                        color = AddLight(color, light);
+                        tint = 150;
+                    }
+
+                    if (light != 0 || tint != 0)
+                    {
+                        color = Shade(color, light, tint);
                     }
 
                     targetPixels[index] = color;
@@ -390,12 +414,25 @@ namespace ILXP.UI
             WritePixels(renderTarget, targetPixels);
         }
 
-        private static int AddLight(int color, int light)
+        private static int Shade(int color, int light, int tint)
         {
             int a = (color >> 24) & 0xFF;
-            int r = ((color >> 16) & 0xFF) + light;
-            int g = ((color >> 8) & 0xFF) + light;
-            int b = (color & 0xFF) + light;
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = color & 0xFF;
+
+            // Water tint: pull the pixel towards a light cyan, proportional to the local
+            // wave height. This is what makes the ripples obvious on a white background.
+            if (tint > 0)
+            {
+                r += ((80 - r) * tint) / 255;
+                g += ((165 - g) * tint) / 255;
+                b += ((235 - b) * tint) / 255;
+            }
+
+            r += light;
+            g += light;
+            b += light;
 
             r = r < 0 ? 0 : (r > 255 ? 255 : r);
             g = g < 0 ? 0 : (g > 255 ? 255 : g);

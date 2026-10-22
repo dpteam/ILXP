@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>ILXP.Tests</AssemblyName>
+    <RootNamespace>ILXP.Tests</RootNamespace>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net40</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Cecil\Mono.Cecil.csproj" />
+  </ItemGroup>
+
+</Project>

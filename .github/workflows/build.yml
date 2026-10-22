@@ -1,0 +1,92 @@
+name: build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build (${{ matrix.platform }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ AnyCPU, x86, x64 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Show environment
+        run: |
+          dotnet --info
+          Write-Host "Platform: ${{ matrix.platform }}"
+
+      - name: Restore
+        run: dotnet restore ILXP.slnx -p:Platform=${{ matrix.platform }}
+
+      - name: Build
+        run: dotnet build ILXP.slnx -c Release --no-restore -p:Platform=${{ matrix.platform }} -warnaserror:false
+
+      - name: Test
+        if: matrix.platform == 'AnyCPU'
+        run: |
+          dotnet build tests/ILXP.Tests/ILXP.Tests.csproj -c Release -p:Platform=AnyCPU
+          $exe = "tests/ILXP.Tests/bin/Release/net40/ILXP.Tests.exe"
+          & $exe run --ilxp "src/ILXP/bin/Release/net40/ILXP.exe"
+          if ($LASTEXITCODE -ne 0) { throw "tests failed with exit code $LASTEXITCODE" }
+
+      - name: Smoke test (CLI)
+        if: matrix.platform == 'AnyCPU'
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File tools/Smoke-Test.ps1 -Exe "src/ILXP/bin/Release/net40/ILXP.exe"
+
+      - name: Decompile accuracy report
+        if: matrix.platform == 'AnyCPU'
+        run: |
+          $exe = "src/ILXP/bin/Release/net40/ILXP.exe"
+          & $exe --accuracy $exe --language il
+          & $exe --accuracy $exe --language cs
+          & $exe --accuracy $exe --language vb
+
+      - name: Render screenshots
+        if: matrix.platform == 'AnyCPU'
+        run: |
+          $exe = "src/ILXP/bin/Release/net40/ILXP.exe"
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          & $exe --screenshot artifacts/main.png --window main
+          & $exe --screenshot artifacts/about.png --window about
+          & $exe --render-water artifacts/water.png
+
+      - name: Collect artifacts
+        if: matrix.platform == 'AnyCPU'
+        run: |
+          New-Item -ItemType Directory -Force -Path "artifacts/ilxp-${{ matrix.platform }}" | Out-Null
+          Copy-Item "src/ILXP/bin/Release/net40/*" "artifacts/ilxp-${{ matrix.platform }}/" -Recurse -Force
+          Copy-Item "tests/ILXP.Tests/bin/Release/net40/*" "artifacts/ilxp-${{ matrix.platform }}/tests/" -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ILXP-${{ matrix.platform }}
+          path: |
+            src/ILXP/bin/Release/net40/**
+            tests/ILXP.Tests/bin/Release/net40/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload screenshots
+        if: matrix.platform == 'AnyCPU'
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: artifacts/*.png
+          if-no-files-found: warn
+          retention-days: 30

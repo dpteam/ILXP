@@ -174,8 +174,59 @@ namespace ILXP.Interop
             }
         }
 
-        private static void SanitizeType(TypeDefinition type)
+        /// <summary>Promotes <c>*.s</c> branches to long form when the target is out of range.</summary>
+        private static void ExpandOutOfRangeBranches(MethodBody body)
         {
+            // Offsets are not known yet; be conservative and always promote short branches
+            // in methods with more than 100 instructions.
+            if (body.Instructions.Count <= 100)
+            {
+                return;
+            }
+
+            foreach (Instruction instruction in body.Instructions)
+            {
+                if (instruction.OpCode.OperandType != OperandType.ShortInlineBrTarget)
+                {
+                    continue;
+                }
+
+                string name = instruction.OpCode.Name;
+                if (!name.EndsWith(".s", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                string longName = name.Substring(0, name.Length - 2);
+                OpCode longForm;
+                if (TryGetOpCode(longName, out longForm))
+                {
+                    instruction.OpCode = longForm;
+                }
+            }
+        }
+
+        private static bool TryGetOpCode(string name, out OpCode opcode)
+        {
+            foreach (FieldInfo field in typeof(OpCodes).GetFields())
+            {
+                if (field.FieldType != typeof(OpCode))
+                {
+                    continue;
+                }
+
+                OpCode candidate = (OpCode)field.GetValue(null);
+                if (string.Equals(candidate.Name, name, StringComparison.Ordinal))
+                {
+                    opcode = candidate;
+                    return true;
+                }
+            }
+            opcode = OpCodes.Nop;
+            return false;
+        }
+
+        private static void SanitizeType(TypeDefinition type)        {
             foreach (MethodDefinition method in type.Methods)
             {
                 if (!method.HasBody)
@@ -242,6 +293,10 @@ namespace ILXP.Interop
                         instruction.Operand = null;
                     }
                 }
+
+                // Short branches must fit into a signed byte; if the layout does not allow
+                // it, promote them to their long form instead of writing a corrupted offset.
+                ExpandOutOfRangeBranches(method.Body);
 
                 if (method.Body.MaxStackSize < 8)
                 {

@@ -2,4 +2,5 @@
   <Project Path="src/ILXP/ILXP.csproj" />
   <Project Path="src/Cecil/Mono.Cecil.csproj" />
   <Project Path="src/Cecil.Pdb/Mono.Cecil.Pdb.csproj" />
+  <Project Path="tests/ILXP.Tests/ILXP.Tests.csproj" />
 </Solution>

@@ -9,6 +9,7 @@ using ILXP.Deobfuscation;
 using ILXP.Interop;
 using ILXP.Music;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 
 namespace ILXP
 {
@@ -63,10 +64,18 @@ namespace ILXP
                         return Clean(options);
                     case "tree":
                         return DumpTree(options);
+                    case "accuracy":
+                        return MeasureAccuracy(options);
+                    case "verify":
+                        return Verify(options);
+                    case "headless":
+                        return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
                         return MusicCommand(options);
                     case "screenshot":
                         return Screenshot(options);
+                    case "render-water":
+                        return RenderWater(options);
                     default:
                         Console.Error.WriteLine("error: unknown command '" + options.Command + "'");
                         return 2;
@@ -358,6 +367,37 @@ namespace ILXP
             return 0;
         }
 
+        private static int RenderWater(Options options)
+        {
+            if (string.IsNullOrEmpty(options.Output))
+            {
+                Console.Error.WriteLine("error: --output <file.png> is required");
+                return 2;
+            }
+
+            int width = options.Width > 0 ? options.Width : 540;
+            int height = options.Height > 0 ? options.Height : 150;
+
+            using (UI.WaterLogo water = new UI.WaterLogo())
+            {
+                water.Size = new Size(width, height);
+                water.Image = AppResources.CompanyLogo;
+                water.AddDrop(width / 3, height / 2, 30);
+                water.AddDrop(width * 2 / 3, height / 3, 22);
+                water.AddDrop(width / 2, height * 2 / 3, 26);
+                water.Advance(options.Frames > 0 ? options.Frames : 14);
+
+                using (Bitmap bitmap = new Bitmap(width, height))
+                {
+                    water.DrawToBitmap(bitmap, new Rectangle(0, 0, width, height));
+                    bitmap.Save(options.Output, System.Drawing.Imaging.ImageFormat.Png);
+                }
+            }
+
+            Console.WriteLine("water rendered to " + options.Output);
+            return 0;
+        }
+
         private static Form CreateWindowForCapture(string window)
         {
             if (string.Equals(window, "main", StringComparison.OrdinalIgnoreCase))
@@ -408,7 +448,7 @@ namespace ILXP
                 }
                 else if (extension == ".wav")
                 {
-                    File.WriteAllBytes(output, ChiptuneSynth.RenderWav(sequence, options.MusicVolume));
+                    Synthesizer.RenderToWav(sequence, options.MusicVolume, output);
                 }
                 else
                 {
@@ -417,6 +457,155 @@ namespace ILXP
                 Console.WriteLine("written to  : " + output);
             }
             return 0;
+        }
+
+        /// <summary>
+        /// Checks that every instruction has an operand matching its opcode and that branch
+        /// targets point inside the method body. Useful before writing an assembly back to
+        /// disk (and for diagnosing damaged input).
+        /// </summary>
+        private static int Verify(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            int methods = 0;
+            int instructions = 0;
+            int badOperands = 0;
+            int badTargets = 0;
+            List<string> problems = new List<string>();
+
+            foreach (ModuleDefinition module in assembly.Modules)
+            {
+                foreach (TypeDefinition type in module.Types)
+                {
+                    VerifyType(type, ref methods, ref instructions, ref badOperands, ref badTargets, problems);
+                }
+            }
+
+            Console.WriteLine("assembly    : " + assembly.Name.FullName);
+            Console.WriteLine("methods     : " + methods);
+            Console.WriteLine("instructions: " + instructions);
+            Console.WriteLine("bad operands: " + badOperands);
+            Console.WriteLine("bad targets : " + badTargets);
+
+            if (problems.Count > 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("problems:");
+                for (int i = 0; i < problems.Count && i < 40; i++)
+                {
+                    Console.WriteLine("  " + problems[i]);
+                }
+                if (problems.Count > 40)
+                {
+                    Console.WriteLine("  ... " + (problems.Count - 40) + " more");
+                }
+            }
+
+            return badOperands == 0 && badTargets == 0 ? 0 : 1;
+        }
+
+        private static void VerifyType(TypeDefinition type, ref int methods, ref int instructions,
+            ref int badOperands, ref int badTargets, List<string> problems)
+        {
+            foreach (MethodDefinition method in type.Methods)
+            {
+                if (!method.HasBody)
+                {
+                    continue;
+                }
+
+                methods++;
+                HashSet<Instruction> body = new HashSet<Instruction>(method.Body.Instructions);
+                foreach (Instruction instruction in method.Body.Instructions)
+                {
+                    instructions++;
+                    OperandType operandType = instruction.OpCode.OperandType;
+                    if (operandType != OperandType.InlineNone && instruction.Operand == null)
+                    {
+                        badOperands++;
+                        if (problems.Count < 200)
+                        {
+                            problems.Add(type.FullName + "::" + method.Name + " IL_" +
+                                         instruction.Offset.ToString("x4") + " " + instruction.OpCode.Name + " has a null operand");
+                        }
+                        continue;
+                    }
+
+                    Instruction target = instruction.Operand as Instruction;
+                    if (target != null && !body.Contains(target))
+                    {
+                        badTargets++;
+                        if (problems.Count < 200)
+                        {
+                            problems.Add(type.FullName + "::" + method.Name + " IL_" +
+                                         instruction.Offset.ToString("x4") + " branches outside the body");
+                        }
+                    }
+
+                    Instruction[] targets = instruction.Operand as Instruction[];
+                    if (targets != null)
+                    {
+                        foreach (Instruction item in targets)
+                        {
+                            if (item == null || !body.Contains(item))
+                            {
+                                badTargets++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (TypeDefinition nested in type.NestedTypes)
+            {
+                VerifyType(nested, ref methods, ref instructions, ref badOperands, ref badTargets, problems);
+            }
+        }
+
+        /// <summary>Prints the structural completeness report for an assembly.</summary>
+        private static int MeasureAccuracy(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+
+            LanguageWriter writer;
+            switch (options.Language)
+            {
+                case "cs":
+                case "csharp":
+                    writer = new CSharpWriter();
+                    break;
+                case "vb":
+                    writer = new VbWriter();
+                    break;
+                default:
+                    writer = new IlWriter();
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(options.Dialect))
+            {
+                OutputDialect dialect = OutputDialect.FromId(options.Dialect);
+                if (dialect != null)
+                {
+                    writer.Dialect = dialect;
+                }
+            }
+
+            AccuracyReport report = Accuracy.Measure(assembly, writer);
+            Console.Write(report.ToString());
+
+            if (options.VerboseOutput && report.Missing.Count > 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("missing members:");
+                foreach (string item in report.Missing)
+                {
+                    Console.WriteLine("  " + item);
+                }
+            }
+
+            return report.Percent >= 99.0 ? 0 : 1;
         }
 
         private static int DumpTree(Options options)
@@ -551,6 +740,9 @@ namespace ILXP
             Console.WriteLine("  ILXP --version                           print the version");
             Console.WriteLine("  ILXP --list <assembly>                   list types in an assembly");
             Console.WriteLine("  ILXP --tree <assembly> [--deep]          list references/namespaces (with resolution)");
+            Console.WriteLine("  ILXP --accuracy <assembly> [--language il|cs|vb] [--verbose]");
+            Console.WriteLine("                                           structural completeness report");
+            Console.WriteLine("  ILXP --headless                          command shell on stdin (no window)");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -587,6 +779,10 @@ namespace ILXP
             public string Window { get; private set; }
             public string Dialect { get; private set; }
             public bool Deep { get; private set; }
+            public int Width { get; private set; }
+            public int Height { get; private set; }
+            public int Frames { get; private set; }
+            public bool VerboseOutput { get; private set; }
             public bool UseNativeTools { get; private set; }
 
             public static Options Parse(string[] args)
@@ -642,6 +838,19 @@ namespace ILXP
                             options.Command = "screenshot";
                             options.Output = Next(args, ref i, argument);
                             break;
+                        case "--render-water":
+                            options.Command = "render-water";
+                            options.Output = Next(args, ref i, argument);
+                            break;
+                        case "--width":
+                            options.Width = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
+                            break;
+                        case "--height":
+                            options.Height = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
+                            break;
+                        case "--frames":
+                            options.Frames = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
+                            break;
                         case "--window":
                             options.Window = Next(args, ref i, argument);
                             break;
@@ -654,6 +863,20 @@ namespace ILXP
                         case "--tree":
                             options.Command = "tree";
                             options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--accuracy":
+                            options.Command = "accuracy";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--verify":
+                            options.Command = "verify";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--headless":
+                            options.Command = "headless";
+                            break;
+                        case "--verbose":
+                            options.VerboseOutput = true;
                             break;
                         case "--deep":
                             options.Deep = true;

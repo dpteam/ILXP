@@ -37,22 +37,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cecil\Mono.Cecil.csproj" />
-    <ProjectReference Include="..\Cecil.Pdb\Mono.Cecil.Pdb.csproj" />
+    <!--
+      Cecil is compiled directly into ILXP.exe, so the build output is a single
+      executable. The standalone Cecil projects remain in the solution for reference and
+      for the round-trip tests, but ILXP does not reference them.
+    -->
+    <Compile Include="..\Cecil\**\*.cs" Exclude="..\Cecil\obj\**;..\Cecil\bin\**;..\Cecil\Properties\AssemblyInfo.cs">
+      <Link>Cecil\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\Cecil.Pdb\**\*.cs" Exclude="..\Cecil.Pdb\obj\**;..\Cecil.Pdb\bin\**;..\Cecil.Pdb\Properties\AssemblyInfo.cs">
+      <Link>Cecil.Pdb\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <!--
-      The native tools are no longer required: ILXP ships managed replacements
-      (ManagedIlDisassembler, ManagedIlAssembler, ManagedDisassembler). They are only
-      used when the "native" switch is passed explicitly, and are copied to a subfolder
-      so that the default build does not depend on them.
+      The native tools are no longer shipped: ILXP uses managed replacements
+      (ManagedIlDisassembler, ManagedIlAssembler, ManagedDisassembler, AssemblyResolver).
+      "native" is only copied for local experiments and is not part of the build output.
     -->
-    <Content Include="..\..\native\**\*">
+    <None Include="..\..\native\**\*">
       <Link>native\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
-    </Content>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
