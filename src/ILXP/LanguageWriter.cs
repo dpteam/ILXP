@@ -71,6 +71,18 @@ namespace ILXP
                 return "<<#" + GetAssemblyName(field.DeclaringType.Scope).FullName + "//N" +
                        field.DeclaringType.Namespace + "//" + field.DeclaringType.Name + "//F" + field.Name + ">>";
             }
+            if (value is PropertyDefinition)
+            {
+                PropertyDefinition property = (PropertyDefinition)value;
+                return "<<#" + GetAssemblyName(property.DeclaringType.Scope).FullName + "//N" +
+                       property.DeclaringType.Namespace + "//" + property.DeclaringType.Name + "//P" + property.Name + ">>";
+            }
+            if (value is EventDefinition)
+            {
+                EventDefinition @event = (EventDefinition)value;
+                return "<<#" + GetAssemblyName(@event.DeclaringType.Scope).FullName + "//N" +
+                       @event.DeclaringType.Namespace + "//" + @event.DeclaringType.Name + "//E" + @event.Name + ">>";
+            }
             throw new ArgumentException("Unknown object type: " + (value == null ? "null" : value.GetType().FullName));
         }
 
@@ -160,6 +172,15 @@ namespace ILXP
         public static string FormatIlLabel(int offset)
         {
             return "<<r>>L_" + offset.ToString("x4") + "<<>>";
+        }
+
+        /// <summary>
+        /// Compiler-generated members (lambdas, local functions, state machines) have
+        /// names starting with '&lt;'. They are hidden from the high-level outline.
+        /// </summary>
+        internal static bool IsCompilerGeneratedName(string name)
+        {
+            return !string.IsNullOrEmpty(name) && name[0] == '<';
         }
 
         /// <summary>Chooses a VB-style prefix for a generated local variable name.</summary>

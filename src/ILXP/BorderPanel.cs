@@ -1,225 +1,164 @@
 using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace ILXP
 {
+    /// <summary>
+    /// Panel that draws a Windows-visual-styles border, matching the look of
+    /// Explorer panes. Only active for <see cref="BorderStyle.FixedSingle"/> when
+    /// visual styles are enabled; otherwise the panel behaves like a plain Panel.
+    /// </summary>
     public class BorderPanel : Panel
     {
-    	private struct Struct0
-    	{
-    		public int int_0;
+        private const int WM_NCCALCSIZE = 0x0083;
+        private const int WM_NCPAINT = 0x0085;
+        private const int DCX_WINDOW = 0x00000001;
+        private const int DCX_CACHE = 0x00000002;
+        private const int DCX_CLIPSIBLINGS = 0x00000010;
+        private const int DCX_INTERSECTRGN = 0x00000080;
 
-    		public int int_1;
+        [StructLayout(LayoutKind.Sequential)]
+        private struct Rect
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
 
-    		public int int_2;
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NcCalcSizeParams
+        {
+            public Rect Client;
+            public Rect Before;
+            public Rect After;
+            public IntPtr LParam;
+        }
 
-    		public int int_3;
-    	}
+        protected override void WndProc(ref Message m)
+        {
+            try
+            {
+                if (!TryHandleNonClientMessage(this, ref m))
+                {
+                    base.WndProc(ref m);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Border painting failed.", ex);
+                base.WndProc(ref m);
+            }
+        }
 
-    	private struct Struct1
-    	{
-    		internal Struct0 struct0_0;
+        /// <summary>Handles WM_NCCALCSIZE for a bordered, themed control.</summary>
+        public static bool TryHandleNonClientMessage(Panel control, ref Message message)
+        {
+            if (control == null || control.BorderStyle != BorderStyle.FixedSingle || !Application.RenderWithVisualStyles)
+            {
+                return false;
+            }
 
-    		internal Struct0 struct0_1;
+            switch (message.Msg)
+            {
+                case WM_NCCALCSIZE:
+                    if (message.WParam == IntPtr.Zero)
+                    {
+                        Rect rect = (Rect)Marshal.PtrToStructure(message.LParam, typeof(Rect));
+                        rect.Bottom++;
+                        rect.Top--;
+                        rect.Right++;
+                        rect.Left--;
+                        Marshal.StructureToPtr(rect, message.LParam, false);
+                    }
+                    else
+                    {
+                        NcCalcSizeParams parameters = (NcCalcSizeParams)Marshal.PtrToStructure(message.LParam, typeof(NcCalcSizeParams));
+                        parameters.Client.Top--;
+                        parameters.Client.Bottom++;
+                        parameters.Client.Left--;
+                        parameters.Client.Right++;
+                        Marshal.StructureToPtr(parameters, message.LParam, false);
+                    }
+                    return true;
 
-    		internal Struct0 struct0_2;
+                case WM_NCPAINT:
+                    return PaintVisualStyleBorder(control, ref message);
+            }
 
-    		internal Struct2 struct2_0;
-    	}
+            return false;
+        }
 
-    	private struct Struct2
-    	{
-    		internal IntPtr intptr_0;
+        private static bool PaintVisualStyleBorder(Panel control, ref Message message)
+        {
+            Panel panel = control as Panel;
+            if (panel == null || !panel.AutoScroll)
+            {
+                return false;
+            }
 
-    		internal IntPtr intptr_1;
+            IntPtr hdc = IntPtr.Zero;
+            try
+            {
+                if (message.WParam != (IntPtr)1 && message.WParam != IntPtr.Zero)
+                {
+                    hdc = GetDCEx(message.HWnd, message.WParam, DCX_WINDOW | DCX_CACHE | DCX_CLIPSIBLINGS | DCX_INTERSECTRGN);
+                }
+                if (hdc == IntPtr.Zero)
+                {
+                    hdc = GetWindowDC(message.HWnd);
+                }
+                if (hdc == IntPtr.Zero)
+                {
+                    return false;
+                }
 
-    		internal int x;
+                Rect windowRect;
+                if (!GetWindowRect(message.HWnd, out windowRect))
+                {
+                    return false;
+                }
 
-    		internal int y;
+                Rectangle bounds = new Rectangle(0, 0, windowRect.Right - windowRect.Left - 1, windowRect.Bottom - windowRect.Top - 1);
+                if (bounds.Width <= 0 || bounds.Height <= 0)
+                {
+                    return false;
+                }
 
-    		internal int int_0;
+                using (Graphics graphics = Graphics.FromHdc(hdc))
+                {
+                    ControlPaint.DrawVisualStyleBorder(graphics, bounds);
+                }
+                bounds.Inflate(-1, -1);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Visual style border painting failed.", ex);
+                return false;
+            }
+            finally
+            {
+                if (hdc != IntPtr.Zero)
+                {
+                    ReleaseDC(message.HWnd, hdc);
+                }
+            }
+        }
 
-    		internal int int_1;
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetWindowDC(IntPtr hWnd);
 
-    		internal uint uint_0;
-    	}
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDCEx(IntPtr hWnd, IntPtr hrgnClip, int flags);
 
-    	[DebuggerNonUserCode]
-    	public BorderPanel()
-    	{
-    	}
+        [DllImport("user32.dll")]
+        private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
-    	protected override void WndProc(ref Message m)
-    	{
-    		try
-    		{
-    			if (!smethod_0(this, ref m))
-    			{
-    				base.WndProc(ref m);
-    				smethod_1(this, ref m);
-    			}
-    		}
-    		catch (Exception projectError)
-    		{
-    			ProjectData.SetProjectError(projectError);
-    			ProjectData.ClearProjectError();
-    		}
-    	}
-
-    	public static bool smethod_0(Control control_0, ref Message message_0)
-    	{
-    		if (Conversions.ToBoolean(Operators.OrObject(Operators.CompareObjectNotEqual(NewLateBinding.LateGet(control_0, null, "borderstyle", new object[0], null, null, null), 2, TextCompare: false), !Application.RenderWithVisualStyles)))
-    		{
-    			return false;
-    		}
-    		checked
-    		{
-    			switch (message_0.Msg)
-    			{
-    			case 131:
-    				if (message_0.WParam == (IntPtr)0)
-    				{
-    					object lParam = message_0.GetLParam(typeof(Struct0));
-    					Struct0 struct2 = default;
-    					Struct0 @struct = ((lParam != null) ? ((Struct0)lParam) : struct2);
-    					@struct.int_3++;
-    					@struct.int_1--;
-    					@struct.int_2++;
-    					@struct.int_0--;
-    					Marshal.StructureToPtr(@struct, message_0.LParam, fDeleteOld: false);
-    				}
-    				else
-    				{
-    					object lParam2 = message_0.GetLParam(typeof(Struct1));
-    					Struct1 struct4 = default;
-    					Struct1 struct3 = ((lParam2 != null) ? ((Struct1)lParam2) : struct4);
-    					struct3.struct0_0.int_1 = struct3.struct0_0.int_1 - 1;
-    					struct3.struct0_0.int_3 = struct3.struct0_0.int_3 + 1;
-    					struct3.struct0_0.int_0 = struct3.struct0_0.int_0 - 1;
-    					struct3.struct0_0.int_2 = struct3.struct0_0.int_2 + 1;
-    					Marshal.StructureToPtr(struct3, message_0.LParam, fDeleteOld: false);
-    				}
-    				return false;
-    			case 133:
-    				if (Conversions.ToBoolean((!Conversions.ToBoolean(control_0.GetType().GetProperty("AutoScroll") != null) || !Conversions.ToBoolean(NewLateBinding.LateGet(control_0, null, "AutoScroll", new object[0], null, null, null))) ? ((object)false) : ((object)true)))
-    				{
-    					return false;
-    				}
-    				try
-    				{
-    					IntPtr zero = IntPtr.Zero;
-    					if (message_0.WParam.ToInt32() != 1 && !(message_0.WParam == IntPtr.Zero))
-    					{
-    						zero = GetDCEx(message_0.HWnd, message_0.WParam, 129);
-    						if (zero == IntPtr.Zero)
-    						{
-    							zero = GetWindowDC(message_0.HWnd);
-    						}
-    					}
-    					else
-    					{
-    						zero = GetWindowDC(message_0.HWnd);
-    					}
-    					if (zero == IntPtr.Zero)
-    					{
-    						return false;
-    					}
-    					Graphics graphics = Graphics.FromHdc(zero);
-    					Struct0 struct0_ = default;
-    					if (GetWindowRect((int)message_0.HWnd, ref struct0_) == 0)
-    					{
-    						return false;
-    					}
-    					Rectangle bounds = new Rectangle(0, 0, struct0_.int_2 - struct0_.int_0 - 1, struct0_.int_3 - struct0_.int_1 - 1);
-    					if ((bounds.Width == 0) | (bounds.Height == 0))
-    					{
-    						return false;
-    					}
-    					ControlPaint.DrawVisualStyleBorder(graphics, bounds);
-    					bounds.Inflate(-1, -1);
-    					ReleaseDC(message_0.HWnd, zero);
-    					return true;
-    				}
-    				catch (Exception projectError)
-    				{
-    					ProjectData.SetProjectError(projectError);
-    					ProjectData.ClearProjectError();
-    				}
-    				break;
-    			}
-    			return false;
-    		}
-    	}
-
-    	public static void smethod_1(Control control_0, ref Message message_0)
-    	{
-    		if (Conversions.ToBoolean(Operators.OrObject(Operators.CompareObjectNotEqual(NewLateBinding.LateGet(control_0, null, "borderstyle", new object[0], null, null, null), 2, TextCompare: false), !Application.RenderWithVisualStyles)))
-    		{
-    			return;
-    		}
-    		int msg = message_0.Msg;
-    		if (msg != 133 || Conversions.ToBoolean((Conversions.ToBoolean(control_0.GetType().GetProperty("AutoScroll") == null) || Conversions.ToBoolean(Operators.NotObject(NewLateBinding.LateGet(control_0, null, "AutoScroll", new object[0], null, null, null)))) ? ((object)true) : ((object)false)))
-    		{
-    			return;
-    		}
-    		try
-    		{
-    			IntPtr zero = IntPtr.Zero;
-    			if (message_0.WParam.ToInt32() != 1 && !(message_0.WParam == IntPtr.Zero))
-    			{
-    				zero = GetDCEx(message_0.HWnd, message_0.WParam, 129);
-    				if (zero == IntPtr.Zero)
-    				{
-    					zero = GetWindowDC(message_0.HWnd);
-    				}
-    			}
-    			else
-    			{
-    				zero = GetWindowDC(message_0.HWnd);
-    			}
-    			if (zero == IntPtr.Zero)
-    			{
-    				return;
-    			}
-    			Graphics graphics = Graphics.FromHdc(zero);
-    			Struct0 struct0_ = default;
-    			if (GetWindowRect((int)message_0.HWnd, ref struct0_) != 0)
-    			{
-    				Rectangle bounds = checked(new Rectangle(0, 0, struct0_.int_2 - struct0_.int_0 - 1, struct0_.int_3 - struct0_.int_1 - 1));
-    				if (!((bounds.Width == 0) | (bounds.Height == 0)))
-    				{
-    					ControlPaint.DrawVisualStyleBorder(graphics, bounds);
-    					bounds.Inflate(-1, -1);
-    					ReleaseDC(message_0.HWnd, zero);
-    				}
-    			}
-    		}
-    		catch (Exception projectError)
-    		{
-    			ProjectData.SetProjectError(projectError);
-    			ProjectData.ClearProjectError();
-    		}
-    	}
-
-    	[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-    	private static extern bool SetWindowPos(IntPtr intptr_0, IntPtr intptr_1, int int_0, int int_1, int int_2, int int_3, int int_4);
-
-    	[DllImport("user32")]
-    	private static extern IntPtr GetWindowDC(IntPtr intptr_0);
-
-    	[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-    	private static extern IntPtr GetDCEx(IntPtr intptr_0, IntPtr intptr_1, int int_0);
-
-    	[DllImport("user32.dll", CharSet = CharSet.Auto)]
-    	private static extern void ReleaseDC(IntPtr intptr_0, IntPtr intptr_1);
-
-    	[DllImport("user32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
-    	private static extern int GetWindowRect(int int_0, ref Struct0 struct0_0);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetWindowRect(IntPtr hWnd, out Rect rect);
     }
-
 }

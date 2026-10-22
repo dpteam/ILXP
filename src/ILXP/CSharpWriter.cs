@@ -130,7 +130,7 @@ namespace ILXP
     			stringBuilder.Append(" = ");
     			if (fieldDefinition_0.Constant is string)
     			{
-    				stringBuilder.Append(string.Format("<<r>>'{0}'<<>>", RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
+    				stringBuilder.Append(string.Format("<<r>>\"{0}\"<<>>", RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
     			}
     			else
     			{
@@ -227,7 +227,7 @@ namespace ILXP
     								}
     								else if (parameter.Constant is string)
     								{
-    									stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>)] ");
+    									stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>\"{RuntimeHelpers.GetObjectValue(parameter.Constant)}\"<<>>)] ");
     								}
     								else
     								{
@@ -303,7 +303,10 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>// Nested Types<<>>");
     					foreach (TypeDefinition nestedType in typeDefinition_0.NestedTypes)
     					{
-    						stringBuilder2.AppendLine(WriteType(nestedType, bool_0: true));
+    						if (!LanguageWriter.IsCompilerGeneratedName(nestedType.Name))
+    						{
+    							stringBuilder2.AppendLine(WriteType(nestedType, bool_0: true));
+    						}
     					}
     					stringBuilder2.AppendLine();
     				}
@@ -363,7 +366,7 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>// Methods<<>>");
     					foreach (MethodDefinition method2 in typeDefinition_0.Methods)
     					{
-    						if (!list.Contains(method2.Name))
+    						if (!list.Contains(method2.Name) && !LanguageWriter.IsCompilerGeneratedName(method2.Name))
     						{
     							stringBuilder2.AppendLine(WriteMethod(method2, bool_0: true));
     						}
@@ -428,48 +431,8 @@ namespace ILXP
     			}
     		}
     		stringBuilder.Append("event ");
+    		stringBuilder.Append(GetTypeName(eventDefinition_0.EventType) + " ");
     		stringBuilder.Append(LanguageWriter.GetReferenceKey(eventDefinition_0) + eventDefinition_0.Name + "<<>>");
-    		stringBuilder.Append("(");
-    		foreach (MethodDefinition method in eventDefinition_0.EventType.GetElementType().Resolve().Methods)
-    		{
-    			methodDefinition = method;
-    			if (Operators.CompareString(methodDefinition.Name, "Invoke", TextCompare: false) == 0)
-    			{
-    				break;
-    			}
-    		}
-    		if (methodDefinition.Parameters.Count > 0)
-    		{
-    			foreach (ParameterDefinition parameter in methodDefinition.Parameters)
-    			{
-    				if (parameter.IsOptional)
-    				{
-    					if (parameter.Constant == null)
-    					{
-    						stringBuilder.Append("[Optional, DefaultParameterValue(<<b>>null<<>>)] ");
-    					}
-    					else if (parameter.Constant is string)
-    					{
-    						stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>)] ");
-    					}
-    					else
-    					{
-    						stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>{RuntimeHelpers.GetObjectValue(parameter.Constant)}<<>>)] ");
-    					}
-    				}
-    				if (parameter.IsOut)
-    				{
-    					stringBuilder.Append("<<b>out<<>> ");
-    				}
-    				if (parameter.ParameterType.IsByReference)
-    				{
-    					stringBuilder.Append("<<b>ref<<>> ");
-    				}
-    				stringBuilder.Append(string.Format("{1} {0}, ", parameter.Name, GetTypeName(parameter.ParameterType)));
-    			}
-    			stringBuilder.Remove(checked(stringBuilder.Length - 2), 2);
-    		}
-    		stringBuilder.Append(")");
     		stringBuilder.Append(";");
     		return stringBuilder.ToString();
     	}
@@ -523,7 +486,10 @@ namespace ILXP
     				stringBuilder.Append("new ");
     			}
     		}
-    		stringBuilder.Append(GetTypeName(methodDefinition_0.ReturnType) + " ");
+    		if (!methodDefinition_0.IsConstructor)
+    		{
+    			stringBuilder.Append(GetTypeName(methodDefinition_0.ReturnType) + " ");
+    		}
     		if (methodDefinition_0.IsConstructor)
     		{
     			stringBuilder.Append(LanguageWriter.GetReferenceKey(methodDefinition_0) + methodDefinition_0.DeclaringType.Name + "<<>>");
@@ -545,7 +511,7 @@ namespace ILXP
     					}
     					else if (parameter.Constant is string)
     					{
-    						stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>)] ");
+    						stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>\"{RuntimeHelpers.GetObjectValue(parameter.Constant)}\"<<>>)] ");
     					}
     					else
     					{
@@ -572,7 +538,7 @@ namespace ILXP
     		}
     		stringBuilder.AppendLine();
     		stringBuilder.AppendLine("{");
-    		VbDecompiler.smethod_2(stringBuilder, methodDefinition_0, 1);
+    		StatementDecompiler.WriteCSharpBody(stringBuilder, methodDefinition_0, 1);
     		stringBuilder.Append("}");
     		return stringBuilder.ToString();
     	}
@@ -644,7 +610,7 @@ namespace ILXP
     					}
     					else if (parameter.Constant is string)
     					{
-    						stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>)] ");
+    						stringBuilder.Append($"[Optional, DefaultParameterValue(<<r>>\"{RuntimeHelpers.GetObjectValue(parameter.Constant)}\"<<>>)] ");
     					}
     					else
     					{
@@ -681,7 +647,7 @@ namespace ILXP
     			MethodDefinition getMethod = propertyDefinition_0.GetMethod;
     			stringBuilder.AppendLine("    <<b>>get<<>>");
     			stringBuilder.AppendLine("    {");
-    			VbDecompiler.smethod_2(stringBuilder, getMethod, 2);
+    			StatementDecompiler.WriteCSharpBody(stringBuilder, getMethod, 2);
     			stringBuilder.AppendLine("    }");
     		}
     		if (propertyDefinition_0.SetMethod != null)
@@ -689,7 +655,7 @@ namespace ILXP
     			MethodDefinition setMethod = propertyDefinition_0.SetMethod;
     			stringBuilder.AppendLine("    <<b>>set<<>>");
     			stringBuilder.AppendLine("    {");
-    			VbDecompiler.smethod_2(stringBuilder, setMethod, 2);
+    			StatementDecompiler.WriteCSharpBody(stringBuilder, setMethod, 2);
     			stringBuilder.AppendLine("    }");
     		}
     		stringBuilder.Append("}");
@@ -735,238 +701,114 @@ namespace ILXP
     		}
     	}
 
-    	private string GetQualifiedTypeName(TypeReference typeReference_0)
+    	private string GetQualifiedTypeName(TypeReference type)
     	{
-    		return LanguageWriter.GetReferenceKey(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name.Replace("&", "") + "<<>>";
+    		return LanguageWriter.GetReferenceKey(type) + type.Namespace + "." + type.Name.Replace("&", string.Empty) + "<<>>";
     	}
 
-    	private string GetTypeName(TypeReference typeReference_0)
+    	private string GetTypeName(TypeReference type)
     	{
-    		if (typeReference_0.IsGenericParameter)
+    		if (type == null)
     		{
-    			return typeReference_0.Name;
+    			return "<<b>>void<<b>>";
     		}
-    		string name = typeReference_0.Name;
-    		string text = "";
-    		string text2 = "";
-    		if (typeReference_0.IsArray)
+    		if (type.IsGenericParameter)
     		{
-    			text = "[]";
+    			return type.Name;
     		}
-    		if (typeReference_0.IsPointer)
+
+    		string arraySuffix = string.Empty;
+    		string pointerSuffix = string.Empty;
+    		if (type.IsArray)
     		{
-    			text2 = "*";
+    			int rank = type is ArrayType ? ((ArrayType)type).Rank : 1;
+    			arraySuffix = "[" + new string(',', rank - 1) + "]";
+    			type = type.GetElementType();
     		}
-    		typeReference_0 = typeReference_0.GetElementType();
-    		if (typeReference_0 == null)
+    		if (type.IsPointer)
     		{
-    			name = "<<b>>void<<b>>";
+    			pointerSuffix += "*";
+    			type = type.GetElementType();
     		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Void", TextCompare: false) == 0)
+    		if (type.IsByReference)
     		{
-    			name = "<<b>>void<<b>>";
+    			// "ref" is emitted by the parameter writer, so only unwrap the type here.
+    			type = type.GetElementType();
     		}
-    		else if (typeReference_0.IsArray)
+
+    		string name;
+    		GenericInstanceType generic = type as GenericInstanceType;
+    		if (generic != null)
     		{
-    			name = "<<b>>array<<>> " + GetQualifiedTypeName(typeReference_0);
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "String", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>string<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Char", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>char<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Boolean", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>bool<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Object", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>object<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Int16", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>int16<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Int32", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>int32<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Int64 Then", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>int64<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "UInt16 Then", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>uint16<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "UInt32", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>uint32<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "UInt64", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>uint64<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Single", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>float32<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Double", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>float64<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Byte", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>uint8<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "SByte", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>int8<<b>>";
-    		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Type", TextCompare: false) == 0)
-    		{
-    			name = "<<b>>type<<b>>";
+    			string elementName = generic.ElementType.Name;
+    			int tick = elementName.IndexOf('`');
+    			if (tick >= 0)
+    			{
+    				elementName = elementName.Substring(0, tick);
+    			}
+    			StringBuilder arguments = new StringBuilder();
+    			foreach (TypeReference argument in generic.GenericArguments)
+    			{
+    				if (arguments.Length > 0)
+    				{
+    					arguments.Append(", ");
+    				}
+    				arguments.Append(GetTypeName(argument));
+    			}
+    			name = elementName + "<" + arguments + ">";
     		}
     		else
     		{
-    			string left = typeReference_0.Namespace;
-    			name = ((Operators.CompareString(left, "System", TextCompare: false) == 0 || Operators.CompareString(left, "System.Reflection", TextCompare: false) == 0 || Operators.CompareString(left, "System.Runtime.InteropServices", TextCompare: false) == 0 || Operators.CompareString(left, "System.Runtime.CompilerServices", TextCompare: false) == 0 || Operators.CompareString(left, "System.Diagnostics", TextCompare: false) == 0 || Operators.CompareString(left, "System.ComponentModel", TextCompare: false) == 0 || Operators.CompareString(left, "System.CodeDom.Compiler", TextCompare: false) == 0 || Operators.CompareString(left, "Microsoft.VisualBasic", TextCompare: false) == 0 || Operators.CompareString(left, "Microsoft.VisualBasic.CompilerServices", TextCompare: false) == 0) ? typeReference_0.Name : (typeReference_0.Namespace + "." + typeReference_0.Name));
+    			name = GetKeywordTypeName(type.Name) ?? QualifyTypeName(type);
     		}
-    		return text2 + LanguageWriter.GetReferenceKey(typeReference_0) + name + "<<>>" + text + text2;
+
+    		return LanguageWriter.GetReferenceKey(type) + "<<b>>" + name + "<<>>" + arraySuffix + pointerSuffix;
     	}
 
-    	private string GetTypeNameShort(TypeReference typeReference_0)
+    	private static string GetKeywordTypeName(string name)
     	{
-    		string text = "<<b>>void<<>>";
-    		if (typeReference_0 == null)
+    		switch (name)
     		{
-    			text = "<<b>>void<<>>";
+    			case "Void": return "void";
+    			case "Boolean": return "bool";
+    			case "Char": return "char";
+    			case "SByte": return "sbyte";
+    			case "Byte": return "byte";
+    			case "Int16": return "short";
+    			case "UInt16": return "ushort";
+    			case "Int32": return "int";
+    			case "UInt32": return "uint";
+    			case "Int64": return "long";
+    			case "UInt64": return "ulong";
+    			case "Single": return "float";
+    			case "Double": return "double";
+    			case "Decimal": return "decimal";
+    			case "String": return "string";
+    			case "Object": return "object";
+    			default: return null;
     		}
-    		else if (Operators.CompareString(typeReference_0.Name, "Void", TextCompare: false) != 0)
+    	}
+
+    	private static string QualifyTypeName(TypeReference type)
+    	{
+    		if (string.IsNullOrEmpty(type.Namespace) || type.Namespace == "System")
     		{
-    			if (typeReference_0.IsArray)
-    			{
-    				text = "<<b>>array<<>> " + GetQualifiedTypeName(typeReference_0);
-    			}
-    			else if (Operators.CompareString(typeReference_0.Name, "String", TextCompare: false) != 0)
-    			{
-    				if (Operators.CompareString(typeReference_0.Name, "Char", TextCompare: false) != 0)
-    				{
-    					if (Operators.CompareString(typeReference_0.Name, "Boolean", TextCompare: false) != 0)
-    					{
-    						if (Operators.CompareString(typeReference_0.Name, "Object", TextCompare: false) != 0)
-    						{
-    							if (Operators.CompareString(typeReference_0.Name, "Int16", TextCompare: false) != 0)
-    							{
-    								if (Operators.CompareString(typeReference_0.Name, "Int32", TextCompare: false) != 0)
-    								{
-    									if (Operators.CompareString(typeReference_0.Name, "Int64 Then", TextCompare: false) != 0)
-    									{
-    										if (Operators.CompareString(typeReference_0.Name, "UInt16 Then", TextCompare: false) != 0)
-    										{
-    											if (Operators.CompareString(typeReference_0.Name, "UInt32", TextCompare: false) != 0)
-    											{
-    												if (Operators.CompareString(typeReference_0.Name, "UInt64", TextCompare: false) != 0)
-    												{
-    													if (Operators.CompareString(typeReference_0.Name, "Single", TextCompare: false) != 0)
-    													{
-    														if (Operators.CompareString(typeReference_0.Name, "Double", TextCompare: false) != 0)
-    														{
-    															if (Operators.CompareString(typeReference_0.Name, "Byte", TextCompare: false) != 0)
-    															{
-    																if (Operators.CompareString(typeReference_0.Name, "SByte", TextCompare: false) != 0)
-    																{
-    																	if (Operators.CompareString(typeReference_0.Name, "Type", TextCompare: false) != 0)
-    																	{
-    																		text = ((!typeReference_0.IsValueType) ? ("<<b>>class<<>> " + GetQualifiedTypeName(typeReference_0)) : ("<<b>>valuetype<<>> " + GetQualifiedTypeName(typeReference_0)));
-    																	}
-    																	else
-    																	{
-    																		text = "<<b>>type<<>>";
-    																	}
-    																}
-    																else
-    																{
-    																	text = "<<b>>int8<<>>";
-    																}
-    															}
-    															else
-    															{
-    																text = "<<b>>uint8<<>>";
-    															}
-    														}
-    														else
-    														{
-    															text = "<<b>>float64<<>>";
-    														}
-    													}
-    													else
-    													{
-    														text = "<<b>>float32<<>>";
-    													}
-    												}
-    												else
-    												{
-    													text = "<<b>>uint64<<>>";
-    												}
-    											}
-    											else
-    											{
-    												text = "<<b>>uint32<<>>";
-    											}
-    										}
-    										else
-    										{
-    											text = "<<b>>uint16<<>>";
-    										}
-    									}
-    									else
-    									{
-    										text = "<<b>>int64<<>>";
-    									}
-    								}
-    								else
-    								{
-    									text = "<<b>>int32<<>>";
-    								}
-    							}
-    							else
-    							{
-    								text = "<<b>>int16<<>>";
-    							}
-    						}
-    						else
-    						{
-    							text = "<<b>>object<<>>";
-    						}
-    					}
-    					else
-    					{
-    						text = "<<b>>bool<<>>";
-    					}
-    				}
-    				else
-    				{
-    					text = "<<b>>char<<>>";
-    				}
-    			}
-    			else
-    			{
-    				text = "<<b>>string<<>>";
-    			}
+    			return type.Name;
     		}
-    		else
+    		switch (type.Namespace)
     		{
-    			text = "<<b>>void<<>>";
+    			case "System.Reflection":
+    			case "System.Runtime.InteropServices":
+    			case "System.Runtime.CompilerServices":
+    			case "System.Diagnostics":
+    			case "System.ComponentModel":
+    			case "System.CodeDom.Compiler":
+    			case "Microsoft.VisualBasic":
+    			case "Microsoft.VisualBasic.CompilerServices":
+    				return type.Name;
+    			default:
+    				return type.Namespace + "." + type.Name;
     		}
-    		if (!text.Contains(" "))
-    		{
-    			text = LanguageWriter.GetReferenceKey(typeReference_0) + text + "<<>>";
-    		}
-    		return text;
     	}
 
     	public override string ToString()

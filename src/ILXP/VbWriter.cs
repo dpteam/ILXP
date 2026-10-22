@@ -130,7 +130,7 @@ namespace ILXP
     			stringBuilder.Append(" = ");
     			if (fieldDefinition_0.Constant is string)
     			{
-    				stringBuilder.Append(string.Format("<<r>>'{0}'<<>>", RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
+    				stringBuilder.Append(string.Format("<<r>>\"{0}\"<<>>", RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
     			}
     			else
     			{
@@ -247,7 +247,7 @@ namespace ILXP
     								}
     								else if (parameter.Constant is string)
     								{
-    									stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+    									stringBuilder.Append($"<<r>>\"{RuntimeHelpers.GetObjectValue(parameter.Constant)}\"<<>>");
     								}
     								else
     								{
@@ -374,7 +374,7 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>' Methods<<>>");
     					foreach (MethodDefinition method2 in typeDefinition_0.Methods)
     					{
-    						if (!list.Contains(method2.Name))
+    						if (!list.Contains(method2.Name) && !LanguageWriter.IsCompilerGeneratedName(method2.Name))
     						{
     							stringBuilder2.AppendLine(WriteMethod(method2, bool_0: true));
     						}
@@ -490,7 +490,7 @@ namespace ILXP
     					}
     					else if (parameter.Constant is string)
     					{
-    						stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+    						stringBuilder.Append($"<<r>>\"{RuntimeHelpers.GetObjectValue(parameter.Constant)}\"<<>>");
     					}
     					else
     					{
@@ -597,7 +597,7 @@ namespace ILXP
     					}
     					else if (parameter.Constant is string)
     					{
-    						stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+    						stringBuilder.Append($"<<r>>\"{RuntimeHelpers.GetObjectValue(parameter.Constant)}\"<<>>");
     					}
     					else
     					{
@@ -622,7 +622,7 @@ namespace ILXP
     			return stringBuilder.ToString();
     		}
     		stringBuilder.AppendLine();
-    		VbDecompiler.smethod_0(stringBuilder, methodDefinition_0, 1);
+    		StatementDecompiler.WriteVisualBasicBody(stringBuilder, methodDefinition_0, 1);
     		if (methodDefinition_0.ReturnType != null && Operators.CompareString(methodDefinition_0.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
     		{
     			stringBuilder.Append("<<b>>End Function<<>>");
@@ -727,7 +727,7 @@ namespace ILXP
     					}
     					else if (parameter.Constant is string)
     					{
-    						stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+    						stringBuilder.Append($"<<r>>\"{RuntimeHelpers.GetObjectValue(parameter.Constant)}\"<<>>");
     					}
     					else
     					{
@@ -754,14 +754,14 @@ namespace ILXP
     		{
     			MethodDefinition getMethod = propertyDefinition_0.GetMethod;
     			stringBuilder.AppendLine("    <<b>>Get<<>> ");
-    			VbDecompiler.smethod_0(stringBuilder, getMethod, 2);
+    			StatementDecompiler.WriteVisualBasicBody(stringBuilder, getMethod, 2);
     			stringBuilder.AppendLine("    <<b>>End Get<<>> ");
     		}
     		if (propertyDefinition_0.SetMethod != null)
     		{
     			MethodDefinition setMethod = propertyDefinition_0.SetMethod;
     			stringBuilder.AppendLine("    <<b>>Set<<>>(value <<b>>As<<>> " + GetTypeName(propertyDefinition_0.PropertyType) + ")");
-    			VbDecompiler.smethod_0(stringBuilder, setMethod, 2);
+    			StatementDecompiler.WriteVisualBasicBody(stringBuilder, setMethod, 2);
     			stringBuilder.AppendLine("    <<b>>End Set<<>> ");
     		}
     		stringBuilder.Append("<<b>>End Property<<>>");

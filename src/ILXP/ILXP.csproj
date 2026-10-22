@@ -12,6 +12,8 @@
     <Platforms>AnyCPU;x86;x64</Platforms>
     <Prefer32Bit>false</Prefer32Bit>
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

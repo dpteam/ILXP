@@ -15,7 +15,7 @@ using Mono.Collections.Generic;
 
 namespace ILXP
 {
-    public sealed class VbDecompiler
+    public sealed class StatementDecompiler
     {
     	private static TypeDefinition typeDefinition_0 = new TypeDefinition("", "", TypeAttributes.NotPublic);
 
@@ -62,11 +62,11 @@ namespace ILXP
     	private static List<Instruction> list_0;
 
     	[DebuggerNonUserCode]
-    	public VbDecompiler()
+    	public StatementDecompiler()
     	{
     	}
 
-    	public static void smethod_0(StringBuilder stringBuilder_0, MethodDefinition methodDefinition_0, int int_0)
+    	public static void WriteVisualBasicBody(StringBuilder stringBuilder_0, MethodDefinition methodDefinition_0, int int_0)
     	{
     		string string_ = smethod_19(methodDefinition_0, int_0);
     		Dictionary<string, string> dictionary = new Dictionary<string, string>();
@@ -303,7 +303,7 @@ namespace ILXP
     		}
     	}
 
-    	public static void smethod_2(StringBuilder stringBuilder_0, MethodDefinition methodDefinition_0, int int_0)
+    	public static void WriteCSharpBody(StringBuilder stringBuilder_0, MethodDefinition methodDefinition_0, int int_0)
     	{
     		string string_ = smethod_19(methodDefinition_0, int_0);
     		Dictionary<string, string> dictionary = new Dictionary<string, string>();

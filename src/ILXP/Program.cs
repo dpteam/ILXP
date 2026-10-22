@@ -14,6 +14,16 @@ namespace ILXP
         [STAThread]
         private static void Main(string[] args)
         {
+            if (args != null && args.Length > 0)
+            {
+                NativeMethods.AttachParentConsole();
+                Log.Initialize();
+                int exitCode = CommandLine.Run(args);
+                Log.Info("Command line finished with exit code " + exitCode);
+                Environment.ExitCode = exitCode;
+                return;
+            }
+
             Log.Initialize();
             Log.Info("ILXP " + AppInfo.VersionText + " starting");
 

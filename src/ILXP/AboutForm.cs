@@ -1,256 +1,122 @@
-using System.ComponentModel;
-using System.Diagnostics;
+using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace ILXP
 {
-    [DesignerGenerated]
+    /// <summary>About box: product name, version, warning and copyright.</summary>
     public sealed class AboutForm : Form
     {
-    	private IContainer icontainer_0;
+        private Button closeButton;
+        private PictureBox logoBox;
+        private Label infoLabel;
+        private Label productLabel;
+        private FlowLayoutPanel copyrightPanel;
+        private Label copyrightLabel;
 
-    	[AccessedThroughProperty("ButtonClose")]
-    	private Button button_0;
+        public AboutForm()
+        {
+            InitializeComponent();
 
-    	[AccessedThroughProperty("PictureBox1")]
-    	private PictureBox pictureBox_0;
+            string product = AppInfo.ProductName;
+            string version = AppInfo.VersionText;
+            string copyright = AppInfo.Copyright;
 
-    	[AccessedThroughProperty("Label1")]
-    	private Label label_0;
+            productLabel.Text = productLabel.Text
+                .Replace("<ProductName>", product)
+                .Replace("<Version>", version)
+                .Replace("<CopyRight>", copyright);
+            copyrightLabel.Text = copyrightLabel.Text
+                .Replace("<ProductName>", product)
+                .Replace("<Version>", version)
+                .Replace("<CopyRight>", copyright);
+            productLabel.Font = new Font(productLabel.Font, FontStyle.Bold);
+        }
 
-    	[AccessedThroughProperty("LabelInfo")]
-    	private Label label_1;
+        private void InitializeComponent()
+        {
+            closeButton = new Button();
+            infoLabel = new Label();
+            productLabel = new Label();
+            logoBox = new PictureBox();
+            copyrightPanel = new FlowLayoutPanel();
+            copyrightLabel = new Label();
+            ((System.ComponentModel.ISupportInitialize)logoBox).BeginInit();
+            copyrightPanel.SuspendLayout();
+            SuspendLayout();
 
-    	[AccessedThroughProperty("FlowLayoutPanel1")]
-    	private FlowLayoutPanel m__003C;
+            closeButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            closeButton.DialogResult = DialogResult.Cancel;
+            closeButton.Location = new Point(375, 270);
+            closeButton.Name = "Close";
+            closeButton.Size = new Size(75, 23);
+            closeButton.TabIndex = 0;
+            closeButton.Text = "Close";
+            closeButton.UseVisualStyleBackColor = true;
 
-    	[AccessedThroughProperty("LabelCopyright")]
-    	private Label label_2;
+            infoLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            infoLabel.AutoSize = true;
+            infoLabel.Location = new Point(9, 212);
+            infoLabel.Name = "LabelInfo";
+            infoLabel.Size = new Size(427, 52);
+            infoLabel.TabIndex = 2;
+            infoLabel.Text = "Warning: This computer program is protected by copyright law and international treaties.";
 
-    	[DebuggerNonUserCode]
-    	protected override void Dispose(bool disposing)
-    	{
-    		try
-    		{
-    			if (disposing && icontainer_0 != null)
-    			{
-    				icontainer_0.Dispose();
-    			}
-    		}
-    		finally
-    		{
-    			base.Dispose(disposing);
-    		}
-    	}
+            productLabel.AutoSize = true;
+            productLabel.Location = new Point(3, 0);
+            productLabel.Name = "Label1";
+            productLabel.Size = new Size(140, 13);
+            productLabel.TabIndex = 3;
+            productLabel.Text = "<ProductName> (<Version>)";
 
-    	[DebuggerStepThrough]
-    	private void method_0()
-    	{
-        		vmethod_1(new Button());
-    		vmethod_5(new Label());
-    		vmethod_7(new Label());
-    		vmethod_3(new PictureBox());
-    		vmethod_8(new FlowLayoutPanel());
-    		vmethod_10(new Label());
-    		((ISupportInitialize)vmethod_2()).BeginInit();
-    		_003C().SuspendLayout();
-    		SuspendLayout();
-    		vmethod_0().Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-    		vmethod_0().DialogResult = DialogResult.Cancel;
-    		Button button = vmethod_0();
-    		Point location = new Point(375, 270);
-    		button.Location = location;
-    		vmethod_0().Name = "ButtonClose";
-    		Button button2 = vmethod_0();
-    		Size size = new Size(75, 23);
-    		button2.Size = size;
-    		vmethod_0().TabIndex = 0;
-    		vmethod_0().Text = "Close";
-    		vmethod_0().UseVisualStyleBackColor = true;
-    		vmethod_4().Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-    		vmethod_4().AutoSize = true;
-    		Label label = vmethod_4();
-    		location = new Point(9, 212);
-    		label.Location = location;
-    		vmethod_4().Name = "Label1";
-    		Label label2 = vmethod_4();
-    		size = new Size(427, 52);
-    		label2.Size = size;
-    		vmethod_4().TabIndex = 2;
-    		vmethod_4().Text = "Warning: This computer program is protected by copyright law and international treaties.";
-    		vmethod_6().AutoSize = true;
-    		Label label3 = vmethod_6();
-    		location = new Point(3, 0);
-    		label3.Location = location;
-    		vmethod_6().Name = "LabelInfo";
-    		Label label4 = vmethod_6();
-    		size = new Size(140, 13);
-    		label4.Size = size;
-    		vmethod_6().TabIndex = 3;
-    		vmethod_6().Text = "<ProductName> (<Version>)";
-    		vmethod_2().BackColor = Color.White;
-    		vmethod_2().Dock = DockStyle.Top;
-    		vmethod_2().Image = AppResources.CompanyLogo;
-    		PictureBox pictureBox = vmethod_2();
-    		location = new Point(0, 0);
-    		pictureBox.Location = location;
-    		PictureBox pictureBox2 = vmethod_2();
-    		Padding margin = new Padding(0);
-    		pictureBox2.Margin = margin;
-    		vmethod_2().Name = "PictureBox1";
-    		PictureBox pictureBox3 = vmethod_2();
-    		size = new Size(459, 128);
-    		pictureBox3.Size = size;
-    		vmethod_2().TabIndex = 1;
-    		vmethod_2().TabStop = false;
-    		_003C().Controls.Add(vmethod_6());
-    		_003C().Controls.Add(vmethod_9());
-    		_003C().FlowDirection = FlowDirection.TopDown;
-    		FlowLayoutPanel flowLayoutPanel = _003C();
-    		location = new Point(8, 137);
-    		flowLayoutPanel.Location = location;
-    		_003C().Name = "FlowLayoutPanel1";
-    		FlowLayoutPanel flowLayoutPanel2 = _003C();
-    		size = new Size(439, 67);
-    		flowLayoutPanel2.Size = size;
-    		_003C().TabIndex = 4;
-    		vmethod_9().AutoSize = true;
-    		Label label5 = vmethod_9();
-    		location = new Point(3, 13);
-    		label5.Location = location;
-    		vmethod_9().Name = "LabelCopyright";
-    		Label label6 = vmethod_9();
-    		size = new Size(68, 13);
-    		label6.Size = size;
-    		vmethod_9().TabIndex = 4;
-    		vmethod_9().Text = "<CopyRight>";
-    		AcceptButton = vmethod_0();
-    		SizeF sizeF = new SizeF(6f, 13f);
-    		AutoScaleDimensions = sizeF;
-    		AutoScaleMode = AutoScaleMode.Font;
-    		AutoSize = true;
-    		CancelButton = vmethod_0();
-    		size = new Size(459, 302);
-    		ClientSize = size;
-    		Controls.Add(_003C());
-    		Controls.Add(vmethod_4());
-    		Controls.Add(vmethod_2());
-    		Controls.Add(vmethod_0());
-    		FormBorderStyle = FormBorderStyle.FixedDialog;
-    		MaximizeBox = false;
-    		MinimizeBox = false;
-    		Name = "AboutDialog";
-    		ShowIcon = false;
-    		ShowInTaskbar = false;
-    		StartPosition = FormStartPosition.CenterParent;
-    		Text = "About";
-    		((ISupportInitialize)vmethod_2()).EndInit();
-    		_003C().ResumeLayout(performLayout: false);
-    		_003C().PerformLayout();
-    		ResumeLayout(performLayout: false);
-    		PerformLayout();
-    	}
+            logoBox.BackColor = Color.White;
+            logoBox.Dock = DockStyle.Top;
+            logoBox.Image = AppResources.CompanyLogo;
+            logoBox.Location = new Point(0, 0);
+            logoBox.Margin = new Padding(0);
+            logoBox.Name = "PictureBox1";
+            logoBox.Size = new Size(459, 128);
+            logoBox.TabIndex = 1;
+            logoBox.TabStop = false;
 
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal Button vmethod_0()
-    	{
-    		return button_0;
-    	}
+            copyrightPanel.Controls.Add(productLabel);
+            copyrightPanel.Controls.Add(copyrightLabel);
+            copyrightPanel.FlowDirection = FlowDirection.TopDown;
+            copyrightPanel.Location = new Point(8, 137);
+            copyrightPanel.Name = "FlowLayoutPanel1";
+            copyrightPanel.Size = new Size(439, 67);
+            copyrightPanel.TabIndex = 4;
 
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_1(Button button_1)
-    	{
-    		button_0 = button_1;
-    	}
+            copyrightLabel.AutoSize = true;
+            copyrightLabel.Location = new Point(3, 13);
+            copyrightLabel.Name = "LabelCopyright";
+            copyrightLabel.Size = new Size(68, 13);
+            copyrightLabel.TabIndex = 4;
+            copyrightLabel.Text = "<CopyRight>";
 
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal PictureBox vmethod_2()
-    	{
-    		return pictureBox_0;
-    	}
-
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_3(PictureBox pictureBox_1)
-    	{
-    		pictureBox_0 = pictureBox_1;
-    	}
-
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal Label vmethod_4()
-    	{
-    		return label_0;
-    	}
-
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_5(Label label_3)
-    	{
-    		label_0 = label_3;
-    	}
-
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal Label vmethod_6()
-    	{
-    		return label_1;
-    	}
-
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_7(Label label_3)
-    	{
-    		label_1 = label_3;
-    	}
-
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal FlowLayoutPanel _003C()
-    	{
-    		return this.m__003C;
-    	}
-
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_8(FlowLayoutPanel flowLayoutPanel_0)
-    	{
-    		this.m__003C = flowLayoutPanel_0;
-    	}
-
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal Label vmethod_9()
-    	{
-    		return label_2;
-    	}
-
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_10(Label label_3)
-    	{
-    		label_2 = label_3;
-    	}
-
-    	public AboutForm()
-    	{
-    		method_0();
-    		vmethod_6().Text = vmethod_6().Text.Replace("<ProductName>", AppInfo.ProductName).Replace("<Version>", AppInfo.VersionText).Replace("<CopyRight>", AppInfo.Copyright);
-    		vmethod_6().Font = new Font(vmethod_6().Font, FontStyle.Bold);
-    		vmethod_9().Text = vmethod_9().Text.Replace("<ProductName>", AppInfo.ProductName).Replace("<Version>", AppInfo.VersionText).Replace("<CopyRight>", AppInfo.Copyright);
-    	}
+            AcceptButton = closeButton;
+            AutoScaleDimensions = new SizeF(6f, 13f);
+            AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            CancelButton = closeButton;
+            ClientSize = new Size(459, 302);
+            Controls.Add(copyrightPanel);
+            Controls.Add(infoLabel);
+            Controls.Add(logoBox);
+            Controls.Add(closeButton);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "AboutDialog";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "About";
+            ((System.ComponentModel.ISupportInitialize)logoBox).EndInit();
+            copyrightPanel.ResumeLayout(false);
+            copyrightPanel.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
+        }
     }
-
 }

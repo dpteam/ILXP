@@ -1,779 +1,599 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace ILXP
 {
+    /// <summary>
+    /// Read-only code viewer with syntax coloring, link navigation, selection and
+    /// copy support. Text is supplied with lightweight markup produced by the
+    /// <see cref="LanguageWriter"/> implementations:
+    /// <c>&lt;&lt;b&gt;&gt;</c> keyword, <c>&lt;&lt;r&gt;&gt;</c> string, <c>&lt;&lt;g&gt;&gt;</c>
+    /// comment, <c>&lt;&lt;#target&gt;&gt;</c> link, <c>&lt;&lt;&gt;&gt;</c> reset.
+    /// </summary>
     public sealed class CodeEditor : BorderPanel
     {
-    	public delegate void _0024(object sender, LinkClickedEventArgs e);
+        private const string MarkupPattern = "(\\<\\<[r|g|b|\\?|\\#].*?\\>\\>)";
 
-    	private CodeToken gclass15_0;
+        private CodeToken hoveredToken;
+        private LineCollection lines;
+        private int selectionStart;
+        private int selectionLength;
+        private int lineHeight;
+        private int characterWidth;
+        private readonly TextFormatFlags textFormatFlags;
+        private readonly Color stringColor = Color.FromArgb(163, 21, 21);
+        private readonly Color keywordColor = Color.FromArgb(0, 0, 255);
+        private readonly Color commentColor = Color.FromArgb(0, 128, 0);
 
-    	private LineCollection gclass13_0;
+        private ContextMenuStrip contextMenu;
+        private ToolStripMenuItem copyMenuItem;
+        private ToolStripMenuItem selectAllMenuItem;
 
-    	private int int_0;
+        /// <summary>Raised when the user clicks a link token.</summary>
+        public event EventHandler<LinkClickedEventArgs> LinkClicked;
 
-    	private int int_1;
+        public CodeEditor()
+        {
+            lines = new LineCollection();
+            selectionStart = -1;
+            textFormatFlags = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix |
+                              TextFormatFlags.TextBoxControl | TextFormatFlags.NoPadding;
 
-    	private int int_2;
+            InitializeContextMenu();
+            BackColor = SystemColors.Window;
+            DoubleBuffered = true;
+            Font = new Font("Courier New", 8.5f);
+            SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.UserMouse |
+                     ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            TabStop = true;
+        }
 
-    	private int m__003C;
+        public override string Text
+        {
+            get { return lines.ToString(); }
+            set { ParseMarkup(value); }
+        }
 
-    	private StringFormat stringFormat_0;
+        public int SelectionStart
+        {
+            get { return selectionLength < 0 ? selectionStart + selectionLength : selectionStart; }
+        }
 
-    	private TextFormatFlags textFormatFlags_0;
+        public int SelectionLength
+        {
+            get { return selectionLength < 0 ? -selectionLength : selectionLength; }
+        }
 
-    	private readonly Color color_0;
+        public CodeToken HoveredToken
+        {
+            get { return hoveredToken; }
+        }
 
-    	private readonly Color color_1;
+        public override Font Font
+        {
+            get { return base.Font; }
+            set
+            {
+                base.Font = value;
+                if (value == null)
+                {
+                    return;
+                }
+                lineHeight = value.Height;
+                characterWidth = TextRenderer.MeasureText("xxxxxxxxxxxxxxxxxxxx", value,
+                    new Size(1000, 100), textFormatFlags).Width -
+                    TextRenderer.MeasureText("xxxxxxxxxxxxxxxxxxx", value,
+                    new Size(1000, 100), textFormatFlags).Width;
+            }
+        }
 
-    	private readonly Color color_2;
+        /// <summary>Clears the document.</summary>
+        public void Clear()
+        {
+            Text = string.Empty;
+        }
 
-    	private IContainer m__0024;
+        /// <summary>Replaces the document with plain text (no markup).</summary>
+        public void SetPlainText(string text)
+        {
+            lines.Clear();
+            if (!string.IsNullOrEmpty(text))
+            {
+                foreach (string lineText in text.Replace(Environment.NewLine, "\r").Split('\r'))
+                {
+                    CodeLine line = new CodeLine();
+                    line.Tokens.Add(new CodeToken(lineText) { Color = Color.Black, Link = string.Empty });
+                    lines.Add(line);
+                }
+            }
+            selectionStart = 0;
+            selectionLength = 0;
+            RecalculateOffsets();
+            UpdateScrollSize();
+            Invalidate();
+        }
 
-    	[AccessedThroughProperty("ContextMenuStrip1")]
-    	private ContextMenuStrip contextMenuStrip_0;
+        private void ParseMarkup(string value)
+        {
+            lines.Clear();
+            if (!string.IsNullOrEmpty(value))
+            {
+                Color color = Color.Black;
+                string link = string.Empty;
+                foreach (string lineText in value.Replace(Environment.NewLine, "\r").Split('\r'))
+                {
+                    CodeLine line = new CodeLine();
+                    string normalized = lineText.Replace("<<>>", "<<?>>");
+                    foreach (string part in Regex.Split(normalized, MarkupPattern))
+                    {
+                        switch (part)
+                        {
+                            case "<<?>>":
+                                color = Color.Black;
+                                link = string.Empty;
+                                continue;
+                            case "<<b>>":
+                                color = keywordColor;
+                                link = string.Empty;
+                                continue;
+                            case "<<r>>":
+                                color = stringColor;
+                                link = string.Empty;
+                                continue;
+                            case "<<g>>":
+                                color = commentColor;
+                                link = string.Empty;
+                                continue;
+                        }
 
-    	[AccessedThroughProperty("ToolStripMenuItemCopy")]
-    	private ToolStripMenuItem toolStripMenuItem_0;
+                        if (part.StartsWith("<<#", StringComparison.Ordinal))
+                        {
+                            color = Color.Black;
+                            link = part.Substring(3, part.Length - 5);
+                            continue;
+                        }
 
-    	[AccessedThroughProperty("ToolStripMenuItemSelectAll")]
-    	private ToolStripMenuItem toolStripMenuItem_1;
+                        line.Tokens.Add(new CodeToken(part) { Color = color, Link = link });
+                    }
+                    lines.Add(line);
+                }
+            }
 
-    	private _0024 _0024_0;
+            AutoScrollPosition = new Point(0, 0);
+            selectionStart = 0;
+            selectionLength = 0;
+            RecalculateOffsets();
+            UpdateScrollSize();
+            Invalidate();
+        }
 
-    	public override Font Font
-    	{
-    		get
-    		{
-    			return base.Font;
-    		}
-    		set
-    		{
-    			base.Font = value;
-    			int_2 = value.Height;
-    			string text = "xxxxxxxxxxxxxxxxxxxx";
-    			Size proposedSize = new Size(1000, 100);
-    			int num = TextRenderer.MeasureText(text, value, proposedSize, textFormatFlags_0).Width;
-    			string text2 = "xxxxxxxxxxxxxxxxxxx";
-    			Size proposedSize2 = new Size(1000, 100);
-    			this.m__003C = checked(num - TextRenderer.MeasureText(text2, value, proposedSize2, textFormatFlags_0).Width);
-    		}
-    	}
+        private void RecalculateOffsets()
+        {
+            int offset = 0;
+            foreach (CodeLine line in lines)
+            {
+                line.Offset = offset;
+                foreach (CodeToken token in line.Tokens)
+                {
+                    offset += token.Text.Length;
+                }
+                line.Length = offset - line.Offset;
+            }
+        }
 
-    	public override string Text
-    	{
-    		get
-    		{
-    			return gclass13_0.ToString();
-    		}
-    		set
-    		{
-    			gclass13_0.Clear();
-    			checked
-    			{
-    				if (!string.IsNullOrEmpty(value))
-    				{
-    					value = value.Replace(Environment.NewLine, "\r");
-    					string[] array = value.Split('\r');
-    					Color black = Color.Black;
-    					string string_ = "";
-    					string[] array2 = array;
-    					for (int i = 0; i < array2.Length; i++)
-    					{
-    						string text = array2[i];
-    						CodeLine gClass = new CodeLine();
-    						text = text.Replace("<<>>", "<<?>>");
-    						string[] array3 = Regex.Split(text, "(\\<\\<[r|g|b|\\?|\\#].*?\\>\\>)");
-    						string[] array4 = array3;
-    						foreach (string text2 in array4)
-    						{
-    							if (Operators.CompareString(text2, "<<?>>", TextCompare: false) == 0)
-    							{
-    								black = Color.Black;
-    								string_ = "";
-    								continue;
-    							}
-    							if (text2.StartsWith("<<#"))
-    							{
-    								black = Color.Black;
-    								string_ = text2.Substring(3, text2.Length - 5);
-    								continue;
-    							}
-    							switch (text2)
-    							{
-    							case "<<b>>":
-    								black = color_1;
-    								string_ = "";
-    								break;
-    							case "<<r>>":
-    								black = color_0;
-    								string_ = "";
-    								break;
-    							case "<<g>>":
-    								black = color_2;
-    								string_ = "";
-    								break;
-    							default:
-    							{
-    								CodeToken gClass2 = new CodeToken(text2);
-    								gClass2.Color = black;
-    								gClass2.Link = string_;
-    								gClass.Tokens.Add(gClass2);
-    								break;
-    							}
-    							}
-    						}
-    						gclass13_0.Add(gClass);
-    					}
-    				}
-    				Point autoScrollPosition = new Point(0, 0);
-    				AutoScrollPosition = autoScrollPosition;
-    				int_0 = 0;
-    				int_1 = 0;
-    				method_6();
-    				method_7();
-    				Invalidate();
-    			}
-    		}
-    	}
+        private void UpdateScrollSize()
+        {
+            int maxLength = 0;
+            foreach (CodeLine line in lines)
+            {
+                maxLength = Math.Max(maxLength, line.Length);
+            }
 
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal ContextMenuStrip vmethod_0()
-    	{
-    		return contextMenuStrip_0;
-    	}
+            AutoScrollPosition = new Point(0, 0);
+            AutoScrollMinSize = new Size(maxLength * characterWidth, lines.Count * lineHeight);
+        }
 
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_1(ContextMenuStrip contextMenuStrip_1)
-    	{
-    		CancelEventHandler value = method_11;
-    		if (contextMenuStrip_0 != null)
-    		{
-    			contextMenuStrip_0.Opening -= value;
-    		}
-    		contextMenuStrip_0 = contextMenuStrip_1;
-    		if (contextMenuStrip_0 != null)
-    		{
-    			contextMenuStrip_0.Opening += value;
-    		}
-    	}
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Graphics graphics = e.Graphics;
+            graphics.TranslateTransform(AutoScrollPosition.X, AutoScrollPosition.Y);
 
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal ToolStripMenuItem vmethod_2()
-    	{
-    		return toolStripMenuItem_0;
-    	}
+            int y = 0;
+            int x = 0;
+            int firstSelected = SelectionStart;
+            int lastSelected = firstSelected + SelectionLength;
+            using (Font underlinedFont = new Font(Font, FontStyle.Underline))
+            {
+                SolidBrush highlight = (SolidBrush)SystemBrushes.Highlight;
+                Rectangle clip = e.ClipRectangle;
+                clip.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
+                clip.Inflate(2, 2);
 
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_3(ToolStripMenuItem toolStripMenuItem_2)
-    	{
-    		EventHandler value = method_9;
-    		if (toolStripMenuItem_0 != null)
-    		{
-    			toolStripMenuItem_0.Click -= value;
-    		}
-    		toolStripMenuItem_0 = toolStripMenuItem_2;
-    		if (toolStripMenuItem_0 != null)
-    		{
-    			toolStripMenuItem_0.Click += value;
-    		}
-    	}
+                int position = 0;
+                foreach (CodeLine line in lines)
+                {
+                    if (y + lineHeight >= clip.Y && y <= clip.Bottom)
+                    {
+                        position = line.Offset;
+                        foreach (CodeToken token in line.Tokens)
+                        {
+                            Font tokenFont = Font;
+                            if (!string.IsNullOrEmpty(token.Link))
+                            {
+                                tokenFont = hoveredToken == token ? underlinedFont : Font;
+                            }
 
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal ToolStripMenuItem vmethod_4()
-    	{
-    		return toolStripMenuItem_1;
-    	}
+                            string text = token.Text;
+                            for (int i = 0; i < text.Length; i++)
+                            {
+                                Rectangle cell = new Rectangle(x, y, characterWidth, lineHeight);
+                                if (clip.IntersectsWith(cell))
+                                {
+                                    if (position >= firstSelected && position < lastSelected)
+                                    {
+                                        graphics.FillRectangle(highlight, cell);
+                                        cell.Offset(AutoScrollPosition);
+                                        TextRenderer.DrawText(graphics, text[i].ToString(), tokenFont, cell,
+                                            SystemColors.HighlightText, SystemColors.Highlight, textFormatFlags);
+                                    }
+                                    else
+                                    {
+                                        cell.Offset(AutoScrollPosition);
+                                        TextRenderer.DrawText(graphics, text[i].ToString(), tokenFont, cell,
+                                            token.Color, textFormatFlags);
+                                    }
+                                }
+                                x += characterWidth;
+                                position++;
+                            }
+                        }
+                        x = 0;
+                    }
+                    y += lineHeight;
+                }
+            }
+        }
 
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	internal void vmethod_5(ToolStripMenuItem toolStripMenuItem_2)
-    	{
-    		EventHandler value = method_10;
-    		if (toolStripMenuItem_1 != null)
-    		{
-    			toolStripMenuItem_1.Click -= value;
-    		}
-    		toolStripMenuItem_1 = toolStripMenuItem_2;
-    		if (toolStripMenuItem_1 != null)
-    		{
-    			toolStripMenuItem_1.Click += value;
-    		}
-    	}
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+            Focus();
+        }
 
-    	public CodeEditor()
-    	{
-    		gclass15_0 = null;
-    		gclass13_0 = new LineCollection();
-    		int_0 = -1;
-    		int_1 = 0;
-    		stringFormat_0 = (StringFormat)StringFormat.GenericDefault.Clone();
-    		textFormatFlags_0 = TextFormatFlags.NoClipping | TextFormatFlags.NoPrefix | TextFormatFlags.TextBoxControl | TextFormatFlags.NoPadding;
-    		color_0 = Color.FromArgb(163, 21, 21);
-    		color_1 = Color.FromArgb(0, 0, 255);
-    		color_2 = Color.FromArgb(0, 128, 0);
-    		method_14();
-    		BackColor = SystemColors.Window;
-    		DoubleBuffered = true;
-    		Font = new Font("Courier New", 8.5f);
-    		SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.UserMouse | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
-    		TabStop = true;
-    	}
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            CodeToken token = null;
+            Point position = new Point(e.X - AutoScrollPosition.X, e.Y - AutoScrollPosition.Y);
+            int caret = HitTest(position, ref token);
 
-    	protected override void OnMouseClick(MouseEventArgs e)
-    	{
-    		base.OnMouseClick(e);
-    		Focus();
-    	}
+            if (e.Button == MouseButtons.Left && Capture && caret - selectionStart != selectionLength)
+            {
+                selectionLength = caret - selectionStart;
+                Invalidate();
+            }
 
-    	public void method_0(string string_0)
-    	{
-    		gclass13_0.Clear();
-    		if (!string.IsNullOrEmpty(string_0))
-    		{
-    			string_0 = string_0.Replace(Environment.NewLine, "\r");
-    			string[] array = string_0.Split('\r');
-    			_ = Color.Black;
-    			string[] array2 = array;
-    			foreach (string text in array2)
-    			{
-    				CodeLine gClass = new CodeLine();
-    				CodeToken gClass2 = new CodeToken(text);
-    				gClass2.Color = Color.Black;
-    				gClass2.Link = "";
-    				gClass.Tokens.Add(gClass2);
-    				gclass13_0.Add(gClass);
-    			}
-    		}
-    		int_0 = 0;
-    		int_1 = 0;
-    		method_6();
-    		method_7();
-    		Invalidate();
-    	}
+            if (hoveredToken != token)
+            {
+                if (hoveredToken != null)
+                {
+                    Invalidate(ToScreen(hoveredToken.Bounds));
+                }
+                hoveredToken = token;
+                if (hoveredToken != null)
+                {
+                    Invalidate(ToScreen(hoveredToken.Bounds));
+                }
+            }
 
-    	[SpecialName]
-    	public int method_1()
-    	{
-    		if (int_1 < 0)
-    		{
-    			return checked(int_0 + int_1);
-    		}
-    		return int_0;
-    	}
+            if (hoveredToken != null && Cursor != Cursors.Hand)
+            {
+                Cursor = Cursors.Hand;
+            }
+            else if (hoveredToken == null && Cursor != Cursors.IBeam)
+            {
+                Cursor = Cursors.IBeam;
+            }
 
-    	[SpecialName]
-    	public int method_2()
-    	{
-    		if (int_1 < 0)
-    		{
-    			return checked(int_1 * -1);
-    		}
-    		return int_1;
-    	}
+            base.OnMouseMove(e);
+        }
 
-    	[SpecialName]
-    	public string _003C()
-    	{
-    		string text = "";
-    		int num = method_1();
-    		checked
-    		{
-    			int num2 = num + method_2();
-    			int num3 = 0;
-    			foreach (CodeLine item in gclass13_0)
-    			{
-    				if (item.Offset + item.Length < num)
-    				{
-    					num3 = item.Offset + item.Length;
-    					continue;
-    				}
-    				foreach (CodeToken item2 in item.Tokens)
-    				{
-    					string text2 = item2.Text;
-    					int i = 0;
-    					for (int length = text2.Length; i < length; i++)
-    					{
-    						char c = text2[i];
-    						if (num3 < num2)
-    						{
-    							if (num3 >= num)
-    							{
-    								text += Conversions.ToString(c);
-    							}
-    							num3++;
-    							continue;
-    						}
-    						return text;
-    					}
-    				}
-    				text += Environment.NewLine;
-    			}
-    			return text;
-    		}
-    	}
+        private Rectangle ToScreen(Rectangle bounds)
+        {
+            return new Rectangle(bounds.X + AutoScrollPosition.X, bounds.Y + AutoScrollPosition.Y, bounds.Width, bounds.Height);
+        }
 
-    	[SpecialName]
-    	public CodeToken method_3()
-    	{
-    		return gclass15_0;
-    	}
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            if (hoveredToken != null)
+            {
+                Cursor = Cursors.Default;
+                hoveredToken = null;
+                Invalidate();
+            }
+            base.OnMouseLeave(e);
+        }
 
-    	public void method_4()
-    	{
-    		int_0 = 0;
-    		int_1 = 0;
-    		if (gclass13_0.Count > 0)
-    		{
-    			int_1 = checked(gclass13_0[gclass13_0.Count - 1].Offset + gclass13_0[gclass13_0.Count - 1].Length);
-    		}
-    		Invalidate();
-    	}
+        private int HitTest(Point position, ref CodeToken hit)
+        {
+            int lineIndex = position.Y / lineHeight;
+            if (lineIndex < 0)
+            {
+                return 0;
+            }
 
-    	public void CopySelection()
-    	{
-    		if (int_1 == 0)
-    		{
-    			return;
-    		}
-    		string text = _003C();
-    		try
-    		{
-    			Clipboard.SetText(text, TextDataFormat.Text);
-    		}
-    		catch (Exception projectError)
-    		{
-    			ProjectData.SetProjectError(projectError);
-    			ProjectData.ClearProjectError();
-    		}
-    	}
+            if (lineIndex >= lines.Count)
+            {
+                int end = 0;
+                if (lines.Count > 0)
+                {
+                    CodeLine last = lines[lines.Count - 1];
+                    end = last.Offset;
+                    foreach (CodeToken token in last.Tokens)
+                    {
+                        end += token.Text.Length;
+                    }
+                }
+                return end;
+            }
 
-    	public void method_5()
-    	{
-    		Text = "";
-    	}
+            CodeLine currentLine = lines[lineIndex];
+            int lineStart = currentLine.Offset;
+            int x = 0;
+            foreach (CodeToken token in currentLine.Tokens)
+            {
+                if (position.X >= x && position.X < x + token.Text.Length * characterWidth)
+                {
+                    if (!string.IsNullOrEmpty(token.Link))
+                    {
+                        hit = token;
+                        token.Bounds = new Rectangle(x, lineIndex * lineHeight, token.Text.Length * characterWidth, lineHeight + 5);
+                    }
 
-    	private void method_6()
-    	{
-    		int num = 0;
-    		checked
-    		{
-    			foreach (CodeLine item in gclass13_0)
-    			{
-    				item.Offset = num;
-    				foreach (CodeToken item2 in item.Tokens)
-    				{
-    					num += item2.Text.Length;
-    				}
-    				item.Length = num - item.Offset;
-    			}
-    		}
-    	}
+                    string text = token.Text;
+                    for (int i = 0; i < text.Length; i++)
+                    {
+                        if (position.X >= x && position.X < x + characterWidth)
+                        {
+                            return lineStart + i;
+                        }
+                        lineStart++;
+                        x += characterWidth;
+                    }
+                    return lineStart;
+                }
 
-    	private void method_7()
-    	{
-    		checked
-    		{
-    			int num = gclass13_0.Count * int_2;
-    			int num2 = 0;
-    			foreach (CodeLine item in gclass13_0)
-    			{
-    				num2 = Math.Max(num2, item.Length);
-    			}
-    			num2 *= this.m__003C;
-    			Point autoScrollPosition = new Point(0, 0);
-    			AutoScrollPosition = autoScrollPosition;
-    			Size autoScrollMinSize = new Size(num2, num);
-    			AutoScrollMinSize = autoScrollMinSize;
-    		}
-    	}
+                lineStart += token.Text.Length;
+                x += token.Text.Length * characterWidth;
+            }
+            return lineStart;
+        }
 
-    	protected override void OnPaint(PaintEventArgs e)
-    	{
-    		base.OnPaint(e);
-    		Graphics graphics = e.Graphics;
-    		graphics.TranslateTransform(AutoScrollPosition.X, AutoScrollPosition.Y);
-    		int num = 0;
-    		int num2 = 0;
-    		Font font = Font;
-    		Font font2 = Font;
-    		Font font3 = new Font(Font, FontStyle.Underline);
-    		_ = Color.Black;
-    		_ = SystemColors.HighlightText;
-    		SolidBrush brush = (SolidBrush)SystemBrushes.Highlight;
-    		int num3 = method_1();
-    		checked
-    		{
-    			int num4 = num3 + method_2();
-    			Rectangle clipRectangle = e.ClipRectangle;
-    			clipRectangle.Offset(AutoScrollPosition.X * -1, AutoScrollPosition.Y * -1);
-    			clipRectangle.Inflate(2, 2);
-    			int num5 = 0;
-    			foreach (CodeLine item in gclass13_0)
-    			{
-    				if (num + int_2 >= clipRectangle.Y && num <= clipRectangle.Bottom)
-    				{
-    					num5 = item.Offset;
-    					foreach (CodeToken item2 in item.Tokens)
-    					{
-    						Font font4 = font;
-    						if (!string.IsNullOrEmpty(item2.Link))
-    						{
-    							font4 = ((gclass15_0 != item2) ? font2 : font3);
-    						}
-    						string text = item2.Text;
-    						int i = 0;
-    						for (int length = text.Length; i < length; i++)
-    						{
-    							char c = text[i];
-    							Rectangle rectangle = new Rectangle(num2, num, this.m__003C, int_2);
-    							if (clipRectangle.IntersectsWith(rectangle))
-    							{
-    								if (num5 >= num3 && num5 < num4)
-    								{
-    									graphics.FillRectangle(brush, rectangle);
-    									rectangle.Offset(AutoScrollPosition);
-    									TextRenderer.DrawText(graphics, Conversions.ToString(c), font4, rectangle, SystemColors.HighlightText, SystemColors.Highlight, textFormatFlags_0);
-    								}
-    								else
-    								{
-    									rectangle.Offset(AutoScrollPosition);
-    									TextRenderer.DrawText(graphics, Conversions.ToString(c), font4, rectangle, item2.Color, textFormatFlags_0);
-    								}
-    							}
-    							num2 += this.m__003C;
-    							num5++;
-    						}
-    					}
-    					num2 = 0;
-    				}
-    				num += int_2;
-    			}
-    		}
-    	}
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                selectionLength = 0;
+                Point position = new Point(e.X - AutoScrollPosition.X, e.Y - AutoScrollPosition.Y);
+                CodeToken token = null;
+                selectionStart = HitTest(position, ref token);
+                Capture = true;
+                Invalidate();
+            }
+            base.OnMouseDown(e);
+        }
 
-    	protected override void OnMouseMove(MouseEventArgs e)
-    	{
-    		CodeToken gclass15_ = null;
-    		checked
-    		{
-    			Point point_ = new Point(e.X - AutoScrollPosition.X, e.Y - AutoScrollPosition.Y);
-    			int num = method_8(point_, ref gclass15_);
-    			if (e.Button == MouseButtons.Left && Capture && num - int_0 != int_1)
-    			{
-    				int_1 = num - int_0;
-    				Invalidate();
-    			}
-    			if (gclass15_0 != gclass15_)
-    			{
-    				Rectangle rc;
-    				if (gclass15_0 != null)
-    				{
-    					rc = gclass15_0.Bounds;
-    					Rectangle rc2 = new Rectangle(rc.X + AutoScrollPosition.X, gclass15_0.Bounds.Y + AutoScrollPosition.Y, gclass15_0.Bounds.Width, gclass15_0.Bounds.Height);
-    					Invalidate(rc2);
-    				}
-    				gclass15_0 = gclass15_;
-    				if (gclass15_0 != null)
-    				{
-    					rc = new Rectangle(gclass15_0.Bounds.X + AutoScrollPosition.X, gclass15_0.Bounds.Y + AutoScrollPosition.Y, gclass15_0.Bounds.Width, gclass15_0.Bounds.Height);
-    					Invalidate(rc);
-    				}
-    			}
-    			if (gclass15_0 != null && !(Cursor == Cursors.Hand))
-    			{
-    				Cursor = Cursors.Hand;
-    			}
-    			if (gclass15_0 == null && !(Cursor == Cursors.IBeam))
-    			{
-    				Cursor = Cursors.IBeam;
-    			}
-    			base.OnMouseMove(e);
-    		}
-    	}
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            AutoScrollPosition = new Point(AutoScrollPosition.X,
+                (AutoScrollPosition.Y / lineHeight) * lineHeight * -1 + lineHeight * e.Delta);
+        }
 
-    	protected override void OnMouseLeave(EventArgs e)
-    	{
-    		if (gclass15_0 != null)
-    		{
-    			Cursor = Cursors.Default;
-    			gclass15_0 = null;
-    			Invalidate();
-    		}
-    		base.OnMouseLeave(e);
-    	}
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (!Capture)
+            {
+                return;
+            }
 
-    	private int method_8(Point point_0, ref CodeToken gclass15_1)
-    	{
-    		int num = point_0.Y / int_2;
-    		int num2 = 0;
-    		checked
-    		{
-    			if (num < 0)
-    			{
-    				num2 = 0;
-    			}
-    			else if (num >= gclass13_0.Count)
-    			{
-    				if (gclass13_0.Count > 0)
-    				{
-    					num2 = gclass13_0[gclass13_0.Count - 1].Offset;
-    					foreach (CodeToken item in gclass13_0[gclass13_0.Count - 1].Tokens)
-    					{
-    						num2 += item.Text.Length;
-    					}
-    				}
-    			}
-    			else
-    			{
-    				int num3 = 0;
-    				num2 = gclass13_0[num].Offset;
-    				foreach (CodeToken item2 in gclass13_0[num].Tokens)
-    				{
-    					if (point_0.X < num3 || point_0.X >= num3 + item2.Text.Length * this.m__003C)
-    					{
-    						num2 += item2.Text.Length;
-    						num3 += item2.Text.Length * this.m__003C;
-    						continue;
-    					}
-    					if (!string.IsNullOrEmpty(item2.Link))
-    					{
-    						gclass15_1 = item2;
-    						CodeToken obj = gclass15_1;
-    						Rectangle rectangle_ = new Rectangle(num3, num * int_2, item2.Text.Length * this.m__003C, int_2 + 5);
-    						obj.Bounds = rectangle_;
-    					}
-    					string text = item2.Text;
-    					int i = 0;
-    					for (int length = text.Length; i < length; i++)
-    					{
-    						_ = text[i];
-    						if (point_0.X < num3 || point_0.X >= num3 + this.m__003C)
-    						{
-    							num2++;
-    							num3 += this.m__003C;
-    							continue;
-    						}
-    						break;
-    					}
-    					break;
-    				}
-    			}
-    			return num2;
-    		}
-    	}
+            if (e.Button == MouseButtons.Left)
+            {
+                CodeToken token = null;
+                Point position = new Point(e.X - AutoScrollPosition.X, e.Y - AutoScrollPosition.Y);
+                int caret = HitTest(position, ref token);
+                if (caret - selectionStart != selectionLength)
+                {
+                    selectionLength = caret - selectionStart;
+                    Invalidate();
+                }
 
-    	protected override void OnMouseDown(MouseEventArgs e)
-    	{
-    		if (e.Button == MouseButtons.Left)
-    		{
-    			int_1 = 0;
-    			Point point = checked(new Point(e.X - AutoScrollPosition.X, e.Y - AutoScrollPosition.Y));
-    			Point point_ = point;
-    			CodeToken gclass15_ = null;
-    			int_0 = method_8(point_, ref gclass15_);
-    			Invalidate();
-    		}
-    		base.OnMouseDown(e);
-    	}
+                if (selectionLength == 0 && token != null && !string.IsNullOrEmpty(token.Link))
+                {
+                    EventHandler<LinkClickedEventArgs> handler = LinkClicked;
+                    if (handler != null)
+                    {
+                        handler(this, new LinkClickedEventArgs(token.Link));
+                    }
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                contextMenu.Show(this, e.Location);
+            }
+            base.OnMouseUp(e);
+        }
 
-    	protected override void OnMouseWheel(MouseEventArgs e)
-    	{
-    		base.OnMouseWheel(e);
-    		checked
-    		{
-    			Point autoScrollPosition = new Point(AutoScrollPosition.X, unchecked(AutoScrollPosition.Y / int_2) * int_2 * -1 + int_2 * e.Delta);
-    			AutoScrollPosition = autoScrollPosition;
-    		}
-    	}
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Down:
+                case Keys.Up:
+                case Keys.Left:
+                case Keys.Right:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.Next:
+                case Keys.Prior:
+                    return true;
+                default:
+                    return base.IsInputKey(keyData);
+            }
+        }
 
-    	protected override void OnMouseUp(MouseEventArgs e)
-    	{
-    		if (!Capture)
-    		{
-    			return;
-    		}
-    		checked
-    		{
-    			if (e.Button == MouseButtons.Left)
-    			{
-    				CodeToken gclass15_ = null;
-    				Point point_ = new Point(e.X - AutoScrollPosition.X, e.Y - AutoScrollPosition.Y);
-    				int num = method_8(point_, ref gclass15_);
-    				if (num - int_0 != int_1)
-    				{
-    					int_1 = num - int_0;
-    					Invalidate();
-    				}
-    				if (int_1 == 0 && gclass15_ != null && !string.IsNullOrEmpty(gclass15_.Link))
-    				{
-    					_0024_0?.Invoke(this, new LinkClickedEventArgs(gclass15_.Link));
-    				}
-    			}
-    			else if (e.Button == MouseButtons.Right)
-    			{
-    				vmethod_0().Show(this, e.Location);
-    			}
-    			base.OnMouseUp(e);
-    		}
-    	}
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                CopySelection();
+            }
+            if (e.Control && e.KeyCode == Keys.A)
+            {
+                SelectAll();
+            }
 
-    	protected override bool IsInputKey(Keys keyData)
-    	{
-    		return keyData switch
-    		{
-    			Keys.Down => true, 
-    			Keys.Up => true, 
-    			Keys.Left => true, 
-    			Keys.Right => true, 
-    			Keys.Home => true, 
-    			Keys.End => true, 
-    			Keys.Next => true, 
-    			Keys.Prior => true, 
-    			_ => base.IsInputKey(keyData), 
-    		};
-    	}
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
+                    AutoScrollPosition = new Point(AutoScrollPosition.X,
+                        (AutoScrollPosition.Y / lineHeight) * lineHeight * -1 + lineHeight);
+                    break;
+                case Keys.Up:
+                    AutoScrollPosition = new Point(AutoScrollPosition.X,
+                        (AutoScrollPosition.Y / lineHeight) * lineHeight * -1 - lineHeight);
+                    break;
+                case Keys.Left:
+                    AutoScrollPosition = new Point(
+                        (AutoScrollPosition.X / characterWidth) * characterWidth * -1 - characterWidth,
+                        AutoScrollPosition.Y);
+                    break;
+                case Keys.Right:
+                    AutoScrollPosition = new Point(
+                        (AutoScrollPosition.X / characterWidth) * characterWidth * -1 + characterWidth,
+                        AutoScrollPosition.Y);
+                    break;
+                case Keys.Home:
+                    AutoScrollPosition = new Point(AutoScrollPosition.X * -1, 0);
+                    break;
+                case Keys.End:
+                    AutoScrollPosition = new Point(AutoScrollPosition.X * -1, lines.Count * lineHeight);
+                    break;
+                case Keys.Next:
+                    AutoScrollPosition = new Point(AutoScrollPosition.X,
+                        (AutoScrollPosition.Y / lineHeight) * lineHeight * -1 + (Height / lineHeight) * lineHeight);
+                    break;
+                case Keys.Prior:
+                    AutoScrollPosition = new Point(AutoScrollPosition.X,
+                        (AutoScrollPosition.Y / lineHeight) * lineHeight * -1 - (Height / lineHeight) * lineHeight);
+                    break;
+            }
+            base.OnKeyDown(e);
+        }
 
-    	protected override void OnKeyDown(KeyEventArgs e)
-    	{
-    		if (e.Control & (e.KeyCode == Keys.C))
-    		{
-    			CopySelection();
-    		}
-    		if (e.Control & (e.KeyCode == Keys.A))
-    		{
-    			method_4();
-    		}
-    		checked
-    		{
-    			Point point;
-    			Point autoScrollPosition;
-    			if (e.KeyCode == Keys.Down)
-    			{
-    				point = AutoScrollPosition;
-    				int num = point.X;
-    				autoScrollPosition = AutoScrollPosition;
-    				Point autoScrollPosition2 = new Point(num, unchecked(autoScrollPosition.Y / int_2) * int_2 * -1 + int_2);
-    				AutoScrollPosition = autoScrollPosition2;
-    			}
-    			if (e.KeyCode == Keys.Up)
-    			{
-    				point = AutoScrollPosition;
-    				autoScrollPosition = new Point(point.X, unchecked(AutoScrollPosition.Y / int_2) * int_2 * -1 - int_2);
-    				AutoScrollPosition = autoScrollPosition;
-    			}
-    			if (e.KeyCode == Keys.Left)
-    			{
-    				int num2 = unchecked(AutoScrollPosition.X / this.m__003C) * this.m__003C * -1 - this.m__003C;
-    				point = AutoScrollPosition;
-    				autoScrollPosition = new Point(num2, point.Y);
-    				AutoScrollPosition = autoScrollPosition;
-    			}
-    			if (e.KeyCode == Keys.Right)
-    			{
-    				int num3 = unchecked(AutoScrollPosition.X / this.m__003C) * this.m__003C * -1 + this.m__003C;
-    				point = AutoScrollPosition;
-    				autoScrollPosition = new Point(num3, point.Y);
-    				AutoScrollPosition = autoScrollPosition;
-    			}
-    			if (e.KeyCode == Keys.Home)
-    			{
-    				point = (AutoScrollPosition = new Point(AutoScrollPosition.X * -1, 0));
-    			}
-    			if (e.KeyCode == Keys.End)
-    			{
-    				point = (AutoScrollPosition = new Point(AutoScrollPosition.X * -1, gclass13_0.Count * int_2));
-    			}
-    			if (e.KeyCode == Keys.Next)
-    			{
-    				autoScrollPosition = (AutoScrollPosition = new Point(AutoScrollPosition.X, unchecked(AutoScrollPosition.Y / int_2) * int_2 * -1 + unchecked(Height / int_2) * int_2));
-    			}
-    			if (e.KeyCode == Keys.Prior)
-    			{
-    				autoScrollPosition = (AutoScrollPosition = new Point(AutoScrollPosition.X, unchecked(AutoScrollPosition.Y / int_2) * int_2 * -1 - unchecked(Height / int_2) * int_2));
-    			}
-    			base.OnKeyDown(e);
-    		}
-    	}
+        public string GetSelectedText()
+        {
+            string text = string.Empty;
+            int start = SelectionStart;
+            int end = start + SelectionLength;
+            int position = 0;
 
-    	private void method_9(object sender, EventArgs e)
-    	{
-    		CopySelection();
-    	}
+            foreach (CodeLine line in lines)
+            {
+                if (line.Offset + line.Length < start)
+                {
+                    position = line.Offset + line.Length;
+                    continue;
+                }
 
-    	private void method_10(object sender, EventArgs e)
-    	{
-    		method_4();
-    	}
+                foreach (CodeToken token in line.Tokens)
+                {
+                    for (int i = 0; i < token.Text.Length; i++)
+                    {
+                        if (position >= start)
+                        {
+                            if (position < end)
+                            {
+                                text += token.Text[i];
+                            }
+                            else
+                            {
+                                return text;
+                            }
+                        }
+                        position++;
+                    }
+                }
+                text += Environment.NewLine;
+            }
+            return text;
+        }
 
-    	private void method_11(object sender, CancelEventArgs e)
-    	{
-    		vmethod_2().Enabled = method_2() > 0;
-    		vmethod_4().Enabled = gclass13_0.Count > 0;
-    	}
+        public void SelectAll()
+        {
+            selectionStart = 0;
+            selectionLength = 0;
+            if (lines.Count > 0)
+            {
+                CodeLine last = lines[lines.Count - 1];
+                selectionLength = last.Offset + last.Length;
+            }
+            Invalidate();
+        }
 
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	public void method_12(_0024 _0024_1)
-    	{
-    		_0024_0 = (_0024)Delegate.Combine(_0024_0, _0024_1);
-    	}
+        public void CopySelection()
+        {
+            if (selectionLength == 0)
+            {
+                return;
+            }
 
-    	[MethodImpl(MethodImplOptions.Synchronized)]
-    	[SpecialName]
-    	[DebuggerNonUserCode]
-    	public void method_13(_0024 _0024_1)
-    	{
-    		_0024_0 = (_0024)Delegate.Remove(_0024_0, _0024_1);
-    	}
+            try
+            {
+                Clipboard.SetText(GetSelectedText(), TextDataFormat.Text);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Unable to copy the selection to the clipboard.", ex);
+            }
+        }
 
-    	private void method_14()
-    	{
-    		this.m__0024 = new Container();
-    		vmethod_1(new ContextMenuStrip(this.m__0024));
-    		vmethod_5(new ToolStripMenuItem());
-    		vmethod_3(new ToolStripMenuItem());
-    		vmethod_0().SuspendLayout();
-    		SuspendLayout();
-    		vmethod_0().Items.AddRange(new ToolStripItem[2]
-    		{
-    			vmethod_2(),
-    			vmethod_4()
-    		});
-    		vmethod_0().Name = "ContextMenuStrip1";
-    		ContextMenuStrip contextMenuStrip = vmethod_0();
-    		Size size = new Size(153, 70);
-    		contextMenuStrip.Size = size;
-    		vmethod_4().Name = "ToolStripMenuItemSelectAll";
-    		ToolStripMenuItem toolStripMenuItem = vmethod_4();
-    		size = new Size(152, 22);
-    		toolStripMenuItem.Size = size;
-    		vmethod_4().Text = "&Select All";
-    		vmethod_2().Name = "ToolStripMenuItemCopy";
-    		ToolStripMenuItem toolStripMenuItem2 = vmethod_2();
-    		size = new Size(152, 22);
-    		toolStripMenuItem2.Size = size;
-    		vmethod_2().Text = "&Copy";
-    		Name = "PanelWithBorders";
-    		vmethod_0().ResumeLayout(performLayout: false);
-    		ResumeLayout(performLayout: false);
-    	}
+        private void InitializeContextMenu()
+        {
+            contextMenu = new ContextMenuStrip();
+            copyMenuItem = new ToolStripMenuItem();
+            selectAllMenuItem = new ToolStripMenuItem();
+            contextMenu.SuspendLayout();
+            SuspendLayout();
+
+            contextMenu.Items.AddRange(new ToolStripItem[] { copyMenuItem, selectAllMenuItem });
+            contextMenu.Name = "ContextMenuStrip1";
+            contextMenu.Size = new Size(120, 48);
+            contextMenu.Opening += OnContextMenuOpening;
+
+            copyMenuItem.Name = "MenuItemCopy";
+            copyMenuItem.Size = new Size(119, 22);
+            copyMenuItem.Text = "&Copy";
+            copyMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
+            copyMenuItem.Click += delegate { CopySelection(); };
+
+            selectAllMenuItem.Name = "MenuItemSelectAll";
+            selectAllMenuItem.Size = new Size(119, 22);
+            selectAllMenuItem.Text = "&Select All";
+            selectAllMenuItem.ShortcutKeyDisplayString = "Ctrl+A";
+            selectAllMenuItem.Click += delegate { SelectAll(); };
+
+            contextMenu.ResumeLayout(false);
+            ResumeLayout(false);
+        }
+
+        private void OnContextMenuOpening(object sender, CancelEventArgs e)
+        {
+            copyMenuItem.Enabled = SelectionLength > 0;
+            selectAllMenuItem.Enabled = lines.Count > 0;
+        }
     }
-
 }
