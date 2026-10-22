@@ -123,11 +123,34 @@ namespace ILXP
                 manifest.AppendLine();
 
                 int count = 0;
+                int bodyFailures = 0;
                 foreach (ModuleDefinition module in assembly.Modules)
                 {
                     foreach (TypeDefinition type in module.Types)
                     {
                         string text = writer.StripMarkup(writer.WriteType(type));
+                        if (options.Bodies)
+                        {
+                            StringBuilder withBodies = new StringBuilder(text);
+                            foreach (MethodDefinition method in type.Methods)
+                            {
+                                if (!method.HasBody || LanguageWriter.IsCompilerGeneratedName(method.Name))
+                                {
+                                    continue;
+                                }
+                                try
+                                {
+                                    withBodies.AppendLine(writer.StripMarkup(writer.WriteMethod(method)));
+                                }
+                                catch (Exception ex)
+                                {
+                                    bodyFailures++;
+                                    Log.Warn("Unable to render body of '" + type.FullName + "::" + method.Name + "'.", ex);
+                                }
+                            }
+                            text = withBodies.ToString();
+                        }
+
                         string fileName = SanitizeFileName(type.FullName) + "." + options.Language;
                         File.WriteAllText(Path.Combine(outputDirectory, fileName), text, Encoding.UTF8);
                         manifest.AppendLine(fileName);
@@ -137,6 +160,11 @@ namespace ILXP
 
                 File.WriteAllText(Path.Combine(outputDirectory, "manifest.txt"), manifest.ToString(), Encoding.UTF8);
                 Console.WriteLine("decompiled " + count.ToString(CultureInfo.InvariantCulture) + " types into " + outputDirectory);
+                if (bodyFailures > 0)
+                {
+                    Console.WriteLine("method bodies that could not be rendered: " + bodyFailures.ToString(CultureInfo.InvariantCulture));
+                    Log.Warn("Decompile finished with " + bodyFailures + " method body failure(s).");
+                }
             }
             return 0;
         }
@@ -314,6 +342,7 @@ namespace ILXP
             Console.WriteLine("Decompile options:");
             Console.WriteLine("  --language <il|cs|vb>   output language (default: il)");
             Console.WriteLine("  --output <directory>    destination directory");
+            Console.WriteLine("  --bodies                also render method bodies (C#/VB)");
             Console.WriteLine();
             Console.WriteLine("Run without arguments to start the graphical interface.");
         }
@@ -329,6 +358,7 @@ namespace ILXP
             public bool IsDll { get; private set; }
             public bool Is64Bit { get; private set; }
             public bool Is32Bit { get; private set; }
+            public bool Bodies { get; private set; }
             public int Offset { get; private set; }
             public int Length { get; private set; }
 
@@ -379,6 +409,9 @@ namespace ILXP
                             break;
                         case "--bytes":
                             options.KeepBytes = true;
+                            break;
+                        case "--bodies":
+                            options.Bodies = true;
                             break;
                         case "--dll":
                             options.IsDll = true;

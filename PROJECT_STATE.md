@@ -31,6 +31,8 @@ Verified manually:
 * `--disasm-x86` decodes bytes with BeaEngine in the **x86** build.
 * `--clean` removes NOPs and folds `sizeof`, `Type.EmptyTypes.Length` and constant
   `System.Math` calls (verified with `tools/Test-MathPass.ps1`).
+* `--decompile ... --bodies` renders every method body; 245 Mono.Cecil types decompiled with
+  zero body-rendering failures.
 * Damaged-input baseline: a PE image is carved out of a larger blob
   (`tools/Test-Carving.ps1`).
 
@@ -40,6 +42,8 @@ Verified manually:
    are `WriteVisualBasicBody` / `WriteCSharpBody`.
 2. The C#/VB writers still have rough edges: attributes on properties/events, generic
    constraints, string escaping, and some `checked`/`Conversions` noise from the VB origin.
+   `--decompile --bodies` appends method bodies after the type outline (it is an inspection
+   dump, not a compilable project).
 3. `refs/_MayBeNeedReverse/ildasm.exe` (4.6 x64) needs companion resources; `native/ildasm.exe`
    is the working SDK 4.8 copy.
 4. `--clean` does not preserve strong-name signatures and writes without symbols.
