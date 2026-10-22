@@ -53,7 +53,7 @@ internal sealed class Class1
 			{
 				if (gform0_1 != null)
 				{
-					throw new ArgumentException(Class8.smethod_1());
+					throw new ArgumentException("Property can only be set to Nothing");
 				}
 				method_4(ref gform0_0);
 			}
@@ -67,7 +67,7 @@ internal sealed class Class1
 			{
 				if (gform1_1 != null)
 				{
-					throw new ArgumentException(Class8.smethod_1());
+					throw new ArgumentException("Property can only be set to Nothing");
 				}
 				method_4(ref gform1_0);
 			}
@@ -84,7 +84,7 @@ internal sealed class Class1
 			{
 				if (hashtable_0.ContainsKey(typeof(T)))
 				{
-					throw new InvalidOperationException(Utils.GetResourceString(Class8.smethod_3()));
+					throw new InvalidOperationException(Utils.GetResourceString("WinForms_RecursiveFormCreate"));
 				}
 			}
 			else
@@ -103,7 +103,7 @@ internal sealed class Class1
 				return ex.InnerException != null;
 			}).Invoke())
 			{
-				string resourceString = Utils.GetResourceString(Class8.smethod_2(), ex.InnerException.Message);
+				string resourceString = Utils.GetResourceString("WinForms_SeeInnerException", ex.InnerException.Message);
 				throw new InvalidOperationException(resourceString, ex.InnerException);
 			}
 			finally

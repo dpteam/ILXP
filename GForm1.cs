@@ -213,39 +213,39 @@ public sealed class GForm1 : Form
 		MenuStrip menuStrip = vmethod_0();
 		Point location = new Point(0, 0);
 		menuStrip.Location = location;
-		vmethod_0().Name = Class8.smethod_165();
+		vmethod_0().Name = "MenuStrip1";
 		MenuStrip menuStrip2 = vmethod_0();
 		Size size = new Size(828, 24);
 		menuStrip2.Size = size;
 		vmethod_0().TabIndex = 0;
-		vmethod_0().Text = Class8.smethod_165();
+		vmethod_0().Text = "MenuStrip1";
 		vmethod_2().DropDownItems.AddRange(new ToolStripItem[3]
 		{
 			vmethod_45(),
 			vmethod_54(),
 			vmethod_56()
 		});
-		vmethod_2().Name = Class8.smethod_166();
+		vmethod_2().Name = "FileToolStripMenuItem";
 		ToolStripMenuItem toolStripMenuItem = vmethod_2();
 		size = new Size(37, 20);
 		toolStripMenuItem.Size = size;
-		vmethod_2().Text = Class8.smethod_167();
-		vmethod_45().Image = (Image)componentResourceManager.GetObject(Class8.smethod_168());
-		vmethod_45().Name = Class8.smethod_169();
+		vmethod_2().Text = "&File";
+		vmethod_45().Image = (Image)componentResourceManager.GetObject("MenuItemFileOpen.Image");
+		vmethod_45().Name = "MenuItemFileOpen";
 		vmethod_45().ShortcutKeys = Keys.O | Keys.Control;
 		ToolStripMenuItem toolStripMenuItem2 = vmethod_45();
 		size = new Size(155, 22);
 		toolStripMenuItem2.Size = size;
-		vmethod_45().Text = Class8.smethod_170();
-		vmethod_54().Name = Class8.smethod_171();
+		vmethod_45().Text = "&Open...";
+		vmethod_54().Name = "ToolStripMenuItem1";
 		ToolStripSeparator toolStripSeparator = vmethod_54();
 		size = new Size(152, 6);
 		toolStripSeparator.Size = size;
-		vmethod_56().Name = Class8.smethod_172();
+		vmethod_56().Name = "MenuItemFileExit";
 		ToolStripMenuItem toolStripMenuItem3 = vmethod_56();
 		size = new Size(155, 22);
 		toolStripMenuItem3.Size = size;
-		vmethod_56().Text = Class8.smethod_173();
+		vmethod_56().Text = "E&xit";
 		vmethod_4().DropDownItems.AddRange(new ToolStripItem[4]
 		{
 			vmethod_58(),
@@ -253,47 +253,47 @@ public sealed class GForm1 : Form
 			vmethod_61(),
 			vmethod_63()
 		});
-		vmethod_4().Name = Class8.smethod_174();
+		vmethod_4().Name = "ViewToolStripMenuItem";
 		ToolStripMenuItem toolStripMenuItem4 = vmethod_4();
 		size = new Size(44, 20);
 		toolStripMenuItem4.Size = size;
-		vmethod_4().Text = Class8.smethod_175();
-		vmethod_58().Image = (Image)componentResourceManager.GetObject(Class8.smethod_176());
-		vmethod_58().Name = Class8.smethod_177();
+		vmethod_4().Text = "&View";
+		vmethod_58().Image = (Image)componentResourceManager.GetObject("MenuItemViewRefresh.Image");
+		vmethod_58().Name = "MenuItemViewRefresh";
 		vmethod_58().ShortcutKeys = Keys.F5;
 		ToolStripMenuItem toolStripMenuItem5 = vmethod_58();
 		size = new Size(175, 22);
 		toolStripMenuItem5.Size = size;
-		vmethod_58().Text = Class8.smethod_178();
-		vmethod_60().Name = Class8.smethod_179();
+		vmethod_58().Text = "&Refresh";
+		vmethod_60().Name = "ToolStripMenuItem2";
 		ToolStripSeparator toolStripSeparator2 = vmethod_60();
 		size = new Size(172, 6);
 		toolStripSeparator2.Size = size;
-		vmethod_61().Image = (Image)componentResourceManager.GetObject(Class8.smethod_180());
-		vmethod_61().Name = Class8.smethod_181();
+		vmethod_61().Image = (Image)componentResourceManager.GetObject("MenuItemViewBack.Image");
+		vmethod_61().Name = "MenuItemViewBack";
 		vmethod_61().ShortcutKeys = Keys.Left | Keys.Alt;
 		ToolStripMenuItem toolStripMenuItem6 = vmethod_61();
 		size = new Size(175, 22);
 		toolStripMenuItem6.Size = size;
-		vmethod_61().Text = Class8.smethod_182();
-		vmethod_63().Image = (Image)componentResourceManager.GetObject(Class8.smethod_183());
-		vmethod_63().Name = Class8.smethod_184();
+		vmethod_61().Text = "&Back";
+		vmethod_63().Image = (Image)componentResourceManager.GetObject("MenuItemViewForward.Image");
+		vmethod_63().Name = "MenuItemViewForward";
 		vmethod_63().ShortcutKeys = Keys.Right | Keys.Alt;
 		ToolStripMenuItem toolStripMenuItem7 = vmethod_63();
 		size = new Size(175, 22);
 		toolStripMenuItem7.Size = size;
-		vmethod_63().Text = Class8.smethod_185();
+		vmethod_63().Text = "&Forward";
 		vmethod_6().DropDownItems.AddRange(new ToolStripItem[1] { vmethod_47() });
-		vmethod_6().Name = Class8.smethod_186();
+		vmethod_6().Name = "HelpToolStripMenuItem";
 		ToolStripMenuItem toolStripMenuItem8 = vmethod_6();
 		size = new Size(44, 20);
 		toolStripMenuItem8.Size = size;
-		vmethod_6().Text = Class8.smethod_187();
-		vmethod_47().Name = Class8.smethod_188();
+		vmethod_6().Text = "&Help";
+		vmethod_47().Name = "MenuItemHelpAbout";
 		ToolStripMenuItem toolStripMenuItem9 = vmethod_47();
 		size = new Size(107, 22);
 		toolStripMenuItem9.Size = size;
-		vmethod_47().Text = Class8.smethod_189();
+		vmethod_47().Text = "&About";
 		_003C().Items.AddRange(new ToolStripItem[7]
 		{
 			vmethod_9(),
@@ -307,62 +307,62 @@ public sealed class GForm1 : Form
 		ToolStrip toolStrip = _003C();
 		location = new Point(0, 24);
 		toolStrip.Location = location;
-		_003C().Name = Class8.smethod_190();
+		_003C().Name = "ToolStrip1";
 		ToolStrip toolStrip2 = _003C();
 		size = new Size(828, 25);
 		toolStrip2.Size = size;
 		_003C().TabIndex = 1;
-		_003C().Text = Class8.smethod_190();
+		_003C().Text = "ToolStrip1";
 		vmethod_9().DisplayStyle = ToolStripItemDisplayStyle.Image;
-		vmethod_9().Image = (Image)componentResourceManager.GetObject(Class8.smethod_191());
+		vmethod_9().Image = (Image)componentResourceManager.GetObject("ToolStripButtonLoadFile.Image");
 		vmethod_9().ImageTransparentColor = Color.Magenta;
-		vmethod_9().Name = Class8.smethod_192();
+		vmethod_9().Name = "ToolStripButtonLoadFile";
 		ToolStripButton toolStripButton = vmethod_9();
 		size = new Size(23, 22);
 		toolStripButton.Size = size;
-		vmethod_9().Text = Class8.smethod_193();
-		vmethod_9().ToolTipText = Class8.smethod_194();
+		vmethod_9().Text = "Open...";
+		vmethod_9().ToolTipText = "Open...\r\nShortcut Key: Ctrl+O";
 		vmethod_22().DisplayStyle = ToolStripItemDisplayStyle.Image;
 		vmethod_22().Enabled = false;
-		vmethod_22().Image = (Image)componentResourceManager.GetObject(Class8.smethod_195());
+		vmethod_22().Image = (Image)componentResourceManager.GetObject("ToolStripButtonRefresh.Image");
 		vmethod_22().ImageTransparentColor = Color.Magenta;
-		vmethod_22().Name = Class8.smethod_196();
+		vmethod_22().Name = "ToolStripButtonRefresh";
 		ToolStripButton toolStripButton2 = vmethod_22();
 		size = new Size(23, 22);
 		toolStripButton2.Size = size;
-		vmethod_22().Text = Class8.smethod_197();
-		vmethod_22().ToolTipText = Class8.smethod_198();
-		vmethod_50().Name = Class8.smethod_199();
+		vmethod_22().Text = "Refresh";
+		vmethod_22().ToolTipText = "Refresh\r\nShortcut Key: F5";
+		vmethod_50().Name = "ToolStripSeparator2";
 		ToolStripSeparator toolStripSeparator3 = vmethod_50();
 		size = new Size(6, 25);
 		toolStripSeparator3.Size = size;
 		vmethod_24().DisplayStyle = ToolStripItemDisplayStyle.Image;
 		vmethod_24().Enabled = false;
-		vmethod_24().Image = (Image)componentResourceManager.GetObject(Class8.smethod_200());
+		vmethod_24().Image = (Image)componentResourceManager.GetObject("ToolStripButtonBack.Image");
 		vmethod_24().ImageTransparentColor = Color.Magenta;
-		vmethod_24().Name = Class8.smethod_201();
+		vmethod_24().Name = "ToolStripButtonBack";
 		ToolStripButton toolStripButton3 = vmethod_24();
 		size = new Size(23, 22);
 		toolStripButton3.Size = size;
-		vmethod_24().Text = Class8.smethod_202();
-		vmethod_24().ToolTipText = Class8.smethod_203();
+		vmethod_24().Text = "Back";
+		vmethod_24().ToolTipText = "Back\r\nShortcut Key: Alt+Left";
 		vmethod_26().DisplayStyle = ToolStripItemDisplayStyle.Image;
 		vmethod_26().Enabled = false;
-		vmethod_26().Image = (Image)componentResourceManager.GetObject(Class8.smethod_204());
+		vmethod_26().Image = (Image)componentResourceManager.GetObject("ToolStripButtonForward.Image");
 		vmethod_26().ImageTransparentColor = Color.Magenta;
-		vmethod_26().Name = Class8.smethod_205();
+		vmethod_26().Name = "ToolStripButtonForward";
 		ToolStripButton toolStripButton4 = vmethod_26();
 		size = new Size(23, 22);
 		toolStripButton4.Size = size;
-		vmethod_26().Text = Class8.smethod_206();
-		vmethod_26().ToolTipText = Class8.smethod_207();
-		vmethod_52().Name = Class8.smethod_208();
+		vmethod_26().Text = "Forward";
+		vmethod_26().ToolTipText = "Forward\r\nShortcut Key: Alt+Right";
+		vmethod_52().Name = "ToolStripSeparator3";
 		ToolStripSeparator toolStripSeparator4 = vmethod_52();
 		size = new Size(6, 25);
 		toolStripSeparator4.Size = size;
 		vmethod_11().DropDownStyle = ComboBoxStyle.DropDownList;
 		vmethod_11().FlatStyle = FlatStyle.Standard;
-		vmethod_11().Name = Class8.smethod_209();
+		vmethod_11().Name = "ToolStripComboBoxLanguage";
 		ToolStripComboBox toolStripComboBox = vmethod_11();
 		size = new Size(121, 25);
 		toolStripComboBox.Size = size;
@@ -370,13 +370,13 @@ public sealed class GForm1 : Form
 		StatusStrip statusStrip = _0024();
 		location = new Point(0, 517);
 		statusStrip.Location = location;
-		_0024().Name = Class8.smethod_210();
+		_0024().Name = "StatusStrip1";
 		StatusStrip statusStrip2 = _0024();
 		size = new Size(828, 22);
 		statusStrip2.Size = size;
 		_0024().TabIndex = 2;
-		_0024().Text = Class8.smethod_210();
-		vmethod_67().Name = Class8.smethod_211();
+		_0024().Text = "StatusStrip1";
+		vmethod_67().Name = "ToolStripStatusLabel1";
 		ToolStripStatusLabel toolStripStatusLabel = vmethod_67();
 		size = new Size(813, 17);
 		toolStripStatusLabel.Size = size;
@@ -387,7 +387,7 @@ public sealed class GForm1 : Form
 		SplitContainer splitContainer = vmethod_14();
 		location = new Point(0, 49);
 		splitContainer.Location = location;
-		vmethod_14().Name = Class8.smethod_212();
+		vmethod_14().Name = "SplitContainer1";
 		vmethod_14().Panel1.Controls.Add(vmethod_16());
 		vmethod_14().Panel2.Controls.Add(vmethod_18());
 		SplitContainer splitContainer2 = vmethod_14();
@@ -400,13 +400,13 @@ public sealed class GForm1 : Form
 		vmethod_16().ContextMenuStrip = vmethod_32();
 		vmethod_16().Dock = DockStyle.Fill;
 		vmethod_16().HideSelection = false;
-		vmethod_16().ImageKey = Class8.smethod_213();
+		vmethod_16().ImageKey = "0VSObject_Assembly.bmp";
 		vmethod_16().ImageList = vmethod_48();
 		TreeView treeView = vmethod_16();
 		location = new Point(0, 0);
 		treeView.Location = location;
-		vmethod_16().Name = Class8.smethod_214();
-		vmethod_16().SelectedImageKey = Class8.smethod_213();
+		vmethod_16().Name = "TreeView1";
+		vmethod_16().SelectedImageKey = "0VSObject_Assembly.bmp";
 		TreeView treeView2 = vmethod_16();
 		size = new Size(371, 468);
 		treeView2.Size = size;
@@ -421,12 +421,12 @@ public sealed class GForm1 : Form
 			vmethod_43(),
 			vmethod_65()
 		});
-		vmethod_32().Name = Class8.smethod_215();
+		vmethod_32().Name = "ContextMenuStrip1";
 		ContextMenuStrip contextMenuStrip = vmethod_32();
 		size = new Size(124, 126);
 		contextMenuStrip.Size = size;
-		vmethod_34().Image = (Image)componentResourceManager.GetObject(Class8.smethod_216());
-		vmethod_34().Name = Class8.smethod_217();
+		vmethod_34().Image = (Image)componentResourceManager.GetObject("MenuItemContextBack.Image");
+		vmethod_34().Name = "MenuItemContextBack";
 		vmethod_34().ShortcutKeyDisplayString = "";
 		ToolStripMenuItem toolStripMenuItem10 = vmethod_34();
 		size = new Size(123, 22);
@@ -564,13 +564,13 @@ public sealed class GForm1 : Form
 		vmethod_30().BackColor = SystemColors.Info;
 		vmethod_30().BorderStyle = BorderStyle.None;
 		vmethod_30().Dock = DockStyle.Fill;
-		vmethod_30().Font = new Font(Class8.smethod_158(), 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+		vmethod_30().Font = new Font("Courier New", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
 		vmethod_30().HideSelection = false;
 		TextBox textBox = vmethod_30();
 		location = new Point(1, 1);
 		textBox.Location = location;
 		vmethod_30().Multiline = true;
-		vmethod_30().Name = Class8.smethod_159();
+		vmethod_30().Name = "TextBox1";
 		vmethod_30().ReadOnly = true;
 		vmethod_30().ScrollBars = ScrollBars.Both;
 		TextBox textBox2 = vmethod_30();
@@ -584,7 +584,7 @@ public sealed class GForm1 : Form
 		GClass11 gClass = vmethod_20();
 		location = new Point(1, 1);
 		gClass.Location = location;
-		vmethod_20().Name = Class8.smethod_160();
+		vmethod_20().Name = "SyntaxBox1";
 		GClass11 gClass2 = vmethod_20();
 		size = new Size(451, 466);
 		gClass2.Size = size;
@@ -596,7 +596,7 @@ public sealed class GForm1 : Form
 		GClass10 gClass3 = vmethod_28();
 		location = new Point(1, 1);
 		gClass3.Location = location;
-		vmethod_28().Name = Class8.smethod_161();
+		vmethod_28().Name = "ImageBox1";
 		GClass10 gClass4 = vmethod_28();
 		size = new Size(451, 466);
 		gClass4.Size = size;
@@ -611,10 +611,10 @@ public sealed class GForm1 : Form
 		Controls.Add(_0024());
 		Controls.Add(_003C());
 		Controls.Add(vmethod_0());
-		Icon = (Icon)componentResourceManager.GetObject(Class8.smethod_162());
+		Icon = (Icon)componentResourceManager.GetObject("$this.Icon");
 		MainMenuStrip = vmethod_0();
-		Name = Class8.smethod_163();
-		Text = Class8.smethod_164();
+		Name = "MainForm";
+		Text = "CodeReflect <Version>";
 		vmethod_0().ResumeLayout(performLayout: false);
 		vmethod_0().PerformLayout();
 		_003C().ResumeLayout(performLayout: false);
@@ -1401,12 +1401,12 @@ public sealed class GForm1 : Form
 		bool_0 = false;
 		gclass7_0 = new GClass7();
 		Type typeFromHandle = typeof(Control);
-		FieldInfo field = typeFromHandle.GetField(Class8.smethod_218(), BindingFlags.Static | BindingFlags.NonPublic);
+		FieldInfo field = typeFromHandle.GetField("defaultFont", BindingFlags.Static | BindingFlags.NonPublic);
 		Font font = Control.DefaultFont;
 		Font value = new Font(SystemFonts.DialogFont.Name, font.SizeInPoints);
 		field.SetValue(null, value);
 		method_0();
-		Text = Text.Replace(Class8.smethod_17(), Class1.smethod_1().Info.Version.ToString(3));
+		Text = Text.Replace("<Version>", Class1.smethod_1().Info.Version.ToString(3));
 		vmethod_11().Items.Add(new GClass4());
 		vmethod_11().Items.Add(new GClass3());
 		vmethod_11().Items.Add(new GClass5());
@@ -1479,50 +1479,50 @@ public sealed class GForm1 : Form
 		}
 		if (methodDefinition.IsAssembly)
 		{
-			return Class8.smethod_219();
+			return "9VSObject_Properties_Friend.bmp";
 		}
 		if (methodDefinition.IsFamily)
 		{
-			return Class8.smethod_220();
+			return "9VSObject_Properties_Protected.bmp";
 		}
 		if (methodDefinition.IsPrivate)
 		{
-			return Class8.smethod_221();
+			return "9VSObject_Properties_Private.bmp";
 		}
-		return Class8.smethod_222();
+		return "9VSObject_Properties.bmp";
 	}
 
 	private string method_3(MethodDefinition methodDefinition_0)
 	{
 		if (methodDefinition_0.IsReuseSlot & methodDefinition_0.IsAssembly)
 		{
-			return Class8.smethod_230();
+			return "8VSObject_MethodOverload_Friend.bmp";
 		}
 		if (methodDefinition_0.IsReuseSlot & methodDefinition_0.IsFamily)
 		{
-			return Class8.smethod_223();
+			return "8VSObject_MethodOverload_Protected.bmp";
 		}
 		if (methodDefinition_0.IsReuseSlot & methodDefinition_0.IsPrivate)
 		{
-			return Class8.smethod_224();
+			return "8VSObject_MethodOverload_Private.bmp";
 		}
 		if (methodDefinition_0.IsReuseSlot)
 		{
-			return Class8.smethod_225();
+			return "8VSObject_MethodOverload.bmp";
 		}
 		if (methodDefinition_0.IsAssembly)
 		{
-			return Class8.smethod_226();
+			return "8VSObject_Method_Friend.bmp";
 		}
 		if (methodDefinition_0.IsFamily)
 		{
-			return Class8.smethod_227();
+			return "8VSObject_Method_Protected.bmp";
 		}
 		if (methodDefinition_0.IsPrivate)
 		{
-			return Class8.smethod_228();
+			return "8VSObject_Method_Private.bmp";
 		}
-		return Class8.smethod_229();
+		return "8VSObject_Method.bmp";
 	}
 
 	private string method_4(FieldDefinition fieldDefinition_0)
@@ -1531,31 +1531,31 @@ public sealed class GForm1 : Form
 		{
 			if (fieldDefinition_0.IsAssembly)
 			{
-				return Class8.smethod_233();
+				return "11VSObject_Constant_Friend.bmp";
 			}
 			if (fieldDefinition_0.IsFamily)
 			{
-				return Class8.smethod_234();
+				return "11VSObject_Constant_Protected.bmp";
 			}
 			if (fieldDefinition_0.IsPrivate)
 			{
-				return Class8.smethod_235();
+				return "11VSObject_Constant_Private.bmp";
 			}
-			return Class8.smethod_236();
+			return "11VSObject_Constant.bmp";
 		}
 		if (fieldDefinition_0.IsAssembly)
 		{
-			return Class8.smethod_237();
+			return "11VSObject_Field_Friend.bmp";
 		}
 		if (fieldDefinition_0.IsFamily)
 		{
-			return Class8.smethod_238();
+			return "11VSObject_Field_Protected.bmp";
 		}
 		if (fieldDefinition_0.IsPrivate)
 		{
-			return Class8.smethod_231();
+			return "11VSObject_Field_Private.bmp";
 		}
-		return Class8.smethod_232();
+		return "11VSObject_Field.bmp";
 	}
 
 	private string method_5(EventDefinition eventDefinition_0)
@@ -1571,154 +1571,154 @@ public sealed class GForm1 : Form
 		}
 		if (methodDefinition.IsAssembly)
 		{
-			return Class8.smethod_239();
+			return "10VSObject_Event_Friend.bmp";
 		}
 		if (methodDefinition.IsFamily)
 		{
-			return Class8.smethod_240();
+			return "10VSObject_Event_Protected.bmp";
 		}
 		if (methodDefinition.IsPrivate)
 		{
-			return Class8.smethod_241();
+			return "10VSObject_Event_Private.bmp";
 		}
-		return Class8.smethod_242();
+		return "10VSObject_Event.bmp";
 	}
 
 	private string method_6(TypeDefinition typeDefinition_0)
 	{
-		if (typeDefinition_0.BaseType != null && typeDefinition_0.BaseType.FullName.EndsWith(Class8.smethod_265()))
+		if (typeDefinition_0.BaseType != null && typeDefinition_0.BaseType.FullName.EndsWith("Delegate"))
 		{
 			if (typeDefinition_0.IsSealed)
 			{
-				return Class8.smethod_266();
+				return "7VSObject_Delegate_Sealed.bmp";
 			}
 			if (typeDefinition_0.IsNestedFamily)
 			{
-				return Class8.smethod_267();
+				return "7VSObject_Delegate_Protected.bmp";
 			}
 			if (typeDefinition_0.IsNestedAssembly)
 			{
-				return Class8.smethod_268();
+				return "7VSObject_Delegate_Friend.bmp";
 			}
 			if (typeDefinition_0.IsNotPublic)
 			{
-				return Class8.smethod_269();
+				return "7VSObject_Delegate_Private.bmp";
 			}
-			return Class8.smethod_270();
+			return "7VSObject_Delegate.bmp";
 		}
 		if (typeDefinition_0.IsEnum)
 		{
 			if (typeDefinition_0.IsSealed)
 			{
-				return Class8.smethod_271();
+				return "7VSObject_Enum_Sealed.bmp";
 			}
 			if (typeDefinition_0.IsNestedFamily)
 			{
-				return Class8.smethod_272();
+				return "7VSObject_Enum_Protected.bmp";
 			}
 			if (typeDefinition_0.IsNestedAssembly)
 			{
-				return Class8.smethod_273();
+				return "7VSObject_Enum_Friend.bmp";
 			}
-			return Class8.smethod_274();
+			return "7VSObject_Enum.bmp";
 		}
 		if (typeDefinition_0.IsInterface)
 		{
 			if (typeDefinition_0.IsSealed)
 			{
-				return Class8.smethod_275();
+				return "7VSObject_Interface_Sealed.bmp";
 			}
 			if (typeDefinition_0.IsNestedFamily)
 			{
-				return Class8.smethod_276();
+				return "7VSObject_Interface_Protected.bmp";
 			}
 			if (typeDefinition_0.IsNestedAssembly)
 			{
-				return Class8.smethod_243();
+				return "7VSObject_Interface_Friend.bmp";
 			}
 			if (typeDefinition_0.IsNotPublic)
 			{
-				return Class8.smethod_244();
+				return "7VSObject_Interface_Private.bmp";
 			}
-			return Class8.smethod_245();
+			return "7VSObject_Interface.bmp";
 		}
 		if (typeDefinition_0.IsSequentialLayout)
 		{
 			if (typeDefinition_0.IsSealed)
 			{
-				return Class8.smethod_246();
+				return "7VSObject_Structure_Sealed.bmp";
 			}
 			if (typeDefinition_0.IsNestedFamily)
 			{
-				return Class8.smethod_247();
+				return "7VSObject_Structure_Protected.bmp";
 			}
 			if (typeDefinition_0.IsNestedAssembly)
 			{
-				return Class8.smethod_248();
+				return "7VSObject_Structure_Friend.bmp";
 			}
 			if (typeDefinition_0.IsNotPublic)
 			{
-				return Class8.smethod_249();
+				return "7VSObject_Structure_Private.bmp";
 			}
-			return Class8.smethod_250();
+			return "7VSObject_Structure.bmp";
 		}
 		if (typeDefinition_0.IsValueType)
 		{
 			if (typeDefinition_0.IsSealed)
 			{
-				return Class8.smethod_251();
+				return "7VSObject_ValueType_Sealed.bmp";
 			}
 			if (typeDefinition_0.IsNestedFamily)
 			{
-				return Class8.smethod_252();
+				return "7VSObject_ValueType_Protected.bmp";
 			}
 			if (typeDefinition_0.IsNestedAssembly)
 			{
-				return Class8.smethod_253();
+				return "7VSObject_ValueType_Friend.bmp";
 			}
 			if (typeDefinition_0.IsNotPublic)
 			{
-				return Class8.smethod_254();
+				return "7VSObject_ValueType_Private.bmp";
 			}
-			return Class8.smethod_255();
+			return "7VSObject_ValueType.bmp";
 		}
 		if (typeDefinition_0.IsClass)
 		{
 			if (typeDefinition_0.IsSealed)
 			{
-				return Class8.smethod_246();
+				return "7VSObject_Structure_Sealed.bmp";
 			}
 			if (typeDefinition_0.IsNestedFamily)
 			{
-				return Class8.smethod_256();
+				return "7VSObject_Class_Protected.bmp";
 			}
 			if (typeDefinition_0.IsNestedAssembly)
 			{
-				return Class8.smethod_257();
+				return "7VSObject_Class_Friend.bmp";
 			}
 			if (typeDefinition_0.IsNotPublic)
 			{
-				return Class8.smethod_258();
+				return "7VSObject_Class_Private.bmp";
 			}
-			return Class8.smethod_259();
+			return "7VSObject_Class.bmp";
 		}
 		if (typeDefinition_0.IsSealed)
 		{
-			return Class8.smethod_260();
+			return "7VSObject_Module_Sealed.bmp";
 		}
 		if (typeDefinition_0.IsNestedFamily)
 		{
-			return Class8.smethod_261();
+			return "7VSObject_Module_Protected.bmp";
 		}
 		if (typeDefinition_0.IsNestedAssembly)
 		{
-			return Class8.smethod_262();
+			return "7VSObject_Module_Friend.bmp";
 		}
 		if (typeDefinition_0.IsNotPublic)
 		{
-			return Class8.smethod_263();
+			return "7VSObject_Module_Private.bmp";
 		}
-		return Class8.smethod_264();
+		return "7VSObject_Module.bmp";
 	}
 
 	private void method_7(TreeNode treeNode_0, TypeDefinition typeDefinition_0)
@@ -1734,21 +1734,21 @@ public sealed class GForm1 : Form
 		treeNode_0.Nodes.Add(treeNode);
 		try
 		{
-			TreeNode treeNode2 = new TreeNode(Class8.smethod_277());
-			treeNode2.ImageKey = Class8.smethod_278();
-			treeNode2.SelectedImageKey = Class8.smethod_278();
+			TreeNode treeNode2 = new TreeNode("Base Types");
+			treeNode2.ImageKey = "4VSBaseTypes.bmp";
+			treeNode2.SelectedImageKey = "4VSBaseTypes.bmp";
 			if (typeDefinition_0.BaseType != null)
 			{
 				TreeNode treeNode3 = new TreeNode(typeDefinition_0.BaseType.Name);
-				treeNode3.ImageKey = Class8.smethod_259();
-				treeNode3.SelectedImageKey = Class8.smethod_259();
+				treeNode3.ImageKey = "7VSObject_Class.bmp";
+				treeNode3.SelectedImageKey = "7VSObject_Class.bmp";
 				treeNode2.Nodes.Add(treeNode3);
 			}
 			foreach (TypeReference @interface in typeDefinition_0.Interfaces)
 			{
 				TreeNode treeNode4 = new TreeNode(@interface.Name);
-				treeNode4.ImageKey = Class8.smethod_245();
-				treeNode4.SelectedImageKey = Class8.smethod_245();
+				treeNode4.ImageKey = "7VSObject_Interface.bmp";
+				treeNode4.SelectedImageKey = "7VSObject_Interface.bmp";
 				treeNode2.Nodes.Add(treeNode4);
 			}
 			if (treeNode2.Nodes.Count > 0)
@@ -1935,7 +1935,7 @@ public sealed class GForm1 : Form
 		catch (Exception projectError)
 		{
 			ProjectData.SetProjectError(projectError);
-			MessageBox.Show(this, string.Format(Class8.smethod_279(), string_0), Class8.smethod_280());
+			MessageBox.Show(this, string.Format("Unable to load the file \"{0}\".", string_0), "Cannot Load File");
 			ProjectData.ClearProjectError();
 		}
 		if (treeNode != null)
@@ -1954,10 +1954,10 @@ public sealed class GForm1 : Form
 		AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(string_0);
 		try
 		{
-			if (File.Exists(Path.ChangeExtension(string_0, Class8.smethod_281())))
+			if (File.Exists(Path.ChangeExtension(string_0, ".pdb")))
 			{
 				PdbReaderProvider pdbReaderProvider = new PdbReaderProvider();
-				assemblyDefinition.MainModule.ReadSymbols(pdbReaderProvider.GetSymbolReader(assemblyDefinition.MainModule, Path.ChangeExtension(string_0, Class8.smethod_281())));
+				assemblyDefinition.MainModule.ReadSymbols(pdbReaderProvider.GetSymbolReader(assemblyDefinition.MainModule, Path.ChangeExtension(string_0, ".pdb")));
 			}
 		}
 		catch (Exception projectError)
@@ -1967,24 +1967,24 @@ public sealed class GForm1 : Form
 		}
 		TreeNode treeNode = new TreeNode(assemblyDefinition.Name.Name);
 		treeNode.Tag = new GClass0(string_0, assemblyDefinition);
-		treeNode.ImageKey = Class8.smethod_213();
-		treeNode.SelectedImageKey = Class8.smethod_213();
+		treeNode.ImageKey = "0VSObject_Assembly.bmp";
+		treeNode.SelectedImageKey = "0VSObject_Assembly.bmp";
 		foreach (ModuleDefinition module in assemblyDefinition.Modules)
 		{
 			TreeNode treeNode2 = treeNode.Nodes.Add(module.Name);
 			Dictionary<string, TreeNode> dictionary = new Dictionary<string, TreeNode>();
-			treeNode2.ImageKey = Class8.smethod_282();
-			treeNode2.SelectedImageKey = Class8.smethod_282();
+			treeNode2.ImageKey = "1VSObject_Library.bmp";
+			treeNode2.SelectedImageKey = "1VSObject_Library.bmp";
 			treeNode2.Tag = module;
-			TreeNode treeNode3 = treeNode2.Nodes.Add(Class8.smethod_283());
-			treeNode3.ImageKey = Class8.smethod_284();
-			treeNode3.SelectedImageKey = Class8.smethod_284();
+			TreeNode treeNode3 = treeNode2.Nodes.Add("References");
+			treeNode3.ImageKey = "4VSReferences.bmp";
+			treeNode3.SelectedImageKey = "4VSReferences.bmp";
 			foreach (AssemblyNameReference assemblyReference in module.AssemblyReferences)
 			{
-				TreeNode treeNode4 = new TreeNode(string.Format(Class8.smethod_285(), assemblyReference.Name, assemblyReference.Version.ToString()));
+				TreeNode treeNode4 = new TreeNode(string.Format("{0} ({1})", assemblyReference.Name, assemblyReference.Version.ToString()));
 				treeNode4.Tag = assemblyReference;
-				treeNode4.ImageKey = Class8.smethod_286();
-				treeNode4.SelectedImageKey = Class8.smethod_286();
+				treeNode4.ImageKey = "5VSProject_reference.bmp";
+				treeNode4.SelectedImageKey = "5VSProject_reference.bmp";
 				treeNode3.Nodes.Add(treeNode4);
 			}
 			foreach (TypeDefinition type in module.Types)
@@ -2371,27 +2371,27 @@ public sealed class GForm1 : Form
 			object objectValue = RuntimeHelpers.GetObjectValue(vmethod_16().SelectedNode.Tag);
 			if (objectValue is MethodDefinition)
 			{
-				vmethod_67().Text = string.Format(Class8.smethod_287(), ((MethodDefinition)objectValue).DeclaringType.FullName, ((MethodDefinition)objectValue).Name);
+				vmethod_67().Text = string.Format("{0}::{1}", ((MethodDefinition)objectValue).DeclaringType.FullName, ((MethodDefinition)objectValue).Name);
 			}
 			else if (objectValue is FieldDefinition)
 			{
-				vmethod_67().Text = string.Format(Class8.smethod_287(), ((FieldDefinition)objectValue).DeclaringType.FullName, ((FieldDefinition)objectValue).Name);
+				vmethod_67().Text = string.Format("{0}::{1}", ((FieldDefinition)objectValue).DeclaringType.FullName, ((FieldDefinition)objectValue).Name);
 			}
 			else if (objectValue is PropertyDefinition)
 			{
-				vmethod_67().Text = string.Format(Class8.smethod_287(), ((PropertyDefinition)objectValue).DeclaringType.FullName, ((PropertyDefinition)objectValue).Name);
+				vmethod_67().Text = string.Format("{0}::{1}", ((PropertyDefinition)objectValue).DeclaringType.FullName, ((PropertyDefinition)objectValue).Name);
 			}
 			else if (objectValue is EventDefinition)
 			{
-				vmethod_67().Text = string.Format(Class8.smethod_287(), ((EventDefinition)objectValue).DeclaringType.FullName, ((EventDefinition)objectValue).Name);
+				vmethod_67().Text = string.Format("{0}::{1}", ((EventDefinition)objectValue).DeclaringType.FullName, ((EventDefinition)objectValue).Name);
 			}
 			else if (objectValue is TypeDefinition)
 			{
-				vmethod_67().Text = string.Format(Class8.smethod_288(), ((TypeDefinition)objectValue).FullName);
+				vmethod_67().Text = string.Format("{0}", ((TypeDefinition)objectValue).FullName);
 			}
 			else if (objectValue is GClass6)
 			{
-				vmethod_67().Text = string.Format(Class8.smethod_288(), ((GClass6)objectValue).method_0());
+				vmethod_67().Text = string.Format("{0}", ((GClass6)objectValue).method_0());
 			}
 			else
 			{
@@ -2636,7 +2636,7 @@ public sealed class GForm1 : Form
 		{
 			SaveFileDialog saveFileDialog = new SaveFileDialog();
 			saveFileDialog.OverwritePrompt = true;
-			saveFileDialog.Filter = Class8.smethod_289();
+			saveFileDialog.Filter = "All Files (*.*)|*.*";
 			saveFileDialog.FileName = vmethod_16().SelectedNode.Text;
 			if (saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
@@ -2651,7 +2651,7 @@ public sealed class GForm1 : Form
 		{
 			ProjectData.SetProjectError(ex);
 			Exception ex2 = ex;
-			MessageBox.Show(this, ex2.Message, Class8.smethod_290(), MessageBoxButtons.OK);
+			MessageBox.Show(this, ex2.Message, "Unable to save file.", MessageBoxButtons.OK);
 			ProjectData.ClearProjectError();
 		}
 	}

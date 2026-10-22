@@ -21,11 +21,11 @@ public sealed class GClass5 : GClass2
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.AppendLine("<<g>>'Name: " + gclass0_0.method_1().Name.Name + "<<>>");
 		stringBuilder.AppendLine("<<g>>'Path: " + gclass0_0.method_0() + "<<>>");
-		stringBuilder.AppendLine("<<g>>'Version: " + $"{gclass0_0.method_1().Name.Version.Major}:{gclass0_0.method_1().Name.Version.MajorRevision}:{gclass0_0.method_1().Name.Version.Minor}:{gclass0_0.method_1().Name.Version.MinorRevision}" + Class8.smethod_18());
+		stringBuilder.AppendLine("<<g>>'Version: " + $"{gclass0_0.method_1().Name.Version.Major}:{gclass0_0.method_1().Name.Version.MajorRevision}:{gclass0_0.method_1().Name.Version.Minor}:{gclass0_0.method_1().Name.Version.MinorRevision}" + "<<>>");
 		stringBuilder.AppendLine();
 		foreach (CustomAttribute customAttribute in gclass0_0.method_1().CustomAttributes)
 		{
-			stringBuilder.Append(Class8.smethod_133());
+			stringBuilder.Append("<<<b>>Assembly<<>>: ");
 			stringBuilder.Append(method_8(customAttribute.AttributeType) + "(");
 			foreach (CustomAttributeArgument constructorArgument in customAttribute.ConstructorArguments)
 			{
@@ -52,7 +52,7 @@ public sealed class GClass5 : GClass2
 		StringBuilder stringBuilder = new StringBuilder();
 		if (!string.IsNullOrEmpty(gclass6_0.method_0()))
 		{
-			stringBuilder.AppendLine(Class8.smethod_135() + GClass2.smethod_0(gclass6_0) + gclass6_0.method_0() + Class8.smethod_18());
+			stringBuilder.AppendLine("<<b>>Namespace<<>> " + GClass2.smethod_0(gclass6_0) + gclass6_0.method_0() + "<<>>");
 		}
 		StringBuilder stringBuilder2 = new StringBuilder();
 		foreach (TypeDefinition type in gclass6_0.method_1().Types)
@@ -63,11 +63,11 @@ public sealed class GClass5 : GClass2
 				stringBuilder2.AppendLine();
 			}
 		}
-		stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + Class8.smethod_82());
-		stringBuilder.AppendLine(Class8.smethod_82() + stringBuilder2.ToString().Trim());
+		stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + "    ");
+		stringBuilder.AppendLine("    " + stringBuilder2.ToString().Trim());
 		if (!string.IsNullOrEmpty(gclass6_0.method_0()))
 		{
-			stringBuilder.Append(Class8.smethod_134());
+			stringBuilder.Append("<<b>>End Namespace<<>>");
 		}
 		return stringBuilder.ToString();
 	}
@@ -75,8 +75,8 @@ public sealed class GClass5 : GClass2
 	public override string vmethod_3(ModuleDefinition moduleDefinition_0)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.AppendLine(Class8.smethod_136() + moduleDefinition_0.Name + Class8.smethod_18());
-		stringBuilder.Append(Class8.smethod_137() + moduleDefinition_0.Runtime.ToString() + Class8.smethod_18());
+		stringBuilder.AppendLine("<<g>>'Module: " + moduleDefinition_0.Name + "<<>>");
+		stringBuilder.Append("<<g>>'Runtime Version: " + moduleDefinition_0.Runtime.ToString() + "<<>>");
 		return stringBuilder.ToString();
 	}
 
@@ -86,54 +86,54 @@ public sealed class GClass5 : GClass2
 		method_6(stringBuilder, fieldDefinition_0.CustomAttributes);
 		if (fieldDefinition_0.DeclaringType.IsEnum)
 		{
-			stringBuilder.Append(GClass2.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + Class8.smethod_18());
+			stringBuilder.Append(GClass2.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + "<<>>");
 		}
 		else
 		{
-			stringBuilder.Append(Class8.smethod_25());
+			stringBuilder.Append("<<b>>");
 			if (fieldDefinition_0.IsPublic)
 			{
-				stringBuilder.Append(Class8.smethod_143());
+				stringBuilder.Append("Public ");
 			}
 			else if (fieldDefinition_0.IsPrivate)
 			{
-				stringBuilder.Append(Class8.smethod_144());
+				stringBuilder.Append("Private ");
 			}
 			else if (fieldDefinition_0.IsAssembly)
 			{
-				stringBuilder.Append(Class8.smethod_145());
+				stringBuilder.Append("Friend ");
 			}
 			else if (fieldDefinition_0.IsFamily)
 			{
-				stringBuilder.Append(Class8.smethod_146());
+				stringBuilder.Append("Protected ");
 			}
 			if (fieldDefinition_0.IsLiteral & fieldDefinition_0.IsStatic)
 			{
-				stringBuilder.Append(Class8.smethod_138());
+				stringBuilder.Append("Const ");
 			}
 			if (fieldDefinition_0.IsStatic & !fieldDefinition_0.IsLiteral)
 			{
-				stringBuilder.Append(Class8.smethod_139());
+				stringBuilder.Append("Shared ");
 			}
 			if (fieldDefinition_0.IsInitOnly)
 			{
-				stringBuilder.Append(Class8.smethod_140());
+				stringBuilder.Append("ReadOnly ");
 			}
-			stringBuilder.Append(Class8.smethod_18());
-			stringBuilder.Append(GClass2.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + Class8.smethod_141());
-			stringBuilder.Append(Class8.smethod_142());
+			stringBuilder.Append("<<>>");
+			stringBuilder.Append(GClass2.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + "<<>> ");
+			stringBuilder.Append("<<b>>As<<>> ");
 			stringBuilder.Append(method_8(fieldDefinition_0.FieldType));
 		}
 		if (fieldDefinition_0.Constant != null)
 		{
-			stringBuilder.Append(Class8.smethod_22());
+			stringBuilder.Append(" = ");
 			if (fieldDefinition_0.Constant is string)
 			{
-				stringBuilder.Append(string.Format(Class8.smethod_23(), RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
+				stringBuilder.Append(string.Format("<<r>>'{0}'<<>>", RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
 			}
 			else
 			{
-				stringBuilder.Append(string.Format(Class8.smethod_24(), RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
+				stringBuilder.Append(string.Format("<<r>>{0}<<>>", RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
 			}
 		}
 		return stringBuilder.ToString();
@@ -287,17 +287,17 @@ public sealed class GClass5 : GClass2
 			}
 			else if (typeDefinition_0.IsClass)
 			{
-				stringBuilder.Append(Class8.smethod_147());
+				stringBuilder.Append("Class ");
 			}
-			stringBuilder.Append(Class8.smethod_18());
+			stringBuilder.Append("<<>>");
 			stringBuilder.AppendLine(text);
-			if (!typeDefinition_0.IsValueType && !typeDefinition_0.IsInterface && !typeDefinition_0.IsEnum && typeDefinition_0.BaseType != null && Operators.CompareString(typeDefinition_0.BaseType.FullName, Class8.smethod_148(), TextCompare: false) != 0)
+			if (!typeDefinition_0.IsValueType && !typeDefinition_0.IsInterface && !typeDefinition_0.IsEnum && typeDefinition_0.BaseType != null && Operators.CompareString(typeDefinition_0.BaseType.FullName, "System.Object", TextCompare: false) != 0)
 			{
-				stringBuilder.AppendLine(Class8.smethod_149() + method_7(typeDefinition_0.BaseType));
+				stringBuilder.AppendLine("    <<b>>Inherits<<>> " + method_7(typeDefinition_0.BaseType));
 			}
 			if (typeDefinition_0.Interfaces.Count > 0)
 			{
-				stringBuilder.Append(Class8.smethod_150());
+				stringBuilder.Append("    <<b>>Implements<<>> ");
 				foreach (TypeReference @interface in typeDefinition_0.Interfaces)
 				{
 					stringBuilder.Append(method_7(@interface) + ", ");
@@ -416,44 +416,44 @@ public sealed class GClass5 : GClass2
 		StringBuilder stringBuilder = new StringBuilder();
 		method_6(stringBuilder, eventDefinition_0.CustomAttributes);
 		MethodDefinition methodDefinition = eventDefinition_0.AddMethod;
-		stringBuilder.Append(Class8.smethod_25());
+		stringBuilder.Append("<<b>>");
 		if (!methodDefinition.DeclaringType.IsInterface)
 		{
 			if (methodDefinition.IsPrivate)
 			{
-				stringBuilder.Append(Class8.smethod_144());
+				stringBuilder.Append("Private ");
 			}
 			else if (methodDefinition.IsAssembly)
 			{
-				stringBuilder.Append(Class8.smethod_145());
+				stringBuilder.Append("Friend ");
 			}
 			else if (methodDefinition.IsFamily)
 			{
-				stringBuilder.Append(Class8.smethod_146());
+				stringBuilder.Append("Protected ");
 			}
 			else if (methodDefinition.IsPublic)
 			{
-				stringBuilder.Append(Class8.smethod_143());
+				stringBuilder.Append("Public ");
 			}
 			if (methodDefinition.IsStatic)
 			{
-				stringBuilder.Append(Class8.smethod_139());
+				stringBuilder.Append("Shared ");
 			}
 			if (methodDefinition.IsVirtual & methodDefinition.IsNewSlot)
 			{
-				stringBuilder.Append(Class8.smethod_151());
+				stringBuilder.Append("Overridable ");
 			}
 			if (methodDefinition.IsVirtual & methodDefinition.IsReuseSlot)
 			{
-				stringBuilder.Append(Class8.smethod_152());
+				stringBuilder.Append("Overrides ");
 			}
 			if (!methodDefinition.IsVirtual & methodDefinition.IsNewSlot)
 			{
-				stringBuilder.Append(Class8.smethod_153());
+				stringBuilder.Append("Shadows ");
 			}
 		}
-		stringBuilder.Append(Class8.smethod_154());
-		stringBuilder.Append(GClass2.smethod_0(eventDefinition_0) + eventDefinition_0.Name + Class8.smethod_18());
+		stringBuilder.Append("Event ");
+		stringBuilder.Append(GClass2.smethod_0(eventDefinition_0) + eventDefinition_0.Name + "<<>>");
 		stringBuilder.Append("(");
 		foreach (MethodDefinition method in eventDefinition_0.EventType.GetElementType().Resolve().Methods)
 		{
@@ -567,7 +567,7 @@ public sealed class GClass5 : GClass2
 		}
 		else
 		{
-			stringBuilder.Append(GClass2.smethod_0(methodDefinition_0) + methodDefinition_0.Name + Class8.smethod_18());
+			stringBuilder.Append(GClass2.smethod_0(methodDefinition_0) + methodDefinition_0.Name + "<<>>");
 		}
 		stringBuilder.Append("(");
 		if (methodDefinition_0.Parameters.Count > 0)
@@ -690,15 +690,15 @@ public sealed class GClass5 : GClass2
 		}
 		if (propertyDefinition_0.GetMethod == null)
 		{
-			stringBuilder.Append(Class8.smethod_155());
+			stringBuilder.Append("WriteOnly ");
 		}
 		if (propertyDefinition_0.SetMethod == null)
 		{
-			stringBuilder.Append(Class8.smethod_140());
+			stringBuilder.Append("ReadOnly ");
 		}
-		stringBuilder.Append(Class8.smethod_156());
-		stringBuilder.Append(Class8.smethod_18());
-		stringBuilder.Append(GClass2.smethod_0(propertyDefinition_0) + propertyDefinition_0.Name + Class8.smethod_18());
+		stringBuilder.Append("Property ");
+		stringBuilder.Append("<<>>");
+		stringBuilder.Append(GClass2.smethod_0(propertyDefinition_0) + propertyDefinition_0.Name + "<<>>");
 		if (propertyDefinition_0.Parameters.Count > 0)
 		{
 			stringBuilder.Append("(");
@@ -779,9 +779,9 @@ public sealed class GClass5 : GClass2
 			foreach (CustomAttribute item in collection_0)
 			{
 				string text = method_8(item.AttributeType);
-				if (text.EndsWith(Class8.smethod_157()))
+				if (text.EndsWith("Attribute<<>>"))
 				{
-					text = text.Replace(Class8.smethod_157(), Class8.smethod_18());
+					text = text.Replace("Attribute<<>>", "<<>>");
 				}
 				stringBuilder_0.Append(text + "(");
 				foreach (CustomAttributeArgument constructorArgument in item.ConstructorArguments)

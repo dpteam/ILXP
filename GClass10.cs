@@ -75,7 +75,7 @@ public class GClass10 : Panel
 
 	public static bool smethod_0(Control control_0, ref Message message_0)
 	{
-		if (Conversions.ToBoolean(Operators.OrObject(Operators.CompareObjectNotEqual(NewLateBinding.LateGet(control_0, null, Class8.smethod_303(), new object[0], null, null, null), 2, TextCompare: false), !Application.RenderWithVisualStyles)))
+		if (Conversions.ToBoolean(Operators.OrObject(Operators.CompareObjectNotEqual(NewLateBinding.LateGet(control_0, null, "borderstyle", new object[0], null, null, null), 2, TextCompare: false), !Application.RenderWithVisualStyles)))
 		{
 			return false;
 		}
@@ -108,7 +108,7 @@ public class GClass10 : Panel
 				}
 				return false;
 			case 133:
-				if (Conversions.ToBoolean((!Conversions.ToBoolean(control_0.GetType().GetProperty(Class8.smethod_304()) != null) || !Conversions.ToBoolean(NewLateBinding.LateGet(control_0, null, Class8.smethod_304(), new object[0], null, null, null))) ? ((object)false) : ((object)true)))
+				if (Conversions.ToBoolean((!Conversions.ToBoolean(control_0.GetType().GetProperty("AutoScroll") != null) || !Conversions.ToBoolean(NewLateBinding.LateGet(control_0, null, "AutoScroll", new object[0], null, null, null))) ? ((object)false) : ((object)true)))
 				{
 					return false;
 				}
@@ -160,12 +160,12 @@ public class GClass10 : Panel
 
 	public static void smethod_1(Control control_0, ref Message message_0)
 	{
-		if (Conversions.ToBoolean(Operators.OrObject(Operators.CompareObjectNotEqual(NewLateBinding.LateGet(control_0, null, Class8.smethod_303(), new object[0], null, null, null), 2, TextCompare: false), !Application.RenderWithVisualStyles)))
+		if (Conversions.ToBoolean(Operators.OrObject(Operators.CompareObjectNotEqual(NewLateBinding.LateGet(control_0, null, "borderstyle", new object[0], null, null, null), 2, TextCompare: false), !Application.RenderWithVisualStyles)))
 		{
 			return;
 		}
 		int msg = message_0.Msg;
-		if (msg != 133 || Conversions.ToBoolean((Conversions.ToBoolean(control_0.GetType().GetProperty(Class8.smethod_304()) == null) || Conversions.ToBoolean(Operators.NotObject(NewLateBinding.LateGet(control_0, null, Class8.smethod_304(), new object[0], null, null, null)))) ? ((object)true) : ((object)false)))
+		if (msg != 133 || Conversions.ToBoolean((Conversions.ToBoolean(control_0.GetType().GetProperty("AutoScroll") == null) || Conversions.ToBoolean(Operators.NotObject(NewLateBinding.LateGet(control_0, null, "AutoScroll", new object[0], null, null, null)))) ? ((object)true) : ((object)false)))
 		{
 			return;
 		}

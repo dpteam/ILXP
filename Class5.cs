@@ -24,7 +24,7 @@ internal sealed class Class5
 	{
 		if (object.ReferenceEquals(resourceManager_0, null))
 		{
-			ResourceManager resourceManager = new ResourceManager(Class8.smethod_291(), typeof(Class5).Assembly);
+			ResourceManager resourceManager = new ResourceManager("DevExtras.CodeReflect.Resources", typeof(Class5).Assembly);
 			resourceManager_0 = resourceManager;
 		}
 		return resourceManager_0;
@@ -45,35 +45,35 @@ internal sealed class Class5
 	[SpecialName]
 	internal static Bitmap smethod_3()
 	{
-		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject(Class8.smethod_292(), cultureInfo_0));
+		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject("Image_FileOpen", cultureInfo_0));
 		return (Bitmap)objectValue;
 	}
 
 	[SpecialName]
 	internal static Bitmap smethod_4()
 	{
-		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject(Class8.smethod_293(), cultureInfo_0));
+		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject("Image_NavBack", cultureInfo_0));
 		return (Bitmap)objectValue;
 	}
 
 	[SpecialName]
 	internal static Bitmap smethod_5()
 	{
-		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject(Class8.smethod_294(), cultureInfo_0));
+		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject("Image_NavForward", cultureInfo_0));
 		return (Bitmap)objectValue;
 	}
 
 	[SpecialName]
 	internal static Bitmap _003C()
 	{
-		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject(Class8.smethod_295(), cultureInfo_0));
+		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject("Image_Refresh", cultureInfo_0));
 		return (Bitmap)objectValue;
 	}
 
 	[SpecialName]
 	internal static Bitmap smethod_6()
 	{
-		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject(Class8.smethod_296(), cultureInfo_0));
+		object objectValue = RuntimeHelpers.GetObjectValue(smethod_0().GetObject("ImageCompanyLogo", cultureInfo_0));
 		return (Bitmap)objectValue;
 	}
 }

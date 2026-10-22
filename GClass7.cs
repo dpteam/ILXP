@@ -33,7 +33,7 @@ public sealed class GClass7
 			int_2 = 100;
 			if (Capacity < 1)
 			{
-				throw new Exception(Class8.smethod_300());
+				throw new Exception("Capacity must be greater than 0");
 			}
 			int_2 = Capacity;
 			object_0 = new object[checked(int_2 - 1 + 1)];
@@ -50,7 +50,7 @@ public sealed class GClass7
 		{
 			if (int_3 >= int_0)
 			{
-				throw new Exception(Class8.smethod_301());
+				throw new Exception("Out of bounds");
 			}
 			checked
 			{
@@ -85,7 +85,7 @@ public sealed class GClass7
 		{
 			if (int_0 <= 0)
 			{
-				throw new Exception(Class8.smethod_302());
+				throw new Exception("Stack is empty");
 			}
 			t result = Conversions.ToGenericParameter<t>(RuntimeHelpers.GetObjectValue(object_0[int_1]));
 			object_0[int_1] = null;

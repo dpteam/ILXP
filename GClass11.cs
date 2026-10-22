@@ -58,10 +58,10 @@ public sealed class GClass11 : GClass10
 		{
 			base.Font = value;
 			int_2 = value.Height;
-			string text = Class8.smethod_347();
+			string text = "xxxxxxxxxxxxxxxxxxxx";
 			Size proposedSize = new Size(1000, 100);
 			int num = TextRenderer.MeasureText(text, value, proposedSize, textFormatFlags_0).Width;
-			string text2 = Class8.smethod_348();
+			string text2 = "xxxxxxxxxxxxxxxxxxx";
 			Size proposedSize2 = new Size(1000, 100);
 			this.m__003C = checked(num - TextRenderer.MeasureText(text2, value, proposedSize2, textFormatFlags_0).Width);
 		}
@@ -230,7 +230,7 @@ public sealed class GClass11 : GClass10
 		method_14();
 		BackColor = SystemColors.Window;
 		DoubleBuffered = true;
-		Font = new Font(Class8.smethod_158(), 8.5f);
+		Font = new Font("Courier New", 8.5f);
 		SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.UserMouse | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
 		TabStop = true;
 	}
@@ -756,21 +756,21 @@ public sealed class GClass11 : GClass10
 			vmethod_2(),
 			vmethod_4()
 		});
-		vmethod_0().Name = Class8.smethod_215();
+		vmethod_0().Name = "ContextMenuStrip1";
 		ContextMenuStrip contextMenuStrip = vmethod_0();
 		Size size = new Size(153, 70);
 		contextMenuStrip.Size = size;
-		vmethod_4().Name = Class8.smethod_353();
+		vmethod_4().Name = "ToolStripMenuItemSelectAll";
 		ToolStripMenuItem toolStripMenuItem = vmethod_4();
 		size = new Size(152, 22);
 		toolStripMenuItem.Size = size;
-		vmethod_4().Text = Class8.smethod_349();
-		vmethod_2().Name = Class8.smethod_350();
+		vmethod_4().Text = "&Select All";
+		vmethod_2().Name = "ToolStripMenuItemCopy";
 		ToolStripMenuItem toolStripMenuItem2 = vmethod_2();
 		size = new Size(152, 22);
 		toolStripMenuItem2.Size = size;
-		vmethod_2().Text = Class8.smethod_351();
-		Name = Class8.smethod_352();
+		vmethod_2().Text = "&Copy";
+		Name = "PanelWithBorders";
 		vmethod_0().ResumeLayout(performLayout: false);
 		ResumeLayout(performLayout: false);
 	}

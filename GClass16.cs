@@ -87,7 +87,7 @@ public sealed class GClass16
 				while (num2 <= 7);
 				StringFormat stringFormat = (StringFormat)StringFormat.GenericDefault.Clone();
 				stringFormat.LineAlignment = StringAlignment.Center;
-				string s = Class8.smethod_354();
+				string s = "Loading...";
 				Font font = Font;
 				Brush black2 = Brushes.Black;
 				rect = new Rectangle(40, 0, Width - 40, Height);

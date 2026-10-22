@@ -1,0 +1,354 @@
+﻿353`tLoading...
+352`tToolStripMenuItemSelectAll
+351`tPanelWithBorders
+350`t&Copy
+349`tToolStripMenuItemCopy
+348`t&Select All
+347`txxxxxxxxxxxxxxxxxxx
+346`txxxxxxxxxxxxxxxxxxxx
+345`t<GENERICOPEN>
+344`tSystem.UInt
+343`t<IFGROUP>
+342`t{value}
+341`t<IFCLOSE>
+340`t<IIFEND>
+339`t<ELSE>
+338`t<NOTEND>
+337`t<NOT>
+336`t<ISEQUALS>
+335`t<ISNOTEQUALS>
+334`t<ORELSE>
+333`t<ANDALSO>
+332`t<OR>
+331`t<AND>
+330`t<NOTEQUALS>
+329`t<EQUALS>
+328`t<PLOP>
+327`t<TRUE>
+326`tldloc
+325`tstloc
+324`tCompareString
+323`t<<MOVEUP>> <ISNOTEQUALS> <NOTHING><NOTEND>
+322`tBoolean
+321`t<TRYEND>
+320`t<TRYSTART>
+319`t{0}-{1}
+318`t<FOREACHEND>
+317`tOperand
+316`tGetEnumerator
+315`tEnumerator
+314`tMoveNext
+313`tSystem.Void Microsoft.VisualBasic.CompilerServices.ProjectData::ClearProjectError()
+312`t<<b>>catch<<>> ({1} {0}) 
+311`t<DIRECTCAST=
+310`t<<b>>For Each<<>> {0} <<b>>As<<>> {1} <<b>>In<<>> {2}
+309`t<GENERICCLOSE>
+308`t<<b>>GoTo<<>>
+307`t<GOTO>
+306`t<<b>>Exit Loop<<>>
+305`t<EXITLOOP>
+304`t({0})
+303`tAutoScroll
+302`tborderstyle
+301`tStack is empty
+300`tOut of bounds
+299`tCapacity must be greater than 0
+298`tLastSelectedNodePath
+297`tSelectedLanguage
+296`tLastFile
+295`tImageCompanyLogo
+294`tImage_Refresh
+293`tImage_NavForward
+292`tImage_NavBack
+291`tImage_FileOpen
+290`tDevExtras.CodeReflect.Resources
+289`tUnable to save file.
+288`tAll Files (*.*)|*.*
+287`t{0}
+286`t{0}::{1}
+285`t5VSProject_reference.bmp
+284`t{0} ({1})
+283`t4VSReferences.bmp
+282`tReferences
+281`t1VSObject_Library.bmp
+280`t.pdb
+279`tCannot Load File
+278`tUnable to load the file "{0}".
+277`t4VSBaseTypes.bmp
+276`tBase Types
+275`t7VSObject_Interface_Protected.bmp
+274`t7VSObject_Interface_Sealed.bmp
+273`t7VSObject_Enum.bmp
+272`t7VSObject_Enum_Friend.bmp
+271`t7VSObject_Enum_Protected.bmp
+270`t7VSObject_Enum_Sealed.bmp
+269`t7VSObject_Delegate.bmp
+268`t7VSObject_Delegate_Private.bmp
+267`t7VSObject_Delegate_Friend.bmp
+266`t7VSObject_Delegate_Protected.bmp
+265`t7VSObject_Delegate_Sealed.bmp
+264`tDelegate
+263`t7VSObject_Module.bmp
+262`t7VSObject_Module_Private.bmp
+261`t7VSObject_Module_Friend.bmp
+260`t7VSObject_Module_Protected.bmp
+259`t7VSObject_Module_Sealed.bmp
+258`t7VSObject_Class.bmp
+257`t7VSObject_Class_Private.bmp
+256`t7VSObject_Class_Friend.bmp
+255`t7VSObject_Class_Protected.bmp
+254`t7VSObject_ValueType.bmp
+253`t7VSObject_ValueType_Private.bmp
+252`t7VSObject_ValueType_Friend.bmp
+251`t7VSObject_ValueType_Protected.bmp
+250`t7VSObject_ValueType_Sealed.bmp
+249`t7VSObject_Structure.bmp
+248`t7VSObject_Structure_Private.bmp
+247`t7VSObject_Structure_Friend.bmp
+246`t7VSObject_Structure_Protected.bmp
+245`t7VSObject_Structure_Sealed.bmp
+244`t7VSObject_Interface.bmp
+243`t7VSObject_Interface_Private.bmp
+242`t7VSObject_Interface_Friend.bmp
+241`t10VSObject_Event.bmp
+240`t10VSObject_Event_Private.bmp
+239`t10VSObject_Event_Protected.bmp
+238`t10VSObject_Event_Friend.bmp
+237`t11VSObject_Field_Protected.bmp
+236`t11VSObject_Field_Friend.bmp
+235`t11VSObject_Constant.bmp
+234`t11VSObject_Constant_Private.bmp
+233`t11VSObject_Constant_Protected.bmp
+232`t11VSObject_Constant_Friend.bmp
+231`t11VSObject_Field.bmp
+230`t11VSObject_Field_Private.bmp
+229`t8VSObject_MethodOverload_Friend.bmp
+228`t8VSObject_Method.bmp
+227`t8VSObject_Method_Private.bmp
+226`t8VSObject_Method_Protected.bmp
+225`t8VSObject_Method_Friend.bmp
+224`t8VSObject_MethodOverload.bmp
+223`t8VSObject_MethodOverload_Private.bmp
+222`t8VSObject_MethodOverload_Protected.bmp
+221`t9VSObject_Properties.bmp
+220`t9VSObject_Properties_Private.bmp
+219`t9VSObject_Properties_Protected.bmp
+218`t9VSObject_Properties_Friend.bmp
+217`tdefaultFont
+216`tMenuItemContextBack
+215`tMenuItemContextBack.Image
+214`tContextMenuStrip1
+213`tTreeView1
+212`t0VSObject_Assembly.bmp
+211`tSplitContainer1
+210`tToolStripStatusLabel1
+209`tStatusStrip1
+208`tToolStripComboBoxLanguage
+207`tToolStripSeparator3
+206`tForward\r\nShortcut Key: Alt+Right
+205`tForward
+204`tToolStripButtonForward
+203`tToolStripButtonForward.Image
+202`tBack\r\nShortcut Key: Alt+Left
+201`tBack
+200`tToolStripButtonBack
+199`tToolStripButtonBack.Image
+198`tToolStripSeparator2
+197`tRefresh\r\nShortcut Key: F5
+196`tRefresh
+195`tToolStripButtonRefresh
+194`tToolStripButtonRefresh.Image
+193`tOpen...\r\nShortcut Key: Ctrl+O
+192`tOpen...
+191`tToolStripButtonLoadFile
+190`tToolStripButtonLoadFile.Image
+189`tToolStrip1
+188`t&About
+187`tMenuItemHelpAbout
+186`t&Help
+185`tHelpToolStripMenuItem
+184`t&Forward
+183`tMenuItemViewForward
+182`tMenuItemViewForward.Image
+181`t&Back
+180`tMenuItemViewBack
+179`tMenuItemViewBack.Image
+178`tToolStripMenuItem2
+177`t&Refresh
+176`tMenuItemViewRefresh
+175`tMenuItemViewRefresh.Image
+174`t&View
+173`tViewToolStripMenuItem
+172`tE&xit
+171`tMenuItemFileExit
+170`tToolStripMenuItem1
+169`t&Open...
+168`tMenuItemFileOpen
+167`tMenuItemFileOpen.Image
+166`t&File
+165`tFileToolStripMenuItem
+164`tMenuStrip1
+163`tCodeReflect <Version>
+162`tMainForm
+161`t$this.Icon
+160`tImageBox1
+159`tSyntaxBox1
+158`tTextBox1
+157`tCourier New
+156`tAttribute<<>>
+155`tProperty 
+154`tWriteOnly 
+153`tEvent 
+152`tShadows 
+151`tOverrides 
+150`tOverridable 
+149`t    <<b>>Implements<<>> 
+148`t    <<b>>Inherits<<>> 
+147`tSystem.Object
+146`tClass 
+145`tProtected 
+144`tFriend 
+143`tPrivate 
+142`tPublic 
+141`t<<b>>As<<>> 
+140`t<<>> 
+139`tReadOnly 
+138`tShared 
+137`tConst 
+136`t<<g>>'Runtime Version: 
+135`t<<g>>'Module: 
+134`t<<b>>Namespace<<>> 
+133`t<<b>>End Namespace<<>>
+132`t<<<b>>Assembly<<>>: 
+131`t<<b>>type<<>>
+130`t<<b>>int8<<>>
+129`t<<b>>uint8<<>>
+128`t<<b>>float64<<>>
+127`t<<b>>float32<<>>
+126`t<<b>>uint64<<>>
+125`t<<b>>uint32<<>>
+124`t<<b>>uint16<<>>
+123`tUInt16
+122`t::.ctor(
+121`t    <<b>>.custom instance void<<>> 
+120`t<<b>>instance<<>> 
+119`t    <<b>>.addon<<>> 
+118`tnotserialized 
+117`tinitonly 
+116`tliteral 
+115`tfamorassem 
+114`tfamily 
+113`tassembly 
+112`tfamandassem 
+111`tinstance 
+110`tclass 
+109`thasdefault 
+108`t.property 
+107`t    <<b>>.maxstack<<>> {0}
+106`t    <<b>>.entrypoint<<>>
+105`t    <<g>>// Code Size {0} (0x{0:x})<<>>
+104`t<<g>>// MVID: 
+103`t<<b>>.module<<>> 
+102`t<<g>>// Target Runtime Version: 
+101`t    <<b>>implements<<>> 
+100`t    <<b>>extends<<>> 
+99`tsealed 
+98`tbeforefieldinit 
+97`tserializable 
+96`tabstract 
+95`timport 
+94`trtspecialname 
+93`tspecialname 
+92`tinterface 
+91`tunicode 
+90`tansi 
+89`tauto 
+88`texplicit 
+87`tsequential 
+86`tnested famorassem 
+85`tnested famandassem 
+84`tnested family 
+83`tnested assembly 
+82`tnested public 
+81`t    
+80`t<<b>>.assembly<<>> 
+79`tboolean
+78`tnum
+77`tuint64
+76`tuint32
+75`tuint16
+74`tint64
+73`tint32
+72`tint16
+71`tdouble
+70`tlong
+69`tstr
+68`tstring
+67`tarray
+66`tflag
+65`t<<r>>L_
+64`tCannot determine scope type
+63`t//N
+62`t<<b>>class<<>> 
+61`t<<b>>valuetype<<>> 
+60`tMicrosoft.VisualBasic.CompilerServices
+59`tMicrosoft.VisualBasic
+58`tSystem.CodeDom.Compiler
+57`tSystem.ComponentModel
+56`tSystem.Diagnostics
+55`tSystem.Runtime.CompilerServices
+54`tSystem.Runtime.InteropServices
+53`tSystem.Reflection
+52`tSystem
+51`t<<b>>type<<b>>
+50`tType
+49`t<<b>>int8<<b>>
+48`tSByte
+47`t<<b>>uint8<<b>>
+46`tByte
+45`t<<b>>float64<<b>>
+44`tDouble
+43`t<<b>>float32<<b>>
+42`tSingle
+41`t<<b>>uint64<<b>>
+40`tUInt64
+39`t<<b>>uint32<<b>>
+38`tUInt32
+37`t<<b>>uint16<<b>>
+36`tUInt16 Then
+35`t<<b>>int64<<b>>
+34`t set;
+33`tevent 
+32`tnew 
+31`toverride 
+30`tvirtual 
+29`tstatic 
+28`tpublic 
+27`tprotected 
+26`tinternal 
+25`tprivate 
+24`t<<b>>
+23`t<<r>>{0}<<>>
+22`t<<r>>'{0}'<<>>
+21`t = 
+20`t<<g>>//Module: 
+19`t<<g>>//Runtime Version: 
+18`t[<<b>>Assembly<<>>: 
+17`t<<>>
+16`t<Version>
+15`t<ProductName>
+14`t<ProductName> (<Version>)
+13`tLabelInfo
+12`tLabel1.Text
+11`tLabel1
+10`tClose
+9`tButtonClose
+8`tAbout
+7`tAboutDialog
+6`t<CopyRight>
+5`tLabelCopyright
+4`tFlowLayoutPanel1
+3`tPictureBox1
+2`tWinForms_RecursiveFormCreate
+1`tWinForms_SeeInnerException
+0`tProperty can only be set to Nothing

@@ -63,7 +63,7 @@ public abstract class GClass2
 		}
 		if (object_0 is FieldReference)
 		{
-			return "<<#" + smethod_1(((FieldReference)object_0).DeclaringType.Scope).FullName + Class8.smethod_64() + ((FieldReference)object_0).DeclaringType.Namespace + "//" + ((FieldReference)object_0).DeclaringType.Name + "//F" + ((FieldReference)object_0).Name + ">>";
+			return "<<#" + smethod_1(((FieldReference)object_0).DeclaringType.Scope).FullName + "//N" + ((FieldReference)object_0).DeclaringType.Namespace + "//" + ((FieldReference)object_0).DeclaringType.Name + "//F" + ((FieldReference)object_0).Name + ">>";
 		}
 		if (!(object_0 is EventReference))
 		{
@@ -84,7 +84,7 @@ public abstract class GClass2
 		}
 		if (!(imetadataScope_0 is AssemblyDefinition))
 		{
-			throw new Exception(Class8.smethod_65());
+			throw new Exception("Cannot determine scope type");
 		}
 		return ((AssemblyDefinition)(object)imetadataScope_0).Name;
 	}
@@ -152,7 +152,7 @@ public abstract class GClass2
 
 	public static string smethod_6(int int_0)
 	{
-		return Class8.smethod_66() + Convert.ToString(int_0, 16).PadLeft(4, '0') + Class8.smethod_18();
+		return "<<r>>L_" + Convert.ToString(int_0, 16).PadLeft(4, '0') + "<<>>";
 	}
 
 	internal string method_1(TypeReference typeReference_0)
@@ -160,23 +160,23 @@ public abstract class GClass2
 		string text = typeReference_0.GetElementType().Name.ToLower();
 		if (typeReference_0.IsArray)
 		{
-			text = Class8.smethod_68();
+			text = "array";
 		}
 		string left = text;
-		if (Operators.CompareString(left, Class8.smethod_69(), TextCompare: false) == 0)
+		if (Operators.CompareString(left, "string", TextCompare: false) == 0)
 		{
-			text = Class8.smethod_70();
+			text = "str";
 		}
-		else if (Operators.CompareString(left, Class8.smethod_71(), TextCompare: false) != 0 && Operators.CompareString(left, Class8.smethod_72(), TextCompare: false) != 0 && Operators.CompareString(left, Class8.smethod_73(), TextCompare: false) != 0 && Operators.CompareString(left, Class8.smethod_74(), TextCompare: false) != 0 && Operators.CompareString(left, Class8.smethod_75(), TextCompare: false) != 0 && Operators.CompareString(left, Class8.smethod_76(), TextCompare: false) != 0 && Operators.CompareString(left, Class8.smethod_77(), TextCompare: false) != 0 && Operators.CompareString(left, Class8.smethod_78(), TextCompare: false) != 0)
+		else if (Operators.CompareString(left, "long", TextCompare: false) != 0 && Operators.CompareString(left, "double", TextCompare: false) != 0 && Operators.CompareString(left, "int16", TextCompare: false) != 0 && Operators.CompareString(left, "int32", TextCompare: false) != 0 && Operators.CompareString(left, "int64", TextCompare: false) != 0 && Operators.CompareString(left, "uint16", TextCompare: false) != 0 && Operators.CompareString(left, "uint32", TextCompare: false) != 0 && Operators.CompareString(left, "uint64", TextCompare: false) != 0)
 		{
-			if (Operators.CompareString(left, Class8.smethod_80(), TextCompare: false) == 0)
+			if (Operators.CompareString(left, "boolean", TextCompare: false) == 0)
 			{
-				text = Class8.smethod_67();
+				text = "flag";
 			}
 		}
 		else
 		{
-			text = Class8.smethod_79();
+			text = "num";
 		}
 		return text;
 	}

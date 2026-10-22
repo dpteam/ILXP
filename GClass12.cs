@@ -69,9 +69,9 @@ public sealed class GClass12
 	{
 		string string_ = smethod_19(methodDefinition_0, int_0);
 		Dictionary<string, string> dictionary = new Dictionary<string, string>();
-		dictionary.Add(Class8.smethod_306(), Class8.smethod_307());
-		dictionary.Add(Class8.smethod_308(), Class8.smethod_309());
-		dictionary.Add(Class8.smethod_310(), ")");
+		dictionary.Add("<EXITLOOP>", "<<b>>Exit Loop<<>>");
+		dictionary.Add("<GOTO>", "<<b>>GoTo<<>>");
+		dictionary.Add("<GENERICCLOSE>", ")");
 		dictionary.Add("<GENERICOPEN>", "(Of ");
 		dictionary.Add("<VALUE>", "value");
 		dictionary.Add("<SELECTCASESTART>", "<<b>>Select Case<<>>");
@@ -278,7 +278,7 @@ public sealed class GClass12
 						text3 = text3.Substring(num4, num3 - num4).Trim();
 						stringBuilder.Remove(num4, num3 - num4);
 						string arg = smethod_1(text2.Substring(0, text2.LastIndexOf(">>") + 2), dictionary_0, methodDefinition_0);
-						stringBuilder.Append(string.Format(Class8.smethod_311(), text2.Substring(text2.LastIndexOf(">>") + 2), arg, text3));
+						stringBuilder.Append(string.Format("<<b>>For Each<<>> {0} <<b>>As<<>> {1} <<b>>In<<>> {2}", text2.Substring(text2.LastIndexOf(">>") + 2), arg, text3));
 						break;
 					}
 					}
@@ -407,7 +407,7 @@ public sealed class GClass12
 		dictionary.Add("<FOREACHSTART=", "");
 		dictionary.Add("<DECLARE=", "");
 		dictionary.Add("<CTYPE=", "");
-		dictionary.Add(Class8.smethod_312(), "");
+		dictionary.Add("<DIRECTCAST=", "");
 		dictionary.Add("<CATCHSTART=", "");
 		dictionary.Add("<CONSTRUCTOR=", "");
 		stringBuilder_0.AppendLine(smethod_3(string_, dictionary, methodDefinition_0));
@@ -508,7 +508,7 @@ public sealed class GClass12
 						string string_6 = text2.Substring(text2.IndexOf("<SEP>") + 5);
 						string_6 = smethod_3(string_6, dictionary_0, methodDefinition_0);
 						string_5 = smethod_3(string_5, dictionary_0, methodDefinition_0);
-						stringBuilder.Append(string.Format(Class8.smethod_313(), string_5, string_6) + text5 + "{");
+						stringBuilder.Append(string.Format("<<b>>catch<<>> ({1} {0}) ", string_5, string_6) + text5 + "{");
 						break;
 					}
 					case "<CONSTRUCTOR=":
@@ -677,7 +677,7 @@ public sealed class GClass12
 				while (num < arrayList_0.Count - 2)
 				{
 					Instruction instruction2 = (Instruction)arrayList_0[num];
-					if (instruction2.OpCode.Code == Code.Call && Operators.CompareString(((MethodReference)instruction2.Operand).FullName, Class8.smethod_314(), TextCompare: false) == 0)
+					if (instruction2.OpCode.Code == Code.Call && Operators.CompareString(((MethodReference)instruction2.Operand).FullName, "System.Void Microsoft.VisualBasic.CompilerServices.ProjectData::ClearProjectError()", TextCompare: false) == 0)
 					{
 						arrayList_0.RemoveAt(num);
 					}
@@ -1035,7 +1035,7 @@ public sealed class GClass12
 					if (!(arrayList_0[num2 - num3] is string))
 					{
 						Instruction instruction = (Instruction)arrayList_0[num2 - num3];
-						if (instruction.OpCode.Code == Code.Call && Operators.CompareString(((MethodReference)instruction.Operand).Name, Class8.smethod_315(), TextCompare: false) == 0)
+						if (instruction.OpCode.Code == Code.Call && Operators.CompareString(((MethodReference)instruction.Operand).Name, "MoveNext", TextCompare: false) == 0)
 						{
 							num2 = num - num3 - 1;
 						}
@@ -1048,7 +1048,7 @@ public sealed class GClass12
 					continue;
 				}
 				Instruction instruction2 = (Instruction)arrayList_0[num2];
-				if (!((instruction2.OpCode.Code == Code.Ldloca) | (instruction2.OpCode.Code == Code.Ldloca_S)) || !((VariableDefinition)instruction2.Operand).VariableType.FullName.Contains(Class8.smethod_316()))
+				if (!((instruction2.OpCode.Code == Code.Ldloca) | (instruction2.OpCode.Code == Code.Ldloca_S)) || !((VariableDefinition)instruction2.Operand).VariableType.FullName.Contains("Enumerator"))
 				{
 					continue;
 				}
@@ -1058,7 +1058,7 @@ public sealed class GClass12
 				{
 					num5++;
 					Instruction instruction3 = (Instruction)arrayList_0[num5];
-					if (instruction3.OpCode.Code == Code.Callvirt && Operators.CompareString(((MethodReference)instruction3.Operand).Name, Class8.smethod_317(), TextCompare: false) == 0 && (num5 + 3 >= num2 || NewLateBinding.LateGet(arrayList_0[num5 + 3], null, Class8.smethod_318(), new object[0], null, null, null) != instruction2))
+					if (instruction3.OpCode.Code == Code.Callvirt && Operators.CompareString(((MethodReference)instruction3.Operand).Name, "GetEnumerator", TextCompare: false) == 0 && (num5 + 3 >= num2 || NewLateBinding.LateGet(arrayList_0[num5 + 3], null, "Operand", new object[0], null, null, null) != instruction2))
 					{
 						break;
 					}
@@ -1090,7 +1090,7 @@ public sealed class GClass12
 					arrayList_0.RemoveAt(num2);
 				}
 				arrayList_0.Insert(num2, instruction4);
-				arrayList_0.Insert(num2, Class8.smethod_319());
+				arrayList_0.Insert(num2, "<FOREACHEND>");
 				VariableDefinition variableDefinition = null;
 				switch (((Instruction)arrayList_0[num5 + 6]).OpCode.Code)
 				{
@@ -1144,12 +1144,12 @@ public sealed class GClass12
 				{
 				case ExceptionHandlerType.Catch:
 				{
-					if (!stringCollection.Contains(string.Format(Class8.smethod_320(), exceptionHandler.TryStart.Offset, exceptionHandler.TryEnd.Offset)) && !stringCollection.Contains(string.Format(Class8.smethod_320(), exceptionHandler.TryStart.Offset, exceptionHandler.HandlerEnd.Offset)))
+					if (!stringCollection.Contains(string.Format("{0}-{1}", exceptionHandler.TryStart.Offset, exceptionHandler.TryEnd.Offset)) && !stringCollection.Contains(string.Format("{0}-{1}", exceptionHandler.TryStart.Offset, exceptionHandler.HandlerEnd.Offset)))
 					{
-						arrayList_0.Insert(smethod_8(arrayList_0, exceptionHandler.TryStart), new string(Conversions.ToCharArrayRankOne(Class8.smethod_321())));
-						arrayList_0.Insert(smethod_8(arrayList_0, exceptionHandler.TryEnd), Class8.smethod_322());
-						stringCollection.Add(string.Format(Class8.smethod_320(), exceptionHandler.TryStart.Offset, exceptionHandler.TryEnd.Offset));
-						stringCollection.Add(string.Format(Class8.smethod_320(), exceptionHandler.TryStart.Offset, exceptionHandler.HandlerEnd.Offset));
+						arrayList_0.Insert(smethod_8(arrayList_0, exceptionHandler.TryStart), new string(Conversions.ToCharArrayRankOne("<TRYSTART>")));
+						arrayList_0.Insert(smethod_8(arrayList_0, exceptionHandler.TryEnd), "<TRYEND>");
+						stringCollection.Add(string.Format("{0}-{1}", exceptionHandler.TryStart.Offset, exceptionHandler.TryEnd.Offset));
+						stringCollection.Add(string.Format("{0}-{1}", exceptionHandler.TryStart.Offset, exceptionHandler.HandlerEnd.Offset));
 					}
 					int num2 = smethod_8(arrayList_0, exceptionHandler.HandlerStart);
 					string text = "";
@@ -1283,7 +1283,7 @@ public sealed class GClass12
 							{
 								if (((MethodReference)instruction2.Operand).ReturnType.IsValueType)
 								{
-									flag2 = Operators.CompareString(((MethodReference)instruction2.Operand).ReturnType.Name, Class8.smethod_323(), TextCompare: false) != 0;
+									flag2 = Operators.CompareString(((MethodReference)instruction2.Operand).ReturnType.Name, "Boolean", TextCompare: false) != 0;
 								}
 								else
 								{
@@ -1295,7 +1295,7 @@ public sealed class GClass12
 							{
 								if (((FieldReference)instruction2.Operand).FieldType.IsValueType)
 								{
-									flag2 = Operators.CompareString(((FieldReference)instruction2.Operand).FieldType.Name, Class8.smethod_323(), TextCompare: false) != 0;
+									flag2 = Operators.CompareString(((FieldReference)instruction2.Operand).FieldType.Name, "Boolean", TextCompare: false) != 0;
 								}
 								else
 								{
@@ -1312,59 +1312,59 @@ public sealed class GClass12
 									break;
 								}
 								flag = !methodDefinition_0.Parameters[0].ParameterType.IsValueType;
-								flag2 = ((methodDefinition_0.Parameters[0].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[0].ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+								flag2 = ((methodDefinition_0.Parameters[0].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[0].ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								break;
 							case Code.Ldarg_1:
 								if (methodDefinition_0.HasThis)
 								{
 									flag = !methodDefinition_0.Parameters[0].ParameterType.IsValueType;
-									flag2 = ((methodDefinition_0.Parameters[0].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[0].ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+									flag2 = ((methodDefinition_0.Parameters[0].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[0].ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								}
 								else
 								{
 									flag = !methodDefinition_0.Parameters[1].ParameterType.IsValueType;
-									flag2 = ((methodDefinition_0.Parameters[1].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[1].ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+									flag2 = ((methodDefinition_0.Parameters[1].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[1].ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								}
 								break;
 							case Code.Ldarg_2:
 								if (methodDefinition_0.HasThis)
 								{
 									flag = !methodDefinition_0.Parameters[1].ParameterType.IsValueType;
-									flag2 = ((methodDefinition_0.Parameters[1].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[1].ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+									flag2 = ((methodDefinition_0.Parameters[1].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[1].ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								}
 								else
 								{
 									flag = !methodDefinition_0.Parameters[2].ParameterType.IsValueType;
-									flag2 = ((methodDefinition_0.Parameters[2].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[2].ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+									flag2 = ((methodDefinition_0.Parameters[2].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[2].ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								}
 								break;
 							case Code.Ldarg_3:
 								if (methodDefinition_0.HasThis)
 								{
 									flag = !methodDefinition_0.Parameters[2].ParameterType.IsValueType;
-									flag2 = ((methodDefinition_0.Parameters[2].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[2].ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+									flag2 = ((methodDefinition_0.Parameters[2].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[2].ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								}
 								else
 								{
 									flag = !methodDefinition_0.Parameters[3].ParameterType.IsValueType;
-									flag2 = ((methodDefinition_0.Parameters[3].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[3].ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+									flag2 = ((methodDefinition_0.Parameters[3].ParameterType.IsValueType && Operators.CompareString(methodDefinition_0.Parameters[3].ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								}
 								break;
 							case Code.Ldloc_0:
 								flag = !methodDefinition_0.Body.Variables[0].VariableType.IsValueType;
-								flag2 = ((methodDefinition_0.Body.Variables[0].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[0].VariableType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+								flag2 = ((methodDefinition_0.Body.Variables[0].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[0].VariableType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								break;
 							case Code.Ldloc_1:
 								flag = !methodDefinition_0.Body.Variables[1].VariableType.IsValueType;
-								flag2 = ((methodDefinition_0.Body.Variables[1].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[1].VariableType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+								flag2 = ((methodDefinition_0.Body.Variables[1].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[1].VariableType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								break;
 							case Code.Ldloc_2:
 								flag = !methodDefinition_0.Body.Variables[2].VariableType.IsValueType;
-								flag2 = ((methodDefinition_0.Body.Variables[2].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[2].VariableType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+								flag2 = ((methodDefinition_0.Body.Variables[2].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[2].VariableType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								break;
 							case Code.Ldloc_3:
 								flag = !methodDefinition_0.Body.Variables[3].VariableType.IsValueType;
-								flag2 = ((methodDefinition_0.Body.Variables[3].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[3].VariableType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+								flag2 = ((methodDefinition_0.Body.Variables[3].VariableType.IsValueType && Operators.CompareString(methodDefinition_0.Body.Variables[3].VariableType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								break;
 							case Code.Ldlen:
 								flag2 = true;
@@ -1406,14 +1406,14 @@ public sealed class GClass12
 							case Code.Ldarg_S:
 							case Code.Ldarg:
 								flag = !((ParameterDefinition)instruction2.Operand).ParameterType.IsValueType;
-								flag2 = ((((ParameterDefinition)instruction2.Operand).ParameterType.IsValueType && Operators.CompareString(((ParameterDefinition)instruction2.Operand).ParameterType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+								flag2 = ((((ParameterDefinition)instruction2.Operand).ParameterType.IsValueType && Operators.CompareString(((ParameterDefinition)instruction2.Operand).ParameterType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								break;
 							case Code.Ldloc_S:
 							case Code.Ldloca_S:
 							case Code.Ldloc:
 							case Code.Ldloca:
 								flag = !((VariableDefinition)instruction2.Operand).VariableType.IsValueType;
-								flag2 = ((((VariableDefinition)instruction2.Operand).VariableType.IsValueType && Operators.CompareString(((VariableDefinition)instruction2.Operand).VariableType.Name, Class8.smethod_323(), TextCompare: false) != 0) ? true : false);
+								flag2 = ((((VariableDefinition)instruction2.Operand).VariableType.IsValueType && Operators.CompareString(((VariableDefinition)instruction2.Operand).VariableType.Name, "Boolean", TextCompare: false) != 0) ? true : false);
 								break;
 							}
 							break;
@@ -1421,7 +1421,7 @@ public sealed class GClass12
 					}
 					if (flag)
 					{
-						arrayList_0.Insert(i, Class8.smethod_324());
+						arrayList_0.Insert(i, "<<MOVEUP>> <ISNOTEQUALS> <NOTHING><NOTEND>");
 						i++;
 					}
 					else if (flag2)
@@ -1498,7 +1498,7 @@ public sealed class GClass12
 				while (num < arrayList_0.Count - 5)
 				{
 					num++;
-					if (arrayList_0[num] is Instruction && arrayList_0[num + 1] is Instruction && arrayList_0[num + 2] is Instruction && arrayList_0[num + 3] is Instruction && ((Instruction)arrayList_0[num]).OpCode.Code == Code.Ldc_I4_0 && ((Instruction)arrayList_0[num + 1]).OpCode.Code == Code.Call && Operators.CompareString(((MethodReference)((Instruction)arrayList_0[num + 1]).Operand).Name, Class8.smethod_325(), TextCompare: false) == 0 && ((Instruction)arrayList_0[num + 2]).OpCode.Code == Code.Ldc_I4_0)
+					if (arrayList_0[num] is Instruction && arrayList_0[num + 1] is Instruction && arrayList_0[num + 2] is Instruction && arrayList_0[num + 3] is Instruction && ((Instruction)arrayList_0[num]).OpCode.Code == Code.Ldc_I4_0 && ((Instruction)arrayList_0[num + 1]).OpCode.Code == Code.Call && Operators.CompareString(((MethodReference)((Instruction)arrayList_0[num + 1]).Operand).Name, "CompareString", TextCompare: false) == 0 && ((Instruction)arrayList_0[num + 2]).OpCode.Code == Code.Ldc_I4_0)
 					{
 						switch (((Instruction)arrayList_0[num + 3]).OpCode.Code)
 						{
@@ -1540,7 +1540,7 @@ public sealed class GClass12
 				while (num < arrayList_0.Count - 7)
 				{
 					num++;
-					if (arrayList_0[num] is Instruction && arrayList_0[num + 1] is Instruction && arrayList_0[num + 2] is Instruction && arrayList_0[num + 3] is Instruction && arrayList_0[num + 4] is Instruction && arrayList_0[num + 5] is Instruction && arrayList_0[num + 6] is Instruction && ((((Instruction)arrayList_0[num]).OpCode.Code == Code.Beq) | (((Instruction)arrayList_0[num]).OpCode.Code == Code.Beq_S)) && ((Instruction)arrayList_0[num]).Operand == (Instruction)arrayList_0[num + 3] && ((Instruction)arrayList_0[num + 1]).OpCode.Code == Code.Ldc_I4_0 && ((((Instruction)arrayList_0[num + 2]).OpCode.Code == Code.Br) | (((Instruction)arrayList_0[num + 2]).OpCode.Code == Code.Br_S)) && ((Instruction)arrayList_0[num + 2]).Operand == (Instruction)arrayList_0[num + 4] && ((Instruction)arrayList_0[num + 3]).OpCode.Code == Code.Ldc_I4_1 && ((Instruction)arrayList_0[num + 4]).OpCode.Name.StartsWith(Class8.smethod_326()) && ((Instruction)arrayList_0[num + 5]).OpCode.Name.StartsWith(Class8.smethod_327()))
+					if (arrayList_0[num] is Instruction && arrayList_0[num + 1] is Instruction && arrayList_0[num + 2] is Instruction && arrayList_0[num + 3] is Instruction && arrayList_0[num + 4] is Instruction && arrayList_0[num + 5] is Instruction && arrayList_0[num + 6] is Instruction && ((((Instruction)arrayList_0[num]).OpCode.Code == Code.Beq) | (((Instruction)arrayList_0[num]).OpCode.Code == Code.Beq_S)) && ((Instruction)arrayList_0[num]).Operand == (Instruction)arrayList_0[num + 3] && ((Instruction)arrayList_0[num + 1]).OpCode.Code == Code.Ldc_I4_0 && ((((Instruction)arrayList_0[num + 2]).OpCode.Code == Code.Br) | (((Instruction)arrayList_0[num + 2]).OpCode.Code == Code.Br_S)) && ((Instruction)arrayList_0[num + 2]).Operand == (Instruction)arrayList_0[num + 4] && ((Instruction)arrayList_0[num + 3]).OpCode.Code == Code.Ldc_I4_1 && ((Instruction)arrayList_0[num + 4]).OpCode.Name.StartsWith("stloc") && ((Instruction)arrayList_0[num + 5]).OpCode.Name.StartsWith("ldloc"))
 					{
 						switch (((Instruction)arrayList_0[num + 6]).OpCode.Code)
 						{
@@ -1674,7 +1674,7 @@ public sealed class GClass12
 			{
 				return;
 			}
-			if (typeReference_0 != typeDefinition_0 && Operators.CompareString(typeReference_0.Name, Class8.smethod_323(), TextCompare: false) != 0)
+			if (typeReference_0 != typeDefinition_0 && Operators.CompareString(typeReference_0.Name, "Boolean", TextCompare: false) != 0)
 			{
 				TypeDefinition typeDefinition = typeReference_0.Resolve();
 				if (typeDefinition == null || !typeDefinition.IsEnum || !int.TryParse(Conversions.ToString(arrayList_0[int_0]), out var result))
@@ -1757,7 +1757,7 @@ public sealed class GClass12
 			}
 			if (Operators.CompareString(Conversions.ToString(arrayList_0[int_1]), "1", TextCompare: false) == 0)
 			{
-				arrayList_0[int_1] = Class8.smethod_328();
+				arrayList_0[int_1] = "<TRUE>";
 			}
 		}
 		if (Operators.CompareString(Conversions.ToString(arrayList_0[int_0]), "0", TextCompare: false) == 0)
@@ -3383,9 +3383,9 @@ public sealed class GClass12
 		{
 			return false;
 		}
-		string_0 = string_0.Replace(string_1, Class8.smethod_329());
+		string_0 = string_0.Replace(string_1, "<PLOP>");
 		string_0 = string_0.Replace(string_2, string_1);
-		string_0 = string_0.Replace(Class8.smethod_329(), string_2);
+		string_0 = string_0.Replace("<PLOP>", string_2);
 		return true;
 	}
 
@@ -3399,9 +3399,9 @@ public sealed class GClass12
 		{
 			string_0 = "<TRUE>";
 		}
-		if ((0u | (smethod_21(ref string_0, "<NOT>", "<YES>") ? 1u : 0u) | (smethod_21(ref string_0, "<NOTEND>", "<YESEND>") ? 1u : 0u) | (smethod_21(ref string_0, "<GREATER>", "<LESSOREQUAL>") ? 1u : 0u) | (smethod_21(ref string_0, "<GREATEROREQUAL>", "<LESS>") ? 1u : 0u) | (smethod_21(ref string_0, Class8.smethod_330(), Class8.smethod_331()) ? 1u : 0u) | (smethod_21(ref string_0, Class8.smethod_332(), Class8.smethod_333()) ? 1u : 0u) | (smethod_21(ref string_0, Class8.smethod_334(), Class8.smethod_335()) ? 1u : 0u) | (smethod_21(ref string_0, Class8.smethod_336(), Class8.smethod_337()) ? 1u : 0u)) == 0)
+		if ((0u | (smethod_21(ref string_0, "<NOT>", "<YES>") ? 1u : 0u) | (smethod_21(ref string_0, "<NOTEND>", "<YESEND>") ? 1u : 0u) | (smethod_21(ref string_0, "<GREATER>", "<LESSOREQUAL>") ? 1u : 0u) | (smethod_21(ref string_0, "<GREATEROREQUAL>", "<LESS>") ? 1u : 0u) | (smethod_21(ref string_0, "<EQUALS>", "<NOTEQUALS>") ? 1u : 0u) | (smethod_21(ref string_0, "<AND>", "<OR>") ? 1u : 0u) | (smethod_21(ref string_0, "<ANDALSO>", "<ORELSE>") ? 1u : 0u) | (smethod_21(ref string_0, "<ISNOTEQUALS>", "<ISEQUALS>") ? 1u : 0u)) == 0)
 		{
-			return Class8.smethod_338() + string_0 + Class8.smethod_339();
+			return "<NOT>" + string_0 + "<NOTEND>";
 		}
 		return string_0;
 	}
@@ -3677,7 +3677,7 @@ public sealed class GClass12
 				bool_1 = false;
 				if (string_0.Contains("{value2}"))
 				{
-					if (int_0 >= 3 && arrayList_0[int_0 - 3] is string && Operators.ConditionalCompareObjectEqual(arrayList_0[int_0 - 3], Class8.smethod_340(), TextCompare: false))
+					if (int_0 >= 3 && arrayList_0[int_0 - 3] is string && Operators.ConditionalCompareObjectEqual(arrayList_0[int_0 - 3], "<ELSE>", TextCompare: false))
 					{
 						bool_1 = true;
 						arrayList_0.RemoveAt(int_0 - 3);
@@ -3686,7 +3686,7 @@ public sealed class GClass12
 						int_0--;
 					}
 				}
-				else if (int_0 >= 2 && arrayList_0[int_0 - 2] is string && Operators.ConditionalCompareObjectEqual(arrayList_0[int_0 - 2], Class8.smethod_340(), TextCompare: false))
+				else if (int_0 >= 2 && arrayList_0[int_0 - 2] is string && Operators.ConditionalCompareObjectEqual(arrayList_0[int_0 - 2], "<ELSE>", TextCompare: false))
 				{
 					bool_1 = true;
 					arrayList_0.RemoveAt(int_0 - 2);
@@ -3712,15 +3712,15 @@ public sealed class GClass12
 					}
 					if (bool_3)
 					{
-						arrayList_0.Insert(num12, Class8.smethod_341());
+						arrayList_0.Insert(num12, "<IIFEND>");
 					}
 					else if (!bool_1)
 					{
-						arrayList_0.Insert(num12, Class8.smethod_342());
+						arrayList_0.Insert(num12, "<IFCLOSE>");
 					}
 					if (num3 > 0)
 					{
-						arrayList_0.Insert(num3, Class8.smethod_340());
+						arrayList_0.Insert(num3, "<ELSE>");
 						((Instruction)arrayList_0[num3 - 1]).Operand = RuntimeHelpers.GetObjectValue(arrayList_0[num3 - 1]);
 						num5++;
 					}
@@ -3776,7 +3776,7 @@ public sealed class GClass12
 				smethod_14(arrayList_0, int_0 - 1);
 				break;
 			}
-			smethod_20(arrayList_0, ref int_0, Class8.smethod_343(), string_0, 0, methodDefinition_0);
+			smethod_20(arrayList_0, ref int_0, "{value}", string_0, 0, methodDefinition_0);
 			arrayList_0[int_0] = smethod_22(smethod_22(Conversions.ToString(arrayList_0[int_0])));
 			if (flag2)
 			{
@@ -3784,15 +3784,15 @@ public sealed class GClass12
 			}
 			if (list_0.Contains((Instruction)instruction.Operand))
 			{
-				arrayList_0[int_0] = Class8.smethod_344() + Conversions.ToString(arrayList_0[int_0]);
+				arrayList_0[int_0] = "<IFGROUP>" + Conversions.ToString(arrayList_0[int_0]);
 				list_0.Remove((Instruction)instruction.Operand);
 			}
-			if (int_0 > 0 && arrayList_0[int_0 - 1] is Instruction && ((Instruction)arrayList_0[int_0 - 1]).Operand == arrayList_0[int_0 - 1] && arrayList_0[int_0 - 2] is string && Conversions.ToString(arrayList_0[int_0 - 2]).Contains(Class8.smethod_344()))
+			if (int_0 > 0 && arrayList_0[int_0 - 1] is Instruction && ((Instruction)arrayList_0[int_0 - 1]).Operand == arrayList_0[int_0 - 1] && arrayList_0[int_0 - 2] is string && Conversions.ToString(arrayList_0[int_0 - 2]).Contains("<IFGROUP>"))
 			{
 				arrayList_0.RemoveAt(int_0 - 1);
 				int_0--;
 			}
-			if (int_0 > 0 && arrayList_0[int_0 - 1] is string && (Conversions.ToString(arrayList_0[int_0 - 1]).Replace(Class8.smethod_344(), "").EndsWith("<ORELSE>") | Conversions.ToString(arrayList_0[int_0 - 1]).Replace("<IFGROUP>", "").EndsWith("<ANDALSO>")))
+			if (int_0 > 0 && arrayList_0[int_0 - 1] is string && (Conversions.ToString(arrayList_0[int_0 - 1]).Replace("<IFGROUP>", "").EndsWith("<ORELSE>") | Conversions.ToString(arrayList_0[int_0 - 1]).Replace("<IFGROUP>", "").EndsWith("<ANDALSO>")))
 			{
 				if (Conversions.ToString(arrayList_0[int_0]).Contains("<IFGROUP>") && Conversions.ToString(arrayList_0[int_0 - 1]).Contains("<IFGROUP>"))
 				{
@@ -3908,7 +3908,7 @@ public sealed class GClass12
 			{
 				arrayList_0[int_0] = "0";
 			}
-			if (variableDefinition.VariableType.FullName.StartsWith(Class8.smethod_345()))
+			if (variableDefinition.VariableType.FullName.StartsWith("System.UInt"))
 			{
 				arrayList_0[int_0] = "0";
 			}
@@ -4126,19 +4126,19 @@ public sealed class GClass12
 			text = "str";
 			break;
 		default:
-			if (Operators.CompareString(text2, Class8.smethod_74(), TextCompare: false) == 0 || Operators.CompareString(text2, Class8.smethod_75(), TextCompare: false) == 0 || Operators.CompareString(text2, Class8.smethod_76(), TextCompare: false) == 0 || Operators.CompareString(text2, Class8.smethod_77(), TextCompare: false) == 0 || Operators.CompareString(text2, Class8.smethod_78(), TextCompare: false) == 0)
+			if (Operators.CompareString(text2, "int32", TextCompare: false) == 0 || Operators.CompareString(text2, "int64", TextCompare: false) == 0 || Operators.CompareString(text2, "uint16", TextCompare: false) == 0 || Operators.CompareString(text2, "uint32", TextCompare: false) == 0 || Operators.CompareString(text2, "uint64", TextCompare: false) == 0)
 			{
 				goto case "long";
 			}
-			if (Operators.CompareString(text2, Class8.smethod_80(), TextCompare: false) == 0)
+			if (Operators.CompareString(text2, "boolean", TextCompare: false) == 0)
 			{
-				text = Class8.smethod_67();
+				text = "flag";
 			}
 			break;
 		case "long":
 		case "double":
 		case "int16":
-			text = Class8.smethod_79();
+			text = "num";
 			break;
 		}
 		return text;
@@ -4183,7 +4183,7 @@ public sealed class GClass12
 				{
 					text2 = typeReference_0.Name.Substring(0, typeReference_0.Name.Length - 2);
 				}
-				text2 += Class8.smethod_346();
+				text2 += "<GENERICOPEN>";
 				foreach (TypeReference genericArgument in genericInstanceType.GenericArguments)
 				{
 					text2 = text2 + smethod_29(genericArgument) + ", ";

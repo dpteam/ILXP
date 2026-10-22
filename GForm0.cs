@@ -63,34 +63,34 @@ public sealed class GForm0 : Form
 		Button button = vmethod_0();
 		Point location = new Point(375, 270);
 		button.Location = location;
-		vmethod_0().Name = Class8.smethod_10();
+		vmethod_0().Name = "ButtonClose";
 		Button button2 = vmethod_0();
 		Size size = new Size(75, 23);
 		button2.Size = size;
 		vmethod_0().TabIndex = 0;
-		vmethod_0().Text = Class8.smethod_11();
+		vmethod_0().Text = "Close";
 		vmethod_0().UseVisualStyleBackColor = true;
 		vmethod_4().Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		vmethod_4().AutoSize = true;
 		Label label = vmethod_4();
 		location = new Point(9, 212);
 		label.Location = location;
-		vmethod_4().Name = Class8.smethod_12();
+		vmethod_4().Name = "Label1";
 		Label label2 = vmethod_4();
 		size = new Size(427, 52);
 		label2.Size = size;
 		vmethod_4().TabIndex = 2;
-		vmethod_4().Text = componentResourceManager.GetString(Class8.smethod_13());
+		vmethod_4().Text = componentResourceManager.GetString("Label1.Text");
 		vmethod_6().AutoSize = true;
 		Label label3 = vmethod_6();
 		location = new Point(3, 0);
 		label3.Location = location;
-		vmethod_6().Name = Class8.smethod_14();
+		vmethod_6().Name = "LabelInfo";
 		Label label4 = vmethod_6();
 		size = new Size(140, 13);
 		label4.Size = size;
 		vmethod_6().TabIndex = 3;
-		vmethod_6().Text = Class8.smethod_15();
+		vmethod_6().Text = "<ProductName> (<Version>)";
 		vmethod_2().BackColor = Color.White;
 		vmethod_2().Dock = DockStyle.Top;
 		vmethod_2().Image = Class5.smethod_6();
@@ -100,7 +100,7 @@ public sealed class GForm0 : Form
 		PictureBox pictureBox2 = vmethod_2();
 		Padding margin = new Padding(0);
 		pictureBox2.Margin = margin;
-		vmethod_2().Name = Class8.smethod_4();
+		vmethod_2().Name = "PictureBox1";
 		PictureBox pictureBox3 = vmethod_2();
 		size = new Size(459, 128);
 		pictureBox3.Size = size;
@@ -112,7 +112,7 @@ public sealed class GForm0 : Form
 		FlowLayoutPanel flowLayoutPanel = _003C();
 		location = new Point(8, 137);
 		flowLayoutPanel.Location = location;
-		_003C().Name = Class8.smethod_5();
+		_003C().Name = "FlowLayoutPanel1";
 		FlowLayoutPanel flowLayoutPanel2 = _003C();
 		size = new Size(439, 67);
 		flowLayoutPanel2.Size = size;
@@ -121,12 +121,12 @@ public sealed class GForm0 : Form
 		Label label5 = vmethod_9();
 		location = new Point(3, 13);
 		label5.Location = location;
-		vmethod_9().Name = Class8.smethod_6();
+		vmethod_9().Name = "LabelCopyright";
 		Label label6 = vmethod_9();
 		size = new Size(68, 13);
 		label6.Size = size;
 		vmethod_9().TabIndex = 4;
-		vmethod_9().Text = Class8.smethod_7();
+		vmethod_9().Text = "<CopyRight>";
 		AcceptButton = vmethod_0();
 		SizeF sizeF = new SizeF(6f, 13f);
 		AutoScaleDimensions = sizeF;
@@ -142,11 +142,11 @@ public sealed class GForm0 : Form
 		FormBorderStyle = FormBorderStyle.FixedDialog;
 		MaximizeBox = false;
 		MinimizeBox = false;
-		Name = Class8.smethod_8();
+		Name = "AboutDialog";
 		ShowIcon = false;
 		ShowInTaskbar = false;
 		StartPosition = FormStartPosition.CenterParent;
-		Text = Class8.smethod_9();
+		Text = "About";
 		((ISupportInitialize)vmethod_2()).EndInit();
 		_003C().ResumeLayout(performLayout: false);
 		_003C().PerformLayout();
@@ -247,8 +247,8 @@ public sealed class GForm0 : Form
 	public GForm0()
 	{
 		method_0();
-		vmethod_6().Text = vmethod_6().Text.Replace(Class8.smethod_16(), Class1.smethod_1().Info.ProductName).Replace(Class8.smethod_17(), Class1.smethod_1().Info.Version.ToString(3)).Replace(Class8.smethod_7(), Class1.smethod_1().Info.Copyright);
+		vmethod_6().Text = vmethod_6().Text.Replace("<ProductName>", Class1.smethod_1().Info.ProductName).Replace("<Version>", Class1.smethod_1().Info.Version.ToString(3)).Replace("<CopyRight>", Class1.smethod_1().Info.Copyright);
 		vmethod_6().Font = new Font(vmethod_6().Font, FontStyle.Bold);
-		vmethod_9().Text = vmethod_9().Text.Replace(Class8.smethod_16(), Class1.smethod_1().Info.ProductName).Replace(Class8.smethod_17(), Class1.smethod_1().Info.Version.ToString(3)).Replace(Class8.smethod_7(), Class1.smethod_1().Info.Copyright);
+		vmethod_9().Text = vmethod_9().Text.Replace("<ProductName>", Class1.smethod_1().Info.ProductName).Replace("<Version>", Class1.smethod_1().Info.Version.ToString(3)).Replace("<CopyRight>", Class1.smethod_1().Info.Copyright);
 	}
 }

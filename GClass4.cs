@@ -22,9 +22,9 @@ public sealed class GClass4 : GClass2
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.AppendLine("<<g>>//Name: " + gclass0_0.method_1().Name.Name + "<<>>");
 		stringBuilder.AppendLine("<<g>>//Path: " + gclass0_0.method_0() + "<<>>");
-		stringBuilder.AppendLine("<<g>>//Version: " + $"{gclass0_0.method_1().Name.Version.Major}:{gclass0_0.method_1().Name.Version.MajorRevision}:{gclass0_0.method_1().Name.Version.Minor}:{gclass0_0.method_1().Name.Version.MinorRevision}" + Class8.smethod_18());
+		stringBuilder.AppendLine("<<g>>//Version: " + $"{gclass0_0.method_1().Name.Version.Major}:{gclass0_0.method_1().Name.Version.MajorRevision}:{gclass0_0.method_1().Name.Version.Minor}:{gclass0_0.method_1().Name.Version.MinorRevision}" + "<<>>");
 		stringBuilder.AppendLine();
-		stringBuilder.AppendLine(Class8.smethod_81() + GClass2.smethod_0(gclass0_0) + gclass0_0.method_1().Name.Name + Class8.smethod_18());
+		stringBuilder.AppendLine("<<b>>.assembly<<>> " + GClass2.smethod_0(gclass0_0) + gclass0_0.method_1().Name.Name + "<<>>");
 		stringBuilder.AppendLine("{");
 		stringBuilder.AppendLine("    <<b>>.ver<<>> " + $"{gclass0_0.method_1().Name.Version.Major}:{gclass0_0.method_1().Name.Version.MajorRevision}:{gclass0_0.method_1().Name.Version.Minor}:{gclass0_0.method_1().Name.Version.MinorRevision}");
 		stringBuilder.AppendLine(Conversions.ToString(Operators.ConcatenateObject("    <<b>>.hash algorithm<<>> 0x" + Convert.ToString(checked((int)gclass0_0.method_1().Name.HashAlgorithm), 16), Interaction.IIf(gclass0_0.method_1().Name.HashAlgorithm == AssemblyHashAlgorithm.SHA1, " <<g>>// SHA1<<>>", ""))));
@@ -50,8 +50,8 @@ public sealed class GClass4 : GClass2
 				stringBuilder2.AppendLine();
 			}
 		}
-		stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + Class8.smethod_82());
-		stringBuilder.AppendLine(Class8.smethod_82() + stringBuilder2.ToString().Trim());
+		stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + "    ");
+		stringBuilder.AppendLine("    " + stringBuilder2.ToString().Trim());
 		stringBuilder.Append("}");
 		return stringBuilder.ToString();
 	}
@@ -80,92 +80,92 @@ public sealed class GClass4 : GClass2
 		}
 		else if (typeDefinition_0.IsNestedPublic)
 		{
-			stringBuilder.Append(Class8.smethod_83());
+			stringBuilder.Append("nested public ");
 		}
 		else if (typeDefinition_0.IsNestedAssembly)
 		{
-			stringBuilder.Append(Class8.smethod_84());
+			stringBuilder.Append("nested assembly ");
 		}
 		else if (typeDefinition_0.IsNestedFamily)
 		{
-			stringBuilder.Append(Class8.smethod_85());
+			stringBuilder.Append("nested family ");
 		}
 		else if (typeDefinition_0.IsNestedFamilyAndAssembly)
 		{
-			stringBuilder.Append(Class8.smethod_86());
+			stringBuilder.Append("nested famandassem ");
 		}
 		else if (typeDefinition_0.IsNestedFamilyOrAssembly)
 		{
-			stringBuilder.Append(Class8.smethod_87());
+			stringBuilder.Append("nested famorassem ");
 		}
 		if (typeDefinition_0.IsSequentialLayout)
 		{
-			stringBuilder.Append(Class8.smethod_88());
+			stringBuilder.Append("sequential ");
 		}
 		if (typeDefinition_0.IsExplicitLayout)
 		{
-			stringBuilder.Append(Class8.smethod_89());
+			stringBuilder.Append("explicit ");
 		}
 		if (typeDefinition_0.IsAutoLayout)
 		{
-			stringBuilder.Append(Class8.smethod_90());
+			stringBuilder.Append("auto ");
 		}
 		if (typeDefinition_0.IsAnsiClass)
 		{
-			stringBuilder.Append(Class8.smethod_91());
+			stringBuilder.Append("ansi ");
 		}
 		if (typeDefinition_0.IsAutoClass)
 		{
-			stringBuilder.Append(Class8.smethod_90());
+			stringBuilder.Append("auto ");
 		}
 		if (typeDefinition_0.IsUnicodeClass)
 		{
-			stringBuilder.Append(Class8.smethod_92());
+			stringBuilder.Append("unicode ");
 		}
 		if (typeDefinition_0.IsInterface)
 		{
-			stringBuilder.Append(Class8.smethod_93());
+			stringBuilder.Append("interface ");
 		}
 		if (typeDefinition_0.IsSpecialName)
 		{
-			stringBuilder.Append(Class8.smethod_94());
+			stringBuilder.Append("specialname ");
 		}
 		if (typeDefinition_0.IsRuntimeSpecialName)
 		{
-			stringBuilder.Append(Class8.smethod_95());
+			stringBuilder.Append("rtspecialname ");
 		}
 		if (typeDefinition_0.IsImport)
 		{
-			stringBuilder.Append(Class8.smethod_96());
+			stringBuilder.Append("import ");
 		}
 		if (typeDefinition_0.IsAbstract)
 		{
-			stringBuilder.Append(Class8.smethod_97());
+			stringBuilder.Append("abstract ");
 		}
 		if (typeDefinition_0.IsSerializable)
 		{
-			stringBuilder.Append(Class8.smethod_98());
+			stringBuilder.Append("serializable ");
 		}
 		if (typeDefinition_0.IsBeforeFieldInit)
 		{
-			stringBuilder.Append(Class8.smethod_99());
+			stringBuilder.Append("beforefieldinit ");
 		}
 		if (typeDefinition_0.IsSealed)
 		{
-			stringBuilder.Append(Class8.smethod_100());
+			stringBuilder.Append("sealed ");
 		}
-		stringBuilder.Append(Class8.smethod_18());
+		stringBuilder.Append("<<>>");
 		stringBuilder.Append(GClass2.smethod_0(typeDefinition_0));
-		stringBuilder.AppendLine(GClass2.smethod_3(typeDefinition_0) + Class8.smethod_18());
+		stringBuilder.AppendLine(GClass2.smethod_3(typeDefinition_0) + "<<>>");
 		if (typeDefinition_0.BaseType != null)
 		{
-			stringBuilder.AppendLine(Class8.smethod_101() + method_6(typeDefinition_0.BaseType));
+			stringBuilder.AppendLine("    <<b>>extends<<>> " + method_6(typeDefinition_0.BaseType));
 		}
 		checked
 		{
 			if (typeDefinition_0.Interfaces.Count > 0)
 			{
-				stringBuilder.Append(Class8.smethod_102());
+				stringBuilder.Append("    <<b>>implements<<>> ");
 				foreach (TypeReference @interface in typeDefinition_0.Interfaces)
 				{
 					stringBuilder.Append(method_6(@interface) + ", ");
@@ -274,10 +274,10 @@ public sealed class GClass4 : GClass2
 	public override string vmethod_3(ModuleDefinition moduleDefinition_0)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.Append(Class8.smethod_104());
+		stringBuilder.Append("<<b>>.module<<>> ");
 		stringBuilder.AppendLine(moduleDefinition_0.Name);
-		stringBuilder.AppendLine(Class8.smethod_105() + moduleDefinition_0.Mvid.ToString() + Class8.smethod_18());
-		stringBuilder.Append(Class8.smethod_103() + moduleDefinition_0.Runtime.ToString() + Class8.smethod_18());
+		stringBuilder.AppendLine("<<g>>// MVID: " + moduleDefinition_0.Mvid.ToString() + "<<>>");
+		stringBuilder.Append("<<g>>// Target Runtime Version: " + moduleDefinition_0.Runtime.ToString() + "<<>>");
 		return stringBuilder.ToString();
 	}
 
@@ -448,15 +448,15 @@ public sealed class GClass4 : GClass2
 			}
 			MethodBody body = methodDefinition_0.Body;
 			stringBuilder.AppendLine($"    <<g>>// Method Start RVA 0x{methodDefinition_0.RVA:x4}<<>>");
-			stringBuilder.AppendLine(string.Format(Class8.smethod_106(), body.CodeSize));
+			stringBuilder.AppendLine(string.Format("    <<g>>// Code Size {0} (0x{0:x})<<>>", body.CodeSize));
 			method_5(stringBuilder, methodDefinition_0.CustomAttributes);
 			if (methodDefinition_0.Module.Assembly.EntryPoint == methodDefinition_0)
 			{
-				stringBuilder.AppendLine(Class8.smethod_107());
+				stringBuilder.AppendLine("    <<b>>.entrypoint<<>>");
 			}
 			if (body != null)
 			{
-				stringBuilder.AppendLine(string.Format(Class8.smethod_108(), body.MaxStackSize));
+				stringBuilder.AppendLine(string.Format("    <<b>>.maxstack<<>> {0}", body.MaxStackSize));
 			}
 			if (body.Variables.Count > 0)
 			{
@@ -603,33 +603,33 @@ public sealed class GClass4 : GClass2
 	public override string vmethod_5(PropertyDefinition propertyDefinition_0)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.Append(Class8.smethod_25());
-		stringBuilder.Append(Class8.smethod_109());
+		stringBuilder.Append("<<b>>");
+		stringBuilder.Append(".property ");
 		if (propertyDefinition_0.IsSpecialName)
 		{
-			stringBuilder.Append(Class8.smethod_94());
+			stringBuilder.Append("specialname ");
 		}
 		if (propertyDefinition_0.IsRuntimeSpecialName)
 		{
-			stringBuilder.Append(Class8.smethod_95());
+			stringBuilder.Append("rtspecialname ");
 		}
 		if (propertyDefinition_0.HasDefault)
 		{
-			stringBuilder.Append(Class8.smethod_110());
+			stringBuilder.Append("hasdefault ");
 		}
 		if (propertyDefinition_0.GetMethod != null && propertyDefinition_0.GetMethod.IsStatic)
 		{
-			stringBuilder.Append(Class8.smethod_111());
+			stringBuilder.Append("class ");
 		}
 		else if (propertyDefinition_0.SetMethod != null && propertyDefinition_0.SetMethod.IsStatic)
 		{
-			stringBuilder.Append(Class8.smethod_111());
+			stringBuilder.Append("class ");
 		}
 		else
 		{
-			stringBuilder.Append(Class8.smethod_112());
+			stringBuilder.Append("instance ");
 		}
-		stringBuilder.Append(Class8.smethod_18());
+		stringBuilder.Append("<<>>");
 		stringBuilder.Append(_003C(propertyDefinition_0.PropertyType) + " ");
 		stringBuilder.AppendLine(GClass2.smethod_0(propertyDefinition_0) + propertyDefinition_0.Name + "<<>>");
 		stringBuilder.AppendLine("{");
@@ -710,53 +710,53 @@ public sealed class GClass4 : GClass2
 		stringBuilder.Append(".field ");
 		if (fieldDefinition_0.IsPrivate)
 		{
-			stringBuilder.Append(Class8.smethod_26());
+			stringBuilder.Append("private ");
 		}
 		else if (fieldDefinition_0.IsFamilyAndAssembly)
 		{
-			stringBuilder.Append(Class8.smethod_113());
+			stringBuilder.Append("famandassem ");
 		}
 		else if (fieldDefinition_0.IsAssembly)
 		{
-			stringBuilder.Append(Class8.smethod_114());
+			stringBuilder.Append("assembly ");
 		}
 		else if (fieldDefinition_0.IsFamily)
 		{
-			stringBuilder.Append(Class8.smethod_115());
+			stringBuilder.Append("family ");
 		}
 		else if (fieldDefinition_0.IsFamilyOrAssembly)
 		{
-			stringBuilder.Append(Class8.smethod_116());
+			stringBuilder.Append("famorassem ");
 		}
 		else if (fieldDefinition_0.IsPublic)
 		{
-			stringBuilder.Append(Class8.smethod_29());
+			stringBuilder.Append("public ");
 		}
 		if (fieldDefinition_0.IsStatic)
 		{
-			stringBuilder.Append(Class8.smethod_30());
+			stringBuilder.Append("static ");
 		}
 		if (fieldDefinition_0.IsLiteral)
 		{
-			stringBuilder.Append(Class8.smethod_117());
+			stringBuilder.Append("literal ");
 		}
 		if (fieldDefinition_0.IsSpecialName)
 		{
-			stringBuilder.Append(Class8.smethod_94());
+			stringBuilder.Append("specialname ");
 		}
 		if (fieldDefinition_0.IsRuntimeSpecialName)
 		{
-			stringBuilder.Append(Class8.smethod_95());
+			stringBuilder.Append("rtspecialname ");
 		}
 		if (fieldDefinition_0.IsInitOnly)
 		{
-			stringBuilder.Append(Class8.smethod_118());
+			stringBuilder.Append("initonly ");
 		}
 		if (fieldDefinition_0.IsNotSerialized)
 		{
-			stringBuilder.Append(Class8.smethod_119());
+			stringBuilder.Append("notserialized ");
 		}
-		stringBuilder.Append(Class8.smethod_18());
+		stringBuilder.Append("<<>>");
 		stringBuilder.Append(_003C(fieldDefinition_0.FieldType) + " ");
 		stringBuilder.Append(GClass2.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + "<<>>");
 		if (fieldDefinition_0.Constant != null)
@@ -803,10 +803,10 @@ public sealed class GClass4 : GClass2
 			if (eventDefinition_0.AddMethod != null)
 			{
 				MethodDefinition addMethod = eventDefinition_0.AddMethod;
-				stringBuilder.Append(Class8.smethod_120());
+				stringBuilder.Append("    <<b>>.addon<<>> ");
 				if (!addMethod.IsStatic)
 				{
-					stringBuilder.Append(Class8.smethod_121());
+					stringBuilder.Append("<<b>>instance<<>> ");
 				}
 				stringBuilder.Append(_003C(addMethod.ReturnType) + " ");
 				stringBuilder.Append(string.Format("{0}::{1}", method_6(addMethod.DeclaringType), GClass2.smethod_0(addMethod) + addMethod.Name + "<<>>"));
@@ -895,7 +895,7 @@ public sealed class GClass4 : GClass2
 		{
 			foreach (CustomAttribute item in collection_0)
 			{
-				stringBuilder_0.Append(Class8.smethod_122() + method_6(item.AttributeType) + Class8.smethod_123());
+				stringBuilder_0.Append("    <<b>>.custom instance void<<>> " + method_6(item.AttributeType) + "::.ctor(");
 				if (item.Constructor.Parameters.Count > 0)
 				{
 					foreach (ParameterDefinition parameter in item.Constructor.Parameters)
@@ -992,47 +992,47 @@ public sealed class GClass4 : GClass2
 		{
 			name = "<<b>>int64<<>>";
 		}
-		else if (Operators.CompareString(typeReference_0.Name, Class8.smethod_124(), TextCompare: false) == 0)
+		else if (Operators.CompareString(typeReference_0.Name, "UInt16", TextCompare: false) == 0)
 		{
-			name = Class8.smethod_125();
+			name = "<<b>>uint16<<>>";
 		}
-		else if (Operators.CompareString(typeReference_0.Name, Class8.smethod_39(), TextCompare: false) == 0)
+		else if (Operators.CompareString(typeReference_0.Name, "UInt32", TextCompare: false) == 0)
 		{
-			name = Class8.smethod_126();
+			name = "<<b>>uint32<<>>";
 		}
-		else if (Operators.CompareString(typeReference_0.Name, Class8.smethod_41(), TextCompare: false) == 0)
+		else if (Operators.CompareString(typeReference_0.Name, "UInt64", TextCompare: false) == 0)
 		{
-			name = Class8.smethod_127();
+			name = "<<b>>uint64<<>>";
 		}
-		else if (Operators.CompareString(typeReference_0.Name, Class8.smethod_43(), TextCompare: false) == 0)
+		else if (Operators.CompareString(typeReference_0.Name, "Single", TextCompare: false) == 0)
 		{
-			name = Class8.smethod_128();
+			name = "<<b>>float32<<>>";
 		}
-		else if (Operators.CompareString(typeReference_0.Name, Class8.smethod_45(), TextCompare: false) == 0)
+		else if (Operators.CompareString(typeReference_0.Name, "Double", TextCompare: false) == 0)
 		{
-			name = Class8.smethod_129();
+			name = "<<b>>float64<<>>";
 		}
-		else if (Operators.CompareString(typeReference_0.Name, Class8.smethod_47(), TextCompare: false) == 0)
+		else if (Operators.CompareString(typeReference_0.Name, "Byte", TextCompare: false) == 0)
 		{
-			name = Class8.smethod_130();
+			name = "<<b>>uint8<<>>";
 		}
-		else if (Operators.CompareString(typeReference_0.Name, Class8.smethod_49(), TextCompare: false) == 0)
+		else if (Operators.CompareString(typeReference_0.Name, "SByte", TextCompare: false) == 0)
 		{
-			name = Class8.smethod_131();
+			name = "<<b>>int8<<>>";
 		}
 		else
 		{
-			if (Operators.CompareString(typeReference_0.Name, Class8.smethod_51(), TextCompare: false) != 0)
+			if (Operators.CompareString(typeReference_0.Name, "Type", TextCompare: false) != 0)
 			{
 				if (typeReference_0.IsValueType)
 				{
-					return Class8.smethod_62() + method_6(typeReference_0) + text + text2;
+					return "<<b>>valuetype<<>> " + method_6(typeReference_0) + text + text2;
 				}
-				return Class8.smethod_63() + method_6(typeReference_0) + text + text2;
+				return "<<b>>class<<>> " + method_6(typeReference_0) + text + text2;
 			}
-			name = Class8.smethod_132();
+			name = "<<b>>type<<>>";
 		}
-		return GClass2.smethod_0(typeReference_0) + name + Class8.smethod_18() + text + text2;
+		return GClass2.smethod_0(typeReference_0) + name + "<<>>" + text + text2;
 	}
 
 	private string method_6(TypeReference typeReference_0)

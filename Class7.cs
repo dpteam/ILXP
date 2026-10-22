@@ -311,7 +311,7 @@ internal sealed class Class7
 					}
 					else
 					{
-						stringBuilder.Append(string.Format(Class8.smethod_305(), dictionaryEntry.Value.GetType().FullName));
+						stringBuilder.Append(string.Format("({0})", dictionaryEntry.Value.GetType().FullName));
 					}
 				}
 				stringBuilder.AppendLine();
