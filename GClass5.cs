@@ -1,0 +1,848 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Text;
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.CompilerServices;
+using Mono.Cecil;
+using Mono.Collections.Generic;
+
+[SuppressIldasm]
+public sealed class GClass5 : GClass2
+{
+	[DebuggerNonUserCode]
+	public GClass5()
+	{
+	}
+
+	public override string vmethod_0(GClass0 gclass0_0)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.AppendLine("<<g>>'Name: " + gclass0_0.method_1().Name.Name + "<<>>");
+		stringBuilder.AppendLine("<<g>>'Path: " + gclass0_0.method_0() + "<<>>");
+		stringBuilder.AppendLine("<<g>>'Version: " + $"{gclass0_0.method_1().Name.Version.Major}:{gclass0_0.method_1().Name.Version.MajorRevision}:{gclass0_0.method_1().Name.Version.Minor}:{gclass0_0.method_1().Name.Version.MinorRevision}" + Class8.smethod_18());
+		stringBuilder.AppendLine();
+		foreach (CustomAttribute customAttribute in gclass0_0.method_1().CustomAttributes)
+		{
+			stringBuilder.Append(Class8.smethod_133());
+			stringBuilder.Append(method_8(customAttribute.AttributeType) + "(");
+			foreach (CustomAttributeArgument constructorArgument in customAttribute.ConstructorArguments)
+			{
+				if ((constructorArgument.Value is string) | (constructorArgument.Value is char))
+				{
+					stringBuilder.Append($"<<r>>\"{RuntimeHelpers.GetObjectValue(constructorArgument.Value)}\"<<>>, ");
+				}
+				else
+				{
+					stringBuilder.Append($"<<r>>{RuntimeHelpers.GetObjectValue(constructorArgument.Value)}<<>>, ");
+				}
+			}
+			if (customAttribute.ConstructorArguments.Count > 0)
+			{
+				stringBuilder.Remove(checked(stringBuilder.Length - 2), 2);
+			}
+			stringBuilder.AppendLine(")>");
+		}
+		return stringBuilder.ToString();
+	}
+
+	public override string vmethod_1(GClass6 gclass6_0)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		if (!string.IsNullOrEmpty(gclass6_0.method_0()))
+		{
+			stringBuilder.AppendLine(Class8.smethod_135() + GClass2.smethod_0(gclass6_0) + gclass6_0.method_0() + Class8.smethod_18());
+		}
+		StringBuilder stringBuilder2 = new StringBuilder();
+		foreach (TypeDefinition type in gclass6_0.method_1().Types)
+		{
+			if (Operators.CompareString(type.Namespace, gclass6_0.method_0(), TextCompare: false) == 0)
+			{
+				stringBuilder2.AppendLine(method_3(type, bool_0: true));
+				stringBuilder2.AppendLine();
+			}
+		}
+		stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + Class8.smethod_82());
+		stringBuilder.AppendLine(Class8.smethod_82() + stringBuilder2.ToString().Trim());
+		if (!string.IsNullOrEmpty(gclass6_0.method_0()))
+		{
+			stringBuilder.Append(Class8.smethod_134());
+		}
+		return stringBuilder.ToString();
+	}
+
+	public override string vmethod_3(ModuleDefinition moduleDefinition_0)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.AppendLine(Class8.smethod_136() + moduleDefinition_0.Name + Class8.smethod_18());
+		stringBuilder.Append(Class8.smethod_137() + moduleDefinition_0.Runtime.ToString() + Class8.smethod_18());
+		return stringBuilder.ToString();
+	}
+
+	public override string vmethod_6(FieldDefinition fieldDefinition_0)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		method_6(stringBuilder, fieldDefinition_0.CustomAttributes);
+		if (fieldDefinition_0.DeclaringType.IsEnum)
+		{
+			stringBuilder.Append(GClass2.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + Class8.smethod_18());
+		}
+		else
+		{
+			stringBuilder.Append(Class8.smethod_25());
+			if (fieldDefinition_0.IsPublic)
+			{
+				stringBuilder.Append(Class8.smethod_143());
+			}
+			else if (fieldDefinition_0.IsPrivate)
+			{
+				stringBuilder.Append(Class8.smethod_144());
+			}
+			else if (fieldDefinition_0.IsAssembly)
+			{
+				stringBuilder.Append(Class8.smethod_145());
+			}
+			else if (fieldDefinition_0.IsFamily)
+			{
+				stringBuilder.Append(Class8.smethod_146());
+			}
+			if (fieldDefinition_0.IsLiteral & fieldDefinition_0.IsStatic)
+			{
+				stringBuilder.Append(Class8.smethod_138());
+			}
+			if (fieldDefinition_0.IsStatic & !fieldDefinition_0.IsLiteral)
+			{
+				stringBuilder.Append(Class8.smethod_139());
+			}
+			if (fieldDefinition_0.IsInitOnly)
+			{
+				stringBuilder.Append(Class8.smethod_140());
+			}
+			stringBuilder.Append(Class8.smethod_18());
+			stringBuilder.Append(GClass2.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + Class8.smethod_141());
+			stringBuilder.Append(Class8.smethod_142());
+			stringBuilder.Append(method_8(fieldDefinition_0.FieldType));
+		}
+		if (fieldDefinition_0.Constant != null)
+		{
+			stringBuilder.Append(Class8.smethod_22());
+			if (fieldDefinition_0.Constant is string)
+			{
+				stringBuilder.Append(string.Format(Class8.smethod_23(), RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
+			}
+			else
+			{
+				stringBuilder.Append(string.Format(Class8.smethod_24(), RuntimeHelpers.GetObjectValue(fieldDefinition_0.Constant)));
+			}
+		}
+		return stringBuilder.ToString();
+	}
+
+	public override string vmethod_2(TypeDefinition typeDefinition_0)
+	{
+		return method_3(typeDefinition_0, bool_0: false);
+	}
+
+	public string method_3(TypeDefinition typeDefinition_0, bool bool_0)
+	{
+		string text = GClass2.smethod_0(typeDefinition_0);
+		checked
+		{
+			if (typeDefinition_0.HasGenericParameters)
+			{
+				string text2 = typeDefinition_0.Name;
+				if (typeDefinition_0.Name.Length > 2 && Operators.CompareString(typeDefinition_0.Name.Substring(typeDefinition_0.Name.Length - 2, 1), "`", TextCompare: false) == 0)
+				{
+					text2 = typeDefinition_0.Name.Substring(0, typeDefinition_0.Name.Length - 2);
+				}
+				text = text + text2 + "<<>>";
+				text += "(<<b>>Of<<>> ";
+				text2 = "";
+				foreach (GenericParameter genericParameter in typeDefinition_0.GenericParameters)
+				{
+					text2 = Conversions.ToString(Operators.ConcatenateObject(text2, Operators.ConcatenateObject(Interaction.IIf(string.IsNullOrEmpty(genericParameter.Name), "?", genericParameter.Name), ",")));
+				}
+				text2 = text2.TrimEnd(',') + ")";
+				text += text2;
+			}
+			else
+			{
+				text = text + typeDefinition_0.Name + "<<>>";
+			}
+			StringBuilder stringBuilder = new StringBuilder();
+			method_6(stringBuilder, typeDefinition_0.CustomAttributes);
+			stringBuilder.Append("<<b>>");
+			if (typeDefinition_0.IsPublic)
+			{
+				stringBuilder.Append("Public ");
+			}
+			else if (typeDefinition_0.IsNotPublic)
+			{
+				stringBuilder.Append("Private ");
+			}
+			else if (typeDefinition_0.IsNestedPrivate)
+			{
+				stringBuilder.Append("Private ");
+			}
+			else if (typeDefinition_0.IsNestedPublic)
+			{
+				stringBuilder.Append("Public ");
+			}
+			else if (typeDefinition_0.IsNestedFamilyAndAssembly)
+			{
+				stringBuilder.Append("Protected Friend ");
+			}
+			else if (typeDefinition_0.IsNestedAssembly)
+			{
+				stringBuilder.Append("Friend ");
+			}
+			else if (typeDefinition_0.IsNestedFamily)
+			{
+				stringBuilder.Append("Protected ");
+			}
+			if (typeDefinition_0.BaseType != null && typeDefinition_0.BaseType.FullName.EndsWith("Delegate"))
+			{
+				foreach (MethodDefinition method in typeDefinition_0.Methods)
+				{
+					if (Operators.CompareString(method.Name, "Invoke", TextCompare: false) != 0)
+					{
+						continue;
+					}
+					stringBuilder.Append("Delegate ");
+					if (method.ReturnType != null && Operators.CompareString(method.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
+					{
+						stringBuilder.Append("Function ");
+					}
+					else
+					{
+						stringBuilder.Append("Sub ");
+					}
+					stringBuilder.Append(text);
+					stringBuilder.Append("(");
+					if (method.Parameters.Count > 0)
+					{
+						foreach (ParameterDefinition parameter in method.Parameters)
+						{
+							if (parameter.IsOut)
+							{
+								stringBuilder.Append("<<b>>ByRef<<>> ");
+							}
+							else
+							{
+								stringBuilder.Append("<<b>>ByVal<<>> ");
+							}
+							if (parameter.IsOptional)
+							{
+								stringBuilder.Append("<<b>>Optional <<>>");
+							}
+							stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+							if (parameter.IsOptional)
+							{
+								stringBuilder.Append(" = ");
+								if (parameter.Constant == null)
+								{
+									stringBuilder.Append(string.Format("<<b>>Nothing<<>>", RuntimeHelpers.GetObjectValue(parameter.Constant)));
+								}
+								else if (parameter.Constant is string)
+								{
+									stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+								}
+								else
+								{
+									stringBuilder.Append($"<<r>>{RuntimeHelpers.GetObjectValue(parameter.Constant)}<<>>");
+								}
+							}
+							stringBuilder.Append(", ");
+						}
+						stringBuilder.Remove(stringBuilder.Length - 2, 2);
+					}
+					stringBuilder.Append(")");
+					if (method.ReturnType != null && Operators.CompareString(method.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
+					{
+						stringBuilder.Append(" <<b>>As<<>> " + method_8(method.ReturnType));
+					}
+					return stringBuilder.ToString();
+				}
+			}
+			if (typeDefinition_0.IsSealed && !(typeDefinition_0.IsValueType | typeDefinition_0.IsEnum))
+			{
+				stringBuilder.Append("NotInheritable ");
+			}
+			if (typeDefinition_0.IsAbstract)
+			{
+				stringBuilder.Append("MustInherit ");
+			}
+			if (typeDefinition_0.IsEnum)
+			{
+				stringBuilder.Append("Enum ");
+			}
+			else if (typeDefinition_0.IsInterface)
+			{
+				stringBuilder.Append("Interface ");
+			}
+			else if (typeDefinition_0.IsValueType)
+			{
+				stringBuilder.Append("Structure ");
+			}
+			else if (typeDefinition_0.IsClass)
+			{
+				stringBuilder.Append(Class8.smethod_147());
+			}
+			stringBuilder.Append(Class8.smethod_18());
+			stringBuilder.AppendLine(text);
+			if (!typeDefinition_0.IsValueType && !typeDefinition_0.IsInterface && !typeDefinition_0.IsEnum && typeDefinition_0.BaseType != null && Operators.CompareString(typeDefinition_0.BaseType.FullName, Class8.smethod_148(), TextCompare: false) != 0)
+			{
+				stringBuilder.AppendLine(Class8.smethod_149() + method_7(typeDefinition_0.BaseType));
+			}
+			if (typeDefinition_0.Interfaces.Count > 0)
+			{
+				stringBuilder.Append(Class8.smethod_150());
+				foreach (TypeReference @interface in typeDefinition_0.Interfaces)
+				{
+					stringBuilder.Append(method_7(@interface) + ", ");
+				}
+				stringBuilder.Remove(stringBuilder.Length - 2, 2);
+				stringBuilder.AppendLine();
+			}
+			if (!bool_0)
+			{
+				StringBuilder stringBuilder2 = new StringBuilder();
+				if (typeDefinition_0.NestedTypes.Count > 0)
+				{
+					stringBuilder2.AppendLine("<<g>>' Nested Types<<>>");
+					foreach (TypeDefinition nestedType in typeDefinition_0.NestedTypes)
+					{
+						stringBuilder2.AppendLine(method_3(nestedType, bool_0: true));
+					}
+					stringBuilder2.AppendLine();
+				}
+				if (typeDefinition_0.Fields.Count > 0)
+				{
+					stringBuilder2.AppendLine("<<g>>' Fields<<>>");
+					foreach (FieldDefinition field in typeDefinition_0.Fields)
+					{
+						if (Operators.CompareString(field.Name, "value__", TextCompare: false) != 0 || !typeDefinition_0.IsEnum)
+						{
+							stringBuilder2.AppendLine(vmethod_6(field));
+						}
+					}
+					stringBuilder2.AppendLine();
+				}
+				if (typeDefinition_0.Properties.Count > 0)
+				{
+					stringBuilder2.AppendLine("<<g>>' Properties<<>>");
+					foreach (PropertyDefinition property in typeDefinition_0.Properties)
+					{
+						stringBuilder2.AppendLine(method_5(property, bool_0: true));
+					}
+					stringBuilder2.AppendLine();
+				}
+				List<string> list = new List<string>();
+				foreach (PropertyDefinition property2 in typeDefinition_0.Properties)
+				{
+					if (property2.SetMethod != null)
+					{
+						list.Add(property2.SetMethod.Name);
+					}
+					if (property2.GetMethod != null)
+					{
+						list.Add(property2.GetMethod.Name);
+					}
+				}
+				foreach (EventDefinition @event in typeDefinition_0.Events)
+				{
+					if (@event.AddMethod != null)
+					{
+						list.Add(@event.AddMethod.Name);
+					}
+					if (@event.RemoveMethod != null)
+					{
+						list.Add(@event.RemoveMethod.Name);
+					}
+					foreach (MethodDefinition otherMethod in @event.OtherMethods)
+					{
+						if (otherMethod != null)
+						{
+							list.Add(otherMethod.Name);
+						}
+					}
+				}
+				if (typeDefinition_0.Methods.Count - list.Count > 0)
+				{
+					stringBuilder2.AppendLine("<<g>>' Methods<<>>");
+					foreach (MethodDefinition method2 in typeDefinition_0.Methods)
+					{
+						if (!list.Contains(method2.Name))
+						{
+							stringBuilder2.AppendLine(method_4(method2, bool_0: true));
+						}
+					}
+					stringBuilder2.AppendLine();
+				}
+				if (typeDefinition_0.Events.Count > 0)
+				{
+					stringBuilder2.AppendLine("<<g>>' Events<<>>");
+					foreach (EventDefinition event2 in typeDefinition_0.Events)
+					{
+						stringBuilder2.AppendLine(vmethod_7(event2));
+					}
+				}
+				stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + "    ");
+				stringBuilder.AppendLine("    " + stringBuilder2.ToString().Trim());
+			}
+			if (typeDefinition_0.IsEnum)
+			{
+				stringBuilder.Append("<<b>>End Enum<<>>");
+			}
+			else if (typeDefinition_0.IsInterface)
+			{
+				stringBuilder.Append("<<b>>End Interface<<>>");
+			}
+			else if (typeDefinition_0.IsValueType)
+			{
+				stringBuilder.Append("<<b>>End Structure<<>>");
+			}
+			else if (typeDefinition_0.IsClass)
+			{
+				stringBuilder.Append("<<b>>End Class<<>>");
+			}
+			return stringBuilder.ToString();
+		}
+	}
+
+	public override string vmethod_7(EventDefinition eventDefinition_0)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		method_6(stringBuilder, eventDefinition_0.CustomAttributes);
+		MethodDefinition methodDefinition = eventDefinition_0.AddMethod;
+		stringBuilder.Append(Class8.smethod_25());
+		if (!methodDefinition.DeclaringType.IsInterface)
+		{
+			if (methodDefinition.IsPrivate)
+			{
+				stringBuilder.Append(Class8.smethod_144());
+			}
+			else if (methodDefinition.IsAssembly)
+			{
+				stringBuilder.Append(Class8.smethod_145());
+			}
+			else if (methodDefinition.IsFamily)
+			{
+				stringBuilder.Append(Class8.smethod_146());
+			}
+			else if (methodDefinition.IsPublic)
+			{
+				stringBuilder.Append(Class8.smethod_143());
+			}
+			if (methodDefinition.IsStatic)
+			{
+				stringBuilder.Append(Class8.smethod_139());
+			}
+			if (methodDefinition.IsVirtual & methodDefinition.IsNewSlot)
+			{
+				stringBuilder.Append(Class8.smethod_151());
+			}
+			if (methodDefinition.IsVirtual & methodDefinition.IsReuseSlot)
+			{
+				stringBuilder.Append(Class8.smethod_152());
+			}
+			if (!methodDefinition.IsVirtual & methodDefinition.IsNewSlot)
+			{
+				stringBuilder.Append(Class8.smethod_153());
+			}
+		}
+		stringBuilder.Append(Class8.smethod_154());
+		stringBuilder.Append(GClass2.smethod_0(eventDefinition_0) + eventDefinition_0.Name + Class8.smethod_18());
+		stringBuilder.Append("(");
+		foreach (MethodDefinition method in eventDefinition_0.EventType.GetElementType().Resolve().Methods)
+		{
+			methodDefinition = method;
+			if (Operators.CompareString(methodDefinition.Name, "Invoke", TextCompare: false) == 0)
+			{
+				break;
+			}
+		}
+		if (methodDefinition.Parameters.Count > 0)
+		{
+			foreach (ParameterDefinition parameter in methodDefinition.Parameters)
+			{
+				if (parameter.IsOut | parameter.ParameterType.IsByReference)
+				{
+					stringBuilder.Append("<<b>>ByRef<<>> ");
+				}
+				else
+				{
+					stringBuilder.Append("<<b>>ByVal<<>> ");
+				}
+				if (parameter.IsOptional)
+				{
+					stringBuilder.Append("<<b>>Optional <<>>");
+				}
+				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+				if (parameter.IsOptional)
+				{
+					stringBuilder.Append(" = ");
+					if (parameter.Constant == null)
+					{
+						stringBuilder.Append(string.Format("<<b>>Nothing<<>>", RuntimeHelpers.GetObjectValue(parameter.Constant)));
+					}
+					else if (parameter.Constant is string)
+					{
+						stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+					}
+					else
+					{
+						stringBuilder.Append($"<<r>>{RuntimeHelpers.GetObjectValue(parameter.Constant)}<<>>");
+					}
+				}
+				stringBuilder.Append(", ");
+			}
+			stringBuilder.Remove(checked(stringBuilder.Length - 2), 2);
+		}
+		stringBuilder.Append(")");
+		return stringBuilder.ToString();
+	}
+
+	public override string vmethod_4(MethodDefinition methodDefinition_0)
+	{
+		return method_4(methodDefinition_0, bool_0: false);
+	}
+
+	public string method_4(MethodDefinition methodDefinition_0, bool bool_0)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		method_6(stringBuilder, methodDefinition_0.CustomAttributes);
+		if (methodDefinition_0.IsPInvokeImpl)
+		{
+			stringBuilder.AppendLine("<DllImport(<<r>>\"" + methodDefinition_0.PInvokeInfo.Module.Name + "\"<<>>)> _");
+		}
+		stringBuilder.Append("<<b>>");
+		if (!methodDefinition_0.DeclaringType.IsInterface)
+		{
+			if (methodDefinition_0.IsPrivate)
+			{
+				stringBuilder.Append("Private ");
+			}
+			else if (methodDefinition_0.IsAssembly)
+			{
+				stringBuilder.Append("Friend ");
+			}
+			else if (methodDefinition_0.IsFamily)
+			{
+				stringBuilder.Append("Protected ");
+			}
+			else if (methodDefinition_0.IsPublic)
+			{
+				stringBuilder.Append("Public ");
+			}
+			if (methodDefinition_0.IsStatic)
+			{
+				stringBuilder.Append("Shared ");
+			}
+			if (methodDefinition_0.IsVirtual & methodDefinition_0.IsNewSlot)
+			{
+				stringBuilder.Append("Overridable ");
+			}
+			if (methodDefinition_0.IsVirtual & methodDefinition_0.IsReuseSlot)
+			{
+				stringBuilder.Append("Overrides ");
+			}
+			if (!methodDefinition_0.IsVirtual & methodDefinition_0.IsNewSlot)
+			{
+				stringBuilder.Append("Shadows ");
+			}
+		}
+		if (methodDefinition_0.ReturnType != null && Operators.CompareString(methodDefinition_0.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
+		{
+			stringBuilder.Append("Function ");
+		}
+		else
+		{
+			stringBuilder.Append("Sub ");
+		}
+		if (methodDefinition_0.IsConstructor)
+		{
+			stringBuilder.Append(GClass2.smethod_0(methodDefinition_0) + "New<<>>");
+		}
+		else
+		{
+			stringBuilder.Append(GClass2.smethod_0(methodDefinition_0) + methodDefinition_0.Name + Class8.smethod_18());
+		}
+		stringBuilder.Append("(");
+		if (methodDefinition_0.Parameters.Count > 0)
+		{
+			foreach (ParameterDefinition parameter in methodDefinition_0.Parameters)
+			{
+				if (((uint)((parameter.IsOut || parameter.ParameterType.IsPointer) ? 1 : 0) | (parameter.ParameterType.IsByReference ? 1u : 0u)) != 0)
+				{
+					stringBuilder.Append("<<b>>ByRef<<>> ");
+				}
+				else
+				{
+					stringBuilder.Append("<<b>>ByVal<<>> ");
+				}
+				if (parameter.IsOptional)
+				{
+					stringBuilder.Append("<<b>>Optional <<>>");
+				}
+				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+				if (parameter.IsOptional)
+				{
+					stringBuilder.Append(" = ");
+					if (parameter.Constant == null)
+					{
+						stringBuilder.Append(string.Format("<<b>>Nothing<<>>", RuntimeHelpers.GetObjectValue(parameter.Constant)));
+					}
+					else if (parameter.Constant is string)
+					{
+						stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+					}
+					else
+					{
+						stringBuilder.Append($"<<r>>{RuntimeHelpers.GetObjectValue(parameter.Constant)}<<>>");
+					}
+				}
+				stringBuilder.Append(", ");
+			}
+			stringBuilder.Remove(checked(stringBuilder.Length - 2), 2);
+		}
+		stringBuilder.Append(")");
+		if (methodDefinition_0.ReturnType != null && Operators.CompareString(methodDefinition_0.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
+		{
+			stringBuilder.Append(" <<b>>As<<>> " + method_8(methodDefinition_0.ReturnType));
+		}
+		if (bool_0)
+		{
+			return stringBuilder.ToString();
+		}
+		if (methodDefinition_0.DeclaringType.IsInterface)
+		{
+			return stringBuilder.ToString();
+		}
+		stringBuilder.AppendLine();
+		GClass12.smethod_0(stringBuilder, methodDefinition_0, 1);
+		if (methodDefinition_0.ReturnType != null && Operators.CompareString(methodDefinition_0.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
+		{
+			stringBuilder.Append("<<b>>End Function<<>>");
+		}
+		else
+		{
+			stringBuilder.Append("<<b>>End Sub<<>>");
+		}
+		return stringBuilder.ToString();
+	}
+
+	public override string vmethod_5(PropertyDefinition propertyDefinition_0)
+	{
+		return method_5(propertyDefinition_0, bool_0: false);
+	}
+
+	public string method_5(PropertyDefinition propertyDefinition_0, bool bool_0)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		method_6(stringBuilder, propertyDefinition_0.CustomAttributes);
+		stringBuilder.Append("<<b>>");
+		if (!propertyDefinition_0.DeclaringType.IsInterface)
+		{
+			if (propertyDefinition_0.GetMethod != null)
+			{
+				if (propertyDefinition_0.GetMethod.IsPrivate)
+				{
+					stringBuilder.Append("Private ");
+				}
+				else if (propertyDefinition_0.GetMethod.IsAssembly)
+				{
+					stringBuilder.Append("Friend ");
+				}
+				else if (propertyDefinition_0.GetMethod.IsFamily)
+				{
+					stringBuilder.Append("Protected ");
+				}
+				else if (propertyDefinition_0.GetMethod.IsPublic)
+				{
+					stringBuilder.Append("Public ");
+				}
+			}
+			else if (propertyDefinition_0.SetMethod != null)
+			{
+				if (propertyDefinition_0.SetMethod.IsPrivate)
+				{
+					stringBuilder.Append("Private ");
+				}
+				else if (propertyDefinition_0.SetMethod.IsAssembly)
+				{
+					stringBuilder.Append("Friend ");
+				}
+				else if (propertyDefinition_0.SetMethod.IsFamily)
+				{
+					stringBuilder.Append("Protected ");
+				}
+				else if (propertyDefinition_0.SetMethod.IsPublic)
+				{
+					stringBuilder.Append("Public ");
+				}
+			}
+		}
+		if (propertyDefinition_0.HasDefault)
+		{
+			stringBuilder.Append("Default ");
+		}
+		if (propertyDefinition_0.GetMethod == null)
+		{
+			stringBuilder.Append(Class8.smethod_155());
+		}
+		if (propertyDefinition_0.SetMethod == null)
+		{
+			stringBuilder.Append(Class8.smethod_140());
+		}
+		stringBuilder.Append(Class8.smethod_156());
+		stringBuilder.Append(Class8.smethod_18());
+		stringBuilder.Append(GClass2.smethod_0(propertyDefinition_0) + propertyDefinition_0.Name + Class8.smethod_18());
+		if (propertyDefinition_0.Parameters.Count > 0)
+		{
+			stringBuilder.Append("(");
+			foreach (ParameterDefinition parameter in propertyDefinition_0.Parameters)
+			{
+				if (parameter.IsOut)
+				{
+					stringBuilder.Append("<<b>>ByRef<<>> ");
+				}
+				else
+				{
+					stringBuilder.Append("<<b>>ByVal<<>> ");
+				}
+				if (parameter.IsOptional)
+				{
+					stringBuilder.Append("<<b>>Optional <<>>");
+				}
+				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+				if (parameter.IsOptional)
+				{
+					stringBuilder.Append(" = ");
+					if (parameter.Constant == null)
+					{
+						stringBuilder.Append(string.Format("<<b>>Nothing<<>>", RuntimeHelpers.GetObjectValue(parameter.Constant)));
+					}
+					else if (parameter.Constant is string)
+					{
+						stringBuilder.Append($"<<r>>'{RuntimeHelpers.GetObjectValue(parameter.Constant)}'<<>>");
+					}
+					else
+					{
+						stringBuilder.Append($"<<r>>{RuntimeHelpers.GetObjectValue(parameter.Constant)}<<>>");
+					}
+				}
+				stringBuilder.Append(", ");
+			}
+			stringBuilder.Remove(checked(stringBuilder.Length - 2), 2);
+			stringBuilder.Append(")");
+		}
+		stringBuilder.Append(" <<b>>AS<<>> ");
+		stringBuilder.Append(method_8(propertyDefinition_0.PropertyType));
+		if (bool_0)
+		{
+			return stringBuilder.ToString();
+		}
+		if (propertyDefinition_0.DeclaringType.IsInterface)
+		{
+			return stringBuilder.ToString();
+		}
+		stringBuilder.AppendLine();
+		if (propertyDefinition_0.GetMethod != null)
+		{
+			MethodDefinition getMethod = propertyDefinition_0.GetMethod;
+			stringBuilder.AppendLine("    <<b>>Get<<>> ");
+			GClass12.smethod_0(stringBuilder, getMethod, 2);
+			stringBuilder.AppendLine("    <<b>>End Get<<>> ");
+		}
+		if (propertyDefinition_0.SetMethod != null)
+		{
+			MethodDefinition setMethod = propertyDefinition_0.SetMethod;
+			stringBuilder.AppendLine("    <<b>>Set<<>>(value <<b>>As<<>> " + method_8(propertyDefinition_0.PropertyType) + ")");
+			GClass12.smethod_0(stringBuilder, setMethod, 2);
+			stringBuilder.AppendLine("    <<b>>End Set<<>> ");
+		}
+		stringBuilder.Append("<<b>>End Property<<>>");
+		return stringBuilder.ToString();
+	}
+
+	private void method_6(StringBuilder stringBuilder_0, Collection<CustomAttribute> collection_0)
+	{
+		if (collection_0.Count == 0)
+		{
+			return;
+		}
+		stringBuilder_0.Append("<");
+		checked
+		{
+			foreach (CustomAttribute item in collection_0)
+			{
+				string text = method_8(item.AttributeType);
+				if (text.EndsWith(Class8.smethod_157()))
+				{
+					text = text.Replace(Class8.smethod_157(), Class8.smethod_18());
+				}
+				stringBuilder_0.Append(text + "(");
+				foreach (CustomAttributeArgument constructorArgument in item.ConstructorArguments)
+				{
+					if ((constructorArgument.Value is string) | (constructorArgument.Value is char))
+					{
+						stringBuilder_0.Append($"<<r>>\"{RuntimeHelpers.GetObjectValue(constructorArgument.Value)}\"<<>>, ");
+					}
+					else
+					{
+						stringBuilder_0.Append($"<<r>>{RuntimeHelpers.GetObjectValue(constructorArgument.Value)}<<>>, ");
+					}
+				}
+				if (item.ConstructorArguments.Count > 0)
+				{
+					stringBuilder_0.Remove(stringBuilder_0.Length - 2, 2);
+				}
+				stringBuilder_0.Append("), ");
+			}
+			stringBuilder_0.Remove(stringBuilder_0.Length - 2, 2);
+			stringBuilder_0.AppendLine("> _");
+		}
+	}
+
+	private string method_7(TypeReference typeReference_0)
+	{
+		return GClass2.smethod_0(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name.Replace("&", "") + "<<>>";
+	}
+
+	private string method_8(TypeReference typeReference_0)
+	{
+		if (typeReference_0.IsGenericParameter)
+		{
+			return typeReference_0.Name;
+		}
+		string text = "";
+		if (typeReference_0.IsArray)
+		{
+			text = "()";
+		}
+		typeReference_0 = typeReference_0.GetElementType();
+		switch (typeReference_0.Namespace)
+		{
+		case "System":
+			return GClass2.smethod_0(typeReference_0) + "<<b>>" + typeReference_0.Name + "<<>>" + text + "<<>>";
+		default:
+			return GClass2.smethod_0(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name + text + "<<>>";
+		case "System.Reflection":
+		case "System.Runtime.InteropServices":
+		case "System.Runtime.CompilerServices":
+		case "System.Diagnostics":
+		case "System.ComponentModel":
+		case "System.CodeDom.Compiler":
+		case "Microsoft.VisualBasic":
+		case "Microsoft.VisualBasic.CompilerServices":
+			return GClass2.smethod_0(typeReference_0) + typeReference_0.Name + text + "<<>>";
+		}
+	}
+
+	public override string ToString()
+	{
+		return "VB";
+	}
+}
