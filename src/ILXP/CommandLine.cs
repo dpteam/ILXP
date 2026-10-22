@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 using ILXP.Deobfuscation;
 using ILXP.Interop;
+using ILXP.Music;
 using Mono.Cecil;
 
 namespace ILXP
@@ -58,6 +61,12 @@ namespace ILXP
                         return DisassembleX86(options);
                     case "clean":
                         return Clean(options);
+                    case "tree":
+                        return DumpTree(options);
+                    case "music":
+                        return MusicCommand(options);
+                    case "screenshot":
+                        return Screenshot(options);
                     default:
                         Console.Error.WriteLine("error: unknown command '" + options.Command + "'");
                         return 2;
@@ -103,6 +112,12 @@ namespace ILXP
                 default:
                     Console.Error.WriteLine("error: unsupported language '" + options.Language + "'");
                     return 2;
+            }
+
+            OutputDialect dialect = OutputDialect.FromId(options.Dialect);
+            if (dialect != null)
+            {
+                writer.Dialect = dialect;
             }
 
             AssemblyDefinition assembly = ReadAssembly(options.Input);
@@ -152,7 +167,11 @@ namespace ILXP
                         }
 
                         string fileName = SanitizeFileName(type.FullName) + "." + options.Language;
-                        File.WriteAllText(Path.Combine(outputDirectory, fileName), text, Encoding.UTF8);
+                        string header = writer.Dialect == null
+                            ? string.Empty
+                            : (options.Language == "vb" ? "' " : "// ") + "Dialect: " + writer.Dialect.DisplayName +
+                              " (" + writer.Dialect.Toolchain + ")" + Environment.NewLine;
+                        File.WriteAllText(Path.Combine(outputDirectory, fileName), header + text, Encoding.UTF8);
                         manifest.AppendLine(fileName);
                         count++;
                     }
@@ -241,13 +260,30 @@ namespace ILXP
 
         private static int DisassembleIl(Options options)
         {
-            string text = IlTools.Disassemble(options.Input, options.Output, options.KeepBytes);
+            if (options.UseNativeTools)
+            {
+                string text = IlTools.Disassemble(options.Input, options.Output, options.KeepBytes);
+                if (string.IsNullOrEmpty(options.Output))
+                {
+                    Console.Write(text);
+                }
+                else
+                {
+                    Console.WriteLine("IL written to " + options.Output);
+                }
+                return 0;
+            }
+
+            // Default: the managed disassembler, which needs no external executable.
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            string il = ManagedIlDisassembler.Disassemble(assembly, options.KeepBytes);
             if (string.IsNullOrEmpty(options.Output))
             {
-                Console.Write(text);
+                Console.Write(il);
             }
             else
             {
+                File.WriteAllText(options.Output, il, new UTF8Encoding(false));
                 Console.WriteLine("IL written to " + options.Output);
             }
             return 0;
@@ -260,8 +296,194 @@ namespace ILXP
             {
                 output = Path.ChangeExtension(options.Input, options.IsDll ? ".dll" : ".exe");
             }
-            IlTools.Assemble(options.Input, output, options.IsDll, options.Is64Bit, options.Is32Bit);
+
+            if (options.UseNativeTools)
+            {
+                IlTools.Assemble(options.Input, output, options.IsDll, options.Is64Bit, options.Is32Bit);
+            }
+            else
+            {
+                ManagedIlAssembler.AssembleFile(options.Input, output, options.IsDll);
+                if (ManagedIlAssembler.LastWarnings != null)
+                {
+                    foreach (string warning in ManagedIlAssembler.LastWarnings)
+                    {
+                        Console.Error.WriteLine("warning: " + warning);
+                    }
+                }
+            }
+
             Console.WriteLine("assembly written to " + output);
+            return 0;
+        }
+
+        private static int Screenshot(Options options)
+        {
+            if (string.IsNullOrEmpty(options.Output))
+            {
+                Console.Error.WriteLine("error: --output <file.png> is required");
+                return 2;
+            }
+
+            using (Form form = CreateWindowForCapture(options.Window))
+            {
+                form.StartPosition = FormStartPosition.Manual;
+                form.Location = new Point(0, 0);
+                form.Show();
+                for (int i = 0; i < 40; i++)
+                {
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(40);
+                }
+
+                AboutForm about = form as AboutForm;
+                if (about != null)
+                {
+                    about.SimulateWaterForCapture();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(30);
+                    }
+                }
+
+                using (Bitmap bitmap = new Bitmap(form.Width, form.Height))
+                {
+                    form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
+                    bitmap.Save(options.Output, System.Drawing.Imaging.ImageFormat.Png);
+                }
+                form.Close();
+            }
+
+            Console.WriteLine("screenshot written to " + options.Output);
+            return 0;
+        }
+
+        private static Form CreateWindowForCapture(string window)
+        {
+            if (string.Equals(window, "main", StringComparison.OrdinalIgnoreCase))
+            {
+                MainForm main = new MainForm();
+                main.SuppressStartupDialogs = true;
+                return main;
+            }
+            return new AboutForm();
+        }
+
+        private static int MusicCommand(Options options)
+        {
+            string input = options.Input;
+            if (string.IsNullOrEmpty(input) || !File.Exists(input))
+            {
+                Console.Error.WriteLine("error: input file not found");
+                return 2;
+            }
+
+            bool isMidi = input.EndsWith(".mid", StringComparison.OrdinalIgnoreCase) ||
+                          input.EndsWith(".midi", StringComparison.OrdinalIgnoreCase);
+
+            MidiSequence sequence;
+            if (isMidi)
+            {
+                sequence = MidiReader.Read(input);
+            }
+            else
+            {
+                sequence = MidiTextFormat.Parse(File.ReadAllText(input));
+            }
+
+            Console.WriteLine("format      : " + sequence.Format);
+            Console.WriteLine("tracks      : " + sequence.Tracks.Count);
+            Console.WriteLine("ticks/qn    : " + sequence.TicksPerQuarterNote);
+            Console.WriteLine("tempo       : " + sequence.MicrosecondsPerQuarter + " us/qn");
+            Console.WriteLine("notes       : " + sequence.NoteCount);
+            Console.WriteLine("duration    : " + TimeSpan.FromSeconds(sequence.Duration));
+
+            string output = options.Output;
+            if (!string.IsNullOrEmpty(output))
+            {
+                string extension = Path.GetExtension(output).ToLowerInvariant();
+                if (extension == ".mid" || extension == ".midi")
+                {
+                    MidiWriter.Write(sequence, output);
+                }
+                else if (extension == ".wav")
+                {
+                    File.WriteAllBytes(output, ChiptuneSynth.RenderWav(sequence, options.MusicVolume));
+                }
+                else
+                {
+                    File.WriteAllText(output, MidiTextFormat.Format(sequence));
+                }
+                Console.WriteLine("written to  : " + output);
+            }
+            return 0;
+        }
+
+        private static int DumpTree(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            StringBuilder text = new StringBuilder();
+
+            foreach (ModuleDefinition module in assembly.Modules)
+            {
+                text.AppendLine(module.Name);
+                text.AppendLine("  References:");
+
+                HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (AssemblyNameReference reference in module.AssemblyReferences)
+                {
+                    if (!seen.Add(reference.FullName))
+                    {
+                        continue;
+                    }
+
+                    string resolved = null;
+                    try
+                    {
+                        resolved = AssemblyResolver.Resolve(reference.FullName, null);
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    text.Append("    ").Append(reference.Name).Append(' ').Append(reference.Version);
+                    text.Append(resolved == null ? "   [not found]" : "   -> " + resolved);
+                    text.AppendLine();
+
+                    if (resolved != null && options.Deep)
+                    {
+                        try
+                        {
+                            LoadedAssembly loaded = AssemblyLoader.Load(resolved);
+                            foreach (TypeDefinition type in loaded.Assembly.MainModule.Types)
+                            {
+                                if (!string.IsNullOrEmpty(type.Namespace) && type.Name != "<Module>")
+                                {
+                                    text.Append("      ").AppendLine(type.FullName);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            text.Append("      (cannot read: ").Append(ex.Message).AppendLine(")");
+                        }
+                    }
+                }
+
+                text.AppendLine("  Namespaces:");
+                foreach (TypeDefinition type in module.Types)
+                {
+                    if (type.Name == "<Module>")
+                    {
+                        continue;
+                    }
+                    text.Append("    ").Append(type.FullName).Append("  (").Append(type.Methods.Count).Append(" methods, ")
+                        .Append(type.Fields.Count).Append(" fields)").AppendLine();
+                }
+            }
+
+            Console.Write(text.ToString());
             return 0;
         }
 
@@ -290,16 +512,13 @@ namespace ILXP
 
         private static int DisassembleX86(Options options)
         {
-            if (!BeaEngine.IsAvailable)
-            {
-                Console.Error.WriteLine("error: BeaEngine.dll is not available (it is a 32-bit native library).");
-                return 2;
-            }
-
             byte[] data = File.ReadAllBytes(options.Input);
             int offset = options.Offset;
             int length = options.Length > 0 ? options.Length : data.Length - offset;
-            string text = BeaEngine.DisassembleBlock(data, offset, length, options.Is64Bit, (ulong)Math.Max(offset, 0));
+
+            // The managed decoder is always used; the native BeaEngine library is only a
+            // fallback for byte sequences the managed decoder does not recognise.
+            string text = ManagedDisassembler.DisassembleBlock(data, offset, length, options.Is64Bit, (ulong)Math.Max(offset, 0));
             if (!string.IsNullOrEmpty(options.Output))
             {
                 File.WriteAllText(options.Output, text);
@@ -332,15 +551,19 @@ namespace ILXP
             Console.WriteLine("  ILXP                                     start the GUI");
             Console.WriteLine("  ILXP --version                           print the version");
             Console.WriteLine("  ILXP --list <assembly>                   list types in an assembly");
+            Console.WriteLine("  ILXP --tree <assembly> [--deep]          list references/namespaces (with resolution)");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
             Console.WriteLine("  ILXP --ilasm <file.il> [--output <assembly>] [--dll] [--x86|--x64]");
             Console.WriteLine("  ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]");
             Console.WriteLine("  ILXP --clean <assembly> [--output <assembly>]   run IL cleanup passes");
+            Console.WriteLine("  ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]");
+            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main]");
             Console.WriteLine();
             Console.WriteLine("Decompile options:");
             Console.WriteLine("  --language <il|cs|vb>   output language (default: il)");
+            Console.WriteLine("  --dialect <id>          output dialect: cs1 cs2 cs3 cs4 cs5 cs6 cs7 cs8 cs9 sd vb");
             Console.WriteLine("  --output <directory>    destination directory");
             Console.WriteLine("  --bodies                also render method bodies (C#/VB)");
             Console.WriteLine();
@@ -361,10 +584,15 @@ namespace ILXP
             public bool Bodies { get; private set; }
             public int Offset { get; private set; }
             public int Length { get; private set; }
+            public float MusicVolume { get; private set; }
+            public string Window { get; private set; }
+            public string Dialect { get; private set; }
+            public bool Deep { get; private set; }
+            public bool UseNativeTools { get; private set; }
 
             public static Options Parse(string[] args)
             {
-                Options options = new Options { Language = "il" };
+                Options options = new Options { Language = "il", MusicVolume = 0.55f };
 
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -407,8 +635,32 @@ namespace ILXP
                             options.Command = "clean";
                             options.Input = Next(args, ref i, argument);
                             break;
+                        case "--music":
+                            options.Command = "music";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--screenshot":
+                            options.Command = "screenshot";
+                            options.Output = Next(args, ref i, argument);
+                            break;
+                        case "--window":
+                            options.Window = Next(args, ref i, argument);
+                            break;
+                        case "--volume":
+                            options.MusicVolume = float.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
+                            break;
                         case "--bytes":
                             options.KeepBytes = true;
+                            break;
+                        case "--tree":
+                            options.Command = "tree";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--deep":
+                            options.Deep = true;
+                            break;
+                        case "--native":
+                            options.UseNativeTools = true;
                             break;
                         case "--bodies":
                             options.Bodies = true;
@@ -430,6 +682,9 @@ namespace ILXP
                             break;
                         case "--language":
                             options.Language = Next(args, ref i, argument).ToLowerInvariant();
+                            break;
+                        case "--dialect":
+                            options.Dialect = Next(args, ref i, argument);
                             break;
                         case "--output":
                         case "-o":

@@ -42,9 +42,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
+      The native tools are no longer required: ILXP ships managed replacements
+      (ManagedIlDisassembler, ManagedIlAssembler, ManagedDisassembler). They are only
+      used when the "native" switch is passed explicitly, and are copied to a subfolder
+      so that the default build does not depend on them.
+    -->
     <Content Include="..\..\native\**\*">
       <Link>native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
     </Content>
   </ItemGroup>
 
@@ -57,6 +64,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppIcon.ico">
       <LogicalName>ILXP.Resources.AppIcon.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Music\Tracks\*.txt">
+      <LogicalName>ILXP.Music.Tracks.%(Filename)%(Extension)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 

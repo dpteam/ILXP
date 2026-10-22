@@ -1,0 +1,5831 @@
+Format: 0
+Tracks: 1
+TicksPerQuarterNote: 70
+
+[Track]
+0	PC	Ch:0	Prog:30
+0	CC	Ch:0	Num:7	Val:100
+0	CC	Ch:0	Num:10	Val:24
+0	CC	Ch:0	Num:7	Val:100
+0	CC	Ch:0	Num:10	Val:24
+0	PC	Ch:1	Prog:29
+0	CC	Ch:1	Num:7	Val:100
+0	CC	Ch:1	Num:10	Val:104
+0	CC	Ch:1	Num:7	Val:100
+0	CC	Ch:1	Num:10	Val:104
+0	PC	Ch:2	Prog:34
+0	CC	Ch:2	Num:7	Val:100
+0	CC	Ch:2	Num:10	Val:64
+0	NoteOn	Ch:2	N:40	V:120
+0	PC	Ch:9	Prog:0
+0	CC	Ch:9	Num:7	Val:100
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:115
+0	NoteOn	Ch:9	N:41	V:120
+0	NoteOn	Ch:1	N:40	V:108
+6	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:2	N:40	V:0
+4	NoteOff	Ch:9	N:36	V:0
+2	NoteOn	Ch:1	N:40	V:114
+1	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:41	V:0
+17	NoteOn	Ch:1	N:52	V:114
+3	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:110
+19	NoteOn	Ch:1	N:50	V:111
+2	NoteOff	Ch:1	N:40	V:0
+15	NoteOff	Ch:1	N:50	V:0
+2	NoteOn	Ch:1	N:40	V:104
+6	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:1	N:48	V:116
+0	NoteOff	Ch:1	N:40	V:0
+18	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:108
+6	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:110
+19	NoteOn	Ch:1	N:46	V:110
+2	NoteOff	Ch:1	N:40	V:0
+17	NoteOff	Ch:1	N:46	V:0
+0	NoteOn	Ch:1	N:40	V:110
+8	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:1	N:40	V:111
+20	NoteOn	Ch:1	N:47	V:110
+18	NoteOff	Ch:1	N:47	V:0
+1	NoteOn	Ch:1	N:48	V:117
+13	NoteOff	Ch:1	N:40	V:0
+4	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:2	N:40	V:127
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+1	NoteOn	Ch:1	N:40	V:111
+4	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:41	V:0
+2	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:2	N:40	V:0
+1	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:1	N:52	V:114
+4	NoteOff	Ch:1	N:40	V:0
+13	NoteOff	Ch:1	N:52	V:0
+2	NoteOn	Ch:1	N:40	V:106
+6	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:108
+19	NoteOn	Ch:1	N:50	V:106
+3	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+6	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:106
+19	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:1	N:48	V:117
+16	NoteOff	Ch:1	N:48	V:0
+4	NoteOn	Ch:1	N:40	V:111
+7	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:1	N:40	V:114
+19	NoteOn	Ch:1	N:46	V:114
+7	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:1	Val:8192
+1	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:8448
+10	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:10240
+2	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:1	Val:8192
+11	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:9856
+1	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:1	Val:9856
+2	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:1	Val:9728
+0	NoteOn	Ch:2	N:40	V:127
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+1	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:1	N:40	V:108
+3	NoteOff	Ch:1	N:46	V:0
+4	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:9	N:40	V:0
+3	NoteOn	Ch:1	N:40	V:107
+19	NoteOn	Ch:1	N:52	V:113
+9	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:40	V:105
+7	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:1	N:50	V:110
+3	NoteOff	Ch:1	N:40	V:0
+16	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:1	N:50	V:0
+8	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:1	N:40	V:114
+19	NoteOn	Ch:1	N:48	V:118
+1	NoteOff	Ch:1	N:40	V:0
+17	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:106
+6	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:108
+19	NoteOn	Ch:1	N:46	V:115
+1	NoteOff	Ch:1	N:40	V:0
+18	NoteOn	Ch:1	N:40	V:111
+3	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:1	N:47	V:110
+19	NoteOff	Ch:1	N:47	V:0
+1	NoteOn	Ch:1	N:48	V:111
+10	NoteOff	Ch:1	N:40	V:0
+8	NoteOn	Ch:2	N:40	V:127
+0	NoteOn	Ch:9	N:36	V:119
+0	NoteOn	Ch:9	N:40	V:119
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOn	Ch:1	N:40	V:108
+19	NoteOn	Ch:1	N:52	V:117
+14	NoteOff	Ch:1	N:40	V:0
+5	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:1	N:52	V:0
+5	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:1	N:40	V:108
+19	NoteOn	Ch:1	N:50	V:110
+5	NoteOff	Ch:1	N:40	V:0
+14	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+6	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:1	N:40	V:115
+19	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:1	N:48	V:117
+19	NoteOn	Ch:1	N:40	V:111
+7	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:1	N:48	V:0
+10	NoteOn	Ch:1	N:40	V:114
+19	NoteOn	Ch:1	N:46	V:114
+7	PitchBend	Ch:1	Val:7936
+2	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:8448
+10	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:1	Val:8192
+11	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:1	Val:9856
+3	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:1	Val:9728
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:122
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:71
+0	NoteOn	Ch:9	N:57	V:61
+1	PitchBend	Ch:1	Val:8192
+0	NoteOff	Ch:1	N:46	V:0
+0	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:57	V:0
+1	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:41	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+9	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+6	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+4	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:1	N:52	V:114
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+15	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:1	N:40	V:110
+19	NoteOn	Ch:0	N:50	V:111
+1	NoteOn	Ch:1	N:50	V:111
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+14	NoteOff	Ch:0	N:50	V:0
+1	NoteOff	Ch:1	N:50	V:0
+1	NoteOn	Ch:0	N:40	V:104
+1	NoteOn	Ch:1	N:40	V:104
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:48	V:116
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOn	Ch:1	N:48	V:116
+0	NoteOff	Ch:1	N:40	V:0
+17	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+1	NoteOn	Ch:1	N:40	V:110
+18	NoteOn	Ch:0	N:46	V:110
+1	NoteOn	Ch:1	N:46	V:110
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:0	N:46	V:0
+0	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:46	V:0
+1	NoteOn	Ch:1	N:40	V:110
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:1	N:47	V:110
+18	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:117
+0	NoteOff	Ch:1	N:47	V:0
+0	NoteOn	Ch:1	N:48	V:117
+13	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+4	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:1	N:48	V:0
+2	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:125
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:70
+0	NoteOn	Ch:9	N:57	V:64
+1	NoteOn	Ch:1	N:40	V:111
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:57	V:0
+0	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:41	V:0
+5	NoteOn	Ch:0	N:40	V:111
+0	NoteOff	Ch:2	N:40	V:0
+1	NoteOn	Ch:1	N:40	V:111
+8	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+7	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+3	NoteOn	Ch:0	N:52	V:114
+1	NoteOn	Ch:1	N:52	V:114
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:0	N:50	V:106
+1	NoteOn	Ch:1	N:50	V:106
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+15	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+19	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:1	N:48	V:117
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+14	NoteOff	Ch:0	N:48	V:0
+1	NoteOff	Ch:1	N:48	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+7	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:1	N:40	V:114
+19	NoteOn	Ch:0	N:46	V:114
+1	NoteOn	Ch:1	N:46	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+2	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+10	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+11	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+13	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+3	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+11	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+0	PitchBend	Ch:1	Val:9344
+1	NoteOff	Ch:1	N:40	V:0
+0	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+0	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:125
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:74
+0	NoteOn	Ch:9	N:57	V:56
+1	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:57	V:0
+1	NoteOff	Ch:9	N:49	V:0
+3	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOn	Ch:0	N:40	V:107
+1	NoteOn	Ch:1	N:40	V:107
+1	NoteOff	Ch:2	N:40	V:0
+8	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+6	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+3	NoteOn	Ch:0	N:52	V:113
+1	NoteOn	Ch:1	N:52	V:113
+8	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:105
+0	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:40	V:105
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:1	N:50	V:110
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+16	NoteOn	Ch:0	N:40	V:111
+0	NoteOff	Ch:0	N:50	V:0
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:1	N:50	V:0
+7	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:48	V:118
+1	NoteOn	Ch:1	N:48	V:118
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:106
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:0	N:46	V:115
+1	NoteOn	Ch:1	N:46	V:115
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+17	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:46	V:0
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:1	N:47	V:110
+18	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:111
+0	NoteOff	Ch:1	N:47	V:0
+0	NoteOn	Ch:1	N:48	V:111
+10	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:116
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:74
+0	NoteOn	Ch:9	N:57	V:68
+0	NoteOff	Ch:1	N:48	V:0
+0	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:57	V:0
+2	NoteOff	Ch:9	N:49	V:0
+1	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:9	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+6	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+7	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+3	NoteOn	Ch:0	N:52	V:117
+1	NoteOn	Ch:1	N:52	V:117
+13	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:0	N:50	V:110
+1	NoteOn	Ch:1	N:50	V:110
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+13	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:115
+1	NoteOn	Ch:1	N:40	V:115
+11	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOn	Ch:0	N:63	V:112
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOn	Ch:9	N:40	V:90
+0	NoteOn	Ch:9	N:41	V:91
+1	NoteOn	Ch:1	N:66	V:112
+8	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:60	V:105
+1	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:64	V:105
+9	NoteOff	Ch:0	N:60	V:0
+0	NoteOn	Ch:0	N:59	V:112
+0	NoteOn	Ch:9	N:36	V:85
+0	NoteOn	Ch:9	N:40	V:81
+0	NoteOn	Ch:9	N:41	V:93
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:63	V:112
+7	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:63	V:103
+1	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:66	V:103
+9	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:66	V:111
+0	NoteOn	Ch:9	N:36	V:88
+0	NoteOn	Ch:9	N:40	V:88
+0	NoteOn	Ch:9	N:41	V:90
+0	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:69	V:111
+9	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:64	V:102
+1	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:67	V:102
+9	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:63	V:113
+0	NoteOn	Ch:9	N:36	V:88
+0	NoteOn	Ch:9	N:40	V:73
+0	NoteOn	Ch:9	N:41	V:91
+0	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:66	V:113
+8	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:59	V:103
+1	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:63	V:103
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:63	V:111
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOn	Ch:9	N:40	V:88
+0	NoteOn	Ch:9	N:41	V:88
+1	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:66	V:111
+7	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:64	V:101
+1	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:67	V:101
+9	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:66	V:112
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOn	Ch:9	N:40	V:82
+0	NoteOn	Ch:9	N:41	V:87
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:69	V:112
+8	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:67	V:103
+1	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:71	V:103
+9	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:66	V:110
+0	NoteOn	Ch:9	N:36	V:91
+0	NoteOn	Ch:9	N:40	V:91
+0	NoteOn	Ch:9	N:41	V:93
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:69	V:110
+7	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:64	V:100
+0	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:67	V:100
+9	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:63	V:113
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOn	Ch:9	N:40	V:90
+0	NoteOn	Ch:9	N:41	V:93
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:66	V:113
+8	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:59	V:103
+0	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:63	V:103
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:118
+1	NoteOn	Ch:9	N:46	V:72
+0	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+3	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:118
+1	NoteOn	Ch:1	N:52	V:114
+1	NoteOn	Ch:9	N:46	V:85
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:40	V:110
+1	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:40	V:110
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:1	N:40	V:110
+2	NoteOn	Ch:9	N:46	V:81
+8	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:50	V:111
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:1	N:50	V:111
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:50	V:0
+0	NoteOff	Ch:1	N:50	V:0
+2	NoteOn	Ch:0	N:40	V:104
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:1	N:40	V:104
+2	NoteOn	Ch:9	N:46	V:81
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:48	V:116
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOn	Ch:1	N:48	V:116
+0	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:9	N:46	V:75
+14	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+0	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+1	NoteOn	Ch:1	N:40	V:110
+2	NoteOn	Ch:9	N:46	V:72
+10	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+2	NoteOn	Ch:0	N:46	V:110
+1	NoteOn	Ch:1	N:46	V:110
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:0	N:46	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:46	V:0
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:110
+1	NoteOn	Ch:9	N:46	V:75
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:40	V:111
+11	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:47	V:110
+1	NoteOn	Ch:9	N:46	V:78
+10	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:117
+0	NoteOff	Ch:1	N:47	V:0
+0	NoteOn	Ch:1	N:48	V:117
+12	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:0	N:48	V:0
+1	NoteOff	Ch:1	N:48	V:0
+2	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:111
+1	NoteOn	Ch:9	N:46	V:68
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:52	V:114
+1	NoteOn	Ch:9	N:46	V:72
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:108
+3	NoteOn	Ch:9	N:46	V:65
+6	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+2	NoteOn	Ch:0	N:50	V:106
+0	NoteOn	Ch:9	N:36	V:117
+1	NoteOn	Ch:1	N:50	V:106
+2	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+2	NoteOn	Ch:9	N:46	V:75
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+18	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:46	V:75
+1	NoteOn	Ch:1	N:48	V:117
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:1	N:48	V:0
+2	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:46	V:69
+0	NoteOn	Ch:1	N:40	V:114
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:46	V:114
+0	NoteOn	Ch:1	N:46	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:7808
+0	PitchBend	Ch:1	Val:7808
+2	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	NoteOn	Ch:9	N:46	V:73
+1	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:121
+8	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:9	N:46	V:0
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+2	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	NoteOff	Ch:2	N:40	V:0
+0	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	NoteOn	Ch:9	N:36	V:120
+11	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+0	NoteOn	Ch:2	N:40	V:71
+0	NoteOn	Ch:9	N:40	V:122
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+0	NoteOn	Ch:9	N:46	V:71
+11	NoteOff	Ch:9	N:40	V:0
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	NoteOff	Ch:9	N:46	V:0
+2	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+0	NoteOff	Ch:2	N:40	V:0
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+0	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+0	NoteOn	Ch:9	N:46	V:75
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+0	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:77
+0	NoteOn	Ch:9	N:36	V:122
+1	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOn	Ch:0	N:40	V:107
+1	NoteOn	Ch:1	N:40	V:107
+18	NoteOn	Ch:9	N:46	V:69
+0	NoteOn	Ch:0	N:52	V:113
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:52	V:113
+8	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:40	V:105
+1	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:40	V:105
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:9	N:46	V:79
+0	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:40	V:111
+10	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:115
+0	NoteOn	Ch:1	N:50	V:110
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:9	N:46	V:71
+1	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:1	N:50	V:0
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:1	N:40	V:114
+19	NoteOn	Ch:0	N:48	V:118
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:48	V:118
+0	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:9	N:46	V:65
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:106
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:40	V:108
+0	NoteOn	Ch:9	N:46	V:75
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:46	V:115
+1	NoteOn	Ch:1	N:46	V:115
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+17	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:46	V:72
+1	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:46	V:0
+0	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:2	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:47	V:110
+1	NoteOn	Ch:9	N:46	V:71
+11	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:0	N:47	V:0
+0	NoteOn	Ch:0	N:48	V:111
+1	NoteOff	Ch:1	N:47	V:0
+0	NoteOn	Ch:1	N:48	V:111
+10	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:1	N:48	V:0
+0	NoteOn	Ch:9	N:46	V:72
+0	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:9	N:46	V:73
+1	NoteOn	Ch:0	N:52	V:117
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:1	N:52	V:117
+11	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+4	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:9	N:46	V:71
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:40	V:108
+9	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:50	V:110
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:40	V:120
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+0	NoteOn	Ch:9	N:46	V:73
+5	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:115
+1	NoteOn	Ch:1	N:40	V:115
+10	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOn	Ch:0	N:67	V:112
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:36	V:82
+1	NoteOn	Ch:1	N:71	V:112
+0	NoteOn	Ch:9	N:50	V:91
+1	NoteOn	Ch:9	N:40	V:82
+3	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:50	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:64	V:105
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:105
+6	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:59	V:112
+0	NoteOn	Ch:9	N:36	V:92
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:64	V:112
+5	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:64	V:103
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:67	V:103
+8	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:67	V:111
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:36	V:92
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:71	V:111
+1	NoteOn	Ch:9	N:40	V:85
+1	NoteOn	Ch:9	N:47	V:85
+3	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:47	V:0
+1	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:64	V:102
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:102
+5	NoteOff	Ch:2	N:40	V:0
+4	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:67	V:113
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:71	V:113
+6	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:71	V:103
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:76	V:103
+9	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:67	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:87
+0	NoteOff	Ch:1	N:76	V:0
+0	NoteOn	Ch:1	N:71	V:111
+3	NoteOn	Ch:9	N:45	V:93
+1	NoteOn	Ch:9	N:40	V:91
+2	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:45	V:0
+0	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:64	V:101
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:101
+5	NoteOff	Ch:2	N:40	V:0
+4	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:67	V:112
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:71	V:112
+6	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:64	V:103
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:103
+9	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:67	V:110
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:36	V:93
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:71	V:110
+2	NoteOn	Ch:9	N:40	V:90
+1	NoteOn	Ch:9	N:41	V:73
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:71	V:100
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:76	V:100
+5	NoteOff	Ch:2	N:40	V:0
+4	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:76	V:113
+0	NoteOn	Ch:9	N:36	V:93
+1	NoteOff	Ch:1	N:76	V:0
+0	NoteOn	Ch:1	N:79	V:113
+1	NoteOn	Ch:9	N:40	V:91
+0	NoteOn	Ch:9	N:41	V:88
+4	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:0	N:76	V:0
+0	NoteOn	Ch:0	N:79	V:103
+1	NoteOff	Ch:1	N:79	V:0
+0	NoteOn	Ch:1	N:83	V:103
+9	NoteOff	Ch:0	N:79	V:0
+0	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:9	N:51	V:112
+1	NoteOff	Ch:1	N:83	V:0
+0	NoteOn	Ch:1	N:45	V:108
+4	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+6	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:9	N:36	V:0
+3	NoteOn	Ch:0	N:45	V:114
+1	NoteOn	Ch:1	N:45	V:114
+18	NoteOn	Ch:0	N:57	V:114
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:118
+0	NoteOn	Ch:9	N:51	V:116
+1	NoteOn	Ch:1	N:57	V:114
+2	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+6	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:0	N:57	V:0
+0	NoteOn	Ch:0	N:45	V:110
+0	NoteOff	Ch:1	N:57	V:0
+1	NoteOn	Ch:1	N:45	V:110
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:110
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:51	V:116
+1	NoteOn	Ch:1	N:45	V:110
+9	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:55	V:111
+0	NoteOn	Ch:9	N:36	V:118
+1	NoteOn	Ch:1	N:55	V:111
+2	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+9	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:55	V:0
+0	NoteOff	Ch:1	N:55	V:0
+2	NoteOn	Ch:0	N:45	V:104
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:51	V:110
+0	NoteOn	Ch:1	N:45	V:104
+6	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+3	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:1	N:45	V:111
+19	NoteOn	Ch:0	N:53	V:116
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:51	V:117
+0	NoteOff	Ch:0	N:45	V:0
+0	NoteOn	Ch:1	N:53	V:116
+1	NoteOff	Ch:1	N:45	V:0
+11	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:53	V:0
+1	NoteOn	Ch:0	N:45	V:108
+0	NoteOff	Ch:1	N:53	V:0
+1	NoteOn	Ch:1	N:45	V:108
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:110
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:51	V:119
+1	NoteOn	Ch:1	N:45	V:110
+11	NoteOff	Ch:9	N:51	V:0
+0	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:51	V:110
+1	NoteOn	Ch:1	N:51	V:110
+0	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+16	NoteOff	Ch:0	N:51	V:0
+1	NoteOn	Ch:0	N:45	V:110
+0	NoteOff	Ch:1	N:51	V:0
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:51	V:111
+1	NoteOn	Ch:1	N:45	V:110
+7	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+1	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:45	V:111
+11	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:0	N:52	V:110
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:111
+1	NoteOn	Ch:1	N:52	V:110
+11	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:53	V:117
+0	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:1	N:53	V:117
+12	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+3	NoteOff	Ch:0	N:53	V:0
+1	NoteOff	Ch:1	N:53	V:0
+1	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:108
+1	NoteOn	Ch:1	N:45	V:111
+3	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+7	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:1	N:45	V:111
+19	NoteOn	Ch:0	N:57	V:114
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:9	N:51	V:111
+0	NoteOn	Ch:1	N:57	V:114
+4	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+7	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+1	NoteOff	Ch:0	N:57	V:0
+1	NoteOff	Ch:1	N:57	V:0
+1	NoteOn	Ch:0	N:45	V:106
+0	NoteOn	Ch:1	N:45	V:106
+6	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+13	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:51	V:101
+1	NoteOn	Ch:1	N:45	V:108
+9	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:55	V:106
+0	NoteOn	Ch:9	N:36	V:117
+1	NoteOn	Ch:1	N:55	V:106
+1	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+8	NoteOff	Ch:9	N:36	V:0
+8	NoteOff	Ch:0	N:55	V:0
+0	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:112
+0	NoteOff	Ch:1	N:55	V:0
+1	NoteOn	Ch:1	N:45	V:114
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+5	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:106
+1	NoteOn	Ch:1	N:45	V:106
+18	NoteOn	Ch:0	N:53	V:117
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:51	V:105
+1	NoteOn	Ch:1	N:53	V:117
+0	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+10	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:53	V:0
+0	NoteOff	Ch:2	N:33	V:0
+1	NoteOff	Ch:1	N:53	V:0
+2	NoteOn	Ch:0	N:45	V:111
+1	NoteOn	Ch:1	N:45	V:111
+6	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+11	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:51	V:108
+1	NoteOn	Ch:1	N:45	V:114
+11	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:51	V:114
+1	NoteOn	Ch:1	N:51	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:7808
+0	PitchBend	Ch:1	Val:7808
+2	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+2	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:121
+0	NoteOn	Ch:9	N:51	V:117
+7	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	NoteOff	Ch:9	N:36	V:0
+0	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	NoteOff	Ch:9	N:51	V:0
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+2	NoteOff	Ch:2	N:33	V:0
+0	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	NoteOn	Ch:9	N:36	V:120
+11	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	NoteOn	Ch:2	N:33	V:71
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:108
+0	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+10	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:51	V:0
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+2	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+0	NoteOff	Ch:2	N:33	V:0
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:45	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:45	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+0	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:77
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:107
+1	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:1	N:45	V:108
+2	NoteOff	Ch:0	N:51	V:0
+1	NoteOff	Ch:1	N:51	V:0
+2	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+5	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:2	N:33	V:0
+1	NoteOn	Ch:0	N:45	V:107
+1	NoteOn	Ch:1	N:45	V:107
+18	NoteOn	Ch:0	N:57	V:113
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:9	N:51	V:115
+1	NoteOn	Ch:1	N:57	V:113
+7	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+3	NoteOff	Ch:9	N:51	V:0
+0	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+3	NoteOff	Ch:0	N:57	V:0
+0	NoteOn	Ch:0	N:45	V:105
+0	NoteOff	Ch:1	N:57	V:0
+1	NoteOn	Ch:1	N:45	V:105
+6	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:107
+1	NoteOn	Ch:1	N:45	V:111
+10	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:55	V:110
+0	NoteOn	Ch:9	N:36	V:115
+1	NoteOn	Ch:1	N:55	V:110
+2	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+8	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:51	V:114
+1	NoteOff	Ch:0	N:55	V:0
+0	NoteOn	Ch:1	N:45	V:111
+0	NoteOff	Ch:1	N:55	V:0
+7	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:51	V:0
+5	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:1	N:45	V:114
+19	NoteOn	Ch:0	N:53	V:118
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:110
+0	NoteOn	Ch:1	N:53	V:118
+1	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+10	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:53	V:0
+1	NoteOn	Ch:0	N:45	V:106
+0	NoteOff	Ch:1	N:53	V:0
+0	NoteOn	Ch:1	N:45	V:106
+6	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:119
+1	NoteOn	Ch:1	N:45	V:108
+10	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:51	V:115
+1	NoteOn	Ch:1	N:51	V:115
+0	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+17	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:110
+1	NoteOn	Ch:1	N:45	V:111
+1	NoteOff	Ch:0	N:51	V:0
+1	NoteOff	Ch:1	N:51	V:0
+3	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+5	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:45	V:111
+1	NoteOn	Ch:1	N:45	V:111
+18	NoteOn	Ch:0	N:52	V:110
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:110
+1	NoteOn	Ch:1	N:52	V:110
+11	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:53	V:111
+1	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:53	V:111
+10	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+7	NoteOff	Ch:0	N:53	V:0
+0	NoteOn	Ch:0	N:45	V:110
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:51	V:119
+1	NoteOff	Ch:1	N:53	V:0
+0	NoteOn	Ch:1	N:45	V:110
+6	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+4	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:45	V:108
+1	NoteOn	Ch:1	N:45	V:108
+19	NoteOn	Ch:0	N:57	V:117
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:51	V:115
+0	NoteOn	Ch:1	N:57	V:117
+11	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+2	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:1	N:45	V:111
+2	NoteOff	Ch:0	N:57	V:0
+1	NoteOff	Ch:1	N:57	V:0
+3	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:119
+0	NoteOn	Ch:1	N:45	V:108
+10	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:55	V:110
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:55	V:110
+4	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+6	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:55	V:0
+0	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:40	V:120
+0	NoteOn	Ch:9	N:51	V:117
+1	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:1	N:45	V:114
+4	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+6	NoteOff	Ch:9	N:51	V:0
+0	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:115
+1	NoteOn	Ch:1	N:45	V:115
+10	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+7	NoteOn	Ch:0	N:69	V:112
+0	NoteOn	Ch:2	N:33	V:104
+0	NoteOn	Ch:9	N:51	V:113
+1	NoteOn	Ch:1	N:64	V:112
+1	NoteOn	Ch:9	N:40	V:82
+3	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:65	V:105
+0	NoteOn	Ch:9	N:40	V:88
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:62	V:105
+1	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:65	V:0
+0	NoteOn	Ch:0	N:64	V:112
+1	NoteOn	Ch:9	N:36	V:79
+0	NoteOff	Ch:1	N:62	V:0
+0	NoteOn	Ch:1	N:60	V:112
+3	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:103
+0	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:103
+9	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:111
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:40	V:93
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:111
+3	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:60	V:102
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:57	V:102
+5	NoteOff	Ch:2	N:33	V:0
+3	NoteOff	Ch:0	N:60	V:0
+0	NoteOn	Ch:0	N:64	V:113
+1	NoteOn	Ch:9	N:36	V:88
+0	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:60	V:113
+3	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:103
+0	NoteOn	Ch:9	N:36	V:86
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:103
+3	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:72	V:111
+0	NoteOn	Ch:2	N:33	V:92
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:69	V:111
+0	NoteOn	Ch:9	N:40	V:93
+4	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:72	V:0
+0	NoteOn	Ch:0	N:69	V:101
+0	NoteOn	Ch:9	N:40	V:87
+1	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:64	V:101
+4	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:112
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:112
+1	NoteOn	Ch:9	N:36	V:86
+3	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:103
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:103
+0	NoteOn	Ch:9	N:36	V:93
+4	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:110
+0	NoteOn	Ch:2	N:33	V:104
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:110
+1	NoteOn	Ch:9	N:40	V:93
+4	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:100
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:100
+1	NoteOn	Ch:9	N:40	V:88
+4	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:113
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:113
+1	NoteOn	Ch:9	N:36	V:93
+3	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:60	V:103
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:57	V:103
+9	NoteOff	Ch:0	N:60	V:0
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:9	N:46	V:72
+1	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:40	V:108
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:9	N:36	V:0
+4	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:118
+1	NoteOn	Ch:1	N:52	V:114
+0	NoteOn	Ch:9	N:46	V:85
+2	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:1	N:40	V:110
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:110
+1	NoteOn	Ch:9	N:46	V:81
+8	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:50	V:111
+0	NoteOn	Ch:9	N:36	V:118
+1	NoteOn	Ch:1	N:50	V:111
+2	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:50	V:0
+1	NoteOff	Ch:1	N:50	V:0
+1	NoteOn	Ch:0	N:40	V:104
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:40	V:104
+2	NoteOn	Ch:9	N:46	V:81
+4	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:48	V:116
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:1	N:48	V:116
+0	NoteOff	Ch:1	N:40	V:0
+1	NoteOn	Ch:9	N:46	V:75
+13	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOff	Ch:1	N:48	V:0
+0	NoteOn	Ch:1	N:40	V:108
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:1	N:40	V:110
+2	NoteOn	Ch:9	N:46	V:72
+10	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:46	V:110
+1	NoteOn	Ch:1	N:46	V:110
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:0	N:46	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:46	V:0
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:110
+0	NoteOn	Ch:9	N:46	V:75
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:40	V:111
+10	NoteOff	Ch:9	N:36	V:0
+8	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:47	V:110
+1	NoteOn	Ch:9	N:46	V:78
+10	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:117
+0	NoteOff	Ch:1	N:47	V:0
+1	NoteOn	Ch:1	N:48	V:117
+12	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:0	N:48	V:0
+1	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOn	Ch:9	N:46	V:68
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:52	V:114
+1	NoteOn	Ch:9	N:46	V:72
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:106
+0	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:1	N:40	V:108
+4	NoteOn	Ch:9	N:46	V:65
+6	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+2	NoteOn	Ch:0	N:50	V:106
+0	NoteOn	Ch:9	N:36	V:117
+0	NoteOn	Ch:1	N:50	V:106
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+1	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOff	Ch:1	N:50	V:0
+1	NoteOn	Ch:1	N:40	V:114
+2	NoteOn	Ch:9	N:46	V:75
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+18	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:46	V:75
+1	NoteOn	Ch:1	N:48	V:117
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:1	N:48	V:0
+2	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+1	NoteOn	Ch:9	N:46	V:69
+0	NoteOn	Ch:1	N:40	V:114
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:46	V:114
+1	NoteOn	Ch:1	N:46	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+2	NoteOn	Ch:9	N:46	V:73
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:121
+8	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+0	NoteOff	Ch:9	N:46	V:0
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+2	NoteOff	Ch:2	N:40	V:0
+0	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+0	NoteOn	Ch:9	N:36	V:120
+12	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	NoteOn	Ch:2	N:40	V:71
+0	NoteOn	Ch:9	N:40	V:122
+0	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:9	N:46	V:71
+10	NoteOff	Ch:9	N:40	V:0
+2	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	NoteOff	Ch:9	N:46	V:0
+0	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+0	NoteOff	Ch:2	N:40	V:0
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+0	NoteOn	Ch:9	N:46	V:75
+1	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:2	N:40	V:77
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:108
+3	NoteOff	Ch:0	N:46	V:0
+0	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOn	Ch:0	N:40	V:107
+1	NoteOn	Ch:1	N:40	V:107
+17	NoteOn	Ch:9	N:46	V:69
+1	NoteOn	Ch:0	N:52	V:113
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:52	V:113
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+0	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:105
+0	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:1	N:40	V:105
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:9	N:46	V:79
+0	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:40	V:111
+10	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+5	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:115
+1	NoteOn	Ch:1	N:50	V:110
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:9	N:46	V:71
+0	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOff	Ch:0	N:50	V:0
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:1	N:50	V:0
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:48	V:118
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:48	V:118
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:9	N:46	V:65
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:106
+0	NoteOff	Ch:1	N:48	V:0
+0	NoteOn	Ch:1	N:40	V:106
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:1	N:40	V:108
+1	NoteOn	Ch:9	N:46	V:75
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:46	V:115
+0	NoteOn	Ch:1	N:46	V:115
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+18	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:46	V:72
+1	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:2	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:47	V:110
+1	NoteOn	Ch:9	N:46	V:71
+11	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:47	V:0
+0	NoteOn	Ch:0	N:48	V:111
+1	NoteOff	Ch:1	N:47	V:0
+0	NoteOn	Ch:1	N:48	V:111
+10	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+0	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:9	N:46	V:72
+0	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+17	NoteOn	Ch:9	N:46	V:73
+1	NoteOn	Ch:0	N:52	V:117
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:52	V:117
+10	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:9	N:46	V:71
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:108
+10	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:50	V:110
+5	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:40	V:120
+0	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+1	NoteOn	Ch:9	N:46	V:73
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:115
+1	NoteOn	Ch:1	N:40	V:115
+18	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:38	V:85
+0	NoteOn	Ch:9	N:40	V:92
+1	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:1	N:48	V:117
+1	NoteOff	Ch:9	N:38	V:0
+1	NoteOff	Ch:9	N:40	V:0
+14	NoteOff	Ch:2	N:40	V:0
+0	NoteOn	Ch:9	N:36	V:86
+2	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:1	N:48	V:0
+7	NoteOn	Ch:9	N:38	V:82
+1	NoteOn	Ch:9	N:40	V:92
+1	NoteOff	Ch:9	N:38	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:98
+1	NoteOn	Ch:1	N:40	V:114
+0	NoteOff	Ch:9	N:40	V:0
+14	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:9	N:36	V:91
+1	NoteOn	Ch:0	N:46	V:114
+1	NoteOn	Ch:1	N:46	V:114
+1	NoteOff	Ch:9	N:36	V:0
+6	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:8448
+0	PitchBend	Ch:1	Val:8448
+2	NoteOn	Ch:9	N:38	V:79
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:88
+2	NoteOff	Ch:9	N:38	V:0
+1	NoteOff	Ch:9	N:40	V:0
+5	NoteOn	Ch:9	N:38	V:79
+0	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+0	NoteOn	Ch:9	N:40	V:90
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+0	NoteOff	Ch:9	N:38	V:0
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	NoteOff	Ch:9	N:40	V:0
+0	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	NoteOff	Ch:2	N:40	V:0
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+0	NoteOn	Ch:9	N:36	V:93
+3	NoteOff	Ch:9	N:36	V:0
+8	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+0	NoteOn	Ch:9	N:38	V:87
+1	NoteOn	Ch:9	N:40	V:93
+0	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+0	NoteOn	Ch:2	N:40	V:104
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+0	NoteOff	Ch:9	N:38	V:0
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+0	NoteOff	Ch:9	N:40	V:0
+12	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	NoteOff	Ch:2	N:40	V:0
+0	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	NoteOn	Ch:9	N:36	V:93
+0	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+0	NoteOff	Ch:9	N:36	V:0
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8192
+0	NoteOff	Ch:0	N:46	V:0
+0	NoteOn	Ch:0	N:49	V:108
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:2	N:37	V:110
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:9	N:57	V:79
+0	NoteOff	Ch:1	N:46	V:0
+0	NoteOn	Ch:1	N:49	V:108
+5	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+6	NoteOff	Ch:9	N:57	V:0
+3	NoteOff	Ch:9	N:36	V:0
+4	NoteOn	Ch:0	N:49	V:114
+0	NoteOff	Ch:2	N:37	V:0
+0	NoteOn	Ch:1	N:49	V:114
+18	NoteOn	Ch:9	N:53	V:123
+1	NoteOn	Ch:0	N:61	V:114
+0	NoteOn	Ch:2	N:37	V:98
+0	NoteOn	Ch:9	N:40	V:118
+1	NoteOn	Ch:1	N:61	V:114
+1	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+1	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:61	V:0
+1	NoteOn	Ch:0	N:49	V:110
+0	NoteOff	Ch:1	N:61	V:0
+1	NoteOn	Ch:1	N:49	V:110
+4	NoteOff	Ch:2	N:37	V:0
+1	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+11	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:49	V:110
+0	NoteOn	Ch:2	N:37	V:89
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:49	V:110
+2	NoteOff	Ch:9	N:53	V:0
+7	NoteOff	Ch:9	N:36	V:0
+9	NoteOn	Ch:0	N:59	V:111
+0	NoteOn	Ch:9	N:36	V:118
+1	NoteOn	Ch:1	N:59	V:111
+1	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+2	NoteOff	Ch:2	N:37	V:0
+8	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:59	V:0
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:9	N:53	V:122
+1	NoteOn	Ch:0	N:49	V:104
+0	NoteOn	Ch:2	N:37	V:104
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:49	V:104
+2	NoteOff	Ch:9	N:53	V:0
+4	NoteOff	Ch:0	N:49	V:0
+0	NoteOff	Ch:1	N:49	V:0
+5	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:49	V:111
+1	NoteOn	Ch:1	N:49	V:111
+2	NoteOff	Ch:2	N:37	V:0
+16	NoteOn	Ch:9	N:53	V:124
+0	NoteOn	Ch:0	N:57	V:116
+0	NoteOn	Ch:2	N:37	V:114
+0	NoteOn	Ch:9	N:36	V:123
+1	NoteOff	Ch:0	N:49	V:0
+0	NoteOn	Ch:1	N:57	V:116
+0	NoteOff	Ch:1	N:49	V:0
+3	NoteOff	Ch:9	N:53	V:0
+11	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:57	V:0
+0	NoteOn	Ch:0	N:49	V:108
+0	NoteOff	Ch:1	N:57	V:0
+1	NoteOn	Ch:1	N:49	V:108
+2	NoteOff	Ch:2	N:37	V:0
+4	NoteOff	Ch:0	N:49	V:0
+0	NoteOff	Ch:1	N:49	V:0
+13	NoteOn	Ch:0	N:49	V:110
+0	NoteOn	Ch:2	N:37	V:104
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:53	V:114
+0	NoteOn	Ch:1	N:49	V:110
+4	NoteOff	Ch:9	N:53	V:0
+8	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:55	V:110
+0	NoteOn	Ch:1	N:55	V:110
+1	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+2	NoteOff	Ch:2	N:37	V:0
+14	NoteOff	Ch:0	N:55	V:0
+1	NoteOn	Ch:0	N:49	V:110
+0	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:2	N:37	V:104
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:53	V:120
+0	NoteOn	Ch:1	N:49	V:110
+4	NoteOff	Ch:9	N:53	V:0
+4	NoteOff	Ch:0	N:49	V:0
+0	NoteOff	Ch:1	N:49	V:0
+2	NoteOff	Ch:9	N:36	V:0
+9	NoteOn	Ch:0	N:49	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:49	V:111
+4	NoteOff	Ch:2	N:37	V:0
+6	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:9	N:53	V:124
+1	NoteOn	Ch:0	N:56	V:110
+0	NoteOn	Ch:2	N:37	V:98
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:56	V:110
+2	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:56	V:0
+1	NoteOn	Ch:0	N:57	V:117
+0	NoteOff	Ch:1	N:56	V:0
+1	NoteOn	Ch:1	N:57	V:117
+3	NoteOff	Ch:2	N:37	V:0
+9	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+3	NoteOff	Ch:0	N:57	V:0
+1	NoteOff	Ch:1	N:57	V:0
+1	NoteOn	Ch:0	N:47	V:111
+0	NoteOn	Ch:2	N:35	V:77
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:49	V:79
+1	NoteOn	Ch:1	N:47	V:111
+3	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+9	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:49	V:0
+3	NoteOn	Ch:0	N:47	V:111
+1	NoteOn	Ch:1	N:47	V:111
+5	NoteOff	Ch:2	N:35	V:0
+12	NoteOn	Ch:9	N:53	V:124
+1	NoteOn	Ch:0	N:59	V:114
+0	NoteOn	Ch:2	N:35	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:59	V:114
+3	NoteOff	Ch:9	N:53	V:0
+0	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+8	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:59	V:0
+0	NoteOff	Ch:1	N:59	V:0
+1	NoteOn	Ch:0	N:47	V:106
+1	NoteOn	Ch:1	N:47	V:106
+4	NoteOff	Ch:2	N:35	V:0
+1	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+11	NoteOn	Ch:9	N:53	V:119
+1	NoteOn	Ch:0	N:47	V:108
+0	NoteOn	Ch:2	N:35	V:104
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:47	V:108
+3	NoteOff	Ch:9	N:53	V:0
+6	NoteOff	Ch:9	N:36	V:0
+10	NoteOn	Ch:0	N:57	V:106
+0	NoteOn	Ch:9	N:36	V:117
+0	NoteOn	Ch:1	N:57	V:106
+2	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+0	NoteOff	Ch:2	N:35	V:0
+8	NoteOff	Ch:9	N:36	V:0
+6	NoteOn	Ch:9	N:53	V:124
+1	NoteOff	Ch:0	N:57	V:0
+1	NoteOn	Ch:0	N:47	V:114
+0	NoteOn	Ch:2	N:35	V:86
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:47	V:114
+2	NoteOff	Ch:9	N:53	V:0
+4	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+5	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:47	V:106
+0	NoteOn	Ch:1	N:47	V:106
+2	NoteOff	Ch:2	N:35	V:0
+16	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:55	V:117
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:36	V:123
+1	NoteOn	Ch:1	N:55	V:117
+0	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+2	NoteOff	Ch:9	N:53	V:0
+11	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:55	V:0
+0	NoteOff	Ch:1	N:55	V:0
+3	NoteOn	Ch:0	N:46	V:111
+1	NoteOn	Ch:1	N:46	V:111
+3	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:1	N:46	V:0
+1	NoteOff	Ch:0	N:46	V:0
+10	NoteOn	Ch:9	N:53	V:125
+0	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:40	V:117
+1	NoteOn	Ch:1	N:45	V:114
+3	NoteOff	Ch:9	N:53	V:0
+8	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:53	V:114
+1	NoteOn	Ch:1	N:53	V:114
+3	NoteOff	Ch:2	N:33	V:0
+4	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:8448
+0	PitchBend	Ch:1	Val:8448
+2	NoteOn	Ch:9	N:53	V:125
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:121
+4	NoteOff	Ch:9	N:53	V:0
+4	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+2	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:9	N:36	V:120
+4	NoteOff	Ch:2	N:33	V:0
+7	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:53	V:125
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+3	NoteOff	Ch:9	N:53	V:0
+7	NoteOff	Ch:9	N:40	V:0
+2	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	NoteOff	Ch:2	N:33	V:0
+11	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:45	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:45	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:2	N:40	V:80
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:57	V:79
+0	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:0	N:53	V:0
+1	NoteOff	Ch:1	N:53	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:57	V:0
+3	NoteOff	Ch:9	N:36	V:0
+4	NoteOn	Ch:0	N:40	V:107
+0	NoteOn	Ch:1	N:40	V:107
+3	NoteOff	Ch:2	N:40	V:0
+15	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:52	V:113
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:1	N:52	V:113
+3	NoteOff	Ch:9	N:53	V:0
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:105
+0	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:1	N:40	V:105
+5	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:1	N:40	V:111
+4	NoteOff	Ch:9	N:53	V:0
+5	NoteOff	Ch:9	N:36	V:0
+9	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:115
+1	NoteOn	Ch:1	N:50	V:110
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+0	NoteOff	Ch:2	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+5	NoteOn	Ch:9	N:53	V:124
+2	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOff	Ch:0	N:50	V:0
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:1	N:50	V:0
+2	NoteOff	Ch:9	N:53	V:0
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:9	N:40	V:0
+8	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+5	NoteOff	Ch:2	N:40	V:0
+12	NoteOn	Ch:9	N:53	V:124
+1	NoteOn	Ch:0	N:48	V:118
+0	NoteOn	Ch:2	N:40	V:77
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:48	V:118
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:9	N:53	V:0
+10	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:48	V:0
+0	NoteOn	Ch:0	N:40	V:106
+1	NoteOff	Ch:1	N:48	V:0
+0	NoteOn	Ch:1	N:40	V:106
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:74
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:40	V:108
+3	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:46	V:115
+0	NoteOn	Ch:1	N:46	V:115
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:2	N:40	V:0
+15	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:46	V:0
+1	NoteOff	Ch:9	N:53	V:0
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+5	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+5	NoteOff	Ch:2	N:40	V:0
+14	NoteOn	Ch:9	N:53	V:119
+0	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:47	V:110
+2	NoteOff	Ch:9	N:53	V:0
+10	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:47	V:0
+0	NoteOn	Ch:0	N:48	V:111
+0	NoteOff	Ch:1	N:47	V:0
+1	NoteOn	Ch:1	N:48	V:111
+4	NoteOff	Ch:2	N:40	V:0
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:1	N:48	V:0
+0	NoteOn	Ch:9	N:53	V:124
+1	NoteOn	Ch:1	N:40	V:110
+3	NoteOff	Ch:9	N:53	V:0
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+5	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:2	N:40	V:0
+16	NoteOn	Ch:0	N:52	V:117
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:52	V:117
+0	NoteOn	Ch:9	N:53	V:125
+4	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:52	V:0
+0	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:1	N:52	V:0
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:9	N:53	V:124
+0	NoteOn	Ch:1	N:40	V:108
+4	NoteOff	Ch:9	N:53	V:0
+6	NoteOff	Ch:9	N:36	V:0
+8	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:50	V:110
+4	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+6	NoteOn	Ch:9	N:53	V:125
+1	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:40	V:120
+0	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+3	NoteOff	Ch:9	N:53	V:0
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+8	NoteOn	Ch:0	N:40	V:115
+0	NoteOn	Ch:1	N:40	V:115
+8	NoteOff	Ch:2	N:40	V:0
+11	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:0	N:67	V:112
+0	NoteOn	Ch:2	N:28	V:104
+0	NoteOn	Ch:9	N:36	V:99
+0	NoteOn	Ch:9	N:38	V:116
+0	NoteOn	Ch:9	N:53	V:125
+0	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:1	N:64	V:112
+0	NoteOn	Ch:9	N:40	V:122
+3	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:38	V:0
+0	NoteOff	Ch:9	N:53	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:71	V:105
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:67	V:105
+9	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:64	V:112
+0	NoteOff	Ch:2	N:28	V:0
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:59	V:112
+8	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:59	V:103
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:55	V:103
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:67	V:111
+1	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:1	N:64	V:111
+8	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:64	V:102
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:59	V:102
+9	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:71	V:113
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:67	V:113
+9	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:67	V:103
+0	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:64	V:103
+9	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:71	V:111
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:67	V:111
+9	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:67	V:101
+0	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:64	V:101
+9	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:64	V:112
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:59	V:112
+9	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:59	V:103
+0	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:55	V:103
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:67	V:110
+1	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:1	N:64	V:110
+9	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:71	V:100
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:67	V:100
+8	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:76	V:113
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:71	V:113
+9	NoteOff	Ch:0	N:76	V:0
+0	NoteOn	Ch:0	N:79	V:103
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:76	V:103
+8	NoteOff	Ch:0	N:79	V:0
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:122
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:71
+0	NoteOn	Ch:9	N:57	V:61
+1	NoteOff	Ch:1	N:76	V:0
+0	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:57	V:0
+0	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:41	V:0
+2	NoteOff	Ch:2	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:1	N:40	V:114
+9	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+6	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+4	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:1	N:52	V:114
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+15	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:110
+1	NoteOn	Ch:1	N:40	V:110
+18	NoteOn	Ch:0	N:50	V:111
+1	NoteOn	Ch:1	N:50	V:111
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+14	NoteOff	Ch:0	N:50	V:0
+1	NoteOff	Ch:1	N:50	V:0
+1	NoteOn	Ch:0	N:40	V:104
+1	NoteOn	Ch:1	N:40	V:104
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:48	V:116
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOn	Ch:1	N:48	V:116
+0	NoteOff	Ch:1	N:40	V:0
+17	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+1	NoteOn	Ch:1	N:40	V:110
+18	NoteOn	Ch:0	N:46	V:110
+1	NoteOn	Ch:1	N:46	V:110
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:0	N:46	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:46	V:0
+0	NoteOn	Ch:1	N:40	V:110
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:1	N:47	V:110
+18	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:117
+0	NoteOff	Ch:1	N:47	V:0
+1	NoteOn	Ch:1	N:48	V:117
+12	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+4	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:1	N:48	V:0
+2	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:125
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:70
+0	NoteOn	Ch:9	N:57	V:64
+1	NoteOn	Ch:1	N:40	V:111
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:57	V:0
+0	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:49	V:0
+1	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:41	V:0
+5	NoteOn	Ch:0	N:40	V:111
+0	NoteOff	Ch:2	N:40	V:0
+1	NoteOn	Ch:1	N:40	V:111
+9	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+6	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+3	NoteOn	Ch:0	N:52	V:114
+1	NoteOn	Ch:1	N:52	V:114
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:0	N:50	V:106
+1	NoteOn	Ch:1	N:50	V:106
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+15	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:106
+0	NoteOn	Ch:1	N:40	V:106
+19	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:1	N:48	V:117
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+15	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:1	N:48	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+7	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:46	V:114
+1	NoteOn	Ch:1	N:46	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+2	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:8448
+0	PitchBend	Ch:1	Val:8448
+10	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+11	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+3	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+0	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+0	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:125
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:74
+0	NoteOn	Ch:9	N:57	V:56
+1	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:57	V:0
+1	NoteOff	Ch:9	N:49	V:0
+3	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOn	Ch:0	N:40	V:107
+1	NoteOn	Ch:1	N:40	V:107
+1	NoteOff	Ch:2	N:40	V:0
+8	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+6	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+4	NoteOn	Ch:0	N:52	V:113
+0	NoteOn	Ch:1	N:52	V:113
+8	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:105
+0	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:1	N:40	V:105
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:50	V:110
+1	NoteOn	Ch:1	N:50	V:110
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+15	NoteOn	Ch:0	N:40	V:111
+0	NoteOff	Ch:0	N:50	V:0
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:1	N:50	V:0
+7	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:48	V:118
+1	NoteOn	Ch:1	N:48	V:118
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+17	NoteOff	Ch:0	N:48	V:0
+0	NoteOn	Ch:0	N:40	V:106
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:106
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:0	N:46	V:115
+1	NoteOn	Ch:1	N:46	V:115
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+17	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:46	V:0
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:1	N:47	V:110
+18	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:111
+0	NoteOff	Ch:1	N:47	V:0
+0	NoteOn	Ch:1	N:48	V:111
+10	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:116
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:41	V:123
+0	NoteOn	Ch:9	N:49	V:74
+0	NoteOn	Ch:9	N:57	V:68
+0	NoteOff	Ch:1	N:48	V:0
+1	NoteOn	Ch:1	N:40	V:110
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+4	NoteOff	Ch:9	N:57	V:0
+1	NoteOff	Ch:9	N:49	V:0
+1	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:9	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+6	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:9	N:49	V:23
+0	NoteOn	Ch:9	N:57	V:23
+7	NoteOff	Ch:9	N:49	V:0
+0	NoteOff	Ch:9	N:57	V:0
+3	NoteOn	Ch:0	N:52	V:117
+1	NoteOn	Ch:1	N:52	V:117
+13	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:52	V:0
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:0	N:50	V:110
+1	NoteOn	Ch:1	N:50	V:110
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+13	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:114
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:115
+1	NoteOn	Ch:1	N:40	V:115
+11	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOn	Ch:0	N:66	V:112
+0	NoteOn	Ch:9	N:40	V:90
+0	NoteOn	Ch:9	N:41	V:91
+0	NoteOn	Ch:1	N:63	V:112
+8	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:64	V:105
+1	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:60	V:105
+9	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:63	V:112
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:59	V:112
+9	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:59	V:103
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:54	V:103
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:69	V:111
+0	NoteOn	Ch:9	N:40	V:88
+0	NoteOn	Ch:9	N:41	V:90
+0	NoteOff	Ch:1	N:54	V:0
+0	NoteOn	Ch:1	N:66	V:111
+9	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:66	V:102
+1	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:63	V:102
+9	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:63	V:113
+0	NoteOn	Ch:9	N:36	V:88
+1	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:59	V:113
+8	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:59	V:103
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:57	V:103
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:71	V:111
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOn	Ch:9	N:40	V:88
+0	NoteOn	Ch:9	N:41	V:88
+1	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:69	V:111
+7	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:69	V:101
+1	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:66	V:101
+9	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:66	V:112
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOn	Ch:9	N:40	V:82
+0	NoteOn	Ch:9	N:41	V:87
+1	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:63	V:112
+8	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:63	V:103
+0	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:59	V:103
+9	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:75	V:110
+0	NoteOn	Ch:9	N:36	V:91
+0	NoteOn	Ch:9	N:40	V:91
+0	NoteOn	Ch:9	N:41	V:93
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:71	V:110
+7	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:41	V:0
+1	NoteOff	Ch:0	N:75	V:0
+0	NoteOn	Ch:0	N:73	V:100
+0	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:69	V:100
+9	NoteOff	Ch:0	N:73	V:0
+0	NoteOn	Ch:0	N:71	V:113
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOn	Ch:9	N:40	V:90
+0	NoteOn	Ch:9	N:41	V:93
+1	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:66	V:113
+8	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:69	V:103
+0	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:63	V:103
+9	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:118
+1	NoteOn	Ch:9	N:46	V:72
+0	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+3	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:118
+1	NoteOn	Ch:1	N:55	V:114
+1	NoteOn	Ch:9	N:46	V:85
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:1	N:40	V:110
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:1	N:40	V:110
+2	NoteOn	Ch:9	N:46	V:81
+8	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:50	V:111
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:1	N:54	V:111
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:50	V:0
+1	NoteOff	Ch:1	N:54	V:0
+1	NoteOn	Ch:0	N:40	V:104
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:40	V:104
+2	NoteOn	Ch:9	N:46	V:81
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:48	V:116
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOn	Ch:1	N:51	V:116
+0	NoteOff	Ch:1	N:40	V:0
+1	NoteOn	Ch:9	N:46	V:75
+13	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+0	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOff	Ch:1	N:51	V:0
+1	NoteOn	Ch:1	N:40	V:108
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+1	NoteOn	Ch:1	N:40	V:110
+2	NoteOn	Ch:9	N:46	V:72
+10	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+2	NoteOn	Ch:0	N:46	V:110
+1	NoteOn	Ch:1	N:50	V:110
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+17	NoteOff	Ch:0	N:46	V:0
+0	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:110
+1	NoteOn	Ch:9	N:46	V:75
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:40	V:111
+11	NoteOff	Ch:9	N:36	V:0
+8	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:1	N:50	V:110
+1	NoteOn	Ch:9	N:46	V:78
+10	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:117
+0	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:52	V:117
+13	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:0	N:48	V:0
+1	NoteOff	Ch:1	N:52	V:0
+2	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:111
+1	NoteOn	Ch:9	N:46	V:68
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:55	V:114
+1	NoteOn	Ch:9	N:46	V:72
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:55	V:0
+1	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:108
+3	NoteOn	Ch:9	N:46	V:65
+6	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+2	NoteOn	Ch:0	N:50	V:106
+0	NoteOn	Ch:9	N:36	V:117
+1	NoteOn	Ch:1	N:54	V:106
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOff	Ch:1	N:54	V:0
+0	NoteOn	Ch:1	N:40	V:114
+2	NoteOn	Ch:9	N:46	V:75
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+18	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:46	V:75
+1	NoteOn	Ch:1	N:52	V:117
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:1	N:52	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:46	V:69
+0	NoteOn	Ch:1	N:40	V:114
+12	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:46	V:114
+0	NoteOn	Ch:1	N:49	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:7808
+0	PitchBend	Ch:1	Val:7808
+2	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+2	NoteOn	Ch:9	N:46	V:73
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:121
+8	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+0	NoteOff	Ch:9	N:46	V:0
+2	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	NoteOff	Ch:2	N:40	V:0
+0	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	NoteOn	Ch:9	N:36	V:120
+11	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+0	NoteOn	Ch:2	N:40	V:71
+0	NoteOn	Ch:9	N:40	V:122
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+0	NoteOn	Ch:9	N:46	V:71
+11	NoteOff	Ch:9	N:40	V:0
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	NoteOff	Ch:9	N:46	V:0
+2	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+0	NoteOff	Ch:2	N:40	V:0
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+0	PitchBend	Ch:1	Val:9344
+1	NoteOff	Ch:1	N:40	V:0
+0	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+0	NoteOn	Ch:9	N:46	V:75
+0	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:77
+0	NoteOn	Ch:9	N:36	V:122
+1	PitchBend	Ch:1	Val:8192
+0	NoteOff	Ch:1	N:49	V:0
+0	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:0	N:46	V:0
+4	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOn	Ch:0	N:40	V:107
+1	NoteOn	Ch:1	N:40	V:107
+18	NoteOn	Ch:9	N:46	V:69
+0	NoteOn	Ch:0	N:52	V:113
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:55	V:113
+8	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:40	V:105
+1	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:1	N:40	V:105
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:9	N:46	V:79
+1	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:111
+10	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:115
+0	NoteOn	Ch:1	N:54	V:110
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:36	V:0
+6	NoteOn	Ch:9	N:46	V:71
+1	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:1	N:54	V:0
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:48	V:118
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:51	V:118
+0	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:9	N:46	V:65
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:106
+0	NoteOff	Ch:1	N:51	V:0
+1	NoteOn	Ch:1	N:40	V:106
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:40	V:108
+0	NoteOn	Ch:9	N:46	V:75
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:46	V:115
+1	NoteOn	Ch:1	N:50	V:115
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+17	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:46	V:72
+1	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:46	V:0
+0	NoteOff	Ch:1	N:50	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:50	V:110
+1	NoteOn	Ch:9	N:46	V:71
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:111
+0	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:52	V:111
+10	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:9	N:46	V:72
+0	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:1	N:40	V:108
+18	NoteOn	Ch:9	N:46	V:73
+1	NoteOn	Ch:0	N:52	V:117
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:55	V:117
+10	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:55	V:0
+4	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:9	N:46	V:71
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:40	V:108
+9	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:54	V:110
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:40	V:120
+1	NoteOff	Ch:1	N:54	V:0
+0	NoteOn	Ch:1	N:40	V:114
+0	NoteOn	Ch:9	N:46	V:73
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:115
+1	NoteOn	Ch:1	N:40	V:115
+11	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOn	Ch:0	N:79	V:103
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:36	V:82
+1	NoteOn	Ch:1	N:76	V:103
+0	NoteOn	Ch:9	N:50	V:91
+1	NoteOn	Ch:9	N:40	V:82
+3	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:50	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:0	N:79	V:0
+0	NoteOn	Ch:0	N:76	V:113
+1	NoteOff	Ch:1	N:76	V:0
+0	NoteOn	Ch:1	N:71	V:113
+6	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:76	V:0
+0	NoteOn	Ch:0	N:71	V:100
+0	NoteOn	Ch:9	N:36	V:92
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:100
+5	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:67	V:110
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:64	V:110
+9	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:76	V:103
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:36	V:92
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:71	V:103
+1	NoteOn	Ch:9	N:40	V:85
+1	NoteOn	Ch:9	N:47	V:85
+3	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:47	V:0
+1	NoteOff	Ch:0	N:76	V:0
+0	NoteOn	Ch:0	N:79	V:112
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:76	V:112
+5	NoteOff	Ch:2	N:40	V:0
+4	NoteOff	Ch:0	N:79	V:0
+0	NoteOn	Ch:0	N:76	V:101
+0	NoteOn	Ch:9	N:36	V:93
+0	NoteOff	Ch:1	N:76	V:0
+0	NoteOn	Ch:1	N:71	V:101
+6	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:0	N:76	V:0
+0	NoteOn	Ch:0	N:71	V:111
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:111
+9	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:67	V:103
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:87
+0	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:64	V:103
+3	NoteOn	Ch:9	N:45	V:93
+1	NoteOn	Ch:9	N:40	V:91
+2	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:45	V:0
+0	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:71	V:113
+0	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:67	V:113
+5	NoteOff	Ch:2	N:40	V:0
+4	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:76	V:102
+0	NoteOn	Ch:9	N:36	V:93
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:71	V:102
+5	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:0	N:76	V:0
+0	NoteOn	Ch:0	N:71	V:111
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:111
+9	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:79	V:103
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:36	V:93
+1	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:76	V:103
+2	NoteOn	Ch:9	N:40	V:90
+1	NoteOn	Ch:9	N:41	V:73
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:41	V:0
+0	NoteOff	Ch:0	N:79	V:0
+0	NoteOn	Ch:0	N:76	V:112
+1	NoteOff	Ch:1	N:76	V:0
+0	NoteOn	Ch:1	N:71	V:112
+6	NoteOff	Ch:2	N:40	V:0
+3	NoteOff	Ch:0	N:76	V:0
+0	NoteOn	Ch:0	N:71	V:105
+0	NoteOn	Ch:9	N:36	V:93
+1	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:67	V:105
+6	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:67	V:112
+0	NoteOff	Ch:1	N:67	V:0
+0	NoteOn	Ch:1	N:64	V:112
+9	NoteOff	Ch:0	N:67	V:0
+0	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:9	N:51	V:112
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:45	V:108
+4	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+6	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:9	N:36	V:0
+3	NoteOn	Ch:0	N:45	V:114
+1	NoteOn	Ch:1	N:45	V:114
+18	NoteOn	Ch:0	N:57	V:114
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:118
+0	NoteOn	Ch:9	N:51	V:116
+1	NoteOn	Ch:1	N:60	V:114
+2	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+7	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:0	N:57	V:0
+0	NoteOn	Ch:0	N:45	V:110
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:45	V:110
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:110
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:51	V:116
+1	NoteOn	Ch:1	N:45	V:110
+10	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:55	V:111
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:1	N:59	V:111
+2	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+9	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:55	V:0
+0	NoteOff	Ch:1	N:59	V:0
+2	NoteOn	Ch:0	N:45	V:104
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:51	V:110
+0	NoteOn	Ch:1	N:45	V:104
+6	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+4	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:1	N:45	V:111
+19	NoteOn	Ch:0	N:53	V:116
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:51	V:117
+0	NoteOff	Ch:0	N:45	V:0
+1	NoteOn	Ch:1	N:56	V:116
+0	NoteOff	Ch:1	N:45	V:0
+11	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:53	V:0
+1	NoteOn	Ch:0	N:45	V:108
+0	NoteOff	Ch:1	N:56	V:0
+1	NoteOn	Ch:1	N:45	V:108
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:110
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:51	V:119
+1	NoteOn	Ch:1	N:45	V:110
+11	NoteOff	Ch:9	N:51	V:0
+0	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:51	V:110
+1	NoteOn	Ch:1	N:55	V:110
+0	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+16	NoteOff	Ch:0	N:51	V:0
+1	NoteOn	Ch:0	N:45	V:110
+0	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:51	V:111
+1	NoteOn	Ch:1	N:45	V:110
+7	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+1	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:45	V:111
+11	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:0	N:52	V:110
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:111
+1	NoteOn	Ch:1	N:55	V:110
+11	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:53	V:117
+0	NoteOff	Ch:1	N:55	V:0
+1	NoteOn	Ch:1	N:57	V:117
+12	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+3	NoteOff	Ch:0	N:53	V:0
+1	NoteOff	Ch:1	N:57	V:0
+2	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:108
+0	NoteOn	Ch:1	N:45	V:111
+3	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+7	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:1	N:45	V:111
+19	NoteOn	Ch:0	N:57	V:114
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:9	N:51	V:111
+0	NoteOn	Ch:1	N:60	V:114
+4	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+7	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+1	NoteOff	Ch:0	N:57	V:0
+1	NoteOff	Ch:1	N:60	V:0
+1	NoteOn	Ch:0	N:45	V:106
+1	NoteOn	Ch:1	N:45	V:106
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:51	V:101
+1	NoteOn	Ch:1	N:45	V:108
+9	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:55	V:106
+0	NoteOn	Ch:9	N:36	V:117
+1	NoteOn	Ch:1	N:59	V:106
+2	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+8	NoteOff	Ch:9	N:36	V:0
+8	NoteOff	Ch:0	N:55	V:0
+0	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:112
+0	NoteOff	Ch:1	N:59	V:0
+1	NoteOn	Ch:1	N:45	V:114
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+5	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:45	V:106
+1	NoteOn	Ch:1	N:45	V:106
+18	NoteOn	Ch:0	N:53	V:117
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:51	V:105
+1	NoteOn	Ch:1	N:57	V:117
+0	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+10	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:0	N:53	V:0
+0	NoteOff	Ch:2	N:33	V:0
+1	NoteOff	Ch:1	N:57	V:0
+2	NoteOn	Ch:0	N:45	V:111
+1	NoteOn	Ch:1	N:45	V:111
+6	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+11	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:51	V:108
+1	NoteOn	Ch:1	N:45	V:114
+11	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:51	V:114
+0	NoteOn	Ch:1	N:55	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:7808
+0	PitchBend	Ch:1	Val:7808
+2	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+2	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:121
+0	NoteOn	Ch:9	N:51	V:117
+8	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	NoteOff	Ch:9	N:51	V:0
+0	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+2	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	NoteOff	Ch:2	N:33	V:0
+0	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	NoteOn	Ch:9	N:36	V:120
+11	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+0	NoteOn	Ch:2	N:33	V:71
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:108
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+11	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:51	V:0
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+2	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+0	NoteOff	Ch:2	N:33	V:0
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:45	V:0
+0	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:45	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+0	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:77
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:107
+1	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:1	N:45	V:108
+2	NoteOff	Ch:0	N:51	V:0
+1	NoteOff	Ch:1	N:55	V:0
+3	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+5	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:2	N:33	V:0
+1	NoteOn	Ch:0	N:45	V:107
+1	NoteOn	Ch:1	N:45	V:107
+18	NoteOn	Ch:0	N:57	V:113
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:9	N:51	V:115
+1	NoteOn	Ch:1	N:60	V:113
+7	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+3	NoteOff	Ch:9	N:51	V:0
+0	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+3	NoteOff	Ch:0	N:57	V:0
+0	NoteOn	Ch:0	N:45	V:105
+0	NoteOff	Ch:1	N:60	V:0
+1	NoteOn	Ch:1	N:45	V:105
+6	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:107
+1	NoteOn	Ch:1	N:45	V:111
+10	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:55	V:110
+0	NoteOn	Ch:9	N:36	V:115
+1	NoteOn	Ch:1	N:59	V:110
+2	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+8	NoteOff	Ch:9	N:36	V:0
+8	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:51	V:114
+0	NoteOff	Ch:0	N:55	V:0
+0	NoteOn	Ch:1	N:45	V:111
+0	NoteOff	Ch:1	N:59	V:0
+7	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:51	V:0
+5	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:1	N:45	V:114
+19	NoteOn	Ch:0	N:53	V:118
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:110
+0	NoteOn	Ch:1	N:56	V:118
+1	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+10	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:53	V:0
+1	NoteOn	Ch:0	N:45	V:106
+0	NoteOff	Ch:1	N:56	V:0
+1	NoteOn	Ch:1	N:45	V:106
+5	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:119
+1	NoteOn	Ch:1	N:45	V:108
+10	NoteOff	Ch:9	N:51	V:0
+2	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:51	V:115
+1	NoteOn	Ch:1	N:55	V:115
+0	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+17	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:110
+1	NoteOn	Ch:1	N:45	V:111
+1	NoteOff	Ch:0	N:51	V:0
+1	NoteOff	Ch:1	N:55	V:0
+3	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+5	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:2	N:33	V:0
+4	NoteOn	Ch:0	N:45	V:111
+1	NoteOn	Ch:1	N:45	V:111
+18	NoteOn	Ch:0	N:52	V:110
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:51	V:110
+1	NoteOn	Ch:1	N:55	V:110
+11	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:2	N:33	V:0
+1	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:53	V:111
+1	NoteOff	Ch:1	N:55	V:0
+0	NoteOn	Ch:1	N:57	V:111
+10	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+7	NoteOff	Ch:0	N:53	V:0
+0	NoteOn	Ch:0	N:45	V:110
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:51	V:119
+1	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:45	V:110
+6	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+4	NoteOff	Ch:9	N:51	V:0
+3	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:1	N:45	V:108
+19	NoteOn	Ch:0	N:57	V:117
+0	NoteOn	Ch:2	N:33	V:83
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOn	Ch:9	N:51	V:115
+0	NoteOn	Ch:1	N:60	V:117
+12	NoteOff	Ch:9	N:51	V:0
+1	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+1	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:111
+0	NoteOn	Ch:1	N:45	V:111
+2	NoteOff	Ch:0	N:57	V:0
+1	NoteOff	Ch:1	N:60	V:0
+3	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+12	NoteOn	Ch:0	N:45	V:108
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:51	V:119
+1	NoteOn	Ch:1	N:45	V:108
+9	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:51	V:0
+4	NoteOff	Ch:2	N:33	V:0
+2	NoteOn	Ch:0	N:55	V:110
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:59	V:110
+4	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+6	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:55	V:0
+0	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:40	V:120
+0	NoteOn	Ch:9	N:51	V:117
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:45	V:114
+5	NoteOff	Ch:0	N:45	V:0
+0	NoteOff	Ch:1	N:45	V:0
+6	NoteOff	Ch:9	N:51	V:0
+0	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:33	V:0
+3	NoteOn	Ch:0	N:45	V:115
+1	NoteOn	Ch:1	N:45	V:115
+10	NoteOff	Ch:0	N:45	V:0
+1	NoteOff	Ch:1	N:45	V:0
+7	NoteOn	Ch:0	N:69	V:112
+0	NoteOn	Ch:2	N:33	V:104
+0	NoteOn	Ch:9	N:51	V:113
+1	NoteOn	Ch:1	N:64	V:112
+1	NoteOn	Ch:9	N:40	V:82
+3	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:65	V:105
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:62	V:105
+1	NoteOff	Ch:9	N:51	V:0
+6	NoteOff	Ch:2	N:33	V:0
+2	NoteOff	Ch:0	N:65	V:0
+0	NoteOn	Ch:0	N:64	V:112
+1	NoteOn	Ch:9	N:36	V:79
+0	NoteOff	Ch:1	N:62	V:0
+0	NoteOn	Ch:1	N:60	V:112
+3	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:103
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:103
+8	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:111
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:40	V:93
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:111
+3	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:60	V:102
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:57	V:102
+5	NoteOff	Ch:2	N:33	V:0
+3	NoteOff	Ch:0	N:60	V:0
+0	NoteOn	Ch:0	N:64	V:113
+1	NoteOn	Ch:9	N:36	V:88
+0	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:60	V:113
+3	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:103
+0	NoteOn	Ch:9	N:36	V:86
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:103
+3	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:72	V:111
+0	NoteOn	Ch:2	N:33	V:92
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:69	V:111
+0	NoteOn	Ch:9	N:40	V:93
+4	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:72	V:0
+0	NoteOn	Ch:0	N:69	V:101
+0	NoteOn	Ch:9	N:40	V:87
+1	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:64	V:101
+4	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:112
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:112
+1	NoteOn	Ch:9	N:36	V:86
+3	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:103
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:103
+9	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:110
+0	NoteOn	Ch:2	N:33	V:104
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:110
+1	NoteOn	Ch:9	N:40	V:93
+4	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:69	V:100
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:64	V:100
+5	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:64	V:113
+1	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:60	V:113
+0	NoteOn	Ch:9	N:36	V:93
+4	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:64	V:0
+0	NoteOn	Ch:0	N:60	V:103
+0	NoteOn	Ch:9	N:36	V:88
+1	NoteOff	Ch:1	N:60	V:0
+0	NoteOn	Ch:1	N:57	V:103
+3	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:60	V:0
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:9	N:46	V:72
+1	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:40	V:108
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+3	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+18	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:118
+1	NoteOn	Ch:1	N:55	V:114
+0	NoteOn	Ch:9	N:46	V:85
+2	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:0	N:52	V:0
+0	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:55	V:0
+1	NoteOn	Ch:1	N:40	V:110
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:110
+1	NoteOn	Ch:9	N:46	V:81
+8	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+2	NoteOn	Ch:0	N:50	V:111
+0	NoteOn	Ch:9	N:36	V:118
+1	NoteOn	Ch:1	N:54	V:111
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+9	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:50	V:0
+1	NoteOff	Ch:1	N:54	V:0
+1	NoteOn	Ch:0	N:40	V:104
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:40	V:104
+2	NoteOn	Ch:9	N:46	V:81
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+4	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:48	V:116
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:1	N:51	V:116
+1	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:9	N:46	V:75
+13	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOff	Ch:1	N:51	V:0
+0	NoteOn	Ch:1	N:40	V:108
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+1	NoteOn	Ch:1	N:40	V:110
+2	NoteOn	Ch:9	N:46	V:72
+9	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+3	NoteOn	Ch:0	N:46	V:110
+1	NoteOn	Ch:1	N:50	V:110
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+16	NoteOff	Ch:0	N:46	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:40	V:110
+0	NoteOn	Ch:9	N:46	V:75
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:40	V:111
+11	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:50	V:110
+1	NoteOn	Ch:9	N:46	V:78
+10	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:0	N:47	V:0
+1	NoteOn	Ch:0	N:48	V:117
+0	NoteOff	Ch:1	N:50	V:0
+1	NoteOn	Ch:1	N:52	V:117
+12	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:0	N:48	V:0
+1	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOn	Ch:9	N:46	V:68
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+10	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+19	NoteOn	Ch:0	N:52	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+0	NoteOn	Ch:1	N:55	V:114
+1	NoteOn	Ch:9	N:46	V:72
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:55	V:0
+1	NoteOn	Ch:0	N:40	V:106
+0	NoteOn	Ch:1	N:40	V:106
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+13	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:1	N:40	V:108
+4	NoteOn	Ch:9	N:46	V:65
+6	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:9	N:46	V:0
+2	NoteOn	Ch:0	N:50	V:106
+0	NoteOn	Ch:9	N:36	V:117
+1	NoteOn	Ch:1	N:54	V:106
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+1	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOff	Ch:1	N:54	V:0
+1	NoteOn	Ch:1	N:40	V:114
+2	NoteOn	Ch:9	N:46	V:75
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+1	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:106
+1	NoteOn	Ch:1	N:40	V:106
+18	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOn	Ch:9	N:46	V:75
+1	NoteOn	Ch:1	N:52	V:117
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:1	N:52	V:0
+2	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:117
+1	NoteOn	Ch:9	N:46	V:69
+0	NoteOn	Ch:1	N:40	V:114
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:46	V:114
+1	NoteOn	Ch:1	N:49	V:114
+7	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+2	NoteOn	Ch:9	N:46	V:73
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:121
+8	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	NoteOff	Ch:9	N:36	V:0
+0	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+2	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:9	N:46	V:0
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+2	NoteOff	Ch:2	N:40	V:0
+0	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	NoteOn	Ch:9	N:36	V:120
+11	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	NoteOn	Ch:2	N:40	V:71
+0	NoteOn	Ch:9	N:40	V:122
+0	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:9	N:46	V:71
+10	NoteOff	Ch:9	N:40	V:0
+2	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	NoteOff	Ch:9	N:46	V:0
+2	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+0	NoteOff	Ch:2	N:40	V:0
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+0	NoteOn	Ch:9	N:46	V:75
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+0	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:77
+0	NoteOn	Ch:9	N:36	V:122
+1	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:49	V:0
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:2	N:40	V:0
+1	NoteOn	Ch:0	N:40	V:107
+1	NoteOn	Ch:1	N:40	V:107
+17	NoteOn	Ch:9	N:46	V:69
+1	NoteOn	Ch:0	N:52	V:113
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:55	V:113
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+0	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:105
+0	NoteOff	Ch:1	N:55	V:0
+1	NoteOn	Ch:1	N:40	V:105
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:9	N:46	V:79
+0	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:40	V:111
+10	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+5	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:115
+1	NoteOn	Ch:1	N:54	V:110
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:9	N:46	V:71
+0	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:1	N:54	V:0
+7	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:9	N:40	V:0
+3	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+19	NoteOn	Ch:0	N:48	V:118
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:51	V:118
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:9	N:46	V:65
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:106
+0	NoteOff	Ch:1	N:51	V:0
+0	NoteOn	Ch:1	N:40	V:106
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:1	N:40	V:108
+1	NoteOn	Ch:9	N:46	V:75
+12	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:46	V:115
+1	NoteOn	Ch:1	N:50	V:115
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+17	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:46	V:72
+1	NoteOn	Ch:1	N:40	V:111
+1	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:50	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:2	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+18	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:50	V:110
+1	NoteOn	Ch:9	N:46	V:71
+11	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:47	V:0
+0	NoteOn	Ch:0	N:48	V:111
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:52	V:111
+10	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+0	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:92
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:1	N:52	V:0
+1	NoteOn	Ch:9	N:46	V:72
+0	NoteOn	Ch:1	N:40	V:110
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+17	NoteOn	Ch:9	N:46	V:73
+1	NoteOn	Ch:0	N:52	V:117
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:55	V:117
+11	NoteOff	Ch:9	N:46	V:0
+2	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:52	V:0
+1	NoteOff	Ch:1	N:55	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:9	N:46	V:71
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:108
+10	NoteOff	Ch:9	N:36	V:0
+3	NoteOff	Ch:9	N:46	V:0
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:54	V:110
+5	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+7	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:40	V:120
+1	NoteOff	Ch:1	N:54	V:0
+0	NoteOn	Ch:1	N:40	V:114
+0	NoteOn	Ch:9	N:46	V:73
+4	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:40	V:0
+1	NoteOff	Ch:9	N:46	V:0
+3	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:0	N:40	V:115
+1	NoteOn	Ch:1	N:40	V:115
+18	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:0	N:48	V:117
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:38	V:85
+0	NoteOn	Ch:9	N:40	V:92
+1	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:1	N:52	V:117
+1	NoteOff	Ch:9	N:38	V:0
+1	NoteOff	Ch:9	N:40	V:0
+14	NoteOff	Ch:2	N:40	V:0
+0	NoteOn	Ch:9	N:36	V:86
+2	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:9	N:36	V:0
+6	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:0	N:48	V:0
+0	NoteOff	Ch:1	N:52	V:0
+7	NoteOn	Ch:9	N:38	V:82
+1	NoteOn	Ch:9	N:40	V:92
+1	NoteOff	Ch:9	N:38	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:98
+1	NoteOn	Ch:1	N:40	V:114
+0	NoteOff	Ch:9	N:40	V:0
+14	NoteOff	Ch:2	N:40	V:0
+3	NoteOn	Ch:9	N:36	V:91
+1	NoteOn	Ch:0	N:46	V:114
+1	NoteOn	Ch:1	N:49	V:114
+1	NoteOff	Ch:9	N:36	V:0
+6	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+2	NoteOn	Ch:9	N:38	V:79
+0	NoteOn	Ch:2	N:40	V:92
+1	NoteOn	Ch:9	N:40	V:88
+1	NoteOff	Ch:9	N:38	V:0
+1	NoteOff	Ch:9	N:40	V:0
+5	NoteOn	Ch:9	N:38	V:79
+0	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+0	NoteOn	Ch:9	N:40	V:90
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+0	NoteOff	Ch:9	N:38	V:0
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	NoteOff	Ch:9	N:40	V:0
+0	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+1	NoteOff	Ch:2	N:40	V:0
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+0	NoteOn	Ch:9	N:36	V:93
+3	NoteOff	Ch:9	N:36	V:0
+9	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+0	NoteOn	Ch:9	N:38	V:87
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+0	NoteOn	Ch:9	N:40	V:93
+1	NoteOn	Ch:2	N:40	V:104
+0	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+0	NoteOff	Ch:9	N:38	V:0
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+0	NoteOff	Ch:9	N:40	V:0
+12	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	NoteOff	Ch:2	N:40	V:0
+0	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	NoteOn	Ch:9	N:36	V:93
+0	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+12	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:40	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:40	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8192
+0	NoteOff	Ch:0	N:46	V:0
+0	NoteOn	Ch:0	N:49	V:108
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:2	N:37	V:110
+0	NoteOn	Ch:9	N:36	V:118
+0	NoteOn	Ch:9	N:57	V:79
+0	NoteOff	Ch:1	N:49	V:0
+0	NoteOn	Ch:1	N:49	V:108
+5	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+6	NoteOff	Ch:9	N:57	V:0
+3	NoteOff	Ch:9	N:36	V:0
+4	NoteOn	Ch:0	N:49	V:114
+0	NoteOff	Ch:2	N:37	V:0
+1	NoteOn	Ch:1	N:49	V:114
+17	NoteOn	Ch:9	N:53	V:123
+1	NoteOn	Ch:0	N:61	V:114
+0	NoteOn	Ch:2	N:37	V:98
+0	NoteOn	Ch:9	N:40	V:118
+1	NoteOn	Ch:1	N:67	V:114
+1	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+1	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:61	V:0
+1	NoteOn	Ch:0	N:49	V:110
+0	NoteOff	Ch:1	N:67	V:0
+1	NoteOn	Ch:1	N:49	V:110
+4	NoteOff	Ch:2	N:37	V:0
+1	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+11	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:49	V:110
+0	NoteOn	Ch:2	N:37	V:89
+0	NoteOn	Ch:9	N:36	V:116
+1	NoteOn	Ch:1	N:49	V:110
+2	NoteOff	Ch:9	N:53	V:0
+7	NoteOff	Ch:9	N:36	V:0
+9	NoteOn	Ch:0	N:59	V:111
+0	NoteOn	Ch:9	N:36	V:118
+1	NoteOn	Ch:1	N:66	V:111
+2	NoteOff	Ch:0	N:49	V:0
+0	NoteOff	Ch:1	N:49	V:0
+2	NoteOff	Ch:2	N:37	V:0
+8	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:59	V:0
+1	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:9	N:53	V:122
+1	NoteOn	Ch:0	N:49	V:104
+0	NoteOn	Ch:2	N:37	V:104
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:49	V:104
+2	NoteOff	Ch:9	N:53	V:0
+4	NoteOff	Ch:0	N:49	V:0
+0	NoteOff	Ch:1	N:49	V:0
+5	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:49	V:111
+1	NoteOn	Ch:1	N:49	V:111
+2	NoteOff	Ch:2	N:37	V:0
+16	NoteOn	Ch:9	N:53	V:124
+0	NoteOn	Ch:0	N:57	V:116
+0	NoteOn	Ch:2	N:37	V:114
+0	NoteOn	Ch:9	N:36	V:123
+1	NoteOff	Ch:0	N:49	V:0
+0	NoteOn	Ch:1	N:64	V:116
+0	NoteOff	Ch:1	N:49	V:0
+3	NoteOff	Ch:9	N:53	V:0
+11	NoteOff	Ch:9	N:36	V:0
+4	NoteOff	Ch:0	N:57	V:0
+1	NoteOn	Ch:0	N:49	V:108
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:49	V:108
+2	NoteOff	Ch:2	N:37	V:0
+4	NoteOff	Ch:0	N:49	V:0
+0	NoteOff	Ch:1	N:49	V:0
+13	NoteOn	Ch:0	N:49	V:110
+0	NoteOn	Ch:2	N:37	V:104
+0	NoteOn	Ch:9	N:40	V:117
+0	NoteOn	Ch:9	N:53	V:114
+0	NoteOn	Ch:1	N:49	V:110
+4	NoteOff	Ch:9	N:53	V:0
+8	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:55	V:110
+0	NoteOn	Ch:1	N:61	V:110
+1	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+2	NoteOff	Ch:2	N:37	V:0
+14	NoteOff	Ch:0	N:55	V:0
+1	NoteOn	Ch:0	N:49	V:110
+0	NoteOff	Ch:1	N:61	V:0
+0	NoteOn	Ch:2	N:37	V:104
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:9	N:53	V:120
+1	NoteOn	Ch:1	N:49	V:110
+3	NoteOff	Ch:9	N:53	V:0
+4	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+1	NoteOff	Ch:9	N:36	V:0
+9	NoteOn	Ch:0	N:49	V:111
+0	NoteOn	Ch:9	N:36	V:121
+1	NoteOn	Ch:1	N:49	V:111
+4	NoteOff	Ch:2	N:37	V:0
+6	NoteOff	Ch:9	N:36	V:0
+7	NoteOn	Ch:9	N:53	V:124
+1	NoteOn	Ch:0	N:56	V:110
+0	NoteOn	Ch:2	N:37	V:98
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:61	V:110
+2	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:56	V:0
+1	NoteOn	Ch:0	N:57	V:117
+0	NoteOff	Ch:1	N:61	V:0
+1	NoteOn	Ch:1	N:64	V:117
+3	NoteOff	Ch:2	N:37	V:0
+9	NoteOff	Ch:0	N:49	V:0
+1	NoteOff	Ch:1	N:49	V:0
+3	NoteOff	Ch:0	N:57	V:0
+1	NoteOff	Ch:1	N:64	V:0
+1	NoteOn	Ch:0	N:47	V:111
+0	NoteOn	Ch:2	N:35	V:77
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:49	V:79
+1	NoteOn	Ch:1	N:47	V:111
+3	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+9	NoteOff	Ch:9	N:36	V:0
+2	NoteOff	Ch:9	N:49	V:0
+3	NoteOn	Ch:0	N:47	V:111
+1	NoteOn	Ch:1	N:47	V:111
+5	NoteOff	Ch:2	N:35	V:0
+13	NoteOn	Ch:9	N:53	V:124
+0	NoteOn	Ch:0	N:59	V:114
+0	NoteOn	Ch:2	N:35	V:92
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:66	V:114
+3	NoteOff	Ch:9	N:53	V:0
+0	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+8	NoteOff	Ch:9	N:40	V:0
+5	NoteOff	Ch:0	N:59	V:0
+0	NoteOff	Ch:1	N:66	V:0
+1	NoteOn	Ch:0	N:47	V:106
+1	NoteOn	Ch:1	N:47	V:106
+4	NoteOff	Ch:2	N:35	V:0
+1	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+12	NoteOn	Ch:9	N:53	V:119
+1	NoteOn	Ch:0	N:47	V:108
+0	NoteOn	Ch:2	N:35	V:104
+0	NoteOn	Ch:9	N:36	V:116
+0	NoteOn	Ch:1	N:47	V:108
+3	NoteOff	Ch:9	N:53	V:0
+6	NoteOff	Ch:9	N:36	V:0
+10	NoteOn	Ch:0	N:57	V:106
+0	NoteOn	Ch:9	N:36	V:117
+0	NoteOn	Ch:1	N:64	V:106
+2	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+0	NoteOff	Ch:2	N:35	V:0
+8	NoteOff	Ch:9	N:36	V:0
+6	NoteOn	Ch:9	N:53	V:124
+1	NoteOff	Ch:0	N:57	V:0
+1	NoteOn	Ch:0	N:47	V:114
+0	NoteOn	Ch:2	N:35	V:86
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOff	Ch:1	N:64	V:0
+0	NoteOn	Ch:1	N:47	V:114
+2	NoteOff	Ch:9	N:53	V:0
+4	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+5	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:47	V:106
+1	NoteOn	Ch:1	N:47	V:106
+2	NoteOff	Ch:2	N:35	V:0
+15	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:55	V:117
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:36	V:123
+1	NoteOn	Ch:1	N:63	V:117
+0	NoteOff	Ch:0	N:47	V:0
+1	NoteOff	Ch:1	N:47	V:0
+2	NoteOff	Ch:9	N:53	V:0
+11	NoteOff	Ch:9	N:36	V:0
+1	NoteOff	Ch:0	N:55	V:0
+1	NoteOff	Ch:1	N:63	V:0
+2	NoteOn	Ch:0	N:46	V:111
+1	NoteOn	Ch:1	N:46	V:111
+3	NoteOff	Ch:2	N:33	V:0
+4	NoteOff	Ch:1	N:46	V:0
+2	NoteOff	Ch:0	N:46	V:0
+9	NoteOn	Ch:9	N:53	V:125
+0	NoteOn	Ch:0	N:45	V:114
+0	NoteOn	Ch:2	N:33	V:98
+0	NoteOn	Ch:9	N:40	V:117
+1	NoteOn	Ch:1	N:45	V:114
+3	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+6	NoteOn	Ch:0	N:53	V:114
+1	NoteOn	Ch:1	N:59	V:114
+3	NoteOff	Ch:2	N:33	V:0
+4	PitchBend	Ch:0	Val:7936
+0	PitchBend	Ch:1	Val:7936
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+1	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:8448
+0	PitchBend	Ch:1	Val:8448
+2	NoteOn	Ch:9	N:53	V:125
+0	NoteOn	Ch:2	N:33	V:86
+0	NoteOn	Ch:9	N:36	V:121
+4	NoteOff	Ch:9	N:53	V:0
+4	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8832
+0	PitchBend	Ch:1	Val:8832
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:10240
+0	PitchBend	Ch:1	Val:10240
+2	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8320
+0	PitchBend	Ch:1	Val:8320
+0	NoteOn	Ch:9	N:36	V:120
+4	NoteOff	Ch:2	N:33	V:0
+7	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+0	NoteOff	Ch:9	N:36	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+2	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:10112
+0	PitchBend	Ch:1	Val:10112
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9088
+0	PitchBend	Ch:1	Val:9088
+0	NoteOn	Ch:2	N:33	V:89
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:9	N:53	V:125
+1	PitchBend	Ch:0	Val:8576
+0	PitchBend	Ch:1	Val:8576
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+3	NoteOff	Ch:9	N:53	V:0
+7	NoteOff	Ch:9	N:40	V:0
+2	PitchBend	Ch:0	Val:8960
+0	PitchBend	Ch:1	Val:8960
+1	PitchBend	Ch:0	Val:9344
+0	PitchBend	Ch:1	Val:9344
+1	PitchBend	Ch:0	Val:9600
+0	PitchBend	Ch:1	Val:9600
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+1	PitchBend	Ch:0	Val:9984
+0	PitchBend	Ch:1	Val:9984
+1	PitchBend	Ch:0	Val:9728
+0	PitchBend	Ch:1	Val:9728
+1	PitchBend	Ch:0	Val:9856
+0	PitchBend	Ch:1	Val:9856
+2	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:8192
+0	PitchBend	Ch:1	Val:8192
+1	NoteOff	Ch:2	N:33	V:0
+11	PitchBend	Ch:0	Val:8704
+0	PitchBend	Ch:1	Val:8704
+1	PitchBend	Ch:0	Val:9216
+0	PitchBend	Ch:1	Val:9216
+0	PitchBend	Ch:0	Val:9344
+0	NoteOff	Ch:0	N:45	V:0
+1	PitchBend	Ch:1	Val:9344
+0	NoteOff	Ch:1	N:45	V:0
+1	PitchBend	Ch:0	Val:9472
+0	PitchBend	Ch:1	Val:9472
+1	PitchBend	Ch:0	Val:8192
+0	NoteOn	Ch:0	N:40	V:108
+0	PitchBend	Ch:1	Val:8192
+0	NoteOn	Ch:2	N:40	V:80
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:57	V:79
+0	NoteOn	Ch:1	N:40	V:108
+3	NoteOff	Ch:0	N:53	V:0
+0	NoteOff	Ch:1	N:59	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+5	NoteOff	Ch:9	N:57	V:0
+3	NoteOff	Ch:9	N:36	V:0
+4	NoteOn	Ch:0	N:40	V:107
+0	NoteOn	Ch:1	N:40	V:107
+3	NoteOff	Ch:2	N:40	V:0
+15	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:52	V:113
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:121
+1	NoteOn	Ch:1	N:55	V:113
+2	NoteOff	Ch:9	N:53	V:0
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+3	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:52	V:0
+1	NoteOn	Ch:0	N:40	V:105
+0	NoteOff	Ch:1	N:55	V:0
+1	NoteOn	Ch:1	N:40	V:105
+5	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+12	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:1	N:40	V:111
+4	NoteOff	Ch:9	N:53	V:0
+5	NoteOff	Ch:9	N:36	V:0
+9	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:115
+1	NoteOn	Ch:1	N:54	V:110
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+0	NoteOff	Ch:2	N:40	V:0
+8	NoteOff	Ch:9	N:36	V:0
+5	NoteOn	Ch:9	N:53	V:124
+2	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:123
+0	NoteOff	Ch:0	N:50	V:0
+1	NoteOn	Ch:1	N:40	V:111
+0	NoteOff	Ch:1	N:54	V:0
+2	NoteOff	Ch:9	N:53	V:0
+5	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:9	N:40	V:0
+8	NoteOn	Ch:0	N:40	V:114
+1	NoteOn	Ch:1	N:40	V:114
+5	NoteOff	Ch:2	N:40	V:0
+12	NoteOn	Ch:9	N:53	V:124
+1	NoteOn	Ch:0	N:48	V:118
+0	NoteOn	Ch:2	N:40	V:77
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:1	N:51	V:118
+1	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+1	NoteOff	Ch:9	N:53	V:0
+10	NoteOff	Ch:9	N:36	V:0
+5	NoteOff	Ch:0	N:48	V:0
+0	NoteOn	Ch:0	N:40	V:106
+1	NoteOff	Ch:1	N:51	V:0
+0	NoteOn	Ch:1	N:40	V:106
+4	NoteOff	Ch:2	N:40	V:0
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:74
+0	NoteOn	Ch:9	N:40	V:122
+0	NoteOn	Ch:1	N:40	V:108
+3	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:46	V:115
+0	NoteOn	Ch:1	N:50	V:115
+1	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+2	NoteOff	Ch:2	N:40	V:0
+15	NoteOn	Ch:9	N:53	V:125
+1	NoteOn	Ch:0	N:40	V:111
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:46	V:0
+1	NoteOff	Ch:1	N:50	V:0
+1	NoteOff	Ch:9	N:53	V:0
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+5	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+4	NoteOff	Ch:2	N:40	V:0
+14	NoteOn	Ch:9	N:53	V:119
+0	NoteOn	Ch:0	N:47	V:110
+0	NoteOn	Ch:2	N:40	V:83
+0	NoteOn	Ch:9	N:40	V:122
+1	NoteOn	Ch:1	N:50	V:110
+2	NoteOff	Ch:9	N:53	V:0
+10	NoteOff	Ch:9	N:40	V:0
+6	NoteOff	Ch:0	N:47	V:0
+0	NoteOn	Ch:0	N:48	V:111
+1	NoteOff	Ch:1	N:50	V:0
+0	NoteOn	Ch:1	N:52	V:111
+4	NoteOff	Ch:2	N:40	V:0
+6	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:0	N:48	V:0
+1	NoteOn	Ch:0	N:40	V:110
+0	NoteOn	Ch:2	N:40	V:86
+0	NoteOn	Ch:9	N:36	V:123
+0	NoteOff	Ch:1	N:52	V:0
+0	NoteOn	Ch:9	N:53	V:124
+1	NoteOn	Ch:1	N:40	V:110
+3	NoteOff	Ch:9	N:53	V:0
+3	NoteOff	Ch:0	N:40	V:0
+0	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+5	NoteOn	Ch:0	N:40	V:108
+1	NoteOn	Ch:1	N:40	V:108
+2	NoteOff	Ch:2	N:40	V:0
+16	NoteOn	Ch:0	N:52	V:117
+0	NoteOn	Ch:2	N:40	V:98
+0	NoteOn	Ch:9	N:40	V:123
+1	NoteOn	Ch:1	N:55	V:117
+0	NoteOn	Ch:9	N:53	V:125
+4	NoteOff	Ch:9	N:53	V:0
+9	NoteOff	Ch:9	N:40	V:0
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+4	NoteOn	Ch:0	N:40	V:111
+1	NoteOn	Ch:1	N:40	V:111
+2	NoteOff	Ch:0	N:52	V:0
+0	NoteOff	Ch:2	N:40	V:0
+1	NoteOff	Ch:1	N:55	V:0
+3	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+11	NoteOn	Ch:0	N:40	V:108
+0	NoteOn	Ch:2	N:40	V:89
+0	NoteOn	Ch:9	N:36	V:122
+1	NoteOn	Ch:9	N:53	V:124
+0	NoteOn	Ch:1	N:40	V:108
+4	NoteOff	Ch:9	N:53	V:0
+6	NoteOff	Ch:9	N:36	V:0
+9	NoteOn	Ch:0	N:50	V:110
+0	NoteOn	Ch:9	N:36	V:122
+0	NoteOn	Ch:1	N:54	V:110
+4	NoteOff	Ch:2	N:40	V:0
+0	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+7	NoteOff	Ch:9	N:36	V:0
+6	NoteOn	Ch:9	N:53	V:125
+1	NoteOff	Ch:0	N:50	V:0
+0	NoteOn	Ch:0	N:40	V:114
+0	NoteOn	Ch:2	N:40	V:104
+0	NoteOn	Ch:9	N:40	V:120
+0	NoteOff	Ch:1	N:54	V:0
+0	NoteOn	Ch:1	N:40	V:114
+3	NoteOff	Ch:9	N:53	V:0
+2	NoteOff	Ch:0	N:40	V:0
+1	NoteOff	Ch:1	N:40	V:0
+6	NoteOff	Ch:9	N:40	V:0
+7	NoteOn	Ch:0	N:40	V:115
+0	NoteOn	Ch:1	N:40	V:115
+8	NoteOff	Ch:2	N:40	V:0
+11	NoteOff	Ch:0	N:40	V:0
+0	NoteOn	Ch:0	N:71	V:112
+0	NoteOn	Ch:2	N:28	V:104
+0	NoteOn	Ch:9	N:36	V:99
+0	NoteOn	Ch:9	N:38	V:116
+0	NoteOn	Ch:9	N:53	V:125
+1	NoteOff	Ch:1	N:40	V:0
+0	NoteOn	Ch:1	N:69	V:112
+0	NoteOn	Ch:9	N:40	V:122
+3	NoteOff	Ch:9	N:36	V:0
+0	NoteOff	Ch:9	N:38	V:0
+0	NoteOff	Ch:9	N:53	V:0
+1	NoteOff	Ch:9	N:40	V:0
+4	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:69	V:105
+1	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:66	V:105
+9	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:66	V:112
+0	NoteOff	Ch:2	N:28	V:0
+1	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:63	V:112
+8	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:63	V:103
+1	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:59	V:103
+9	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:59	V:111
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:57	V:111
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:57	V:102
+0	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:54	V:102
+9	NoteOff	Ch:0	N:57	V:0
+0	NoteOn	Ch:0	N:54	V:113
+1	NoteOff	Ch:1	N:54	V:0
+0	NoteOn	Ch:1	N:51	V:113
+9	NoteOff	Ch:0	N:54	V:0
+0	NoteOn	Ch:0	N:51	V:103
+0	NoteOff	Ch:1	N:51	V:0
+0	NoteOn	Ch:1	N:47	V:103
+9	NoteOff	Ch:0	N:51	V:0
+0	NoteOn	Ch:0	N:75	V:111
+1	NoteOff	Ch:1	N:47	V:0
+0	NoteOn	Ch:1	N:71	V:111
+9	NoteOff	Ch:0	N:75	V:0
+0	NoteOn	Ch:0	N:73	V:101
+0	NoteOff	Ch:1	N:71	V:0
+0	NoteOn	Ch:1	N:69	V:101
+9	NoteOff	Ch:0	N:73	V:0
+0	NoteOn	Ch:0	N:71	V:112
+1	NoteOff	Ch:1	N:69	V:0
+0	NoteOn	Ch:1	N:66	V:112
+9	NoteOff	Ch:0	N:71	V:0
+0	NoteOn	Ch:0	N:69	V:103
+1	NoteOff	Ch:1	N:66	V:0
+0	NoteOn	Ch:1	N:63	V:103
+8	NoteOff	Ch:0	N:69	V:0
+0	NoteOn	Ch:0	N:66	V:110
+1	NoteOff	Ch:1	N:63	V:0
+0	NoteOn	Ch:1	N:59	V:110
+9	NoteOff	Ch:0	N:66	V:0
+0	NoteOn	Ch:0	N:63	V:100
+1	NoteOff	Ch:1	N:59	V:0
+0	NoteOn	Ch:1	N:57	V:100
+8	NoteOff	Ch:0	N:63	V:0
+0	NoteOn	Ch:0	N:59	V:113
+1	NoteOff	Ch:1	N:57	V:0
+0	NoteOn	Ch:1	N:54	V:113
+9	NoteOff	Ch:0	N:59	V:0
+0	NoteOn	Ch:0	N:57	V:103
+1	NoteOff	Ch:1	N:54	V:0
+0	NoteOn	Ch:1	N:51	V:103
+9	NoteOff	Ch:0	N:57	V:0
+0	NoteOff	Ch:1	N:51	V:0
+0	Meta	EndOfTrack	

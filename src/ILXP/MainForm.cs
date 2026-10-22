@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using ILXP.Deobfuscation;
 using ILXP.Interop;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
@@ -21,6 +22,9 @@ namespace ILXP
         private bool suppressHistory;
         private readonly NavigationHistory navigationHistory;
 
+        /// <summary>Set by automation (screenshots, tests) to avoid modal startup dialogs.</summary>
+        internal bool SuppressStartupDialogs { get; set; }
+
         public MainForm()
         {
             navigationHistory = new NavigationHistory();
@@ -35,6 +39,7 @@ namespace ILXP
             languageCombo.SelectedIndex = Math.Min(Math.Max(AppSettings.Default.SelectedLanguage, 0), languageCombo.Items.Count - 1);
             writer = languageCombo.SelectedItem as LanguageWriter;
             treeView.TreeViewNodeSorter = new TreeNodeComparer();
+            treeView.BeforeExpand += OnTreeBeforeExpand;
 
             Shown += OnShown;
         }
@@ -62,6 +67,11 @@ namespace ILXP
 
         private void OnShown(object sender, EventArgs e)
         {
+            if (SuppressStartupDialogs)
+            {
+                return;
+            }
+
             Application.DoEvents();
 
             string lastPath = AppSettings.Default.LastSelectedNodePath;
@@ -189,6 +199,61 @@ namespace ILXP
             {
                 Log.Error("Unable to assemble IL.", ex);
                 MessageBox.Show(this, ex.Message, "IL Assembler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void OnRecursiveFoldersChanged(object sender, EventArgs e)
+        {
+            AppSettings.Default.RecursiveFolders = recursiveFoldersMenuItem.Checked;
+            AppSettings.Default.Save();
+        }
+
+        private void OnCleanAssembly(object sender, EventArgs e)
+        {
+            TreeNode node = treeView.SelectedNode;
+            while (node != null && node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            AssemblyItem item = node == null ? null : node.Tag as AssemblyItem;
+            if (item == null)
+            {
+                MessageBox.Show(this, "Open an assembly first.", AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Save the cleaned assembly";
+                dialog.Filter = "Assembly (*.dll)|*.dll|Executable (*.exe)|*.exe";
+                dialog.FileName = Path.GetFileNameWithoutExtension(item.FilePath) + ".cleaned" + Path.GetExtension(item.FilePath);
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                try
+                {
+                    AssemblyDefinition assembly = item.Assembly;
+                    DeobfuscationReport report = DeobfuscationPipeline.Run(assembly, DeobfuscationPipeline.CreateDefault());
+                    assembly.Write(dialog.FileName, new WriterParameters { WriteSymbols = false });
+
+                    System.Text.StringBuilder text = new System.Text.StringBuilder();
+                    text.AppendLine("Cleaned assembly written to:");
+                    text.AppendLine(dialog.FileName);
+                    text.AppendLine();
+                    foreach (System.Collections.Generic.KeyValuePair<string, int> pair in report.Results)
+                    {
+                        text.AppendLine(pair.Key + ": " + pair.Value);
+                    }
+                    MessageBox.Show(this, text.ToString(), "Clean assembly", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unable to clean the assembly.", ex);
+                    MessageBox.Show(this, ex.Message, "Clean assembly", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -328,15 +393,28 @@ namespace ILXP
 
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             treeView.BeginUpdate();
-            foreach (string file in files)
+            try
             {
-                TreeNode node = LoadAssemblyTree(file);
-                if (node != null)
+                foreach (string path in files)
                 {
-                    ReplaceAssemblyNode(node);
+                    if (Directory.Exists(path))
+                    {
+                        // Folders are scanned asynchronously; see LoadFolder.
+                        LoadFolder(path, AppSettings.Default.RecursiveFolders);
+                        continue;
+                    }
+
+                    TreeNode node = LoadAssemblyTree(path);
+                    if (node != null)
+                    {
+                        AddOrReplaceAssemblyNode(node);
+                    }
                 }
             }
-            treeView.EndUpdate();
+            finally
+            {
+                treeView.EndUpdate();
+            }
         }
 
         private void OnTreeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -351,6 +429,13 @@ namespace ILXP
         {
             if (e.Node == null)
             {
+                return;
+            }
+
+            TypeLink link = e.Node.Tag as TypeLink;
+            if (link != null)
+            {
+                NavigateToType(link.Type);
                 return;
             }
 
@@ -624,21 +709,28 @@ namespace ILXP
             root.Tag = new AssemblyItem(path, assembly);
             SetImage(root, "0VSObject_Assembly.bmp");
 
+            TreeNode assemblyReferences = CreateLazyNode("References", "4VSReferences.bmp", delegate
+            {
+                return BuildAssemblyReferenceNodes(assembly);
+            });
+            root.Nodes.Add(assemblyReferences);
+
             foreach (ModuleDefinition module in assembly.Modules)
             {
                 TreeNode moduleNode = root.Nodes.Add(module.Name);
                 SetImage(moduleNode, "1VSObject_Library.bmp");
                 moduleNode.Tag = module;
 
-                TreeNode referencesNode = moduleNode.Nodes.Add("References");
-                SetImage(referencesNode, "4VSReferences.bmp");
-                foreach (AssemblyNameReference reference in module.AssemblyReferences)
+                TreeNode referencesNode = CreateLazyNode("References", "4VSReferences.bmp", delegate
                 {
-                    TreeNode referenceNode = new TreeNode(string.Format("{0} ({1})", reference.Name, reference.Version));
-                    referenceNode.Tag = reference;
-                    SetImage(referenceNode, "5VSProject_reference.bmp");
-                    referencesNode.Nodes.Add(referenceNode);
-                }
+                    List<TreeNode> list = new List<TreeNode>();
+                    foreach (AssemblyNameReference reference in module.AssemblyReferences)
+                    {
+                        list.Add(CreateReferenceNode(reference));
+                    }
+                    return list;
+                });
+                moduleNode.Nodes.Add(referencesNode);
 
                 Dictionary<string, TreeNode> namespaces = new Dictionary<string, TreeNode>();
                 foreach (TypeDefinition type in module.Types)
@@ -687,6 +779,31 @@ namespace ILXP
             return root;
         }
 
+        /// <summary>Builds the union of all references of an assembly (deduplicated).</summary>
+        private List<TreeNode> BuildAssemblyReferenceNodes(AssemblyDefinition assembly)
+        {
+            List<TreeNode> list = new List<TreeNode>();
+            HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (ModuleDefinition module in assembly.Modules)
+            {
+                foreach (AssemblyNameReference reference in module.AssemblyReferences)
+                {
+                    if (!seen.Add(reference.FullName))
+                    {
+                        continue;
+                    }
+                    list.Add(CreateReferenceNode(reference));
+                }
+            }
+            if (list.Count == 0)
+            {
+                TreeNode none = new TreeNode("(no references)");
+                none.ForeColor = Color.Gray;
+                list.Add(none);
+            }
+            return list;
+        }
+
         private static void TryReadSymbols(AssemblyDefinition assembly, string path)
         {
             try
@@ -725,112 +842,10 @@ namespace ILXP
 
             try
             {
-                TreeNode baseTypesNode = new TreeNode("Base Types");
-                SetImage(baseTypesNode, "4VSBaseTypes.bmp");
-                if (type.BaseType != null)
+                List<TreeNode> members = BuildTypeMembers(type);
+                if (members.Count > 0)
                 {
-                    TreeNode baseTypeNode = new TreeNode(type.BaseType.Name);
-                    SetImage(baseTypeNode, "7VSObject_Class.bmp");
-                    baseTypesNode.Nodes.Add(baseTypeNode);
-                }
-                foreach (TypeReference @interface in type.Interfaces)
-                {
-                    TreeNode interfaceNode = new TreeNode(@interface.Name);
-                    SetImage(interfaceNode, "7VSObject_Interface.bmp");
-                    baseTypesNode.Nodes.Add(interfaceNode);
-                }
-                if (baseTypesNode.Nodes.Count > 0)
-                {
-                    typeNode.Nodes.Add(baseTypesNode);
-                }
-
-                foreach (TypeDefinition nested in type.NestedTypes)
-                {
-                    AddTypeNode(typeNode, nested);
-                }
-
-                List<string> accessorNames = new List<string>();
-                foreach (PropertyDefinition property in type.Properties)
-                {
-                    if (property.SetMethod != null)
-                    {
-                        accessorNames.Add(property.SetMethod.Name);
-                    }
-                    if (property.GetMethod != null)
-                    {
-                        accessorNames.Add(property.GetMethod.Name);
-                    }
-                }
-                foreach (EventDefinition @event in type.Events)
-                {
-                    if (@event.AddMethod != null)
-                    {
-                        accessorNames.Add(@event.AddMethod.Name);
-                    }
-                    if (@event.RemoveMethod != null)
-                    {
-                        accessorNames.Add(@event.RemoveMethod.Name);
-                    }
-                    foreach (MethodDefinition other in @event.OtherMethods)
-                    {
-                        if (other != null)
-                        {
-                            accessorNames.Add(other.Name);
-                        }
-                    }
-                }
-
-                foreach (MethodDefinition method in type.Methods)
-                {
-                    if (accessorNames.Contains(method.Name))
-                    {
-                        continue;
-                    }
-
-                    TreeNode methodNode = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(method));
-                    SetImage(methodNode, GetMethodImageKey(method));
-                    if (!method.IsPublic)
-                    {
-                        methodNode.ForeColor = Color.Gray;
-                    }
-                    methodNode.Tag = method;
-                    typeNode.Nodes.Add(methodNode);
-                }
-
-                foreach (PropertyDefinition property in type.Properties)
-                {
-                    TreeNode propertyNode = new TreeNode(property.Name);
-                    SetImage(propertyNode, GetPropertyImageKey(property));
-                    propertyNode.Tag = property;
-                    AddAccessorNode(propertyNode, property.SetMethod, property);
-                    AddAccessorNode(propertyNode, property.GetMethod, property);
-                    typeNode.Nodes.Add(propertyNode);
-                }
-
-                foreach (EventDefinition @event in type.Events)
-                {
-                    TreeNode eventNode = new TreeNode(@event.Name);
-                    SetImage(eventNode, GetEventImageKey(@event));
-                    eventNode.Tag = @event;
-                    typeNode.Nodes.Add(eventNode);
-                    AddAccessorNode(eventNode, @event.AddMethod, null);
-                    AddAccessorNode(eventNode, @event.RemoveMethod, null);
-                    foreach (MethodDefinition other in @event.OtherMethods)
-                    {
-                        AddAccessorNode(eventNode, other, null);
-                    }
-                }
-
-                foreach (FieldDefinition field in type.Fields)
-                {
-                    TreeNode fieldNode = new TreeNode(field.Name);
-                    SetImage(fieldNode, GetFieldImageKey(field));
-                    fieldNode.Tag = field;
-                    if (!field.IsPublic)
-                    {
-                        fieldNode.ForeColor = Color.Gray;
-                    }
-                    typeNode.Nodes.Add(fieldNode);
+                    typeNode.Nodes.AddRange(members.ToArray());
                 }
             }
             catch (Exception ex)
@@ -838,6 +853,130 @@ namespace ILXP
                 Log.Warn("Unable to build the tree for type '" + type.FullName + "'.", ex);
                 typeNode.Tag = ex.Message;
             }
+        }
+
+        /// <summary>
+        /// Builds the child nodes of a type: base types (clickable), nested types,
+        /// methods, properties, events and fields.
+        /// </summary>
+        private List<TreeNode> BuildTypeMembers(TypeDefinition type)
+        {
+            List<TreeNode> nodes = new List<TreeNode>();
+
+            TreeNode baseTypesNode = new TreeNode("Base Types");
+            SetImage(baseTypesNode, "4VSBaseTypes.bmp");
+            if (type.BaseType != null)
+            {
+                baseTypesNode.Nodes.Add(CreateTypeLinkNode(type.BaseType, "7VSObject_Class.bmp"));
+            }
+            foreach (TypeReference @interface in type.Interfaces)
+            {
+                baseTypesNode.Nodes.Add(CreateTypeLinkNode(@interface, "7VSObject_Interface.bmp"));
+            }
+            if (baseTypesNode.Nodes.Count > 0)
+            {
+                nodes.Add(baseTypesNode);
+            }
+
+            foreach (TypeDefinition nested in type.NestedTypes)
+            {
+                TreeNode nestedNode = new TreeNode(LanguageWriter.GetShortTypeName(nested));
+                SetImage(nestedNode, GetTypeImageKey(nested));
+                if (nested.IsNotPublic)
+                {
+                    nestedNode.ForeColor = Color.Gray;
+                }
+                nestedNode.Tag = nested;
+                nestedNode.Nodes.Add(CreateLazyNode("...", "8VSObject_Method.bmp",
+                    CreateTypeMembersFactory(nested)));
+                nodes.Add(nestedNode);
+            }
+
+            List<string> accessorNames = new List<string>();
+            foreach (PropertyDefinition property in type.Properties)
+            {
+                if (property.SetMethod != null)
+                {
+                    accessorNames.Add(property.SetMethod.Name);
+                }
+                if (property.GetMethod != null)
+                {
+                    accessorNames.Add(property.GetMethod.Name);
+                }
+            }
+            foreach (EventDefinition @event in type.Events)
+            {
+                if (@event.AddMethod != null)
+                {
+                    accessorNames.Add(@event.AddMethod.Name);
+                }
+                if (@event.RemoveMethod != null)
+                {
+                    accessorNames.Add(@event.RemoveMethod.Name);
+                }
+                foreach (MethodDefinition other in @event.OtherMethods)
+                {
+                    if (other != null)
+                    {
+                        accessorNames.Add(other.Name);
+                    }
+                }
+            }
+
+            foreach (MethodDefinition method in type.Methods)
+            {
+                if (accessorNames.Contains(method.Name) || LanguageWriter.IsCompilerGeneratedName(method.Name))
+                {
+                    continue;
+                }
+
+                TreeNode methodNode = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(method));
+                SetImage(methodNode, GetMethodImageKey(method));
+                if (!method.IsPublic)
+                {
+                    methodNode.ForeColor = Color.Gray;
+                }
+                methodNode.Tag = method;
+                nodes.Add(methodNode);
+            }
+
+            foreach (PropertyDefinition property in type.Properties)
+            {
+                TreeNode propertyNode = new TreeNode(property.Name);
+                SetImage(propertyNode, GetPropertyImageKey(property));
+                propertyNode.Tag = property;
+                AddAccessorNode(propertyNode, property.SetMethod, property);
+                AddAccessorNode(propertyNode, property.GetMethod, property);
+                nodes.Add(propertyNode);
+            }
+
+            foreach (EventDefinition @event in type.Events)
+            {
+                TreeNode eventNode = new TreeNode(@event.Name);
+                SetImage(eventNode, GetEventImageKey(@event));
+                eventNode.Tag = @event;
+                AddAccessorNode(eventNode, @event.AddMethod, null);
+                AddAccessorNode(eventNode, @event.RemoveMethod, null);
+                foreach (MethodDefinition other in @event.OtherMethods)
+                {
+                    AddAccessorNode(eventNode, other, null);
+                }
+                nodes.Add(eventNode);
+            }
+
+            foreach (FieldDefinition field in type.Fields)
+            {
+                TreeNode fieldNode = new TreeNode(field.Name);
+                SetImage(fieldNode, GetFieldImageKey(field));
+                fieldNode.Tag = field;
+                if (!field.IsPublic)
+                {
+                    fieldNode.ForeColor = Color.Gray;
+                }
+                nodes.Add(fieldNode);
+            }
+
+            return nodes;
         }
 
         private static void AddAccessorNode(TreeNode parent, MethodDefinition method, PropertyDefinition owner)

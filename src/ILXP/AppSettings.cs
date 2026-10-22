@@ -59,6 +59,51 @@ namespace ILXP
             set { values["LastSelectedNodePath"] = value ?? string.Empty; }
         }
 
+        /// <summary>Whether the About box should start playing music (default: on).</summary>
+        public bool MusicEnabled
+        {
+            get { return GetBool("MusicEnabled", true); }
+            set { values["MusicEnabled"] = value ? "1" : "0"; }
+        }
+
+        /// <summary>Identifier of the last played tune (a built-in id or "file:&lt;path&gt;").</summary>
+        public string MusicTrack
+        {
+            get { return GetString("MusicTrack", "E1M1"); }
+            set { values["MusicTrack"] = value ?? string.Empty; }
+        }
+
+        public float MusicVolume
+        {
+            get
+            {
+                float result;
+                return float.TryParse(GetString("MusicVolume", "0.55"), NumberStyles.Float, CultureInfo.InvariantCulture, out result)
+                    ? Math.Max(0f, Math.Min(1f, result))
+                    : 0.55f;
+            }
+            set { values["MusicVolume"] = Math.Max(0f, Math.Min(1f, value)).ToString("0.00", CultureInfo.InvariantCulture); }
+        }
+
+        /// <summary>Folders are loaded recursively when true.</summary>
+        public bool RecursiveFolders
+        {
+            get { return GetBool("RecursiveFolders", true); }
+            set { values["RecursiveFolders"] = value ? "1" : "0"; }
+        }
+
+        public bool AutoLoadReferences
+        {
+            get { return GetBool("AutoLoadReferences", false); }
+            set { values["AutoLoadReferences"] = value ? "1" : "0"; }
+        }
+
+        public string DecompilerTarget
+        {
+            get { return GetString("DecompilerTarget", "auto"); }
+            set { values["DecompilerTarget"] = value ?? "auto"; }
+        }
+
         public string SettingsPath
         {
             get { return filePath; }
@@ -168,6 +213,16 @@ namespace ILXP
             return int.TryParse(GetString(key, string.Empty), NumberStyles.Integer, CultureInfo.InvariantCulture, out result)
                 ? result
                 : fallback;
+        }
+
+        private bool GetBool(string key, bool fallback)
+        {
+            string value = GetString(key, string.Empty);
+            if (string.IsNullOrEmpty(value))
+            {
+                return fallback;
+            }
+            return value == "1" || string.Equals(value, "true", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

@@ -11,8 +11,11 @@ namespace ILXP
         private ToolStripMenuItem openMenuItem;
         private ToolStripSeparator fileSeparator;
         private ToolStripMenuItem exitMenuItem;
+        private ToolStripMenuItem openFolderMenuItem;
+        private ToolStripMenuItem recursiveFoldersMenuItem;
         private ToolStripMenuItem exportIlMenuItem;
         private ToolStripMenuItem assembleIlMenuItem;
+        private ToolStripMenuItem cleanAssemblyMenuItem;
         private ToolStripMenuItem viewMenu;
         private ToolStripMenuItem refreshMenuItem;
         private ToolStripSeparator viewSeparator;
@@ -53,8 +56,11 @@ namespace ILXP
             this.openMenuItem = new ToolStripMenuItem();
             this.fileSeparator = new ToolStripSeparator();
             this.exitMenuItem = new ToolStripMenuItem();
+            this.openFolderMenuItem = new ToolStripMenuItem();
+            this.recursiveFoldersMenuItem = new ToolStripMenuItem();
             this.exportIlMenuItem = new ToolStripMenuItem();
             this.assembleIlMenuItem = new ToolStripMenuItem();
+            this.cleanAssemblyMenuItem = new ToolStripMenuItem();
             this.viewMenu = new ToolStripMenuItem();
             this.refreshMenuItem = new ToolStripMenuItem();
             this.viewSeparator = new ToolStripSeparator();
@@ -106,7 +112,17 @@ namespace ILXP
             this.mainMenu.Size = new Size(828, 24);
             this.mainMenu.TabIndex = 0;
 
-            this.fileMenu.DropDownItems.AddRange(new ToolStripItem[] { this.openMenuItem, this.exportIlMenuItem, this.assembleIlMenuItem, this.fileSeparator, this.exitMenuItem });
+            this.fileMenu.DropDownItems.AddRange(new ToolStripItem[]
+            {
+                this.openMenuItem,
+                this.openFolderMenuItem,
+                this.recursiveFoldersMenuItem,
+                this.exportIlMenuItem,
+                this.assembleIlMenuItem,
+                this.cleanAssemblyMenuItem,
+                this.fileSeparator,
+                this.exitMenuItem
+            });
             this.fileMenu.Name = "FileToolStripMenuItem";
             this.fileMenu.Size = new Size(37, 20);
             this.fileMenu.Text = "&File";
@@ -118,6 +134,18 @@ namespace ILXP
             this.openMenuItem.Text = "&Open...";
             this.openMenuItem.Click += this.OnOpenFile;
 
+            this.openFolderMenuItem.Name = "MenuItemFileOpenFolder";
+            this.openFolderMenuItem.Size = new Size(155, 22);
+            this.openFolderMenuItem.Text = "Open F&older...";
+            this.openFolderMenuItem.Click += this.OnOpenFolder;
+
+            this.recursiveFoldersMenuItem.Name = "MenuItemFileRecursiveFolders";
+            this.recursiveFoldersMenuItem.Size = new Size(155, 22);
+            this.recursiveFoldersMenuItem.Text = "&Recursive folders";
+            this.recursiveFoldersMenuItem.CheckOnClick = true;
+            this.recursiveFoldersMenuItem.Checked = AppSettings.Default.RecursiveFolders;
+            this.recursiveFoldersMenuItem.CheckedChanged += this.OnRecursiveFoldersChanged;
+
             this.exportIlMenuItem.Name = "MenuItemFileExportIl";
             this.exportIlMenuItem.Size = new Size(155, 22);
             this.exportIlMenuItem.Text = "Export &IL...";
@@ -127,6 +155,11 @@ namespace ILXP
             this.assembleIlMenuItem.Size = new Size(155, 22);
             this.assembleIlMenuItem.Text = "&Assemble IL...";
             this.assembleIlMenuItem.Click += this.OnAssembleIl;
+
+            this.cleanAssemblyMenuItem.Name = "MenuItemFileClean";
+            this.cleanAssemblyMenuItem.Size = new Size(155, 22);
+            this.cleanAssemblyMenuItem.Text = "&Clean assembly...";
+            this.cleanAssemblyMenuItem.Click += this.OnCleanAssembly;
 
             this.fileSeparator.Name = "ToolStripMenuItem1";
             this.fileSeparator.Size = new Size(152, 6);

@@ -13,6 +13,27 @@ namespace ILXP
     /// </summary>
     public abstract class LanguageWriter
     {
+        /// <summary>Selected output dialect (affects headers and optional syntax).</summary>
+        public OutputDialect Dialect { get; set; }
+
+        /// <summary>Comment prefix used when writing the dialect header.</summary>
+        protected virtual string CommentPrefix
+        {
+            get { return "// "; }
+        }
+
+        /// <summary>Header that documents which dialect the output targets.</summary>
+        protected string GetDialectHeader()
+        {
+            if (Dialect == null)
+            {
+                return string.Empty;
+            }
+
+            return CommentPrefix + "Dialect: " + Dialect.DisplayName +
+                   "  (" + Dialect.Toolchain + ")" + Environment.NewLine;
+        }
+
         public abstract string WriteAssembly(AssemblyItem assembly);
 
         public abstract string WriteNamespace(ModuleItem module);

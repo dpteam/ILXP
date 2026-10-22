@@ -20,6 +20,11 @@ Status legend: `[x]` done, `[~]` in progress / partially done, `[ ]` planned.
 - [x] Embed Mono.Cecil 0.9.6.4 and Mono.Cecil.Pdb as decompiled source projects.
 - [x] Reverse engineer and integrate the four binaries from `refs/_MayBeNeedReverse`
       (see `REVERSE_ENGINEERING.md`).
+- [x] Replace the native tools with managed implementations (ILDasm, ILAsm, x86 disassembler,
+      GAC resolver); `--native` still uses the shipped binaries.
+- [x] About box: interactive water logo, music player with track selection and MIDI import.
+- [x] Recursive folder loading and a lazily expanded tree (references are browsable).
+- [x] Output dialects (C# 1.0–9.0, SharpDevelop, VB).
 - [x] Baseline support for damaged inputs: `AssemblyLoader` carves a valid PE image out of a
       larger blob (memory dump, appended data) and retries (verified with `tools/Test-Carving.ps1`).
 
@@ -61,8 +66,7 @@ Dependency order matters: de4dot-family sources need **dnlib**; Unscrambler need
 
 ### 3.3 Unscrambler
 
-- [x] Port `SizeOfReplace`, `EmptyTypeReplace`, `NopRemover` as Cecil passes.
-- [x] Port `MathReplace` (constant folding of `System.Math` calls); verified with
+- [x] Port `SizeOfReplace`, `EmptyTypeReplace`, `NopRemover` as Cecil passes.- [x] Port `MathReplace` (constant folding of `System.Math` calls); verified with
       `tools/Test-MathPass.ps1` (`Math.Abs(-5)` → `5`, `Math.Sqrt(16.0)` → `4.0`).
 - [ ] Port `ConvertToIntReplace`, `DoubleParseReplace`, `CalliReplace`, `HideCallsRemover`,
       `LocalsToFieldRemover`, `InterfaceLoopRemover`.

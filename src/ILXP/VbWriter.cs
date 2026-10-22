@@ -12,6 +12,10 @@ namespace ILXP
 {
     public sealed class VbWriter : LanguageWriter
     {
+    	protected override string CommentPrefix
+    	{
+    		get { return "' "; }
+    	}
     	[DebuggerNonUserCode]
     	public VbWriter()
     	{
@@ -20,6 +24,7 @@ namespace ILXP
     	public override string WriteAssembly(AssemblyItem gclass0_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
+    		stringBuilder.AppendLine("<<g>>" + GetDialectHeader().TrimEnd() + "<<>>");
     		stringBuilder.AppendLine("<<g>>'Name: " + gclass0_0.Assembly.Name.Name + "<<>>");
     		stringBuilder.AppendLine("<<g>>'Path: " + gclass0_0.FilePath + "<<>>");
     		stringBuilder.AppendLine("<<g>>'Version: " + $"{gclass0_0.Assembly.Name.Version.Major}:{gclass0_0.Assembly.Name.Version.MajorRevision}:{gclass0_0.Assembly.Name.Version.Minor}:{gclass0_0.Assembly.Name.Version.MinorRevision}" + "<<>>");
