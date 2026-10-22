@@ -1,189 +1,210 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Mono.Cecil;
 
 namespace ILXP
 {
+    /// <summary>
+    /// Base class for the three output languages supported by the application.
+    /// Each writer turns Cecil metadata into text annotated with lightweight markup
+    /// (<c>&lt;&lt;b&gt;&gt;</c>, <c>&lt;&lt;r&gt;&gt;</c>, ...) that the editor renders
+    /// as colored tokens.
+    /// </summary>
     public abstract class LanguageWriter
     {
-    	[DebuggerNonUserCode]
-    	public LanguageWriter()
-    	{
-    	}
+        public abstract string WriteAssembly(AssemblyItem assembly);
 
-    	public abstract string vmethod_0(AssemblyItem gclass0_0);
+        public abstract string WriteNamespace(ModuleItem module);
 
-    	public abstract string vmethod_1(ModuleItem gclass6_0);
+        public abstract string WriteType(TypeDefinition type);
 
-    	public abstract string vmethod_2(TypeDefinition typeDefinition_0);
+        public abstract string WriteModule(ModuleDefinition module);
 
-    	public abstract string vmethod_3(ModuleDefinition moduleDefinition_0);
+        public abstract string WriteMethod(MethodDefinition method);
 
-    	public abstract string vmethod_4(MethodDefinition methodDefinition_0);
+        public abstract string WriteProperty(PropertyDefinition property);
 
-    	public abstract string vmethod_5(PropertyDefinition propertyDefinition_0);
+        public abstract string WriteField(FieldDefinition field);
 
-    	public abstract string vmethod_6(FieldDefinition fieldDefinition_0);
+        public abstract string WriteEvent(EventDefinition @event);
 
-    	public abstract string vmethod_7(EventDefinition eventDefinition_0);
+        /// <summary>
+        /// Builds the navigation key ("&lt;&lt;#assembly//Nnamespace//Type&gt;&gt;")
+        /// that the editor uses to jump to the declaration of a metadata reference.
+        /// </summary>
+        public static string GetReferenceKey(object value)
+        {
+            if (value is AssemblyItem)
+            {
+                return "<<#" + ((AssemblyItem)value).Assembly.Name.FullName + ">>";
+            }
+            if (value is AssemblyNameReference)
+            {
+                return "<<#" + ((AssemblyNameReference)value).FullName + ">>";
+            }
+            if (value is AssemblyDefinition)
+            {
+                return "<<#" + ((AssemblyDefinition)value).Name.FullName + ">>";
+            }
+            if (value is ModuleItem)
+            {
+                ModuleItem module = (ModuleItem)value;
+                return "<<#" + module.Module.Assembly.Name.FullName + "//N" + module.Namespace + ">>";
+            }
+            if (value is TypeReference)
+            {
+                TypeReference type = (TypeReference)value;
+                return "<<#" + GetAssemblyName(type.Scope).FullName + "//N" + type.Namespace + "//" +
+                       type.GetElementType().Name.Replace("<", string.Empty).Replace(">", string.Empty) + ">>";
+            }
+            if (value is MethodReference)
+            {
+                MethodReference method = (MethodReference)value;
+                return "<<#" + GetAssemblyName(method.DeclaringType.Scope).FullName + "//N" +
+                       method.DeclaringType.Namespace + "//" + method.DeclaringType.Name + "//M" +
+                       GetMethodSignature(method.GetElementMethod()) + ">>";
+            }
+            if (value is FieldReference)
+            {
+                FieldReference field = (FieldReference)value;
+                return "<<#" + GetAssemblyName(field.DeclaringType.Scope).FullName + "//N" +
+                       field.DeclaringType.Namespace + "//" + field.DeclaringType.Name + "//F" + field.Name + ">>";
+            }
+            throw new ArgumentException("Unknown object type: " + (value == null ? "null" : value.GetType().FullName));
+        }
 
-    	public static string smethod_0(object object_0)
-    	{
-    		if (object_0 is AssemblyItem)
-    		{
-    			return "<<#" + ((AssemblyItem)object_0).method_1().Name.FullName + ">>";
-    		}
-    		if (object_0 is AssemblyNameReference)
-    		{
-    			return "<<#" + ((AssemblyNameReference)object_0).FullName + ">>";
-    		}
-    		if (object_0 is AssemblyDefinition)
-    		{
-    			return "<<#" + ((AssemblyDefinition)object_0).Name.FullName + ">>";
-    		}
-    		if (object_0 is ModuleItem)
-    		{
-    			return "<<#" + ((ModuleItem)object_0).method_1().Assembly.Name.FullName + "//N" + ((ModuleItem)object_0).method_0() + ">>";
-    		}
-    		if (object_0 is TypeReference)
-    		{
-    			return "<<#" + smethod_1(((TypeReference)object_0).Scope).FullName + "//N" + ((TypeReference)object_0).Namespace + "//" + ((TypeReference)object_0).GetElementType().Name.Replace("<", "").Replace(">", "") + ">>";
-    		}
-    		if (object_0 is MethodReference)
-    		{
-    			return "<<#" + smethod_1(((MethodReference)object_0).DeclaringType.Scope).FullName + "//N" + ((MethodReference)object_0).DeclaringType.Namespace + "//" + ((MethodReference)object_0).DeclaringType.Name + "//M" + smethod_4(((MethodReference)object_0).GetElementMethod()) + ">>";
-    		}
-    		if (object_0 is FieldReference)
-    		{
-    			return "<<#" + smethod_1(((FieldReference)object_0).DeclaringType.Scope).FullName + "//N" + ((FieldReference)object_0).DeclaringType.Namespace + "//" + ((FieldReference)object_0).DeclaringType.Name + "//F" + ((FieldReference)object_0).Name + ">>";
-    		}
-    		throw new Exception("Unknown object type");
-    	}
+        public static AssemblyNameReference GetAssemblyName(IMetadataScope scope)
+        {
+            AssemblyNameReference reference = scope as AssemblyNameReference;
+            if (reference != null)
+            {
+                return reference;
+            }
 
-    	public static AssemblyNameReference smethod_1(IMetadataScope imetadataScope_0)
-    	{
-    		if (imetadataScope_0 is AssemblyNameReference)
-    		{
-    			return (AssemblyNameReference)imetadataScope_0;
-    		}
-    		if (imetadataScope_0 is ModuleDefinition)
-    		{
-    			return ((ModuleDefinition)imetadataScope_0).Assembly.Name;
-    		}
-    		if (!(imetadataScope_0 is AssemblyDefinition))
-    		{
-    			throw new Exception("Cannot determine scope type");
-    		}
-    		return ((AssemblyDefinition)(object)imetadataScope_0).Name;
-    	}
+            ModuleDefinition module = scope as ModuleDefinition;
+            if (module != null)
+            {
+                return module.Assembly.Name;
+            }
 
-    	public string method_0(string string_0)
-    	{
-    		string_0 = Regex.Replace(string_0, "\\<\\<[r|g|b]?\\>\\>", "");
-    		string_0 = Regex.Replace(string_0, "\\<\\<\\#[^\\>|\\<]+\\>\\>", "");
-    		return string_0;
-    	}
+            object rawScope = scope;
+            AssemblyDefinition assembly = rawScope as AssemblyDefinition;
+            if (assembly != null)
+            {
+                return assembly.Name;
+            }
 
-    	public static string smethod_2(TypeReference typeReference_0)
-    	{
-    		return typeReference_0.Namespace + "." + smethod_3(typeReference_0);
-    	}
+            throw new ArgumentException("Cannot determine scope type: " + (scope == null ? "null" : scope.GetType().FullName));
+        }
 
-    	public static string smethod_3(TypeReference typeReference_0)
-    	{
-    		string text = typeReference_0.GetElementType().Name;
-    		checked
-    		{
-    			if (typeReference_0 is GenericInstanceType)
-    			{
-    				if (typeReference_0.Name.Length > 2 && Operators.CompareString(typeReference_0.Name.Substring(typeReference_0.Name.Length - 2, 1), "`", TextCompare: false) == 0)
-    				{
-    					text = typeReference_0.Name.Substring(0, typeReference_0.Name.Length - 2);
-    				}
-    				text += "<";
-    				GenericInstanceType genericInstanceType = (GenericInstanceType)typeReference_0;
-    				foreach (TypeReference genericArgument in genericInstanceType.GenericArguments)
-    				{
-    					text = Conversions.ToString(Operators.ConcatenateObject(text, Operators.ConcatenateObject(Interaction.IIf(string.IsNullOrEmpty(genericArgument.Name), "?", genericArgument.Name), ", ")));
-    				}
-    				text = text.TrimEnd(' ', ',') + ">";
-    			}
-    			return text;
-    		}
-    	}
+        /// <summary>Removes the markup tags from a generated fragment.</summary>
+        public string StripMarkup(string text)
+        {
+            text = Regex.Replace(text, "\\<\\<[r|g|b]?\\>\\>", string.Empty);
+            text = Regex.Replace(text, "\\<\\<\\#[^\\>|\\<]+\\>\\>", string.Empty);
+            return text;
+        }
 
-    	public static string smethod_4(MethodReference methodReference_0)
-    	{
-    		string text = "(";
-    		foreach (ParameterDefinition parameter in methodReference_0.Parameters)
-    		{
-    			text = text + parameter.ParameterType.Name + ",";
-    		}
-    		text = text.TrimEnd(',') + ")";
-    		return methodReference_0.Name + text;
-    	}
+        public static string GetFullTypeName(TypeReference type)
+        {
+            return type.Namespace + "." + GetShortTypeName(type);
+        }
 
-    	public static string smethod_5(MethodReference methodReference_0)
-    	{
-    		string text = methodReference_0.Name + "(";
-    		foreach (ParameterDefinition parameter in methodReference_0.Parameters)
-    		{
-    			text = text + smethod_3(parameter.ParameterType) + ",";
-    		}
-    		text = text.TrimEnd(',') + ")";
-    		if (!text.StartsWith(".") && methodReference_0.ReturnType != null)
-    		{
-    			text = $"{text} : {smethod_3(methodReference_0.ReturnType)}";
-    		}
-    		return text;
-    	}
+        public static string GetShortTypeName(TypeReference type)
+        {
+            string name = type.GetElementType().Name;
+            GenericInstanceType generic = type as GenericInstanceType;
+            if (generic != null)
+            {
+                if (type.Name.Length > 2 && type.Name[type.Name.Length - 2] == '`')
+                {
+                    name = type.Name.Substring(0, type.Name.Length - 2);
+                }
 
-    	public static string smethod_6(int int_0)
-    	{
-    		return "<<r>>L_" + Convert.ToString(int_0, 16).PadLeft(4, '0') + "<<>>";
-    	}
+                name += "<";
+                foreach (TypeReference argument in generic.GenericArguments)
+                {
+                    name += (string.IsNullOrEmpty(argument.Name) ? "?" : argument.Name) + ", ";
+                }
+                name = name.TrimEnd(' ', ',') + ">";
+            }
+            return name;
+        }
 
-    	internal string method_1(TypeReference typeReference_0)
-    	{
-    		string text = typeReference_0.GetElementType().Name.ToLower();
-    		if (typeReference_0.IsArray)
-    		{
-    			text = "array";
-    		}
-    		string left = text;
-    		if (Operators.CompareString(left, "string", TextCompare: false) == 0)
-    		{
-    			text = "str";
-    		}
-    		else if (Operators.CompareString(left, "long", TextCompare: false) != 0 && Operators.CompareString(left, "double", TextCompare: false) != 0 && Operators.CompareString(left, "int16", TextCompare: false) != 0 && Operators.CompareString(left, "int32", TextCompare: false) != 0 && Operators.CompareString(left, "int64", TextCompare: false) != 0 && Operators.CompareString(left, "uint16", TextCompare: false) != 0 && Operators.CompareString(left, "uint32", TextCompare: false) != 0 && Operators.CompareString(left, "uint64", TextCompare: false) != 0)
-    		{
-    			if (Operators.CompareString(left, "boolean", TextCompare: false) == 0)
-    			{
-    				text = "flag";
-    			}
-    		}
-    		else
-    		{
-    			text = "num";
-    		}
-    		return text;
-    	}
+        public static string GetMethodSignature(MethodReference method)
+        {
+            string text = "(";
+            foreach (ParameterDefinition parameter in method.Parameters)
+            {
+                text += parameter.ParameterType.Name + ",";
+            }
+            return method.Name + text.TrimEnd(',') + ")";
+        }
 
-    	internal string method_2(TypeReference typeReference_0, List<string> list_0)
-    	{
-    		string text = method_1(typeReference_0);
-    		int i;
-    		for (i = 1; list_0.Contains(text + Conversions.ToString(i)); i = checked(i + 1))
-    		{
-    		}
-    		list_0.Add(text + Conversions.ToString(i));
-    		return text + Conversions.ToString(i);
-    	}
+        public static string GetMethodSignatureWithReturn(MethodReference method)
+        {
+            string text = method.Name + "(";
+            foreach (ParameterDefinition parameter in method.Parameters)
+            {
+                text += GetShortTypeName(parameter.ParameterType) + ",";
+            }
+            text = text.TrimEnd(',') + ")";
+            if (!text.StartsWith(".", StringComparison.Ordinal) && method.ReturnType != null)
+            {
+                text += " : " + GetShortTypeName(method.ReturnType);
+            }
+            return text;
+        }
+
+        public static string FormatIlLabel(int offset)
+        {
+            return "<<r>>L_" + offset.ToString("x4") + "<<>>";
+        }
+
+        /// <summary>Chooses a VB-style prefix for a generated local variable name.</summary>
+        internal string GetLocalNamePrefix(TypeReference type)
+        {
+            string name = type.GetElementType().Name.ToLowerInvariant();
+            if (type.IsArray)
+            {
+                return "array";
+            }
+            if (name == "string")
+            {
+                return "str";
+            }
+            if (name == "boolean")
+            {
+                return "flag";
+            }
+            switch (name)
+            {
+                case "long":
+                case "double":
+                case "int16":
+                case "int32":
+                case "int64":
+                case "uint16":
+                case "uint32":
+                case "uint64":
+                    return "num";
+                default:
+                    return name;
+            }
+        }
+
+        /// <summary>Creates a unique local name such as <c>num1</c>, <c>num2</c>, ...</summary>
+        internal string CreateUniqueLocalName(TypeReference type, List<string> usedNames)
+        {
+            string prefix = GetLocalNamePrefix(type);
+            int index = 1;
+            while (usedNames.Contains(prefix + index.ToString()))
+            {
+                index++;
+            }
+            usedNames.Add(prefix + index.ToString());
+            return prefix + index.ToString();
+        }
     }
-
 }

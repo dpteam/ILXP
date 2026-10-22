@@ -123,9 +123,9 @@ namespace ILXP
     							default:
     							{
     								CodeToken gClass2 = new CodeToken(text2);
-    								gClass2.method_7(black);
-    								gClass2.method_5(string_);
-    								gClass.method_0().Add(gClass2);
+    								gClass2.Color = black;
+    								gClass2.Link = string_;
+    								gClass.Tokens.Add(gClass2);
     								break;
     							}
     							}
@@ -254,9 +254,9 @@ namespace ILXP
     			{
     				CodeLine gClass = new CodeLine();
     				CodeToken gClass2 = new CodeToken(text);
-    				gClass2.method_7(Color.Black);
-    				gClass2.method_5("");
-    				gClass.method_0().Add(gClass2);
+    				gClass2.Color = Color.Black;
+    				gClass2.Link = "";
+    				gClass.Tokens.Add(gClass2);
     				gclass13_0.Add(gClass);
     			}
     		}
@@ -298,14 +298,14 @@ namespace ILXP
     			int num3 = 0;
     			foreach (CodeLine item in gclass13_0)
     			{
-    				if (item.method_1() + item.method_3() < num)
+    				if (item.Offset + item.Length < num)
     				{
-    					num3 = item.method_1() + item.method_3();
+    					num3 = item.Offset + item.Length;
     					continue;
     				}
-    				foreach (CodeToken item2 in item.method_0())
+    				foreach (CodeToken item2 in item.Tokens)
     				{
-    					string text2 = item2.method_0();
+    					string text2 = item2.Text;
     					int i = 0;
     					for (int length = text2.Length; i < length; i++)
     					{
@@ -340,7 +340,7 @@ namespace ILXP
     		int_1 = 0;
     		if (gclass13_0.Count > 0)
     		{
-    			int_1 = checked(gclass13_0[gclass13_0.Count - 1].method_1() + gclass13_0[gclass13_0.Count - 1].method_3());
+    			int_1 = checked(gclass13_0[gclass13_0.Count - 1].Offset + gclass13_0[gclass13_0.Count - 1].Length);
     		}
     		Invalidate();
     	}
@@ -375,12 +375,12 @@ namespace ILXP
     		{
     			foreach (CodeLine item in gclass13_0)
     			{
-    				item.method_2(num);
-    				foreach (CodeToken item2 in item.method_0())
+    				item.Offset = num;
+    				foreach (CodeToken item2 in item.Tokens)
     				{
-    					num += item2.method_0().Length;
+    					num += item2.Text.Length;
     				}
-    				item.method_4(num - item.method_1());
+    				item.Length = num - item.Offset;
     			}
     		}
     	}
@@ -393,7 +393,7 @@ namespace ILXP
     			int num2 = 0;
     			foreach (CodeLine item in gclass13_0)
     			{
-    				num2 = Math.Max(num2, item.method_3());
+    				num2 = Math.Max(num2, item.Length);
     			}
     			num2 *= this.m__003C;
     			Point autoScrollPosition = new Point(0, 0);
@@ -428,15 +428,15 @@ namespace ILXP
     			{
     				if (num + int_2 >= clipRectangle.Y && num <= clipRectangle.Bottom)
     				{
-    					num5 = item.method_1();
-    					foreach (CodeToken item2 in item.method_0())
+    					num5 = item.Offset;
+    					foreach (CodeToken item2 in item.Tokens)
     					{
     						Font font4 = font;
-    						if (!string.IsNullOrEmpty(item2.method_4()))
+    						if (!string.IsNullOrEmpty(item2.Link))
     						{
     							font4 = ((gclass15_0 != item2) ? font2 : font3);
     						}
-    						string text = item2.method_0();
+    						string text = item2.Text;
     						int i = 0;
     						for (int length = text.Length; i < length; i++)
     						{
@@ -453,7 +453,7 @@ namespace ILXP
     								else
     								{
     									rectangle.Offset(AutoScrollPosition);
-    									TextRenderer.DrawText(graphics, Conversions.ToString(c), font4, rectangle, item2.method_6(), textFormatFlags_0);
+    									TextRenderer.DrawText(graphics, Conversions.ToString(c), font4, rectangle, item2.Color, textFormatFlags_0);
     								}
     							}
     							num2 += this.m__003C;
@@ -484,14 +484,14 @@ namespace ILXP
     				Rectangle rc;
     				if (gclass15_0 != null)
     				{
-    					rc = gclass15_0.method_2();
-    					Rectangle rc2 = new Rectangle(rc.X + AutoScrollPosition.X, gclass15_0.method_2().Y + AutoScrollPosition.Y, gclass15_0.method_2().Width, gclass15_0.method_2().Height);
+    					rc = gclass15_0.Bounds;
+    					Rectangle rc2 = new Rectangle(rc.X + AutoScrollPosition.X, gclass15_0.Bounds.Y + AutoScrollPosition.Y, gclass15_0.Bounds.Width, gclass15_0.Bounds.Height);
     					Invalidate(rc2);
     				}
     				gclass15_0 = gclass15_;
     				if (gclass15_0 != null)
     				{
-    					rc = new Rectangle(gclass15_0.method_2().X + AutoScrollPosition.X, gclass15_0.method_2().Y + AutoScrollPosition.Y, gclass15_0.method_2().Width, gclass15_0.method_2().Height);
+    					rc = new Rectangle(gclass15_0.Bounds.X + AutoScrollPosition.X, gclass15_0.Bounds.Y + AutoScrollPosition.Y, gclass15_0.Bounds.Width, gclass15_0.Bounds.Height);
     					Invalidate(rc);
     				}
     			}
@@ -532,33 +532,33 @@ namespace ILXP
     			{
     				if (gclass13_0.Count > 0)
     				{
-    					num2 = gclass13_0[gclass13_0.Count - 1].method_1();
-    					foreach (CodeToken item in gclass13_0[gclass13_0.Count - 1].method_0())
+    					num2 = gclass13_0[gclass13_0.Count - 1].Offset;
+    					foreach (CodeToken item in gclass13_0[gclass13_0.Count - 1].Tokens)
     					{
-    						num2 += item.method_0().Length;
+    						num2 += item.Text.Length;
     					}
     				}
     			}
     			else
     			{
     				int num3 = 0;
-    				num2 = gclass13_0[num].method_1();
-    				foreach (CodeToken item2 in gclass13_0[num].method_0())
+    				num2 = gclass13_0[num].Offset;
+    				foreach (CodeToken item2 in gclass13_0[num].Tokens)
     				{
-    					if (point_0.X < num3 || point_0.X >= num3 + item2.method_0().Length * this.m__003C)
+    					if (point_0.X < num3 || point_0.X >= num3 + item2.Text.Length * this.m__003C)
     					{
-    						num2 += item2.method_0().Length;
-    						num3 += item2.method_0().Length * this.m__003C;
+    						num2 += item2.Text.Length;
+    						num3 += item2.Text.Length * this.m__003C;
     						continue;
     					}
-    					if (!string.IsNullOrEmpty(item2.method_4()))
+    					if (!string.IsNullOrEmpty(item2.Link))
     					{
     						gclass15_1 = item2;
     						CodeToken obj = gclass15_1;
-    						Rectangle rectangle_ = new Rectangle(num3, num * int_2, item2.method_0().Length * this.m__003C, int_2 + 5);
-    						obj.method_3(rectangle_);
+    						Rectangle rectangle_ = new Rectangle(num3, num * int_2, item2.Text.Length * this.m__003C, int_2 + 5);
+    						obj.Bounds = rectangle_;
     					}
-    					string text = item2.method_0();
+    					string text = item2.Text;
     					int i = 0;
     					for (int length = text.Length; i < length; i++)
     					{
@@ -620,9 +620,9 @@ namespace ILXP
     					int_1 = num - int_0;
     					Invalidate();
     				}
-    				if (int_1 == 0 && gclass15_ != null && !string.IsNullOrEmpty(gclass15_.method_4()))
+    				if (int_1 == 0 && gclass15_ != null && !string.IsNullOrEmpty(gclass15_.Link))
     				{
-    					_0024_0?.Invoke(this, new LinkClickedEventArgs(gclass15_.method_4()));
+    					_0024_0?.Invoke(this, new LinkClickedEventArgs(gclass15_.Link));
     				}
     			}
     			else if (e.Button == MouseButtons.Right)

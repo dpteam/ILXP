@@ -17,17 +17,17 @@ namespace ILXP
     	{
     	}
 
-    	public override string vmethod_0(AssemblyItem gclass0_0)
+    	public override string WriteAssembly(AssemblyItem gclass0_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
-    		stringBuilder.AppendLine("<<g>>'Name: " + gclass0_0.method_1().Name.Name + "<<>>");
-    		stringBuilder.AppendLine("<<g>>'Path: " + gclass0_0.method_0() + "<<>>");
-    		stringBuilder.AppendLine("<<g>>'Version: " + $"{gclass0_0.method_1().Name.Version.Major}:{gclass0_0.method_1().Name.Version.MajorRevision}:{gclass0_0.method_1().Name.Version.Minor}:{gclass0_0.method_1().Name.Version.MinorRevision}" + "<<>>");
+    		stringBuilder.AppendLine("<<g>>'Name: " + gclass0_0.Assembly.Name.Name + "<<>>");
+    		stringBuilder.AppendLine("<<g>>'Path: " + gclass0_0.FilePath + "<<>>");
+    		stringBuilder.AppendLine("<<g>>'Version: " + $"{gclass0_0.Assembly.Name.Version.Major}:{gclass0_0.Assembly.Name.Version.MajorRevision}:{gclass0_0.Assembly.Name.Version.Minor}:{gclass0_0.Assembly.Name.Version.MinorRevision}" + "<<>>");
     		stringBuilder.AppendLine();
-    		foreach (CustomAttribute customAttribute in gclass0_0.method_1().CustomAttributes)
+    		foreach (CustomAttribute customAttribute in gclass0_0.Assembly.CustomAttributes)
     		{
     			stringBuilder.Append("<<<b>>Assembly<<>>: ");
-    			stringBuilder.Append(method_8(customAttribute.AttributeType) + "(");
+    			stringBuilder.Append(GetTypeName(customAttribute.AttributeType) + "(");
     			foreach (CustomAttributeArgument constructorArgument in customAttribute.ConstructorArguments)
     			{
     				if ((constructorArgument.Value is string) | (constructorArgument.Value is char))
@@ -48,32 +48,32 @@ namespace ILXP
     		return stringBuilder.ToString();
     	}
 
-    	public override string vmethod_1(ModuleItem gclass6_0)
+    	public override string WriteNamespace(ModuleItem gclass6_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
-    		if (!string.IsNullOrEmpty(gclass6_0.method_0()))
+    		if (!string.IsNullOrEmpty(gclass6_0.Namespace))
     		{
-    			stringBuilder.AppendLine("<<b>>Namespace<<>> " + LanguageWriter.smethod_0(gclass6_0) + gclass6_0.method_0() + "<<>>");
+    			stringBuilder.AppendLine("<<b>>Namespace<<>> " + LanguageWriter.GetReferenceKey(gclass6_0) + gclass6_0.Namespace + "<<>>");
     		}
     		StringBuilder stringBuilder2 = new StringBuilder();
-    		foreach (TypeDefinition type in gclass6_0.method_1().Types)
+    		foreach (TypeDefinition type in gclass6_0.Module.Types)
     		{
-    			if (Operators.CompareString(type.Namespace, gclass6_0.method_0(), TextCompare: false) == 0)
+    			if (Operators.CompareString(type.Namespace, gclass6_0.Namespace, TextCompare: false) == 0)
     			{
-    				stringBuilder2.AppendLine(method_3(type, bool_0: true));
+    				stringBuilder2.AppendLine(WriteType(type, bool_0: true));
     				stringBuilder2.AppendLine();
     			}
     		}
     		stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + "    ");
     		stringBuilder.AppendLine("    " + stringBuilder2.ToString().Trim());
-    		if (!string.IsNullOrEmpty(gclass6_0.method_0()))
+    		if (!string.IsNullOrEmpty(gclass6_0.Namespace))
     		{
     			stringBuilder.Append("<<b>>End Namespace<<>>");
     		}
     		return stringBuilder.ToString();
     	}
 
-    	public override string vmethod_3(ModuleDefinition moduleDefinition_0)
+    	public override string WriteModule(ModuleDefinition moduleDefinition_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
     		stringBuilder.AppendLine("<<g>>'Module: " + moduleDefinition_0.Name + "<<>>");
@@ -81,13 +81,13 @@ namespace ILXP
     		return stringBuilder.ToString();
     	}
 
-    	public override string vmethod_6(FieldDefinition fieldDefinition_0)
+    	public override string WriteField(FieldDefinition fieldDefinition_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
-    		method_6(stringBuilder, fieldDefinition_0.CustomAttributes);
+    		WriteCustomAttributes(stringBuilder, fieldDefinition_0.CustomAttributes);
     		if (fieldDefinition_0.DeclaringType.IsEnum)
     		{
-    			stringBuilder.Append(LanguageWriter.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + "<<>>");
+    			stringBuilder.Append(LanguageWriter.GetReferenceKey(fieldDefinition_0) + fieldDefinition_0.Name + "<<>>");
     		}
     		else
     		{
@@ -121,9 +121,9 @@ namespace ILXP
     				stringBuilder.Append("ReadOnly ");
     			}
     			stringBuilder.Append("<<>>");
-    			stringBuilder.Append(LanguageWriter.smethod_0(fieldDefinition_0) + fieldDefinition_0.Name + "<<>> ");
+    			stringBuilder.Append(LanguageWriter.GetReferenceKey(fieldDefinition_0) + fieldDefinition_0.Name + "<<>> ");
     			stringBuilder.Append("<<b>>As<<>> ");
-    			stringBuilder.Append(method_8(fieldDefinition_0.FieldType));
+    			stringBuilder.Append(GetTypeName(fieldDefinition_0.FieldType));
     		}
     		if (fieldDefinition_0.Constant != null)
     		{
@@ -140,14 +140,14 @@ namespace ILXP
     		return stringBuilder.ToString();
     	}
 
-    	public override string vmethod_2(TypeDefinition typeDefinition_0)
+    	public override string WriteType(TypeDefinition typeDefinition_0)
     	{
-    		return method_3(typeDefinition_0, bool_0: false);
+    		return WriteType(typeDefinition_0, bool_0: false);
     	}
 
-    	public string method_3(TypeDefinition typeDefinition_0, bool bool_0)
+    	public string WriteType(TypeDefinition typeDefinition_0, bool bool_0)
     	{
-    		string text = LanguageWriter.smethod_0(typeDefinition_0);
+    		string text = LanguageWriter.GetReferenceKey(typeDefinition_0);
     		checked
     		{
     			if (typeDefinition_0.HasGenericParameters)
@@ -172,7 +172,7 @@ namespace ILXP
     				text = text + typeDefinition_0.Name + "<<>>";
     			}
     			StringBuilder stringBuilder = new StringBuilder();
-    			method_6(stringBuilder, typeDefinition_0.CustomAttributes);
+    			WriteCustomAttributes(stringBuilder, typeDefinition_0.CustomAttributes);
     			stringBuilder.Append("<<b>>");
     			if (typeDefinition_0.IsPublic)
     			{
@@ -237,7 +237,7 @@ namespace ILXP
     							{
     								stringBuilder.Append("<<b>>Optional <<>>");
     							}
-    							stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+    							stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {GetTypeName(parameter.ParameterType)}");
     							if (parameter.IsOptional)
     							{
     								stringBuilder.Append(" = ");
@@ -261,7 +261,7 @@ namespace ILXP
     					stringBuilder.Append(")");
     					if (method.ReturnType != null && Operators.CompareString(method.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
     					{
-    						stringBuilder.Append(" <<b>>As<<>> " + method_8(method.ReturnType));
+    						stringBuilder.Append(" <<b>>As<<>> " + GetTypeName(method.ReturnType));
     					}
     					return stringBuilder.ToString();
     				}
@@ -294,14 +294,14 @@ namespace ILXP
     			stringBuilder.AppendLine(text);
     			if (!typeDefinition_0.IsValueType && !typeDefinition_0.IsInterface && !typeDefinition_0.IsEnum && typeDefinition_0.BaseType != null && Operators.CompareString(typeDefinition_0.BaseType.FullName, "System.Object", TextCompare: false) != 0)
     			{
-    				stringBuilder.AppendLine("    <<b>>Inherits<<>> " + method_7(typeDefinition_0.BaseType));
+    				stringBuilder.AppendLine("    <<b>>Inherits<<>> " + GetQualifiedTypeName(typeDefinition_0.BaseType));
     			}
     			if (typeDefinition_0.Interfaces.Count > 0)
     			{
     				stringBuilder.Append("    <<b>>Implements<<>> ");
     				foreach (TypeReference @interface in typeDefinition_0.Interfaces)
     				{
-    					stringBuilder.Append(method_7(@interface) + ", ");
+    					stringBuilder.Append(GetQualifiedTypeName(@interface) + ", ");
     				}
     				stringBuilder.Remove(stringBuilder.Length - 2, 2);
     				stringBuilder.AppendLine();
@@ -314,7 +314,7 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>' Nested Types<<>>");
     					foreach (TypeDefinition nestedType in typeDefinition_0.NestedTypes)
     					{
-    						stringBuilder2.AppendLine(method_3(nestedType, bool_0: true));
+    						stringBuilder2.AppendLine(WriteType(nestedType, bool_0: true));
     					}
     					stringBuilder2.AppendLine();
     				}
@@ -325,7 +325,7 @@ namespace ILXP
     					{
     						if (Operators.CompareString(field.Name, "value__", TextCompare: false) != 0 || !typeDefinition_0.IsEnum)
     						{
-    							stringBuilder2.AppendLine(vmethod_6(field));
+    							stringBuilder2.AppendLine(WriteField(field));
     						}
     					}
     					stringBuilder2.AppendLine();
@@ -335,7 +335,7 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>' Properties<<>>");
     					foreach (PropertyDefinition property in typeDefinition_0.Properties)
     					{
-    						stringBuilder2.AppendLine(method_5(property, bool_0: true));
+    						stringBuilder2.AppendLine(WriteProperty(property, bool_0: true));
     					}
     					stringBuilder2.AppendLine();
     				}
@@ -376,7 +376,7 @@ namespace ILXP
     					{
     						if (!list.Contains(method2.Name))
     						{
-    							stringBuilder2.AppendLine(method_4(method2, bool_0: true));
+    							stringBuilder2.AppendLine(WriteMethod(method2, bool_0: true));
     						}
     					}
     					stringBuilder2.AppendLine();
@@ -386,7 +386,7 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>' Events<<>>");
     					foreach (EventDefinition event2 in typeDefinition_0.Events)
     					{
-    						stringBuilder2.AppendLine(vmethod_7(event2));
+    						stringBuilder2.AppendLine(WriteEvent(event2));
     					}
     				}
     				stringBuilder2.Replace(Environment.NewLine, Environment.NewLine + "    ");
@@ -412,10 +412,10 @@ namespace ILXP
     		}
     	}
 
-    	public override string vmethod_7(EventDefinition eventDefinition_0)
+    	public override string WriteEvent(EventDefinition eventDefinition_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
-    		method_6(stringBuilder, eventDefinition_0.CustomAttributes);
+    		WriteCustomAttributes(stringBuilder, eventDefinition_0.CustomAttributes);
     		MethodDefinition methodDefinition = eventDefinition_0.AddMethod;
     		stringBuilder.Append("<<b>>");
     		if (!methodDefinition.DeclaringType.IsInterface)
@@ -454,7 +454,7 @@ namespace ILXP
     			}
     		}
     		stringBuilder.Append("Event ");
-    		stringBuilder.Append(LanguageWriter.smethod_0(eventDefinition_0) + eventDefinition_0.Name + "<<>>");
+    		stringBuilder.Append(LanguageWriter.GetReferenceKey(eventDefinition_0) + eventDefinition_0.Name + "<<>>");
     		stringBuilder.Append("(");
     		foreach (MethodDefinition method in eventDefinition_0.EventType.GetElementType().Resolve().Methods)
     		{
@@ -480,7 +480,7 @@ namespace ILXP
     				{
     					stringBuilder.Append("<<b>>Optional <<>>");
     				}
-    				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+    				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {GetTypeName(parameter.ParameterType)}");
     				if (parameter.IsOptional)
     				{
     					stringBuilder.Append(" = ");
@@ -505,15 +505,15 @@ namespace ILXP
     		return stringBuilder.ToString();
     	}
 
-    	public override string vmethod_4(MethodDefinition methodDefinition_0)
+    	public override string WriteMethod(MethodDefinition methodDefinition_0)
     	{
-    		return method_4(methodDefinition_0, bool_0: false);
+    		return WriteMethod(methodDefinition_0, bool_0: false);
     	}
 
-    	public string method_4(MethodDefinition methodDefinition_0, bool bool_0)
+    	public string WriteMethod(MethodDefinition methodDefinition_0, bool bool_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
-    		method_6(stringBuilder, methodDefinition_0.CustomAttributes);
+    		WriteCustomAttributes(stringBuilder, methodDefinition_0.CustomAttributes);
     		if (methodDefinition_0.IsPInvokeImpl)
     		{
     			stringBuilder.AppendLine("<DllImport(<<r>>\"" + methodDefinition_0.PInvokeInfo.Module.Name + "\"<<>>)> _");
@@ -564,11 +564,11 @@ namespace ILXP
     		}
     		if (methodDefinition_0.IsConstructor)
     		{
-    			stringBuilder.Append(LanguageWriter.smethod_0(methodDefinition_0) + "New<<>>");
+    			stringBuilder.Append(LanguageWriter.GetReferenceKey(methodDefinition_0) + "New<<>>");
     		}
     		else
     		{
-    			stringBuilder.Append(LanguageWriter.smethod_0(methodDefinition_0) + methodDefinition_0.Name + "<<>>");
+    			stringBuilder.Append(LanguageWriter.GetReferenceKey(methodDefinition_0) + methodDefinition_0.Name + "<<>>");
     		}
     		stringBuilder.Append("(");
     		if (methodDefinition_0.Parameters.Count > 0)
@@ -587,7 +587,7 @@ namespace ILXP
     				{
     					stringBuilder.Append("<<b>>Optional <<>>");
     				}
-    				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+    				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {GetTypeName(parameter.ParameterType)}");
     				if (parameter.IsOptional)
     				{
     					stringBuilder.Append(" = ");
@@ -611,7 +611,7 @@ namespace ILXP
     		stringBuilder.Append(")");
     		if (methodDefinition_0.ReturnType != null && Operators.CompareString(methodDefinition_0.ReturnType.FullName, "System.Void", TextCompare: false) != 0)
     		{
-    			stringBuilder.Append(" <<b>>As<<>> " + method_8(methodDefinition_0.ReturnType));
+    			stringBuilder.Append(" <<b>>As<<>> " + GetTypeName(methodDefinition_0.ReturnType));
     		}
     		if (bool_0)
     		{
@@ -634,15 +634,15 @@ namespace ILXP
     		return stringBuilder.ToString();
     	}
 
-    	public override string vmethod_5(PropertyDefinition propertyDefinition_0)
+    	public override string WriteProperty(PropertyDefinition propertyDefinition_0)
     	{
-    		return method_5(propertyDefinition_0, bool_0: false);
+    		return WriteProperty(propertyDefinition_0, bool_0: false);
     	}
 
-    	public string method_5(PropertyDefinition propertyDefinition_0, bool bool_0)
+    	public string WriteProperty(PropertyDefinition propertyDefinition_0, bool bool_0)
     	{
     		StringBuilder stringBuilder = new StringBuilder();
-    		method_6(stringBuilder, propertyDefinition_0.CustomAttributes);
+    		WriteCustomAttributes(stringBuilder, propertyDefinition_0.CustomAttributes);
     		stringBuilder.Append("<<b>>");
     		if (!propertyDefinition_0.DeclaringType.IsInterface)
     		{
@@ -699,7 +699,7 @@ namespace ILXP
     		}
     		stringBuilder.Append("Property ");
     		stringBuilder.Append("<<>>");
-    		stringBuilder.Append(LanguageWriter.smethod_0(propertyDefinition_0) + propertyDefinition_0.Name + "<<>>");
+    		stringBuilder.Append(LanguageWriter.GetReferenceKey(propertyDefinition_0) + propertyDefinition_0.Name + "<<>>");
     		if (propertyDefinition_0.Parameters.Count > 0)
     		{
     			stringBuilder.Append("(");
@@ -717,7 +717,7 @@ namespace ILXP
     				{
     					stringBuilder.Append("<<b>>Optional <<>>");
     				}
-    				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {method_8(parameter.ParameterType)}");
+    				stringBuilder.Append($"{parameter.Name} <<b>>As<<>> {GetTypeName(parameter.ParameterType)}");
     				if (parameter.IsOptional)
     				{
     					stringBuilder.Append(" = ");
@@ -740,7 +740,7 @@ namespace ILXP
     			stringBuilder.Append(")");
     		}
     		stringBuilder.Append(" <<b>>AS<<>> ");
-    		stringBuilder.Append(method_8(propertyDefinition_0.PropertyType));
+    		stringBuilder.Append(GetTypeName(propertyDefinition_0.PropertyType));
     		if (bool_0)
     		{
     			return stringBuilder.ToString();
@@ -760,7 +760,7 @@ namespace ILXP
     		if (propertyDefinition_0.SetMethod != null)
     		{
     			MethodDefinition setMethod = propertyDefinition_0.SetMethod;
-    			stringBuilder.AppendLine("    <<b>>Set<<>>(value <<b>>As<<>> " + method_8(propertyDefinition_0.PropertyType) + ")");
+    			stringBuilder.AppendLine("    <<b>>Set<<>>(value <<b>>As<<>> " + GetTypeName(propertyDefinition_0.PropertyType) + ")");
     			VbDecompiler.smethod_0(stringBuilder, setMethod, 2);
     			stringBuilder.AppendLine("    <<b>>End Set<<>> ");
     		}
@@ -768,7 +768,7 @@ namespace ILXP
     		return stringBuilder.ToString();
     	}
 
-    	private void method_6(StringBuilder stringBuilder_0, Collection<CustomAttribute> collection_0)
+    	private void WriteCustomAttributes(StringBuilder stringBuilder_0, Collection<CustomAttribute> collection_0)
     	{
     		if (collection_0.Count == 0)
     		{
@@ -779,7 +779,7 @@ namespace ILXP
     		{
     			foreach (CustomAttribute item in collection_0)
     			{
-    				string text = method_8(item.AttributeType);
+    				string text = GetTypeName(item.AttributeType);
     				if (text.EndsWith("Attribute<<>>"))
     				{
     					text = text.Replace("Attribute<<>>", "<<>>");
@@ -807,12 +807,12 @@ namespace ILXP
     		}
     	}
 
-    	private string method_7(TypeReference typeReference_0)
+    	private string GetQualifiedTypeName(TypeReference typeReference_0)
     	{
-    		return LanguageWriter.smethod_0(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name.Replace("&", "") + "<<>>";
+    		return LanguageWriter.GetReferenceKey(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name.Replace("&", "") + "<<>>";
     	}
 
-    	private string method_8(TypeReference typeReference_0)
+    	private string GetTypeName(TypeReference typeReference_0)
     	{
     		if (typeReference_0.IsGenericParameter)
     		{
@@ -827,9 +827,9 @@ namespace ILXP
     		switch (typeReference_0.Namespace)
     		{
     		case "System":
-    			return LanguageWriter.smethod_0(typeReference_0) + "<<b>>" + typeReference_0.Name + "<<>>" + text + "<<>>";
+    			return LanguageWriter.GetReferenceKey(typeReference_0) + "<<b>>" + typeReference_0.Name + "<<>>" + text + "<<>>";
     		default:
-    			return LanguageWriter.smethod_0(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name + text + "<<>>";
+    			return LanguageWriter.GetReferenceKey(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name + text + "<<>>";
     		case "System.Reflection":
     		case "System.Runtime.InteropServices":
     		case "System.Runtime.CompilerServices":
@@ -838,7 +838,7 @@ namespace ILXP
     		case "System.CodeDom.Compiler":
     		case "Microsoft.VisualBasic":
     		case "Microsoft.VisualBasic.CompilerServices":
-    			return LanguageWriter.smethod_0(typeReference_0) + typeReference_0.Name + text + "<<>>";
+    			return LanguageWriter.GetReferenceKey(typeReference_0) + typeReference_0.Name + text + "<<>>";
     		}
     	}
 

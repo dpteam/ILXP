@@ -1,28 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace ILXP
 {
+    /// <summary>
+    /// All rendered lines of the document, in order.
+    /// </summary>
     public sealed class LineCollection : List<CodeLine>
     {
-    	[DebuggerNonUserCode]
-    	public LineCollection()
-    	{
-    	}
-
-    	public override string ToString()
-    	{
-    		string text = "";
-    		using Enumerator enumerator = GetEnumerator();
-    		while (enumerator.MoveNext())
-    		{
-    			CodeLine current = enumerator.Current;
-    			text = text + current.ToString() + Environment.NewLine;
-    		}
-    		return text;
-    	}
+        public override string ToString()
+        {
+            System.Text.StringBuilder text = new System.Text.StringBuilder();
+            foreach (CodeLine line in this)
+            {
+                foreach (CodeToken token in line.Tokens)
+                {
+                    text.Append(token.Text);
+                }
+                text.AppendLine();
+            }
+            return text.ToString();
+        }
     }
-
 }

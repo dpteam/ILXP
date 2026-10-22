@@ -1,182 +1,166 @@
 using System;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace ILXP
 {
+    /// <summary>
+    /// Simple back/forward navigation history with a bounded ring buffer.
+    /// </summary>
     public sealed class NavigationHistory
     {
-    	[DefaultMember("Item")]
-    	public class RingStack<t>
-    	{
-    		private object[] object_0;
+        /// <summary>
+        /// Fixed-capacity ring buffer used by the history. Kept public (as in the
+        /// original code) because the type is generic and self-contained.
+        /// </summary>
+        public sealed class RingStack<T>
+        {
+            private readonly object[] items;
+            private int head = -1;
+            private int count;
+            private int capacity;
 
-    		private int int_0;
+            public RingStack()
+                : this(100)
+            {
+            }
 
-    		private int int_1;
+            public RingStack(int capacity)
+            {
+                if (capacity < 1)
+                {
+                    throw new ArgumentOutOfRangeException("capacity", "Capacity must be greater than 0");
+                }
+                this.capacity = capacity;
+                items = new object[capacity];
+            }
 
-    		private int int_2;
+            public int Count
+            {
+                get { return count; }
+            }
 
-    		public RingStack()
-    		{
-    			int_0 = 0;
-    			int_1 = -1;
-    			int_2 = 100;
-    			object_0 = new object[checked(int_2 - 1 + 1)];
-    		}
+            public T this[int index]
+            {
+                get
+                {
+                    if (index < 0 || index >= count)
+                    {
+                        throw new ArgumentOutOfRangeException("index", "Stack is empty");
+                    }
+                    int position = head - index;
+                    if (position < 0)
+                    {
+                        position += capacity;
+                    }
+                    return (T)items[position];
+                }
+            }
 
-    		public RingStack(int Capacity)
-    		{
-    			int_0 = 0;
-    			int_1 = -1;
-    			int_2 = 100;
-    			if (Capacity < 1)
-    			{
-    				throw new Exception("Capacity must be greater than 0");
-    			}
-    			int_2 = Capacity;
-    			object_0 = new object[checked(int_2 - 1 + 1)];
-    		}
+            public void Push(T value)
+            {
+                head++;
+                if (head >= capacity)
+                {
+                    head -= capacity;
+                }
+                if (count < capacity)
+                {
+                    count++;
+                }
+                items[head] = value;
+            }
 
-    		[SpecialName]
-    		public int method_0()
-    		{
-    			return int_0;
-    		}
+            public T Pop()
+            {
+                if (count <= 0)
+                {
+                    throw new InvalidOperationException("Stack is empty");
+                }
+                T value = (T)items[head];
+                items[head] = null;
+                head--;
+                if (head < 0)
+                {
+                    head += capacity;
+                }
+                count--;
+                return value;
+            }
 
-    		[SpecialName]
-    		public t method_1(int int_3)
-    		{
-    			if (int_3 >= int_0)
-    			{
-    				throw new Exception("Out of bounds");
-    			}
-    			checked
-    			{
-    				int_3 = int_1 - int_3;
-    				if (int_3 < 0)
-    				{
-    					int_3 += int_2;
-    				}
-    				t result = default;
-    				return result;
-    			}
-    		}
+            public void Clear()
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    items[head] = null;
+                    head--;
+                    if (head < 0)
+                    {
+                        head = capacity - 1;
+                    }
+                }
+                head = -1;
+                count = 0;
+            }
+        }
 
-    		public void method_2(t gparam_0)
-    		{
-    			checked
-    			{
-    				int_1++;
-    				if (int_1 >= int_2)
-    				{
-    					int_1 -= int_2;
-    				}
-    				if (int_0 < int_2)
-    				{
-    					int_0++;
-    				}
-    				object_0[int_1] = gparam_0;
-    			}
-    		}
+        private readonly RingStack<string> backStack;
+        private readonly RingStack<string> forwardStack;
 
-    		public t method_3()
-    		{
-    			if (int_0 <= 0)
-    			{
-    				throw new Exception("Stack is empty");
-    			}
-    			t result = Conversions.ToGenericParameter<t>(RuntimeHelpers.GetObjectValue(object_0[int_1]));
-    			object_0[int_1] = null;
-    			checked
-    			{
-    				int_1--;
-    				if (int_1 < 0)
-    				{
-    					int_1 += int_2;
-    				}
-    				int_0--;
-    				return result;
-    			}
-    		}
+        public NavigationHistory()
+        {
+            backStack = new RingStack<string>(300);
+            forwardStack = new RingStack<string>(300);
+        }
 
-    		public void method_4()
-    		{
-    			checked
-    			{
-    				for (int i = 0; i < int_0; i++)
-    				{
-    					object_0[int_1] = null;
-    					int_1--;
-    					if (int_1 < 0)
-    					{
-    						int_1 = int_2 - 1;
-    					}
-    				}
-    				int_1 = -1;
-    				int_0 = 0;
-    			}
-    		}
-    	}
+        public void Clear()
+        {
+            backStack.Clear();
+            forwardStack.Clear();
+        }
 
-    	private RingStack<string> gclass8_0;
+        /// <summary>
+        /// Records a new location. Re-visiting the current location is a no-op.
+        /// </summary>
+        public void Navigate(string location)
+        {
+            if (backStack.Count > 0)
+            {
+                string current = backStack.Pop();
+                backStack.Push(current);
+                if (string.Equals(location, current, StringComparison.Ordinal))
+                {
+                    return;
+                }
+            }
+            backStack.Push(location);
+            forwardStack.Clear();
+        }
 
-    	private RingStack<string> gclass8_1;
+        public bool CanGoBack
+        {
+            get { return backStack.Count > 1; }
+        }
 
-    	public NavigationHistory()
-    	{
-    		gclass8_0 = new RingStack<string>(300);
-    		gclass8_1 = new RingStack<string>(300);
-    	}
+        public bool CanGoForward
+        {
+            get { return forwardStack.Count > 0; }
+        }
 
-    	public void method_0()
-    	{
-    		gclass8_0.method_4();
-    		gclass8_1.method_4();
-    	}
+        public string Back()
+        {
+            forwardStack.Push(backStack.Pop());
+            string location = backStack.Pop();
+            backStack.Push(location);
+            return location;
+        }
 
-    	public void method_1(string string_0)
-    	{
-    		if (gclass8_0.method_0() > 0)
-    		{
-    			string text = gclass8_0.method_3();
-    			gclass8_0.method_2(text);
-    			if (Operators.CompareString(string_0, text, TextCompare: false) == 0)
-    			{
-    				return;
-    			}
-    		}
-    		gclass8_0.method_2(string_0);
-    		gclass8_1.method_4();
-    	}
-
-    	[SpecialName]
-    	public bool method_2()
-    	{
-    		return gclass8_0.method_0() > 1;
-    	}
-
-    	[SpecialName]
-    	public bool method_3()
-    	{
-    		return gclass8_1.method_0() > 0;
-    	}
-
-    	public string method_4()
-    	{
-    		gclass8_1.method_2(gclass8_0.method_3());
-    		string text = gclass8_0.method_3();
-    		gclass8_0.method_2(text);
-    		return text;
-    	}
-
-    	public string method_5()
-    	{
-    		string text = gclass8_1.method_3();
-    		gclass8_0.method_2(text);
-    		return text;
-    	}
+        public string Forward()
+        {
+            string location = forwardStack.Pop();
+            backStack.Push(location);
+            return location;
+        }
     }
-
 }

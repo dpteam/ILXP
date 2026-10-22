@@ -1,49 +1,22 @@
-using System.Runtime.CompilerServices;
-
 namespace ILXP
 {
+    /// <summary>
+    /// A rendered line of source code: its tokens plus the character range the line
+    /// occupies in the full document.
+    /// </summary>
     public sealed class CodeLine
     {
-    	private TokenList tokenList_0;
+        public CodeLine()
+        {
+            Tokens = new TokenList();
+        }
 
-    	private int int_0;
+        public TokenList Tokens { get; private set; }
 
-    	private int int_1;
+        /// <summary>Zero-based character offset of the first character of the line.</summary>
+        public int Offset { get; set; }
 
-    	public CodeLine()
-    	{
-    		tokenList_0 = new TokenList();
-    	}
-
-    	[SpecialName]
-    	public TokenList method_0()
-    	{
-    		return tokenList_0;
-    	}
-
-    	[SpecialName]
-    	public int method_1()
-    	{
-    		return int_0;
-    	}
-
-    	[SpecialName]
-    	public void method_2(int int_2)
-    	{
-    		int_0 = int_2;
-    	}
-
-    	[SpecialName]
-    	public int method_3()
-    	{
-    		return int_1;
-    	}
-
-    	[SpecialName]
-    	public void method_4(int int_2)
-    	{
-    		int_1 = int_2;
-    	}
+        /// <summary>Number of characters in the line (excluding the line break).</summary>
+        public int Length { get; set; }
     }
-
 }

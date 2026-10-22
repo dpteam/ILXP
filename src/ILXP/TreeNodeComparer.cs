@@ -1,52 +1,47 @@
+using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace ILXP
 {
+    /// <summary>
+    /// Orders tree nodes by the numeric prefix of their image key (the original
+    /// designer icons are named like <c>7VSObject_Class.bmp</c>, where the leading
+    /// number defines the sort group) and then by their text.
+    /// </summary>
     public sealed class TreeNodeComparer : IComparer
     {
-    	[DebuggerNonUserCode]
-    	public TreeNodeComparer()
-    	{
-    	}
+        int IComparer.Compare(object x, object y)
+        {
+            TreeNode left = x as TreeNode;
+            TreeNode right = y as TreeNode;
+            int result = GetSortGroup(left).CompareTo(GetSortGroup(right));
+            if (result == 0)
+            {
+                result = string.Compare(
+                    left == null ? string.Empty : left.Text,
+                    right == null ? string.Empty : right.Text,
+                    StringComparison.CurrentCulture);
+            }
+            return result;
+        }
 
-    	int IComparer.Compare(object x, object y)
-    	{
-    		TreeNode treeNode = (TreeNode)x;
-    		TreeNode treeNode2 = (TreeNode)y;
-    		int num = 99;
-    		if (!string.IsNullOrEmpty(treeNode.ImageKey))
-    		{
-    			if (char.IsDigit(treeNode.ImageKey[1]))
-    			{
-    				num = int.Parse(treeNode.ImageKey.Substring(0, 2));
-    			}
-    			else if (char.IsDigit(treeNode.ImageKey[0]))
-    			{
-    				num = int.Parse(treeNode.ImageKey.Substring(0, 1));
-    			}
-    		}
-    		int value = 99;
-    		if (!string.IsNullOrEmpty(treeNode2.ImageKey))
-    		{
-    			if (char.IsDigit(treeNode2.ImageKey[1]))
-    			{
-    				value = int.Parse(treeNode2.ImageKey.Substring(0, 2));
-    			}
-    			else if (char.IsDigit(treeNode2.ImageKey[0]))
-    			{
-    				value = int.Parse(treeNode2.ImageKey.Substring(0, 1));
-    			}
-    		}
-    		int num2 = num.CompareTo(value);
-    		if (num2 == 0)
-    		{
-    			num2 = treeNode.Text.CompareTo(treeNode2.Text);
-    		}
-    		return num2;
-    	}
+        private static int GetSortGroup(TreeNode node)
+        {
+            if (node == null || string.IsNullOrEmpty(node.ImageKey))
+            {
+                return 99;
+            }
+
+            string key = node.ImageKey;
+            int length = key.Length > 1 && char.IsDigit(key[1]) ? 2 : 1;
+            int value;
+            if (char.IsDigit(key[0]) && int.TryParse(key.Substring(0, length), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
+            {
+                return value;
+            }
+            return 99;
+        }
     }
-
 }

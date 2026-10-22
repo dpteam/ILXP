@@ -22,7 +22,7 @@ namespace ILXP
     		{
     			if (item.Tag is AssemblyItem)
     			{
-    				list.Add(Path.GetDirectoryName(((AssemblyItem)item.Tag).method_0()));
+    				list.Add(Path.GetDirectoryName(((AssemblyItem)item.Tag).FilePath));
     			}
     		}
     		return smethod_1(string_0, list);

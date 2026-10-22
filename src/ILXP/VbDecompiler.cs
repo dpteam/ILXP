@@ -1690,7 +1690,7 @@ namespace ILXP
     					return;
     				}
     				while (current.Constant == null || !Operators.ConditionalCompareObjectEqual(result, current.Constant, TextCompare: false));
-    				arrayList_0[int_0] = smethod_29(typeReference_0) + "." + LanguageWriter.smethod_0(current) + current.Name + "<<>>";
+    				arrayList_0[int_0] = smethod_29(typeReference_0) + "." + LanguageWriter.GetReferenceKey(current) + current.Name + "<<>>";
     				return;
     			}
     			if (Operators.CompareString(Conversions.ToString(arrayList_0[int_0]), "0", TextCompare: false) == 0)
@@ -2129,13 +2129,13 @@ namespace ILXP
     										{
     											arrayList_[j - methodReference5.Parameters.Count - 1] = "<MYBASE>";
     										}
-    										name = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - methodReference5.Parameters.Count - 1]), LanguageWriter.smethod_0(methodReference5) + name + "<<>>");
+    										name = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - methodReference5.Parameters.Count - 1]), LanguageWriter.GetReferenceKey(methodReference5) + name + "<<>>");
     										arrayList_.RemoveAt(j - methodReference5.Parameters.Count - 1);
     										j--;
     									}
     									else
     									{
-    										name = smethod_29(methodReference5.DeclaringType) + "." + LanguageWriter.smethod_0(methodReference5) + name + "<<>>";
+    										name = smethod_29(methodReference5.DeclaringType) + "." + LanguageWriter.GetReferenceKey(methodReference5) + name + "<<>>";
     									}
     									arrayList_[j] = name;
     									if (propertyDefinition2.Parameters.Count > 0)
@@ -2167,13 +2167,13 @@ namespace ILXP
     										{
     											arrayList_[j - 1] = "<MYBASE>";
     										}
-    										name2 = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - 1]), LanguageWriter.smethod_0(eventDefinition2) + name2 + "<<>>");
+    										name2 = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - 1]), LanguageWriter.GetReferenceKey(eventDefinition2) + name2 + "<<>>");
     										arrayList_.RemoveAt(j - 1);
     										j--;
     									}
     									else
     									{
-    										name2 = smethod_29(methodReference5.DeclaringType) + "." + LanguageWriter.smethod_0(eventDefinition2) + name2 + "<<>>";
+    										name2 = smethod_29(methodReference5.DeclaringType) + "." + LanguageWriter.GetReferenceKey(eventDefinition2) + name2 + "<<>>";
     									}
     									if (Conversions.ToBoolean(Operators.AndObject(j > 0, Operators.CompareObjectEqual(arrayList_[j - 1], "<ME>", TextCompare: false))))
     									{
@@ -2311,7 +2311,7 @@ namespace ILXP
     								string right3 = smethod_18(methodReference5.Parameters, arrayList_, ref j, 0);
     								if (Operators.CompareString(methodDefinition_0.Name, methodReference5.Name, TextCompare: false) == 0 && ((Operators.CompareString(text6, ".ctor", TextCompare: false) == 0) | (Operators.CompareString(text6, ".cctor", TextCompare: false) == 0)) && smethod_17(methodDefinition_0.DeclaringType, methodReference5.DeclaringType))
     								{
-    									text6 = $"<CONSTRUCTOR={LanguageWriter.smethod_0(methodReference5)}{methodReference5.DeclaringType.Name}<<>><END>";
+    									text6 = $"<CONSTRUCTOR={LanguageWriter.GetReferenceKey(methodReference5)}{methodReference5.DeclaringType.Name}<<>><END>";
     								}
     								else if ((Operators.CompareString(text6, ".ctor", TextCompare: false) == 0) | (Operators.CompareString(text6, ".cctor", TextCompare: false) == 0))
     								{
@@ -2325,13 +2325,13 @@ namespace ILXP
     										{
     											arrayList_[j - 1] = "<MYBASE>";
     										}
-    										text6 = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - 1]), LanguageWriter.smethod_0(methodReference5) + text6 + "<<>>");
+    										text6 = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - 1]), LanguageWriter.GetReferenceKey(methodReference5) + text6 + "<<>>");
     										arrayList_.RemoveAt(j - 1);
     										j--;
     									}
     									else
     									{
-    										text6 = smethod_29(methodReference5.DeclaringType) + "." + LanguageWriter.smethod_0(methodReference5) + text6 + "<<>>";
+    										text6 = smethod_29(methodReference5.DeclaringType) + "." + LanguageWriter.GetReferenceKey(methodReference5) + text6 + "<<>>";
     									}
     								}
     								if (Operators.CompareString(methodReference5.Name, "GetTypeFromHandle", TextCompare: false) == 0 && Operators.CompareString(methodReference5.DeclaringType.FullName, "System.Type", TextCompare: false) == 0)
@@ -2609,7 +2609,7 @@ namespace ILXP
     								}
     								if (propertyDefinition != null)
     								{
-    									arrayList_[j] = "." + LanguageWriter.smethod_0(propertyDefinition) + propertyDefinition.Name + "<<>>";
+    									arrayList_[j] = "." + LanguageWriter.GetReferenceKey(propertyDefinition) + propertyDefinition.Name + "<<>>";
     									if (propertyDefinition.Parameters.Count > 0)
     									{
     										int int_1 = 0;
@@ -2660,7 +2660,7 @@ namespace ILXP
     								else if (eventDefinition != null)
     								{
     									string arg3 = smethod_18(methodReference2.Parameters, arrayList_, ref j, 0);
-    									string arg4 = Conversions.ToString(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(arrayList_[j - 1], "."), LanguageWriter.smethod_0(eventDefinition)), eventDefinition.Name), "<<>>"));
+    									string arg4 = Conversions.ToString(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(arrayList_[j - 1], "."), LanguageWriter.GetReferenceKey(eventDefinition)), eventDefinition.Name), "<<>>"));
     									arrayList_[j - 1] = "";
     									if (Operators.CompareString(methodReference2.FullName, eventDefinition.AddMethod.FullName, TextCompare: false) == 0)
     									{
@@ -2674,7 +2674,7 @@ namespace ILXP
     								else
     								{
     									string text3 = smethod_18(methodReference2.Parameters, arrayList_, ref j, 0);
-    									arrayList_[j] = "." + LanguageWriter.smethod_0(methodReference2) + methodReference2.Name + "<<>>(" + text3 + ")";
+    									arrayList_[j] = "." + LanguageWriter.GetReferenceKey(methodReference2) + methodReference2.Name + "<<>>(" + text3 + ")";
     								}
     								arrayList_[j] = Operators.AddObject(arrayList_[j - 1], arrayList_[j]);
     								arrayList_.RemoveAt(j - 1);
@@ -2723,10 +2723,10 @@ namespace ILXP
     								smethod_20(arrayList_, ref j, "<THROW> {value1}", null, 0, methodDefinition_0);
     								continue;
     							case Code.Ldfld:
-    								smethod_20(arrayList_, ref j, "{value1}.{value}", LanguageWriter.smethod_0(RuntimeHelpers.GetObjectValue(instruction5.Operand)) + ((FieldReference)instruction5.Operand).Name + "<<>>", 0, methodDefinition_0);
+    								smethod_20(arrayList_, ref j, "{value1}.{value}", LanguageWriter.GetReferenceKey(RuntimeHelpers.GetObjectValue(instruction5.Operand)) + ((FieldReference)instruction5.Operand).Name + "<<>>", 0, methodDefinition_0);
     								continue;
     							case Code.Ldflda:
-    								smethod_20(arrayList_, ref j, "{value1}.{value}", LanguageWriter.smethod_0(RuntimeHelpers.GetObjectValue(instruction5.Operand)) + ((FieldReference)instruction5.Operand).Name + "<<>>", 0, methodDefinition_0);
+    								smethod_20(arrayList_, ref j, "{value1}.{value}", LanguageWriter.GetReferenceKey(RuntimeHelpers.GetObjectValue(instruction5.Operand)) + ((FieldReference)instruction5.Operand).Name + "<<>>", 0, methodDefinition_0);
     								continue;
     							case Code.Stfld:
     								smethod_15(arrayList_, j - 1, ((FieldReference)instruction5.Operand).FieldType);
@@ -2746,7 +2746,7 @@ namespace ILXP
     								{
     									arrayList_[j] = ((FieldReference)instruction5.Operand).DeclaringType.FullName;
     								}
-    								arrayList_[j] = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j]), LanguageWriter.smethod_0(RuntimeHelpers.GetObjectValue(instruction5.Operand)) + ((FieldReference)instruction5.Operand).Name + "<<>>");
+    								arrayList_[j] = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j]), LanguageWriter.GetReferenceKey(RuntimeHelpers.GetObjectValue(instruction5.Operand)) + ((FieldReference)instruction5.Operand).Name + "<<>>");
     								continue;
     							case Code.Stsfld:
     								smethod_15(arrayList_, j - 1, ((FieldReference)instruction5.Operand).FieldType);
@@ -2762,7 +2762,7 @@ namespace ILXP
     								{
     									arrayList_[j] = smethod_29(((FieldDefinition)instruction5.Operand).DeclaringType);
     								}
-    								arrayList_[j] = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j]), LanguageWriter.smethod_0((FieldReference)instruction5.Operand) + ((FieldReference)instruction5.Operand).Name + "<<>>");
+    								arrayList_[j] = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j]), LanguageWriter.GetReferenceKey((FieldReference)instruction5.Operand) + ((FieldReference)instruction5.Operand).Name + "<<>>");
     								smethod_20(arrayList_, ref j, "{value} = {value1}", Conversions.ToString(arrayList_[j]), 0, methodDefinition_0);
     								continue;
     							case Code.Box:
@@ -2954,7 +2954,7 @@ namespace ILXP
     							case Code.Ldftn:
     							{
     								MethodReference methodReference4 = (MethodReference)instruction5.Operand;
-    								arrayList_[j] = string.Format("<ADDRESSOF>{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - 1]), LanguageWriter.smethod_0(methodReference4) + methodReference4.Name + "<<>>");
+    								arrayList_[j] = string.Format("<ADDRESSOF>{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - 1]), LanguageWriter.GetReferenceKey(methodReference4) + methodReference4.Name + "<<>>");
     								arrayList_.RemoveAt(j - 1);
     								j--;
     								continue;
@@ -2962,7 +2962,7 @@ namespace ILXP
     							case Code.Ldvirtftn:
     							{
     								MethodReference methodReference3 = (MethodReference)instruction5.Operand;
-    								arrayList_[j] = "." + LanguageWriter.smethod_0(methodReference3) + methodReference3.Name + "<<>>";
+    								arrayList_[j] = "." + LanguageWriter.GetReferenceKey(methodReference3) + methodReference3.Name + "<<>>";
     								arrayList_[j] = Operators.ConcatenateObject("<ADDRESSOF>", Operators.AddObject(arrayList_[j - 1], arrayList_[j]));
     								arrayList_.RemoveAt(j - 1);
     								j--;
@@ -3060,7 +3060,7 @@ namespace ILXP
     							}
     							else if (instruction5.Operand is Instruction)
     							{
-    								arg6 = LanguageWriter.smethod_6(((Instruction)instruction5.Operand).Offset);
+    								arg6 = LanguageWriter.FormatIlLabel(((Instruction)instruction5.Operand).Offset);
     							}
     							else if (instruction5.Operand is MethodDefinition)
     							{
@@ -3099,11 +3099,11 @@ namespace ILXP
     								Instruction[] array9 = (Instruction[])instruction5.Operand;
     								foreach (Instruction instruction7 in array9)
     								{
-    									stringBuilder.Append(LanguageWriter.smethod_6(instruction7.Offset) + ", ");
+    									stringBuilder.Append(LanguageWriter.FormatIlLabel(instruction7.Offset) + ", ");
     								}
     								stringBuilder.Remove(stringBuilder.Length - 2, 2);
     							}
-    							arrayList_[j] = $"{LanguageWriter.smethod_6(instruction5.Offset)}: {instruction5.OpCode} {arg6}";
+    							arrayList_[j] = $"{LanguageWriter.FormatIlLabel(instruction5.Offset)}: {instruction5.OpCode} {arg6}";
     						}
     						else if (arrayList_[j] is string)
     						{
@@ -4191,45 +4191,45 @@ namespace ILXP
     			switch (typeReference_0.Name)
     			{
     			case "Void":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEVOID>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEVOID>" + text + "<<>>";
     			case "String":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPESTRING>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPESTRING>" + text + "<<>>";
     			case "Char":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPECHAR>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPECHAR>" + text + "<<>>";
     			case "Boolean":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEBOOLEAN>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEBOOLEAN>" + text + "<<>>";
     			case "Object":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEOBJECT>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEOBJECT>" + text + "<<>>";
     			case "Int16":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEINT16>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEINT16>" + text + "<<>>";
     			case "Int32":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEINT32>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEINT32>" + text + "<<>>";
     			case "Int64":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEINT64>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEINT64>" + text + "<<>>";
     			case "UInt16":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEUINT16>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEUINT16>" + text + "<<>>";
     			case "UInt32":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEUINT32>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEUINT32>" + text + "<<>>";
     			case "UInt64":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEUINT64>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEUINT64>" + text + "<<>>";
     			case "Single":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPESINGLE>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPESINGLE>" + text + "<<>>";
     			case "Double":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEDOUBLE>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEDOUBLE>" + text + "<<>>";
     			case "Byte":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPEBYTE>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPEBYTE>" + text + "<<>>";
     			case "SByte":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPESBYTE>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPESBYTE>" + text + "<<>>";
     			case "Type":
-    				return LanguageWriter.smethod_0(typeReference_0) + "<TYPETYPE>" + text + "<<>>";
+    				return LanguageWriter.GetReferenceKey(typeReference_0) + "<TYPETYPE>" + text + "<<>>";
     			default:
     				switch (typeReference_0.Namespace)
     				{
     				case null:
     				case "":
-    					return LanguageWriter.smethod_0(typeReference_0) + typeReference_0.Name + text + "<<>>";
+    					return LanguageWriter.GetReferenceKey(typeReference_0) + typeReference_0.Name + text + "<<>>";
     				default:
-    					return LanguageWriter.smethod_0(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name + text + "<<>>";
+    					return LanguageWriter.GetReferenceKey(typeReference_0) + typeReference_0.Namespace + "." + typeReference_0.Name + text + "<<>>";
     				case "System":
     				case "System.Reflection":
     				case "System.Runtime.InteropServices":
@@ -4239,7 +4239,7 @@ namespace ILXP
     				case "System.CodeDom.Compiler":
     				case "Microsoft.VisualBasic":
     				case "Microsoft.VisualBasic.CompilerServices":
-    					return LanguageWriter.smethod_0(typeReference_0) + typeReference_0.Name + text + "<<>>";
+    					return LanguageWriter.GetReferenceKey(typeReference_0) + typeReference_0.Name + text + "<<>>";
     				}
     			}
     		}

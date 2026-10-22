@@ -1,31 +1,20 @@
-using System.Runtime.CompilerServices;
 using Mono.Cecil;
 
 namespace ILXP
 {
+    /// <summary>
+    /// A module (usually a namespace group) shown below an assembly in the tree.
+    /// </summary>
     public sealed class ModuleItem
     {
-    	private string string_0;
+        public ModuleItem(string name, ModuleDefinition module)
+        {
+            Namespace = name;
+            Module = module;
+        }
 
-    	private ModuleDefinition moduleDefinition_0;
+        public string Namespace { get; private set; }
 
-    	public ModuleItem(string Namespace, ModuleDefinition module)
-    	{
-    		moduleDefinition_0 = module;
-    		string_0 = Namespace;
-    	}
-
-    	[SpecialName]
-    	public string method_0()
-    	{
-    		return string_0;
-    	}
-
-    	[SpecialName]
-    	public ModuleDefinition method_1()
-    	{
-    		return moduleDefinition_0;
-    	}
+        public ModuleDefinition Module { get; private set; }
     }
-
 }

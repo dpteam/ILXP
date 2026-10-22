@@ -1,76 +1,49 @@
 using System.Drawing;
-using System.Runtime.CompilerServices;
 
 namespace ILXP
 {
+    /// <summary>
+    /// A single styled run of text inside a rendered source line. Tokens may carry a
+    /// link target, which the editor turns into a clickable hyperlink.
+    /// </summary>
     public sealed class CodeToken
     {
-    	private string string_0;
+        private string text;
+        private Color color = Color.Black;
+        private string link;
+        private Rectangle bounds;
 
-    	private Color color_0;
+        public CodeToken()
+        {
+        }
 
-    	private string string_1;
+        public CodeToken(string text)
+        {
+            this.text = text;
+        }
 
-    	private Rectangle rectangle_0;
+        public string Text
+        {
+            get { return text; }
+            set { text = value; }
+        }
 
-    	public CodeToken()
-    	{
-    		color_0 = Color.Black;
-    	}
+        public Rectangle Bounds
+        {
+            get { return bounds; }
+            set { bounds = value; }
+        }
 
-    	public CodeToken(string text)
-    	{
-    		color_0 = Color.Black;
-    		string_0 = text;
-    	}
+        public string Link
+        {
+            get { return link; }
+            set { link = value; }
+        }
 
-    	[SpecialName]
-    	public string method_0()
-    	{
-    		return string_0;
-    	}
-
-    	[SpecialName]
-    	public void method_1(string string_2)
-    	{
-    		string_0 = string_2;
-    	}
-
-    	[SpecialName]
-    	public Rectangle method_2()
-    	{
-    		return rectangle_0;
-    	}
-
-    	[SpecialName]
-    	public void method_3(Rectangle rectangle_1)
-    	{
-    		rectangle_0 = rectangle_1;
-    	}
-
-    	[SpecialName]
-    	public string method_4()
-    	{
-    		return string_1;
-    	}
-
-    	[SpecialName]
-    	public void method_5(string string_2)
-    	{
-    		string_1 = string_2;
-    	}
-
-    	[SpecialName]
-    	public Color method_6()
-    	{
-    		return color_0;
-    	}
-
-    	[SpecialName]
-    	public void method_7(Color color_1)
-    	{
-    		color_0 = color_1;
-    	}
+        public Color Color
+        {
+            get { return color; }
+            set { color = value; }
+        }
     }
-
 }

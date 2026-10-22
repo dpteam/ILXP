@@ -1724,7 +1724,7 @@ namespace ILXP
 
     	private void method_7(TreeNode treeNode_0, TypeDefinition typeDefinition_0)
     	{
-    		TreeNode treeNode = new TreeNode(LanguageWriter.smethod_3(typeDefinition_0));
+    		TreeNode treeNode = new TreeNode(LanguageWriter.GetShortTypeName(typeDefinition_0));
     		treeNode.ImageKey = method_6(typeDefinition_0);
     		treeNode.SelectedImageKey = treeNode.ImageKey;
     		if (typeDefinition_0.IsNotPublic)
@@ -1794,7 +1794,7 @@ namespace ILXP
     			{
     				if (!list.Contains(method.Name))
     				{
-    					TreeNode treeNode5 = new TreeNode(LanguageWriter.smethod_5(method));
+    					TreeNode treeNode5 = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(method));
     					treeNode5.ImageKey = method_3(method);
     					treeNode5.SelectedImageKey = treeNode5.ImageKey;
     					if (!method.IsPublic)
@@ -1813,7 +1813,7 @@ namespace ILXP
     				treeNode6.Tag = property2;
     				if (property2.SetMethod != null)
     				{
-    					TreeNode treeNode7 = new TreeNode(LanguageWriter.smethod_5(property2.SetMethod));
+    					TreeNode treeNode7 = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(property2.SetMethod));
     					treeNode7.Tag = property2.SetMethod;
     					treeNode7.ImageKey = method_3(property2.SetMethod);
     					treeNode7.SelectedImageKey = treeNode7.ImageKey;
@@ -1829,7 +1829,7 @@ namespace ILXP
     				}
     				if (property2.GetMethod != null)
     				{
-    					TreeNode treeNode8 = new TreeNode(LanguageWriter.smethod_5(property2.GetMethod));
+    					TreeNode treeNode8 = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(property2.GetMethod));
     					treeNode8.Tag = property2.GetMethod;
     					treeNode8.ImageKey = method_3(property2.GetMethod);
     					treeNode8.SelectedImageKey = treeNode8.ImageKey;
@@ -1854,7 +1854,7 @@ namespace ILXP
     				treeNode.Nodes.Add(treeNode9);
     				if (event2.AddMethod != null)
     				{
-    					TreeNode treeNode10 = new TreeNode(LanguageWriter.smethod_5(event2.AddMethod));
+    					TreeNode treeNode10 = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(event2.AddMethod));
     					treeNode10.Tag = event2.AddMethod;
     					treeNode10.ImageKey = method_3(event2.AddMethod);
     					treeNode10.SelectedImageKey = treeNode10.ImageKey;
@@ -1870,7 +1870,7 @@ namespace ILXP
     				}
     				if (event2.RemoveMethod != null)
     				{
-    					TreeNode treeNode11 = new TreeNode(LanguageWriter.smethod_5(event2.RemoveMethod));
+    					TreeNode treeNode11 = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(event2.RemoveMethod));
     					treeNode11.Tag = event2.RemoveMethod;
     					treeNode11.ImageKey = method_3(event2.RemoveMethod);
     					treeNode11.SelectedImageKey = treeNode11.ImageKey;
@@ -1888,7 +1888,7 @@ namespace ILXP
     				{
     					if (otherMethod2 != null)
     					{
-    						TreeNode treeNode12 = new TreeNode(LanguageWriter.smethod_5(otherMethod2));
+    						TreeNode treeNode12 = new TreeNode(LanguageWriter.GetMethodSignatureWithReturn(otherMethod2));
     						treeNode12.Tag = otherMethod2;
     						treeNode12.ImageKey = method_3(otherMethod2);
     						treeNode12.SelectedImageKey = treeNode12.ImageKey;
@@ -2086,7 +2086,7 @@ namespace ILXP
     			object objectValue = RuntimeHelpers.GetObjectValue(item);
     			if (objectValue is AssemblyItem)
     			{
-    				text = ((AssemblyItem)objectValue).method_1().Name.FullName;
+    				text = ((AssemblyItem)objectValue).Assembly.Name.FullName;
     				break;
     			}
     		}
@@ -2104,7 +2104,7 @@ namespace ILXP
     			object objectValue3 = RuntimeHelpers.GetObjectValue(item3);
     			if (objectValue3 is ModuleItem)
     			{
-    				text = text + "//N" + ((ModuleItem)objectValue3).method_0();
+    				text = text + "//N" + ((ModuleItem)objectValue3).Namespace;
     				break;
     			}
     		}
@@ -2122,7 +2122,7 @@ namespace ILXP
     			object objectValue5 = RuntimeHelpers.GetObjectValue(item5);
     			if (objectValue5 is MethodDefinition)
     			{
-    				text = text + "//M" + LanguageWriter.smethod_4((MethodDefinition)objectValue5);
+    				text = text + "//M" + LanguageWriter.GetMethodSignature((MethodDefinition)objectValue5);
     				return text;
     			}
     		}
@@ -2169,7 +2169,7 @@ namespace ILXP
     			bool flag = false;
     			foreach (TreeNode node in vmethod_16().Nodes)
     			{
-    				if (Operators.CompareString(((AssemblyItem)node.Tag).method_1().Name.FullName, array[0], TextCompare: false) == 0)
+    				if (Operators.CompareString(((AssemblyItem)node.Tag).Assembly.Name.FullName, array[0], TextCompare: false) == 0)
     				{
     					treeNode = node;
     					flag = true;
@@ -2221,7 +2221,7 @@ namespace ILXP
     				}
     				foreach (TreeNode node5 in node4.Nodes)
     				{
-    					if (node5.Tag != null && Operators.CompareString(((ModuleItem)node5.Tag).method_0(), array[1].Substring(1), TextCompare: false) == 0)
+    					if (node5.Tag != null && Operators.CompareString(((ModuleItem)node5.Tag).Namespace, array[1].Substring(1), TextCompare: false) == 0)
     					{
     						treeNode = node5;
     						flag3 = true;
@@ -2255,7 +2255,7 @@ namespace ILXP
     				flag3 = false;
     				foreach (TreeNode node7 in treeNode.Nodes)
     				{
-    					if (!(node7.Tag is MethodDefinition) || Operators.CompareString(LanguageWriter.smethod_4((MethodDefinition)node7.Tag), array[3].Substring(1), TextCompare: false) != 0)
+    					if (!(node7.Tag is MethodDefinition) || Operators.CompareString(LanguageWriter.GetMethodSignature((MethodDefinition)node7.Tag), array[3].Substring(1), TextCompare: false) != 0)
     					{
     						if (!(node7.Tag is PropertyDefinition))
     						{
@@ -2263,7 +2263,7 @@ namespace ILXP
     						}
     						foreach (TreeNode node8 in node7.Nodes)
     						{
-    							if (node8.Tag is MethodDefinition && Operators.CompareString(LanguageWriter.smethod_4((MethodDefinition)node8.Tag), array[3].Substring(1), TextCompare: false) == 0)
+    							if (node8.Tag is MethodDefinition && Operators.CompareString(LanguageWriter.GetMethodSignature((MethodDefinition)node8.Tag), array[3].Substring(1), TextCompare: false) == 0)
     							{
     								treeNode = node8;
     								flag3 = true;
@@ -2346,20 +2346,20 @@ namespace ILXP
 
     	private void method_13()
     	{
-    		if (gclass7_0.method_3())
+    		if (gclass7_0.CanGoForward)
     		{
     			bool_0 = true;
-    			method_12(gclass7_0.method_5());
+    			method_12(gclass7_0.Forward());
     			bool_0 = false;
     		}
     	}
 
     	private void method_14()
     	{
-    		if (gclass7_0.method_2())
+    		if (gclass7_0.CanGoBack)
     		{
     			bool_0 = true;
-    			method_12(gclass7_0.method_4());
+    			method_12(gclass7_0.Back());
     			bool_0 = false;
     		}
     	}
@@ -2392,7 +2392,7 @@ namespace ILXP
     			}
     			else if (objectValue is ModuleItem)
     			{
-    				vmethod_67().Text = string.Format("{0}", ((ModuleItem)objectValue).method_0());
+    				vmethod_67().Text = string.Format("{0}", ((ModuleItem)objectValue).Namespace);
     			}
     			else
     			{
@@ -2409,21 +2409,21 @@ namespace ILXP
     		string text = method_11();
     		if (!bool_0 && !string.IsNullOrEmpty(text))
     		{
-    			gclass7_0.method_1(text);
+    			gclass7_0.Navigate(text);
     		}
-    		vmethod_24().Enabled = gclass7_0.method_2();
-    		vmethod_61().Enabled = gclass7_0.method_2();
-    		vmethod_26().Enabled = gclass7_0.method_3();
-    		vmethod_63().Enabled = gclass7_0.method_3();
+    		vmethod_24().Enabled = gclass7_0.CanGoBack;
+    		vmethod_61().Enabled = gclass7_0.CanGoBack;
+    		vmethod_26().Enabled = gclass7_0.CanGoForward;
+    		vmethod_63().Enabled = gclass7_0.CanGoForward;
     		AppSettings.Default.LastSelectedNodePath = text;
     		TreeNode selectedNode = vmethod_16().SelectedNode;
     		while (selectedNode != null && selectedNode.Parent != null)
     		{
     			selectedNode = selectedNode.Parent;
     		}
-    		if (selectedNode != null && !string.IsNullOrEmpty(((AssemblyItem)selectedNode.Tag).method_0()) && File.Exists(((AssemblyItem)selectedNode.Tag).method_0()))
+    		if (selectedNode != null && !string.IsNullOrEmpty(((AssemblyItem)selectedNode.Tag).FilePath) && File.Exists(((AssemblyItem)selectedNode.Tag).FilePath))
     		{
-    			AppSettings.Default.LastFile = ((AssemblyItem)selectedNode.Tag).method_0();
+    			AppSettings.Default.LastFile = ((AssemblyItem)selectedNode.Tag).FilePath;
     		}
     		AppSettings.Default.Save();
     	}
@@ -2483,35 +2483,35 @@ namespace ILXP
     			}
     			else if (objectValue is MethodDefinition)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_4((MethodDefinition)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteMethod((MethodDefinition)objectValue);
     			}
     			else if (objectValue is FieldDefinition)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_6((FieldDefinition)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteField((FieldDefinition)objectValue);
     			}
     			else if (objectValue is PropertyDefinition)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_5((PropertyDefinition)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteProperty((PropertyDefinition)objectValue);
     			}
     			else if (objectValue is AssemblyItem)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_0((AssemblyItem)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteAssembly((AssemblyItem)objectValue);
     			}
     			else if (objectValue is ModuleDefinition)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_3((ModuleDefinition)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteModule((ModuleDefinition)objectValue);
     			}
     			else if (objectValue is EventDefinition)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_7((EventDefinition)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteEvent((EventDefinition)objectValue);
     			}
     			else if (objectValue is TypeDefinition)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_2((TypeDefinition)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteType((TypeDefinition)objectValue);
     			}
     			else if (objectValue is ModuleItem)
     			{
-    				vmethod_20().Text = gclass2_0.vmethod_1((ModuleItem)objectValue);
+    				vmethod_20().Text = gclass2_0.WriteNamespace((ModuleItem)objectValue);
     			}
     			else
     			{
@@ -2609,8 +2609,8 @@ namespace ILXP
     		{
     			flag2 = true;
     		}
-    		vmethod_34().Enabled = gclass7_0.method_2();
-    		vmethod_36().Enabled = gclass7_0.method_3();
+    		vmethod_34().Enabled = gclass7_0.CanGoBack;
+    		vmethod_36().Enabled = gclass7_0.CanGoForward;
     		vmethod_41().Visible = flag | flag2;
     		vmethod_43().Visible = flag;
     		vmethod_65().Visible = flag2;
@@ -2660,11 +2660,11 @@ namespace ILXP
     	private void method_30(object sender, EventArgs e)
     	{
     		vmethod_16().SelectedNode.Remove();
-    		gclass7_0.method_0();
-    		vmethod_24().Enabled = gclass7_0.method_2();
-    		vmethod_61().Enabled = gclass7_0.method_2();
-    		vmethod_26().Enabled = gclass7_0.method_3();
-    		vmethod_63().Enabled = gclass7_0.method_3();
+    		gclass7_0.Clear();
+    		vmethod_24().Enabled = gclass7_0.CanGoBack;
+    		vmethod_61().Enabled = gclass7_0.CanGoBack;
+    		vmethod_26().Enabled = gclass7_0.CanGoForward;
+    		vmethod_63().Enabled = gclass7_0.CanGoForward;
     		vmethod_20().Visible = true;
     		vmethod_30().Visible = false;
     		vmethod_28().Visible = false;
@@ -2702,7 +2702,7 @@ namespace ILXP
     		vmethod_20().method_5();
     		foreach (TreeNode node in vmethod_16().Nodes)
     		{
-    			stringCollection.Add(((AssemblyItem)node.Tag).method_0());
+    			stringCollection.Add(((AssemblyItem)node.Tag).FilePath);
     		}
     		vmethod_16().Nodes.Clear();
     		Refresh();
@@ -2737,8 +2737,8 @@ namespace ILXP
     	private void method_38(object sender, EventArgs e)
     	{
     		vmethod_58().Enabled = vmethod_16().Nodes.Count > 0;
-    		vmethod_61().Enabled = gclass7_0.method_2();
-    		vmethod_63().Enabled = gclass7_0.method_3();
+    		vmethod_61().Enabled = gclass7_0.CanGoBack;
+    		vmethod_63().Enabled = gclass7_0.CanGoForward;
     	}
     }
 

@@ -1,37 +1,22 @@
-using System.Runtime.CompilerServices;
 using Mono.Cecil;
 
 namespace ILXP
 {
+    /// <summary>
+    /// A loaded assembly together with the path it was loaded from. The path is kept
+    /// even when the assembly is later replaced (for example after a refresh), so the
+    /// tree can always be restored from disk.
+    /// </summary>
     public sealed class AssemblyItem
     {
-    	private string string_0;
+        public AssemblyItem(string filePath, AssemblyDefinition assembly)
+        {
+            FilePath = filePath;
+            Assembly = assembly;
+        }
 
-    	private AssemblyDefinition assemblyDefinition_0;
+        public string FilePath { get; private set; }
 
-    	public AssemblyItem(string FileName, AssemblyDefinition assembly)
-    	{
-    		string_0 = FileName;
-    		assemblyDefinition_0 = assembly;
-    	}
-
-    	[SpecialName]
-    	public string method_0()
-    	{
-    		return string_0;
-    	}
-
-    	[SpecialName]
-    	public AssemblyDefinition method_1()
-    	{
-    		return assemblyDefinition_0;
-    	}
-
-    	[SpecialName]
-    	public void method_2(AssemblyDefinition assemblyDefinition_1)
-    	{
-    		assemblyDefinition_0 = assemblyDefinition_1;
-    	}
+        public AssemblyDefinition Assembly { get; set; }
     }
-
 }
