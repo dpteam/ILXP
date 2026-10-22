@@ -27,6 +27,12 @@ Status legend: `[x]` done, `[~]` in progress / partially done, `[ ]` planned.
 - [x] Output dialects (C# 1.0–9.0, SharpDevelop, VB).
 - [x] Baseline support for damaged inputs: `AssemblyLoader` carves a valid PE image out of a
       larger blob (memory dump, appended data) and retries (verified with `tools/Test-Carving.ps1`).
+- [x] Single-file build: Cecil is compiled into `ILXP.exe`; `native/` is no longer shipped and
+      all native functionality is replaced by managed code.
+- [x] About box: interactive water logo (large, visible ripples), music player with the full
+      General MIDI instrument set, track selection, MIDI import/export.
+- [x] Recursive folder loading, lazily expanded browsable tree, tree search, expand/collapse.
+- [x] Output dialects (C# 1.0–9.0, SharpDevelop, VB) and target-runtime detection.
 
 ## Phase 2 вЂ“ finish the deobfuscation of the source (in progress)
 
@@ -92,8 +98,19 @@ Dependency order matters: de4dot-family sources need **dnlib**; Unscrambler need
 
 ## Phase 5 вЂ“ quality
 
-- [ ] Add automated tests (golden IL output, string decryption, PE parsing, passes).
-- [ ] Add a smoke test that loads a set of assemblies and renders every node.
+- [x] `tests/ILXP.Tests`: dependency-free test runner (40 checks) covering CLI, accuracy,
+      managed round trip, cleanup passes, obfuscation round trip, damaged input, music and
+      headless mode.
+- [x] From-scratch test obfuscator (`TestObfuscator`): renaming, NOP insertion, opaque
+      predicates, junk types, short-branch expansion.
+- [x] `--accuracy` structural completeness metric (measured on ILXP.exe: IL 100 %, C# 99.9 %,
+      VB 99.6 %).
+- [x] `--verify` instruction/operand validation.
+- [x] `--headless` scriptable shell.
+- [x] GitHub Actions workflow: AnyCPU/x86/x64 builds, tests, smoke test, accuracy report,
+      screenshots and artifacts.
+- [ ] Add more obfuscator transforms (control-flow flattening, string encryption, proxy calls)
+      so deobfuscation quality can be measured numerically.
 - [ ] Improve the C#/VB writers: attributes, generics, events, constructors, string escaping.
 - [ ] Localisation-ready UI strings.
 - [ ] Verify Windows XP compatibility (no APIs newer than .NET 4.0, no DPI-only APIs).
