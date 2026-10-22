@@ -92,6 +92,7 @@ namespace ILXP.Tests
                 TestQuickOpen();
                 TestVerification();
                 TestExpansion();
+                TestIlNavigation();
             }
             finally
             {
@@ -335,6 +336,19 @@ namespace ILXP.Tests
 
             CommandResult infinite = RunIlxp("--expand", ilxpPath, "--depth", "9");
             Check("infinite depth is reported", infinite.Output.Contains("expansion"), infinite.Output);
+        }
+
+        private static void TestIlNavigation()
+        {
+            Section("IL line map (Ctrl+G)");
+
+            CommandResult map = RunIlxp("--ilmap", ilxpPath, "ILXP.CodeToken", "get_Text");
+            Check("ilmap runs", map.ExitCode == 0, map.ToString());
+            Check("ilmap finds labels", map.Output.Contains("IL_0000"), map.Output);
+            Check("ilmap round-trips", map.Output.Contains("map ok"), map.Output);
+
+            CommandResult missing = RunIlxp("--ilmap", ilxpPath, "ILXP.CodeToken", "no_such_method");
+            Check("ilmap reports missing methods", missing.ExitCode == 2, missing.ToString());
         }
 
         // ------------------------------------------------------------------

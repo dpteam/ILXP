@@ -35,6 +35,102 @@ namespace ILXP
         /// <summary>Raised when the user clicks a link token.</summary>
         public event EventHandler<LinkClickedEventArgs> LinkClicked;
 
+        /// <summary>Raised when the caret or the selection changes (mouse or keyboard).</summary>
+        public event EventHandler SelectionChanged;
+
+        /// <summary>Number of rendered lines.</summary>
+        public int LineCount
+        {
+            get { return lines.Count; }
+        }
+
+        /// <summary>Plain text of a rendered line, or an empty string.</summary>
+        public string GetLineText(int index)
+        {
+            if (index < 0 || index >= lines.Count)
+            {
+                return string.Empty;
+            }
+
+            System.Text.StringBuilder text = new System.Text.StringBuilder();
+            foreach (CodeToken token in lines[index].Tokens)
+            {
+                text.Append(token.Text);
+            }
+            return text.ToString();
+        }
+
+        /// <summary>Index of the line that contains the given character offset.</summary>
+        public int GetLineIndexAt(int charOffset)
+        {
+            if (lines.Count == 0)
+            {
+                return -1;
+            }
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                CodeLine line = lines[i];
+                if (charOffset < line.Offset + line.Length)
+                {
+                    return i;
+                }
+            }
+            return lines.Count - 1;
+        }
+
+        /// <summary>Selects a whole line and scrolls it into view.</summary>
+        public void SelectLine(int index)
+        {
+            if (index < 0 || index >= lines.Count)
+            {
+                return;
+            }
+
+            CodeLine line = lines[index];
+            selectionStart = line.Offset;
+            selectionLength = line.Length;
+            ScrollToLine(index);
+            Invalidate();
+            RaiseSelectionChanged();
+        }
+
+        /// <summary>Scrolls so that the requested line is visible.</summary>
+        public void ScrollToLine(int index)
+        {
+            if (index < 0)
+            {
+                return;
+            }
+
+            int y = index * lineHeight;
+            int visibleTop = -AutoScrollPosition.Y;
+            int visibleBottom = visibleTop + ClientSize.Height - lineHeight;
+
+            if (y < visibleTop || y > visibleBottom)
+            {
+                AutoScrollPosition = new Point(AutoScrollPosition.X, Math.Max(0, y - ClientSize.Height / 2));
+            }
+        }
+
+        private void RaiseSelectionChanged()
+        {
+            EventHandler handler = SelectionChanged;
+            if (handler == null)
+            {
+                return;
+            }
+
+            try
+            {
+                handler(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Selection handler failed.", ex);
+            }
+        }
+
         public CodeEditor()
         {
             lines = new LineCollection();
@@ -382,6 +478,7 @@ namespace ILXP
                 selectionStart = HitTest(position, ref token);
                 Capture = true;
                 Invalidate();
+                RaiseSelectionChanged();
             }
             base.OnMouseDown(e);
         }
@@ -419,6 +516,7 @@ namespace ILXP
                         handler(this, new LinkClickedEventArgs(token.Link));
                     }
                 }
+                RaiseSelectionChanged();
             }
             else if (e.Button == MouseButtons.Right)
             {
@@ -492,6 +590,7 @@ namespace ILXP
                     break;
             }
             base.OnKeyDown(e);
+            RaiseSelectionChanged();
         }
 
         public string GetSelectedText()

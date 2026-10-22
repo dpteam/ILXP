@@ -30,18 +30,34 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~\.nuget\packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
+
       - name: Show environment
         shell: pwsh
         run: |
           dotnet --info
           Write-Host "matrix platform: ${{ matrix.platform }}"
 
-      # The .slnx solution only declares the "Any CPU" configuration. Passing a platform
-      # to the solution would fail with MSB4126, so platform-specific builds target the
-      # project files directly.
-      - name: Restore
+      # The .NET SDK infers a RuntimeIdentifier (win-x86 / win-x64) from PlatformTarget for
+      # .NET Framework executables, and the assets file must be restored with the same
+      # properties that the build uses. Restoring the solution once and then building with
+      # -p:Platform=x64 fails with NETSDK1047, so every platform restores explicitly.
+      - name: Restore (Any CPU)
+        if: matrix.platform == 'AnyCPU'
         shell: pwsh
         run: dotnet restore ILXP.slnx
+
+      - name: Restore (x86 / x64)
+        if: matrix.platform != 'AnyCPU'
+        shell: pwsh
+        run: |
+          dotnet restore src/ILXP/ILXP.csproj -p:Platform=${{ matrix.platform }}
+          dotnet restore tests/ILXP.Tests/ILXP.Tests.csproj -p:Platform=${{ matrix.platform }}
 
       - name: Build (Any CPU)
         if: matrix.platform == 'AnyCPU'
@@ -54,6 +70,18 @@ jobs:
         run: |
           dotnet build src/ILXP/ILXP.csproj -c Release --no-restore -p:Platform=${{ matrix.platform }}
           dotnet build tests/ILXP.Tests/ILXP.Tests.csproj -c Release --no-restore -p:Platform=${{ matrix.platform }}
+
+      - name: Verify PE platform
+        shell: pwsh
+        run: |
+          $exe = if ('${{ matrix.platform }}' -eq 'AnyCPU') {
+            "src/ILXP/bin/Release/net40/ILXP.exe"
+          } else {
+            "src/ILXP/bin/${{ matrix.platform }}/Release/net40/ILXP.exe"
+          }
+          powershell -NoProfile -ExecutionPolicy Bypass -File tools/Test-Platform.ps1 `
+            -Exe $exe -Expected "${{ matrix.platform }}"
+          if ($LASTEXITCODE -ne 0) { throw "platform verification failed" }
 
       - name: Test suite
         if: matrix.platform == 'AnyCPU'

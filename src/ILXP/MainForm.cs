@@ -57,10 +57,28 @@ namespace ILXP
                     treeView.EndUpdate();
                 }
 
-                TreeNode selected = string.IsNullOrEmpty(typeName) ? node : FindTypeNode(node, typeName);
-                if (selected == null)
+                TreeNode selected = node;
+                if (!string.IsNullOrEmpty(typeName))
                 {
-                    selected = node;
+                    // "Type" or "Type::member" (member may be a method, field, property or event).
+                    string typePart = typeName;
+                    string memberPart = null;
+                    int separator = typeName.IndexOf("::", StringComparison.Ordinal);
+                    if (separator > 0)
+                    {
+                        typePart = typeName.Substring(0, separator);
+                        memberPart = typeName.Substring(separator + 2);
+                    }
+
+                    TreeNode typeNode = FindTypeNode(node, typePart);
+                    if (typeNode != null)
+                    {
+                        selected = typeNode;
+                        if (!string.IsNullOrEmpty(memberPart))
+                        {
+                            selected = FindMemberNodeByTag(typeNode, memberPart) ?? typeNode;
+                        }
+                    }
                 }
 
                 TreeNode parent = selected.Parent;
@@ -72,6 +90,7 @@ namespace ILXP
 
                 treeView.SelectedNode = selected;
                 selected.EnsureVisible();
+                treeView.Focus();
                 return true;
             }
             catch (Exception ex)
@@ -79,6 +98,38 @@ namespace ILXP
                 Log.Warn("Unable to prepare the window for capture.", ex);
                 return false;
             }
+        }
+
+        /// <summary>Finds a member node by name inside a type (expanding lazy children).</summary>
+        private TreeNode FindMemberNodeByTag(TreeNode typeNode, string memberName)
+        {
+            ExpandLazyNode(typeNode);
+            foreach (TreeNode child in typeNode.Nodes)
+            {
+                if (child.Tag is MethodDefinition && string.Equals(((MethodDefinition)child.Tag).Name, memberName, StringComparison.Ordinal))
+                {
+                    return child;
+                }
+                if (child.Tag is FieldDefinition && string.Equals(((FieldDefinition)child.Tag).Name, memberName, StringComparison.Ordinal))
+                {
+                    return child;
+                }
+                if (child.Tag is PropertyDefinition && string.Equals(((PropertyDefinition)child.Tag).Name, memberName, StringComparison.Ordinal))
+                {
+                    return child;
+                }
+                if (child.Tag is EventDefinition && string.Equals(((EventDefinition)child.Tag).Name, memberName, StringComparison.Ordinal))
+                {
+                    return child;
+                }
+
+                TreeNode nested = FindMemberNodeByTag(child, memberName);
+                if (nested != null)
+                {
+                    return nested;
+                }
+            }
+            return null;
         }
 
         /// <summary>Finds a type node by full or short name, expanding only matching namespaces.</summary>
@@ -407,6 +458,11 @@ namespace ILXP
             {
                 e.SuppressKeyPress = true;
                 OnQuickOpen(sender, EventArgs.Empty);
+            }
+            else if (e.Control && e.KeyCode == Keys.G)
+            {
+                e.SuppressKeyPress = true;
+                OnGoToIlOffset(sender, EventArgs.Empty);
             }
         }
 
@@ -889,6 +945,10 @@ namespace ILXP
             {
                 codeEditor.Clear();
             }
+
+            // The IL map is derived from the rendered text, so it is rebuilt after every
+            // document change (cheap: one regex pass).
+            RebuildIlMap();
         }
 
         private void ShowTextViewer(string text)
@@ -897,6 +957,7 @@ namespace ILXP
             imageBox.Visible = false;
             textViewer.Visible = true;
             textViewer.Text = text;
+            ilMap = IlLineMap.Parse(string.Empty);
         }
 
         private void UpdateStatusAndHistory()

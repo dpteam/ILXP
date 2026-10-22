@@ -72,6 +72,8 @@ namespace ILXP
                         return SearchCommand(options);
                     case "expand":
                         return ExpandCommand(options);
+                    case "ilmap":
+                        return IlMapCommand(options);
                     case "headless":
                         return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
@@ -366,6 +368,8 @@ namespace ILXP
                     if (options.TreeDepth != 0)
                     {
                         main.ExpandForCapture(options.TreeDepth);
+                        // Expanding reorders the visible nodes; bring the selection back.
+                        main.LoadForCapture(options.Input, options.Select);
                     }
                     for (int i = 0; i < 25; i++)
                     {
@@ -668,6 +672,93 @@ namespace ILXP
             return 0;
         }
 
+        /// <summary>
+        /// Prints the line → IL offset map for one method and verifies the reverse lookup.
+        /// This is the same map the editor uses for Ctrl+G, exposed for tests and scripts.
+        /// </summary>
+        private static int IlMapCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            string typeName = options.Select;
+            string methodName = options.Query;
+
+            TypeDefinition type = null;
+            foreach (ModuleDefinition module in assembly.Modules)
+            {
+                foreach (TypeDefinition candidate in module.Types)
+                {
+                    if (string.Equals(candidate.FullName, typeName, StringComparison.Ordinal) ||
+                        string.Equals(candidate.Name, typeName, StringComparison.Ordinal))
+                    {
+                        type = candidate;
+                        break;
+                    }
+                }
+                if (type != null)
+                {
+                    break;
+                }
+            }
+
+            if (type == null)
+            {
+                Console.Error.WriteLine("error: type not found: " + typeName);
+                return 2;
+            }
+
+            MethodDefinition method = null;
+            foreach (MethodDefinition candidate in type.Methods)
+            {
+                if (string.Equals(candidate.Name, methodName, StringComparison.Ordinal))
+                {
+                    method = candidate;
+                    break;
+                }
+            }
+
+            if (method == null)
+            {
+                Console.Error.WriteLine("error: method not found: " + methodName);
+                return 2;
+            }
+
+            string il = new IlWriter().StripMarkup(new IlWriter().WriteMethod(method));
+            IlLineMap map = IlLineMap.Parse(il);
+
+            Console.WriteLine("method : " + type.FullName + "::" + method.Name);
+            Console.WriteLine("lines  : " + il.Replace("\r\n", "\n").Split('\n').Length);
+            Console.WriteLine("labels : " + map.Count);
+            Console.WriteLine();
+
+            int failures = 0;
+            foreach (KeyValuePair<int, int> entry in map.Entries)
+            {
+                int line;
+                bool roundTrip = map.TryGetLine(entry.Value, out line) && line == entry.Key;
+                if (!roundTrip)
+                {
+                    failures++;
+                }
+
+                Console.WriteLine(string.Format("  line {0,4}  IL_{1:x4}  {2}",
+                    entry.Key + 1, entry.Value, roundTrip ? "ok" : "MISMATCH"));
+            }
+
+            // Nearest-instruction lookup must never fail for an offset inside the body.
+            if (map.Count > 0)
+            {
+                int lastLine = map.FindLine(0x7fffffff);
+                if (lastLine < 0)
+                {
+                    failures++;
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(failures == 0 ? "map ok" : failures + " problem(s)");
+            return failures == 0 ? 0 : 1;
+        }
+
         /// <summary>Prints the structural completeness report for an assembly.</summary>
         private static int MeasureAccuracy(Options options)
         {
@@ -851,6 +942,7 @@ namespace ILXP
             Console.WriteLine("  ILXP --verify <assembly>                 validate instruction operands and branches");
             Console.WriteLine("  ILXP --search <assembly> <query>         quick-open search (fuzzy)");
             Console.WriteLine("  ILXP --expand <assembly> [--depth <n>]   preview a tree expansion (node counts)");
+            Console.WriteLine("  ILXP --ilmap <assembly> <type> <method>  line -> IL offset map (Ctrl+G source)");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -1001,6 +1093,12 @@ namespace ILXP
                         case "--expand":
                             options.Command = "expand";
                             options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--ilmap":
+                            options.Command = "ilmap";
+                            options.Input = Next(args, ref i, argument);
+                            options.Select = Next(args, ref i, argument);
+                            options.Query = Next(args, ref i, argument);
                             break;
                         case "--depth":
                             options.Depth = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);

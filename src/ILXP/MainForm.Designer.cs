@@ -18,6 +18,7 @@ namespace ILXP
         private ToolStripMenuItem cleanAssemblyMenuItem;
         private ToolStripMenuItem editMenu;
         private ToolStripMenuItem quickOpenMenuItem;
+        private ToolStripMenuItem goToIlMenuItem;
         private ToolStripMenuItem findMenuItem;
         private ToolStripMenuItem copyMenuItem;
         private ToolStripMenuItem outputMenu;
@@ -73,6 +74,7 @@ namespace ILXP
             this.cleanAssemblyMenuItem = new ToolStripMenuItem();
             this.editMenu = new ToolStripMenuItem();
             this.quickOpenMenuItem = new ToolStripMenuItem();
+            this.goToIlMenuItem = new ToolStripMenuItem();
             this.findMenuItem = new ToolStripMenuItem();
             this.copyMenuItem = new ToolStripMenuItem();
             this.outputMenu = new ToolStripMenuItem();
@@ -240,7 +242,7 @@ namespace ILXP
             this.aboutMenuItem.Click += this.OnAbout;
 
             // edit menu
-            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.findMenuItem, this.copyMenuItem });
+            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.goToIlMenuItem, this.findMenuItem, this.copyMenuItem });
             this.editMenu.Name = "EditToolStripMenuItem";
             this.editMenu.Size = new Size(39, 20);
             this.editMenu.Text = "&Edit";
@@ -250,6 +252,12 @@ namespace ILXP
             this.quickOpenMenuItem.Size = new Size(160, 22);
             this.quickOpenMenuItem.Text = "&Quick Open...";
             this.quickOpenMenuItem.Click += this.OnQuickOpen;
+
+            this.goToIlMenuItem.Name = "MenuItemEditGoToIl";
+            this.goToIlMenuItem.ShortcutKeys = Keys.Control | Keys.G;
+            this.goToIlMenuItem.Size = new Size(160, 22);
+            this.goToIlMenuItem.Text = "Go to &IL offset...";
+            this.goToIlMenuItem.Click += this.OnGoToIlOffset;
 
             this.findMenuItem.Name = "MenuItemEditFind";
             this.findMenuItem.ShortcutKeys = Keys.Control | Keys.F;
@@ -492,6 +500,7 @@ namespace ILXP
             this.codeEditor.TabIndex = 1;
             this.codeEditor.TabStop = true;
             this.codeEditor.LinkClicked += this.OnEditorLinkClicked;
+            this.codeEditor.SelectionChanged += this.OnEditorSelectionChanged;
 
             this.imageBox.BackColor = SystemColors.Info;
             this.imageBox.BackgroundImageLayout = ImageLayout.Center;

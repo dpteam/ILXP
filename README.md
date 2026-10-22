@@ -65,6 +65,7 @@ ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]
 ILXP --verify <assembly>
 ILXP --search <assembly> <query>
 ILXP --expand <assembly> [--depth <n>]
+ILXP --ilmap <assembly> <type> <method>
 ILXP --headless
 ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
@@ -87,12 +88,24 @@ Notes:
 * `--screenshot --open <assembly> --select <type>` loads an assembly and selects a type before
   capturing, which is how `docs/screenshot-main.png` is produced.
 * `--search` uses the same fuzzy index as the Ctrl+P palette, so it doubles as a test hook.
+* `--ilmap` prints the line → IL offset map of one method (the same map the editor uses for
+  `Ctrl+G`) and verifies the reverse lookup.
+
+## IL ⇄ source navigation
+
+Every instruction in the IL view is labelled (`L_0000:`, `L_0001:`, …) and those labels are
+clickable links. `IlLineMap` recovers the line → offset map from the rendered text itself, so:
+
+* clicking a line and reading the status bar shows `IL_00xx (line N)`;
+* `Ctrl+G` (or *Edit → Go to IL offset…*) accepts `0x002a`, `002ah` or `002a` and selects the
+  instruction at — or the closest one before — that offset.
 
 ## Keyboard shortcuts
 
 | Shortcut | Action |
 | --- | --- |
 | `Ctrl+P` | Quick Open (fuzzy search over all types and members) |
+| `Ctrl+G` | go to an IL offset in the current method view |
 | `Ctrl+E` | Expand the tree to a chosen depth (0–9 or everything) |
 | `Ctrl+F` | focus the tree search box (`Enter` = next match, `Esc` = clear) |
 | `Ctrl+O` | open an assembly |
