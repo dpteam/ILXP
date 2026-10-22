@@ -89,6 +89,8 @@ namespace ILXP.Tests
                 TestDamagedInput();
                 TestMusicPipeline();
                 TestHeadless();
+                TestQuickOpen();
+                TestVerification();
             }
             finally
             {
@@ -277,7 +279,6 @@ namespace ILXP.Tests
         private static void TestHeadless()
         {
             Section("Headless mode");
-
             string script = string.Join(Environment.NewLine, new[]
             {
                 "open " + ilxpPath,
@@ -295,10 +296,37 @@ namespace ILXP.Tests
             Check("headless ran accuracy", result.Output.Contains("structural completeness"), result.Output);
         }
 
+        private static void TestQuickOpen()
+        {
+            Section("Quick Open index");
+
+            CommandResult all = RunIlxp("--search", ilxpPath, "waterlogo");
+            Check("search runs", all.ExitCode == 0, all.ToString());
+            Check("search finds WaterLogo", all.Output.Contains("WaterLogo"), all.Output);
+
+            CommandResult member = RunIlxp("--search", ilxpPath, "selectnodepath");
+            Check("search finds a method", member.ExitCode == 0 && member.Output.Contains("SelectNodeByPath"), member.Output);
+
+            CommandResult nothing = RunIlxp("--search", ilxpPath, "zzzznotarealthing");
+            Check("search reports no matches", nothing.ExitCode == 1, nothing.ToString());
+        }
+
+        private static void TestVerification()
+        {
+            Section("IL verification");
+
+            CommandResult valid = RunIlxp("--verify", ilxpPath);
+            Check("built assembly verifies", valid.ExitCode == 0, valid.Output);
+
+            string obfuscated = Path.Combine(workspace, "verify.obf.exe");
+            TestObfuscator.Obfuscate(ilxpPath, obfuscated, 99);
+            CommandResult obfuscatedResult = RunIlxp("--verify", obfuscated);
+            Check("obfuscated assembly verifies", obfuscatedResult.ExitCode == 0, obfuscatedResult.Output);
+        }
+
         // ------------------------------------------------------------------
         // Helpers
         // ------------------------------------------------------------------
-
         private sealed class CommandResult
         {
             public int ExitCode;

@@ -68,6 +68,8 @@ namespace ILXP
                         return MeasureAccuracy(options);
                     case "verify":
                         return Verify(options);
+                    case "search":
+                        return SearchCommand(options);
                     case "headless":
                         return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
@@ -333,7 +335,7 @@ namespace ILXP
                 return 2;
             }
 
-            using (Form form = CreateWindowForCapture(options.Window))
+            using (Form form = CreateWindowForCapture(options))
             {
                 form.StartPosition = FormStartPosition.Manual;
                 form.Location = new Point(0, 0);
@@ -409,14 +411,26 @@ namespace ILXP
             return 0;
         }
 
-        private static Form CreateWindowForCapture(string window)
+        private static Form CreateWindowForCapture(Options options)
         {
+            string window = options.Window;
             if (string.Equals(window, "main", StringComparison.OrdinalIgnoreCase))
             {
                 MainForm main = new MainForm();
                 main.SuppressStartupDialogs = true;
                 return main;
             }
+
+            if (string.Equals(window, "quickopen", StringComparison.OrdinalIgnoreCase))
+            {
+                List<UI.QuickOpenForm.Entry> index = new List<UI.QuickOpenForm.Entry>();
+                if (!string.IsNullOrEmpty(options.Input))
+                {
+                    index.AddRange(QuickOpenIndex.Build(AssemblyLoader.Load(options.Input).Assembly));
+                }
+                return new UI.QuickOpenForm(index, options.Query ?? string.Empty);
+            }
+
             return new AboutForm();
         }
         private static int MusicCommand(Options options)
@@ -474,6 +488,38 @@ namespace ILXP
         /// targets point inside the method body. Useful before writing an assembly back to
         /// disk (and for diagnosing damaged input).
         /// </summary>
+        /// <summary>
+        /// Quick Open from the command line: prints the best fuzzy matches for a query.
+        /// Same index and scoring as the Ctrl+P palette, so it doubles as a test hook.
+        /// </summary>
+        private static int SearchCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            List<UI.QuickOpenForm.Entry> index = QuickOpenIndex.Build(assembly);
+
+            string query = options.Query ?? string.Empty;
+            List<UI.QuickOpenForm.Entry> results = string.IsNullOrEmpty(query)
+                ? index.GetRange(0, Math.Min(index.Count, 40))
+                : QuickOpenIndex.Search(index, query, 40);
+
+            Console.WriteLine("indexed: " + index.Count + " entries");
+            Console.WriteLine("query  : " + (string.IsNullOrEmpty(query) ? "(all)" : query));
+            Console.WriteLine();
+
+            foreach (UI.QuickOpenForm.Entry entry in results)
+            {
+                Console.WriteLine(string.Format("[{0,-9}] {1}", entry.Kind, entry.Display));
+                if (options.VerboseOutput)
+                {
+                    Console.WriteLine("            " + entry.Path);
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("matches: " + results.Count);
+            return results.Count > 0 ? 0 : 1;
+        }
+
         private static int Verify(Options options)
         {
             AssemblyDefinition assembly = ReadAssembly(options.Input);
@@ -753,6 +799,8 @@ namespace ILXP
             Console.WriteLine("  ILXP --accuracy <assembly> [--language il|cs|vb] [--verbose]");
             Console.WriteLine("                                           structural completeness report");
             Console.WriteLine("  ILXP --headless                          command shell on stdin (no window)");
+            Console.WriteLine("  ILXP --verify <assembly>                 validate instruction operands and branches");
+            Console.WriteLine("  ILXP --search <assembly> <query>         quick-open search (fuzzy)");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -760,7 +808,7 @@ namespace ILXP
             Console.WriteLine("  ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]");
             Console.WriteLine("  ILXP --clean <assembly> [--output <assembly>]   run IL cleanup passes");
             Console.WriteLine("  ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]");
-            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main] [--open <assembly>] [--select <type>]");
+            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>]");
             Console.WriteLine();
             Console.WriteLine("Decompile options:");
             Console.WriteLine("  --language <il|cs|vb>   output language (default: il)");
@@ -794,6 +842,7 @@ namespace ILXP
             public int Frames { get; private set; }
             public bool VerboseOutput { get; private set; }
             public string Select { get; private set; }
+            public string Query { get; private set; }
             public bool UseNativeTools { get; private set; }
 
             public static Options Parse(string[] args)
@@ -871,6 +920,9 @@ namespace ILXP
                         case "--select":
                             options.Select = Next(args, ref i, argument);
                             break;
+                        case "--query":
+                            options.Query = Next(args, ref i, argument);
+                            break;
                         case "--volume":
                             options.MusicVolume = float.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
                             break;
@@ -888,6 +940,11 @@ namespace ILXP
                         case "--verify":
                             options.Command = "verify";
                             options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--search":
+                            options.Command = "search";
+                            options.Input = Next(args, ref i, argument);
+                            options.Query = Next(args, ref i, argument);
                             break;
                         case "--headless":
                             options.Command = "headless";

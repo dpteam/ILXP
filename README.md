@@ -62,7 +62,10 @@ ILXP --ilasm <file.il> [--output <assembly>] [--dll] [--x86|--x64] [--native]
 ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]
 ILXP --clean <assembly> [--output <assembly>]
 ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]
-ILXP --screenshot <out.png> [--window about|main] [--open <assembly>] [--select <type>]
+ILXP --verify <assembly>
+ILXP --search <assembly> <query>
+ILXP --headless
+ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
 ```
 
@@ -82,6 +85,18 @@ Notes:
   chiptune synthesizer.
 * `--screenshot --open <assembly> --select <type>` loads an assembly and selects a type before
   capturing, which is how `docs/screenshot-main.png` is produced.
+* `--search` uses the same fuzzy index as the Ctrl+P palette, so it doubles as a test hook.
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+P` | Quick Open (fuzzy search over all types and members) |
+| `Ctrl+F` | focus the tree search box (`Enter` = next match, `Esc` = clear) |
+| `Ctrl+O` | open an assembly |
+| `Ctrl+Shift+C` | copy the selected node name |
+| `F5` | refresh all assemblies |
+| `Alt+Left` / `Alt+Right` | navigation history |
 
 ## Testing
 

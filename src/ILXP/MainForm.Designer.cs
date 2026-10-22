@@ -17,6 +17,7 @@ namespace ILXP
         private ToolStripMenuItem assembleIlMenuItem;
         private ToolStripMenuItem cleanAssemblyMenuItem;
         private ToolStripMenuItem editMenu;
+        private ToolStripMenuItem quickOpenMenuItem;
         private ToolStripMenuItem findMenuItem;
         private ToolStripMenuItem copyMenuItem;
         private ToolStripMenuItem outputMenu;
@@ -69,6 +70,7 @@ namespace ILXP
             this.assembleIlMenuItem = new ToolStripMenuItem();
             this.cleanAssemblyMenuItem = new ToolStripMenuItem();
             this.editMenu = new ToolStripMenuItem();
+            this.quickOpenMenuItem = new ToolStripMenuItem();
             this.findMenuItem = new ToolStripMenuItem();
             this.copyMenuItem = new ToolStripMenuItem();
             this.outputMenu = new ToolStripMenuItem();
@@ -231,10 +233,16 @@ namespace ILXP
             this.aboutMenuItem.Click += this.OnAbout;
 
             // edit menu
-            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.findMenuItem, this.copyMenuItem });
+            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.findMenuItem, this.copyMenuItem });
             this.editMenu.Name = "EditToolStripMenuItem";
             this.editMenu.Size = new Size(39, 20);
             this.editMenu.Text = "&Edit";
+
+            this.quickOpenMenuItem.Name = "MenuItemEditQuickOpen";
+            this.quickOpenMenuItem.ShortcutKeys = Keys.Control | Keys.P;
+            this.quickOpenMenuItem.Size = new Size(160, 22);
+            this.quickOpenMenuItem.Text = "&Quick Open...";
+            this.quickOpenMenuItem.Click += this.OnQuickOpen;
 
             this.findMenuItem.Name = "MenuItemEditFind";
             this.findMenuItem.ShortcutKeys = Keys.Control | Keys.F;
@@ -265,9 +273,9 @@ namespace ILXP
             this.collapseAllMenuItem.Click += this.OnCollapseAll;
 
             // search box in the toolbar
-            this.searchBox.Name = "ToolStripSearchBox";
+            searchBox.Name = "ToolStripSearchBox";
             this.searchBox.Size = new Size(160, 25);
-            this.searchBox.ToolTipText = "Find in tree (Enter for next match)";
+            this.searchBox.ToolTipText = "Find in tree (Enter for next match, Ctrl+P for Quick Open)";
             this.searchBox.KeyDown += this.OnSearchBoxKeyDown;
             this.searchBox.TextChanged += this.OnSearchBoxTextChanged;
 

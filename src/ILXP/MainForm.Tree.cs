@@ -439,6 +439,7 @@ namespace ILXP
                 }
             }
             treeView.Nodes.Add(node);
+            InvalidateQuickOpenIndex();
         }
     }
 }

@@ -145,6 +145,8 @@ namespace ILXP
             writer = languageCombo.SelectedItem as LanguageWriter;
             treeView.TreeViewNodeSorter = new TreeNodeComparer();
             treeView.BeforeExpand += OnTreeBeforeExpand;
+            KeyPreview = true;
+            KeyDown += OnMainKeyDown;
 
             Shown += OnShown;
         }
@@ -376,6 +378,15 @@ namespace ILXP
         {
             searchBox.Focus();
             searchBox.SelectAll();
+        }
+
+        private void OnMainKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.P)
+            {
+                e.SuppressKeyPress = true;
+                OnQuickOpen(sender, EventArgs.Empty);
+            }
         }
 
         private void OnSearchBoxTextChanged(object sender, EventArgs e)
@@ -613,6 +624,7 @@ namespace ILXP
             }
 
             treeView.SelectedNode.Remove();
+            InvalidateQuickOpenIndex();
             navigationHistory.Clear();
             backButton.Enabled = navigationHistory.CanGoBack;
             backMenuItem.Enabled = navigationHistory.CanGoBack;
@@ -1499,6 +1511,7 @@ namespace ILXP
             treeView.CollapseAll();
             treeView.Nodes.Add(node);
             treeView.SelectedNode = node;
+            InvalidateQuickOpenIndex();
             node.Expand();
             if (node.Nodes.Count > 0)
             {

@@ -20,7 +20,7 @@ date whenever a milestone is reached.
 dotnet build ILXP.slnx                              # 0 errors, single-file output
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x86
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x64
-tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 40/40 checks pass
+tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 46/46 checks pass
 powershell -File tools/Smoke-Test.ps1               # 11/11 checks pass
 ```
 
@@ -81,6 +81,9 @@ src\ILXP\bin\Debug\net40\ILXP.exe
 # full test suite / smoke test
 tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run
 powershell -File tools\Smoke-Test.ps1
+
+# quick open search from the command line
+src\ILXP\bin\Debug\net40\ILXP.exe --search src\ILXP\bin\Debug\net40\ILXP.exe waterlogo
 
 # accuracy + IL verification
 src\ILXP\bin\Debug\net40\ILXP.exe --accuracy src\ILXP\bin\Debug\net40\ILXP.exe --language cs --verbose
