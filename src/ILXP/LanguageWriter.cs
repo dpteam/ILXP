@@ -16,6 +16,9 @@ namespace ILXP
         /// <summary>Selected output dialect (affects headers and optional syntax).</summary>
         public OutputDialect Dialect { get; set; }
 
+        /// <summary>Runtime the input assembly targets (informational).</summary>
+        public RuntimeProfile Runtime { get; set; }
+
         /// <summary>Comment prefix used when writing the dialect header.</summary>
         protected virtual string CommentPrefix
         {
@@ -32,6 +35,19 @@ namespace ILXP
 
             return CommentPrefix + "Dialect: " + Dialect.DisplayName +
                    "  (" + Dialect.Toolchain + ")" + Environment.NewLine;
+        }
+
+        /// <summary>Header that documents the runtime the input was built for.</summary>
+        protected string GetRuntimeHeader()
+        {
+            if (Runtime == null)
+            {
+                return string.Empty;
+            }
+
+            return CommentPrefix + "Target runtime: " + Runtime.FrameworkName +
+                   (string.IsNullOrEmpty(Runtime.TargetFramework) ? string.Empty : "  [" + Runtime.TargetFramework + "]") +
+                   Environment.NewLine;
         }
 
         public abstract string WriteAssembly(AssemblyItem assembly);

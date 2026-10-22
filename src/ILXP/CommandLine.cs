@@ -119,7 +119,6 @@ namespace ILXP
             {
                 writer.Dialect = dialect;
             }
-
             AssemblyDefinition assembly = ReadAssembly(options.Input);
             {
                 string outputDirectory = options.Output;

@@ -21,6 +21,10 @@ namespace ILXP
     	{
     		StringBuilder stringBuilder = new StringBuilder();
     		stringBuilder.AppendLine("<<g>>" + GetDialectHeader().TrimEnd() + "<<>>");
+    		if (Runtime != null)
+    		{
+    			stringBuilder.AppendLine("<<g>>" + GetRuntimeHeader().TrimEnd() + "<<>>");
+    		}
     		stringBuilder.AppendLine("<<g>>//Name: " + gclass0_0.Assembly.Name.Name + "<<>>");
     		stringBuilder.AppendLine("<<g>>//Path: " + gclass0_0.FilePath + "<<>>");
     		stringBuilder.AppendLine("<<g>>//Version: " + $"{gclass0_0.Assembly.Name.Version.Major}:{gclass0_0.Assembly.Name.Version.MajorRevision}:{gclass0_0.Assembly.Name.Version.Minor}:{gclass0_0.Assembly.Name.Version.MinorRevision}" + "<<>>");

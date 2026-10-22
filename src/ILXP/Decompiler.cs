@@ -28,6 +28,7 @@ namespace ILXP
             }
 
             Directory.CreateDirectory(outputDirectory);
+            writer.Runtime = RuntimeProfile.Detect(assembly);
             string extension = GetExtension(writer);
             StringBuilder manifest = new StringBuilder();
             manifest.AppendLine("assembly: " + assembly.Name.FullName);

@@ -729,6 +729,7 @@ namespace ILXP
             }
             else if (value is AssemblyItem)
             {
+                writer.Runtime = RuntimeProfile.Detect(((AssemblyItem)value).Assembly);
                 codeEditor.Text = writer.WriteAssembly((AssemblyItem)value);
             }
             else if (value is ModuleDefinition)
@@ -929,6 +930,12 @@ namespace ILXP
             }
             root.Tag = new AssemblyItem(path, assembly);
             SetImage(root, "0VSObject_Assembly.bmp");
+
+            RuntimeProfile profile = RuntimeProfile.Detect(assembly);
+            root.ToolTipText = string.IsNullOrEmpty(root.ToolTipText)
+                ? profile.ToString()
+                : root.ToolTipText + Environment.NewLine + profile.ToString();
+            root.Text += "  [" + profile.FrameworkName + "]";
 
             TreeNode assemblyReferences = CreateLazyNode("References", "4VSReferences.bmp", delegate
             {
