@@ -20,7 +20,7 @@ date whenever a milestone is reached.
 dotnet build ILXP.slnx                              # 0 errors, single-file output
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x86
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x64
-tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 53/53 checks pass
+tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 60/60 checks pass
 powershell -File tools/Smoke-Test.ps1               # 11/11 checks pass
 ```
 
@@ -50,6 +50,9 @@ Verified manually:
 * `--disasm-x86` uses the managed x86/x64 decoder (works in AnyCPU and x64).
 * `--clean` removes NOPs and folds `sizeof`, `Type.EmptyTypes.Length`, constant `Math` calls.
 * IL ⇄ source navigation: `IlLineMap` + `Ctrl+G` + status-bar offset display.
+* IL search: `Ctrl+Shift+F` regex over every method's IL, results with `IL_xxxx` offsets,
+  double-click navigation; CLI `--ilsearch`.
+* Edit → Copy as… (name, signature, IL, C#, VB, references, target framework, nav key).
 * Platform builds are verified (`tools/Test-Platform.ps1`): x64 → machine 0x8664,
   x86 → 32BitRequired, AnyCPU → neither.
 * Damaged-input baseline: PE carving from larger blobs; random garbage fails cleanly.

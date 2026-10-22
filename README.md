@@ -66,6 +66,7 @@ ILXP --verify <assembly>
 ILXP --search <assembly> <query>
 ILXP --expand <assembly> [--depth <n>]
 ILXP --ilmap <assembly> <type> <method>
+ILXP --ilsearch <assembly> <pattern> [--literal] [--max <n>]
 ILXP --headless
 ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
@@ -90,6 +91,18 @@ Notes:
 * `--search` uses the same fuzzy index as the Ctrl+P palette, so it doubles as a test hook.
 * `--ilmap` prints the line → IL offset map of one method (the same map the editor uses for
   `Ctrl+G`) and verifies the reverse lookup.
+* `--ilsearch` is the engine behind `Ctrl+Shift+F`: a regex over the rendered IL of every
+  method, reporting the type, method, IL offset and the matching line.
+
+## Search
+
+* `Ctrl+P` — **Quick Open**: fuzzy search over every type and member of the loaded assemblies.
+* `Ctrl+Shift+F` — **Search in IL**: regex (or literal) search over the rendered IL of every
+  method. Results show type, method, `IL_xxxx` offset and the matching line; double-click
+  jumps to the method and selects the instruction.
+* `Ctrl+F` — tree filter.
+* **Edit → Copy as…** copies the full name, signature, IL, C# or VB of the selected node, the
+  assembly reference list, the target framework, or the navigation key.
 
 ## IL ⇄ source navigation
 
@@ -105,6 +118,7 @@ clickable links. `IlLineMap` recovers the line → offset map from the rendered 
 | Shortcut | Action |
 | --- | --- |
 | `Ctrl+P` | Quick Open (fuzzy search over all types and members) |
+| `Ctrl+Shift+F` | search in IL (regex over every method, with offsets) |
 | `Ctrl+G` | go to an IL offset in the current method view |
 | `Ctrl+E` | Expand the tree to a chosen depth (0–9 or everything) |
 | `Ctrl+F` | focus the tree search box (`Enter` = next match, `Esc` = clear) |

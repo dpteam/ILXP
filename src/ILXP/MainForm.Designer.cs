@@ -19,6 +19,8 @@ namespace ILXP
         private ToolStripMenuItem editMenu;
         private ToolStripMenuItem quickOpenMenuItem;
         private ToolStripMenuItem goToIlMenuItem;
+        private ToolStripMenuItem searchIlMenuItem;
+        private ToolStripMenuItem copyAsMenuItem;
         private ToolStripMenuItem findMenuItem;
         private ToolStripMenuItem copyMenuItem;
         private ToolStripMenuItem outputMenu;
@@ -75,6 +77,8 @@ namespace ILXP
             this.editMenu = new ToolStripMenuItem();
             this.quickOpenMenuItem = new ToolStripMenuItem();
             this.goToIlMenuItem = new ToolStripMenuItem();
+            this.searchIlMenuItem = new ToolStripMenuItem();
+            this.copyAsMenuItem = new ToolStripMenuItem();
             this.findMenuItem = new ToolStripMenuItem();
             this.copyMenuItem = new ToolStripMenuItem();
             this.outputMenu = new ToolStripMenuItem();
@@ -242,7 +246,7 @@ namespace ILXP
             this.aboutMenuItem.Click += this.OnAbout;
 
             // edit menu
-            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.goToIlMenuItem, this.findMenuItem, this.copyMenuItem });
+            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.goToIlMenuItem, this.searchIlMenuItem, this.findMenuItem, this.copyMenuItem, this.copyAsMenuItem });
             this.editMenu.Name = "EditToolStripMenuItem";
             this.editMenu.Size = new Size(39, 20);
             this.editMenu.Text = "&Edit";
@@ -258,6 +262,17 @@ namespace ILXP
             this.goToIlMenuItem.Size = new Size(160, 22);
             this.goToIlMenuItem.Text = "Go to &IL offset...";
             this.goToIlMenuItem.Click += this.OnGoToIlOffset;
+
+            this.searchIlMenuItem.Name = "MenuItemEditSearchIl";
+            this.searchIlMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F;
+            this.searchIlMenuItem.Size = new Size(160, 22);
+            this.searchIlMenuItem.Text = "Search in &IL...";
+            this.searchIlMenuItem.Click += this.OnSearchInIl;
+
+            this.copyAsMenuItem.Name = "MenuItemEditCopyAs";
+            this.copyAsMenuItem.Size = new Size(160, 22);
+            this.copyAsMenuItem.Text = "Copy &as...";
+            this.copyAsMenuItem.Click += this.OnCopyAs;
 
             this.findMenuItem.Name = "MenuItemEditFind";
             this.findMenuItem.ShortcutKeys = Keys.Control | Keys.F;

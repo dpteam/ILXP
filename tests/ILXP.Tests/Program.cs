@@ -93,6 +93,7 @@ namespace ILXP.Tests
                 TestVerification();
                 TestExpansion();
                 TestIlNavigation();
+                TestIlSearch();
             }
             finally
             {
@@ -349,6 +350,26 @@ namespace ILXP.Tests
 
             CommandResult missing = RunIlxp("--ilmap", ilxpPath, "ILXP.CodeToken", "no_such_method");
             Check("ilmap reports missing methods", missing.ExitCode == 2, missing.ToString());
+        }
+
+        private static void TestIlSearch()
+        {
+            Section("IL search");
+
+            CommandResult regex = RunIlxp("--ilsearch", ilxpPath, "ldstr.*Sound");
+            Check("regex search runs", regex.ExitCode == 0, regex.ToString());
+            Check("regex search finds a string", regex.Output.Contains("InstrumentMap"), regex.Output);
+            Check("regex search reports offsets", regex.Output.Contains("IL_"), regex.Output);
+
+            CommandResult literal = RunIlxp("--ilsearch", ilxpPath, "callvirt", "--literal", "--max", "5");
+            Check("literal search runs", literal.ExitCode == 0, literal.ToString());
+            Check("literal search respects --max", literal.Output.Contains("matches  : 5"), literal.Output);
+
+            CommandResult none = RunIlxp("--ilsearch", ilxpPath, "zzz_no_such_opcode_zzz", "--literal");
+            Check("search reports no matches", none.ExitCode == 1, none.ToString());
+
+            CommandResult broken = RunIlxp("--ilsearch", ilxpPath, "([unclosed");
+            Check("invalid regex is rejected", broken.ExitCode == 2, broken.ToString());
         }
 
         // ------------------------------------------------------------------

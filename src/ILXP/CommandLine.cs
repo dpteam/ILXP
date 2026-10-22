@@ -74,6 +74,8 @@ namespace ILXP
                         return ExpandCommand(options);
                     case "ilmap":
                         return IlMapCommand(options);
+                    case "ilsearch":
+                        return IlSearchCommand(options);
                     case "headless":
                         return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
@@ -441,6 +443,29 @@ namespace ILXP
                 return new UI.QuickOpenForm(index, options.Query ?? string.Empty);
             }
 
+            if (string.Equals(window, "ilsearch", StringComparison.OrdinalIgnoreCase))
+            {
+                List<AssemblyDefinition> assemblies = new List<AssemblyDefinition>();
+                if (!string.IsNullOrEmpty(options.Input))
+                {
+                    assemblies.Add(AssemblyLoader.Load(options.Input).Assembly);
+                }
+
+                string query = options.Query ?? "ldstr";
+                return new UI.IlSearchForm(
+                    delegate(string pattern, IlSearch.Options searchOptions)
+                    {
+                        List<IlMatch> results = new List<IlMatch>();
+                        foreach (AssemblyDefinition assembly in assemblies)
+                        {
+                            results.AddRange(IlSearch.Search(assembly, pattern, searchOptions));
+                        }
+                        return results;
+                    },
+                    null,
+                    query);
+            }
+
             return new AboutForm();
         }
         private static int MusicCommand(Options options)
@@ -670,6 +695,41 @@ namespace ILXP
                 ? "expansion would stop at the budget"
                 : "expansion fits the budget");
             return 0;
+        }
+
+        /// <summary>Regex search over the IL of every method (the Ctrl+Shift+F engine).</summary>
+        private static int IlSearchCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            IlSearch.Options searchOptions = new IlSearch.Options
+            {
+                IgnoreCase = options.IgnoreCase,
+                UseRegex = !options.Literal,
+                MaxResults = options.MaxResults > 0 ? options.MaxResults : 500
+            };
+
+            List<IlMatch> matches;
+            try
+            {
+                matches = IlSearch.Search(assembly, options.Query ?? string.Empty, searchOptions);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.Error.WriteLine("error: " + ex.Message);
+                return 2;
+            }
+
+            Console.WriteLine("assembly : " + assembly.Name.FullName);
+            Console.WriteLine("pattern  : " + (options.Query ?? string.Empty));
+            Console.WriteLine("matches  : " + matches.Count);
+            Console.WriteLine();
+
+            foreach (IlMatch match in matches)
+            {
+                Console.WriteLine(match.Display);
+            }
+
+            return matches.Count > 0 ? 0 : 1;
         }
 
         /// <summary>
@@ -943,6 +1003,8 @@ namespace ILXP
             Console.WriteLine("  ILXP --search <assembly> <query>         quick-open search (fuzzy)");
             Console.WriteLine("  ILXP --expand <assembly> [--depth <n>]   preview a tree expansion (node counts)");
             Console.WriteLine("  ILXP --ilmap <assembly> <type> <method>  line -> IL offset map (Ctrl+G source)");
+            Console.WriteLine("  ILXP --ilsearch <assembly> <pattern> [--literal] [--ignore-case] [--max <n>]");
+            Console.WriteLine("                                           regex search over rendered IL (case-insensitive)");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -950,7 +1012,7 @@ namespace ILXP
             Console.WriteLine("  ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]");
             Console.WriteLine("  ILXP --clean <assembly> [--output <assembly>]   run IL cleanup passes");
             Console.WriteLine("  ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]");
-            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--tree-depth <n>]");
+            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main|quickopen|ilsearch] [--open <assembly>] [--select <type>] [--query <text>] [--tree-depth <n>]");
             Console.WriteLine();
             Console.WriteLine("Decompile options:");
             Console.WriteLine("  --language <il|cs|vb>   output language (default: il)");
@@ -987,11 +1049,14 @@ namespace ILXP
             public string Query { get; private set; }
             public int Depth { get; private set; }
             public int TreeDepth { get; private set; }
+            public bool IgnoreCase { get; private set; }
+            public bool Literal { get; private set; }
+            public int MaxResults { get; private set; }
             public bool UseNativeTools { get; private set; }
 
             public static Options Parse(string[] args)
             {
-                Options options = new Options { Language = "il", MusicVolume = 0.55f };
+                Options options = new Options { Language = "il", MusicVolume = 0.55f, IgnoreCase = true };
 
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -1099,6 +1164,20 @@ namespace ILXP
                             options.Input = Next(args, ref i, argument);
                             options.Select = Next(args, ref i, argument);
                             options.Query = Next(args, ref i, argument);
+                            break;
+                        case "--ilsearch":
+                            options.Command = "ilsearch";
+                            options.Input = Next(args, ref i, argument);
+                            options.Query = Next(args, ref i, argument);
+                            break;
+                        case "--ignore-case":
+                            options.IgnoreCase = true;
+                            break;
+                        case "--literal":
+                            options.Literal = true;
+                            break;
+                        case "--max":
+                            options.MaxResults = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
                             break;
                         case "--depth":
                             options.Depth = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);

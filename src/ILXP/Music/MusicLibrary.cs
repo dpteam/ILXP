@@ -162,6 +162,13 @@ namespace ILXP.Music
             File.WriteAllText(path, track.Text);
         }
 
+        /// <summary>Renders a tune to a WAV file with the built-in synthesizer.</summary>
+        public static void ExportWav(MusicTrack track, string path, float volume)
+        {
+            MidiSequence sequence = MidiTextFormat.Parse(track.Text);
+            Synthesizer.RenderToWav(sequence, volume, path);
+        }
+
         private static void RegisterImported(MusicTrack track)
         {
             lock (SyncRoot)

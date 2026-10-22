@@ -386,6 +386,8 @@ namespace ILXP
             musicMenu.Items.Add(new ToolStripMenuItem("Load MIDI file...", null, OnLoadMidi));
             musicMenu.Items.Add(new ToolStripMenuItem("Load music TXT...", null, OnLoadMusicText));
             musicMenu.Items.Add(new ToolStripMenuItem("Save current tune as MIDI...", null, OnSaveMidi));
+            musicMenu.Items.Add(new ToolStripMenuItem("Save current tune as WAV...", null, OnSaveWav));
+            musicMenu.Items.Add(new ToolStripMenuItem("Save current tune as TXT...", null, OnSaveMusicText));
 
             musicMenu.Show(anotherMusicButton, new Point(0, anotherMusicButton.Height));
         }
@@ -498,6 +500,74 @@ namespace ILXP
                 {
                     Log.Error("Unable to export the tune.", ex);
                     MessageBox.Show(this, ex.Message, "MIDI export", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void OnSaveWav(object sender, EventArgs e)
+        {
+            MusicTrack track = trackCombo.SelectedItem as MusicTrack;
+            if (track == null)
+            {
+                return;
+            }
+
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Render the tune to WAV";
+                dialog.Filter = "Wave audio (*.wav)|*.wav";
+                dialog.FileName = SanitizeFileName(track.DisplayName) + ".wav";
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                Cursor previous = Cursor;
+                Cursor = Cursors.WaitCursor;
+                try
+                {
+                    MusicLibrary.ExportWav(track, dialog.FileName, AppSettings.Default.MusicVolume);
+                    MessageBox.Show(this, "Rendered to " + dialog.FileName, AppInfo.ProductName,
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unable to render the tune to WAV.", ex);
+                    MessageBox.Show(this, ex.Message, "WAV export", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                finally
+                {
+                    Cursor = previous;
+                }
+            }
+        }
+
+        private void OnSaveMusicText(object sender, EventArgs e)
+        {
+            MusicTrack track = trackCombo.SelectedItem as MusicTrack;
+            if (track == null)
+            {
+                return;
+            }
+
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Save the tune as text";
+                dialog.Filter = "Music text (*.txt)|*.txt";
+                dialog.FileName = SanitizeFileName(track.DisplayName) + ".txt";
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                try
+                {
+                    MusicLibrary.ExportText(track, dialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unable to save the tune as text.", ex);
+                    MessageBox.Show(this, ex.Message, "Text export", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }

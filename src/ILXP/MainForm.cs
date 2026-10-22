@@ -454,7 +454,12 @@ namespace ILXP
 
         private void OnMainKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.P)
+            if (e.Control && e.Shift && e.KeyCode == Keys.F)
+            {
+                e.SuppressKeyPress = true;
+                OnSearchInIl(sender, EventArgs.Empty);
+            }
+            else if (e.Control && e.KeyCode == Keys.P)
             {
                 e.SuppressKeyPress = true;
                 OnQuickOpen(sender, EventArgs.Empty);
