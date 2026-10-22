@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="ILXP.csproj" />
+  <Project Path="src/ILXP/ILXP.csproj" />
+  <Project Path="src/Cecil/Mono.Cecil.csproj" />
+  <Project Path="src/Cecil.Pdb/Mono.Cecil.Pdb.csproj" />
 </Solution>
