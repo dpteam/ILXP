@@ -96,6 +96,13 @@ namespace ILXP
                     List<TreeNode> next = new List<TreeNode>();
                     foreach (TreeNode node in level)
                     {
+                        // Referenced assemblies live on disk: expanding them loads foreign
+                        // metadata and can take a long time. They are expanded manually.
+                        if (node.Tag is Mono.Cecil.AssemblyNameReference)
+                        {
+                            continue;
+                        }
+
                         if (node.Nodes.Count > 0 && !node.IsExpanded)
                         {
                             // Materialise lazy children only when they will be shown.

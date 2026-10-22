@@ -40,6 +40,14 @@
       `clean`, `ildasm`, `resources`, `lang`, `dialect`, `info`, `quit`).
 - [x] GitHub Actions: сборка AnyCPU/x86/x64, тесты, smoke-тест, отчёт о точности,
       скриншоты, артефакты.
+- [x] Исправлены грабли CI: `.slnx` объявляет конфигурации (`Debug`/`Release` ×
+      `Any CPU`/`x86`/`x64`), платформенные сборки идут через проект, а не через solution
+      (`MSB4126`), smoke-тест ищет `Mono.Cecil.dll` в текущей конфигурации, а
+      `src/Cecil.Pdb` больше не выпадает из git из-за правила `*.pdb`.
+- [ ] CI: кэш NuGet/`obj`, матрица по `Configuration`, публикация релиза по тегу
+      (portable zip с exe + pdb + лицензиями).
+- [ ] CI: отдельный job «deobfuscation quality» — обфусцировать ILXP.exe своим
+      обфускатором, почистить, сравнить `--verify` и процент NOP до/после.
 - [x] Скриншоты в README (`docs/screenshot-*.png`).
 
 ### Дерево / UI

@@ -153,6 +153,10 @@ Notable options:
 Tree expansion is deliberately conservative: *Expand all* walks the tree level by level with a
 25 000 node budget, pumps the message queue between levels and reports progress in the status
 bar, so it can never freeze the UI the way `TreeView.ExpandAll()` would on a lazy tree.
+Reference nodes are skipped by bulk expansion (resolving every dependency from disk is the main
+cause of multi-minute freezes); open them individually when you need them.
+
+Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 nodes / 3.4 s.
 
 ## Repository layout
 
