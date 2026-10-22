@@ -20,7 +20,7 @@ date whenever a milestone is reached.
 dotnet build ILXP.slnx                              # 0 errors, single-file output
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x86
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x64
-tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 46/46 checks pass
+tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 49/49 checks pass
 powershell -File tools/Smoke-Test.ps1               # 11/11 checks pass
 ```
 
@@ -40,6 +40,8 @@ Verified manually:
 * GUI starts and stays alive; log file is written to `%APPDATA%\ILXP\logs\ILXP.log`.
 * About box: large visible water ripples on click/drag plus ambient drops; music starts on
   open and stops on close.
+* Tree: safe depth-limited expansion (budget 25 000 nodes), `Ctrl+E` depth prompt, and a
+  category-based settings dialog (General / Tree / Output / Music / Advanced).
 * Music: full General MIDI program map (128 instruments) + percussion map, stereo, ADSR,
   resonant filter, vibrato/detune/PWM, sustain pedal, WAV cache.
 * `--list`, `--tree`, `--accuracy`, `--verify`, `--headless`, `--decompile`
@@ -131,13 +133,14 @@ re-run on a fresh decompiled snapshot.
 
 ## Suggested next steps (in order)
 
-1. Quick Open (Ctrl+P) and IL-offset ⇄ source-line navigation — biggest usability win.
+1. IL-offset ⇄ source-line navigation (needs a line→offset map from the writers).
 2. Finish renaming `StatementDecompiler` internals.
-3. Improve `ManagedIlAssembler` coverage (exception handlers, `switch`, `ldtoken`).
-4. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
+3. Port ILSpy/dnSpy features together with their settings, plus an ILSpy/dnSpy settings
+   importer (see `IDEAS.md`, level 2).
+4. Improve `ManagedIlAssembler` coverage (exception handlers, `switch`, `ldtoken`).
+5. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
    flattening / string encryption so deobfuscation can be measured numerically.
-5. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.
-6. Implement the runtime/compiler profile matrix from `IDEAS.md`.
+6. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.
 
 ## Commit style
 

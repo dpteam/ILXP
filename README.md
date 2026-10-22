@@ -64,6 +64,7 @@ ILXP --clean <assembly> [--output <assembly>]
 ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]
 ILXP --verify <assembly>
 ILXP --search <assembly> <query>
+ILXP --expand <assembly> [--depth <n>]
 ILXP --headless
 ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
@@ -92,6 +93,7 @@ Notes:
 | Shortcut | Action |
 | --- | --- |
 | `Ctrl+P` | Quick Open (fuzzy search over all types and members) |
+| `Ctrl+E` | Expand the tree to a chosen depth (0–9 or everything) |
 | `Ctrl+F` | focus the tree search box (`Enter` = next match, `Esc` = clear) |
 | `Ctrl+O` | open an assembly |
 | `Ctrl+Shift+C` | copy the selected node name |
@@ -133,6 +135,24 @@ Current measured accuracy on `ILXP.exe` (5 000+ metadata members):
 `--accuracy` reports per-member coverage (types, methods, fields, properties, events) and can
 list the missing members with `--verbose`. `--verify` checks every instruction operand and
 branch target, which is also what the cleanup passes are validated against.
+
+## Settings
+
+`View → Settings…` opens a category-based settings dialog (the same layout idea as ILSpy and
+dnSpy): **General**, **Tree**, **Output**, **Music**, **Advanced**. Values are stored in
+`%APPDATA%\ILXP\settings.ini` and applied immediately on OK. "Reset to defaults" clears every
+stored key.
+
+Notable options:
+
+* **Tree → Default expand depth (0–9)** – used by *View → Expand to depth…* (`Ctrl+E`).
+* **Tree → Lazy references** – resolve referenced assemblies only when a reference is opened.
+* **Output → Default language / Output dialect** – the writer and target toolchain.
+* **Music → Play music in the About box / Default tune / Volume**.
+
+Tree expansion is deliberately conservative: *Expand all* walks the tree level by level with a
+25 000 node budget, pumps the message queue between levels and reports progress in the status
+bar, so it can never freeze the UI the way `TreeView.ExpandAll()` would on a lazy tree.
 
 ## Repository layout
 

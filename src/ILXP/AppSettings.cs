@@ -92,6 +92,30 @@ namespace ILXP
             set { values["RecursiveFolders"] = value ? "1" : "0"; }
         }
 
+        /// <summary>
+        /// Tree expansion depth used by View → Expand: 0 = collapsed, 1..9 = levels,
+        /// -1 = everything the node budget allows.
+        /// </summary>
+        public int TreeExpandDepth
+        {
+            get { return GetInt("TreeExpandDepth", 2); }
+            set { values["TreeExpandDepth"] = value.ToString(CultureInfo.InvariantCulture); }
+        }
+
+        /// <summary>When true, expanding a node may load referenced assemblies from disk.</summary>
+        public bool LazyReferences
+        {
+            get { return GetBool("LazyReferences", true); }
+            set { values["LazyReferences"] = value ? "1" : "0"; }
+        }
+
+        /// <summary>Show the loading overlay while a slow operation runs.</summary>
+        public bool ShowLoadingOverlay
+        {
+            get { return GetBool("ShowLoadingOverlay", true); }
+            set { values["ShowLoadingOverlay"] = value ? "1" : "0"; }
+        }
+
         public bool AutoLoadReferences
         {
             get { return GetBool("AutoLoadReferences", false); }
@@ -134,6 +158,15 @@ namespace ILXP
                 {
                     Log.Warn("Unable to save settings to '" + path + "'.", ex);
                 }
+            }
+        }
+
+        /// <summary>Clears every stored value, so the defaults apply again.</summary>
+        public void ResetToDefaults()
+        {
+            lock (SyncRoot)
+            {
+                values.Clear();
             }
         }
 

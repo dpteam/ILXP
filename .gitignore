@@ -434,3 +434,14 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# ---------------------------------------------------------------------------
+# ILXP: keep project folders whose names collide with file-extension rules.
+# The Visual Studio template ignores '*.pdb', which also matches the directory
+# 'src/Cecil.Pdb' on case-insensitive file systems.
+# ---------------------------------------------------------------------------
+!src/Cecil.Pdb/
+!src/Cecil.Pdb/**
+# ...but its build output stays ignored (the negations above would re-include it).
+src/Cecil.Pdb/bin/
+src/Cecil.Pdb/obj/

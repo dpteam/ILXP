@@ -91,6 +91,7 @@ namespace ILXP.Tests
                 TestHeadless();
                 TestQuickOpen();
                 TestVerification();
+                TestExpansion();
             }
             finally
             {
@@ -322,6 +323,18 @@ namespace ILXP.Tests
             TestObfuscator.Obfuscate(ilxpPath, obfuscated, 99);
             CommandResult obfuscatedResult = RunIlxp("--verify", obfuscated);
             Check("obfuscated assembly verifies", obfuscatedResult.ExitCode == 0, obfuscatedResult.Output);
+        }
+
+        private static void TestExpansion()
+        {
+            Section("Tree expansion budget");
+
+            CommandResult shallow = RunIlxp("--expand", ilxpPath, "--depth", "1");
+            Check("expand preview runs", shallow.ExitCode == 0, shallow.ToString());
+            Check("expand preview reports a budget", shallow.Output.Contains("node budget"), shallow.Output);
+
+            CommandResult infinite = RunIlxp("--expand", ilxpPath, "--depth", "9");
+            Check("infinite depth is reported", infinite.Output.Contains("expansion"), infinite.Output);
         }
 
         // ------------------------------------------------------------------

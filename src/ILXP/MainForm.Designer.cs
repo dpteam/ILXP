@@ -23,6 +23,8 @@ namespace ILXP
         private ToolStripMenuItem outputMenu;
         private ToolStripMenuItem expandAllMenuItem;
         private ToolStripMenuItem collapseAllMenuItem;
+        private ToolStripMenuItem expandDepthMenuItem;
+        private ToolStripMenuItem settingsMenuItem;
         private ToolStripTextBox searchBox;
         private ToolStripMenuItem viewMenu;
         private ToolStripMenuItem refreshMenuItem;
@@ -76,6 +78,8 @@ namespace ILXP
             this.outputMenu = new ToolStripMenuItem();
             this.expandAllMenuItem = new ToolStripMenuItem();
             this.collapseAllMenuItem = new ToolStripMenuItem();
+            this.expandDepthMenuItem = new ToolStripMenuItem();
+            this.settingsMenuItem = new ToolStripMenuItem();
             this.searchBox = new ToolStripTextBox();
             this.viewMenu = new ToolStripMenuItem();
             this.refreshMenuItem = new ToolStripMenuItem();
@@ -188,10 +192,13 @@ namespace ILXP
             {
                 this.refreshMenuItem,
                 this.expandAllMenuItem,
+                this.expandDepthMenuItem,
                 this.collapseAllMenuItem,
                 this.viewSeparator,
                 this.backMenuItem,
-                this.forwardMenuItem
+                this.forwardMenuItem,
+                new ToolStripSeparator(),
+                this.settingsMenuItem
             });
             this.viewMenu.DropDownOpening += this.OnViewMenuOpening;
             this.viewMenu.DropDownClosed += this.OnViewMenuClosed;
@@ -264,13 +271,25 @@ namespace ILXP
 
             this.expandAllMenuItem.Name = "MenuItemViewExpandAll";
             this.expandAllMenuItem.Size = new Size(180, 22);
-            this.expandAllMenuItem.Text = "&Expand all";
+            this.expandAllMenuItem.Text = "&Expand all (deep)";
+            this.expandAllMenuItem.ToolTipText = "Expands every level; may take a while on large assemblies";
             this.expandAllMenuItem.Click += this.OnExpandAll;
+
+            this.expandDepthMenuItem.Name = "MenuItemViewExpandDepth";
+            this.expandDepthMenuItem.Size = new Size(180, 22);
+            this.expandDepthMenuItem.Text = "Expand to &depth...";
+            this.expandDepthMenuItem.ShortcutKeys = Keys.Control | Keys.E;
+            this.expandDepthMenuItem.Click += this.OnExpandToDepth;
 
             this.collapseAllMenuItem.Name = "MenuItemViewCollapseAll";
             this.collapseAllMenuItem.Size = new Size(180, 22);
             this.collapseAllMenuItem.Text = "&Collapse all";
             this.collapseAllMenuItem.Click += this.OnCollapseAll;
+
+            this.settingsMenuItem.Name = "MenuItemViewSettings";
+            this.settingsMenuItem.Size = new Size(180, 22);
+            this.settingsMenuItem.Text = "&Settings...";
+            this.settingsMenuItem.Click += this.OnOpenSettings;
 
             // search box in the toolbar
             searchBox.Name = "ToolStripSearchBox";

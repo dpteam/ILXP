@@ -364,14 +364,35 @@ namespace ILXP
             }
         }
 
-        private void OnExpandAll(object sender, EventArgs e)
+        private void OnOpenSettings(object sender, EventArgs e)
         {
-            treeView.ExpandAll();
-        }
+            using (UI.SettingsForm form = new UI.SettingsForm())
+            {
+                if (form.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+            }
 
-        private void OnCollapseAll(object sender, EventArgs e)
-        {
-            treeView.CollapseAll();
+            // Apply the settings that affect the live window.
+            if (writer != null)
+            {
+                OutputDialect dialect = OutputDialect.FromId(AppSettings.Default.DecompilerTarget);
+                if (dialect != null)
+                {
+                    writer.Dialect = dialect;
+                }
+            }
+
+            languageCombo.SelectedIndex = Math.Min(Math.Max(AppSettings.Default.SelectedLanguage, 0),
+                Math.Max(0, languageCombo.Items.Count - 1));
+            recursiveFoldersMenuItem.Checked = AppSettings.Default.RecursiveFolders;
+
+            if (treeView.SelectedNode != null)
+            {
+                DisplayNode(treeView.SelectedNode);
+            }
+            statusLabel.Text = "Settings saved";
         }
 
         private void OnFindInTree(object sender, EventArgs e)

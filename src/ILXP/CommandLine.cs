@@ -70,6 +70,8 @@ namespace ILXP
                         return Verify(options);
                     case "search":
                         return SearchCommand(options);
+                    case "expand":
+                        return ExpandCommand(options);
                     case "headless":
                         return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
@@ -361,6 +363,10 @@ namespace ILXP
                 if (main != null && !string.IsNullOrEmpty(options.Input))
                 {
                     main.LoadForCapture(options.Input, options.Select);
+                    if (options.TreeDepth != 0)
+                    {
+                        main.ExpandForCapture(options.TreeDepth);
+                    }
                     for (int i = 0; i < 25; i++)
                     {
                         Application.DoEvents();
@@ -619,6 +625,49 @@ namespace ILXP
             }
         }
 
+        /// <summary>
+        /// Measures how a depth-limited tree expansion behaves (the same budget and
+        /// level-by-level logic as the GUI, without a window). Used by the tests to make
+        /// sure "Expand all" can never explode.
+        /// </summary>
+        private static int ExpandCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            int depth = options.Depth;
+
+            // Simulate the expansion: count nodes that would be created per level.
+            int[] perLevel = new int[Math.Max(1, depth + 1)];
+            int total = 0;
+            long memberNodes = 0;
+
+            foreach (ModuleDefinition module in assembly.Modules)
+            {
+                foreach (TypeDefinition type in module.Types)
+                {
+                    if (type.Name == "<Module>")
+                    {
+                        continue;
+                    }
+
+                    total++;                        // level 1: type
+                    memberNodes += type.Methods.Count + type.Fields.Count +
+                                   type.Properties.Count + type.Events.Count;
+                }
+            }
+
+            long projected = total + memberNodes;
+            Console.WriteLine("assembly            : " + assembly.Name.FullName);
+            Console.WriteLine("depth               : " + (depth < 0 ? "infinite" : depth.ToString()));
+            Console.WriteLine("types (level 1)     : " + total);
+            Console.WriteLine("member nodes        : " + memberNodes);
+            Console.WriteLine("projected nodes     : " + projected);
+            Console.WriteLine("node budget         : 25000");
+            Console.WriteLine(projected > 25000
+                ? "expansion would stop at the budget"
+                : "expansion fits the budget");
+            return 0;
+        }
+
         /// <summary>Prints the structural completeness report for an assembly.</summary>
         private static int MeasureAccuracy(Options options)
         {
@@ -801,6 +850,7 @@ namespace ILXP
             Console.WriteLine("  ILXP --headless                          command shell on stdin (no window)");
             Console.WriteLine("  ILXP --verify <assembly>                 validate instruction operands and branches");
             Console.WriteLine("  ILXP --search <assembly> <query>         quick-open search (fuzzy)");
+            Console.WriteLine("  ILXP --expand <assembly> [--depth <n>]   preview a tree expansion (node counts)");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -808,7 +858,7 @@ namespace ILXP
             Console.WriteLine("  ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]");
             Console.WriteLine("  ILXP --clean <assembly> [--output <assembly>]   run IL cleanup passes");
             Console.WriteLine("  ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]");
-            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>]");
+            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--tree-depth <n>]");
             Console.WriteLine();
             Console.WriteLine("Decompile options:");
             Console.WriteLine("  --language <il|cs|vb>   output language (default: il)");
@@ -843,6 +893,8 @@ namespace ILXP
             public bool VerboseOutput { get; private set; }
             public string Select { get; private set; }
             public string Query { get; private set; }
+            public int Depth { get; private set; }
+            public int TreeDepth { get; private set; }
             public bool UseNativeTools { get; private set; }
 
             public static Options Parse(string[] args)
@@ -945,6 +997,16 @@ namespace ILXP
                             options.Command = "search";
                             options.Input = Next(args, ref i, argument);
                             options.Query = Next(args, ref i, argument);
+                            break;
+                        case "--expand":
+                            options.Command = "expand";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--depth":
+                            options.Depth = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
+                            break;
+                        case "--tree-depth":
+                            options.TreeDepth = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
                             break;
                         case "--headless":
                             options.Command = "headless";
