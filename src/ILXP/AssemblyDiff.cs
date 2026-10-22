@@ -109,7 +109,7 @@ namespace ILXP
                         Kind = "type",
                         FullName = pair.Key,
                         Change = ChangeKind.Changed,
-                        Detail = "members differ"
+                        Detail = "metadata: " + pair.Value + " -> " + rightHash
                     });
                 }
             }
@@ -149,7 +149,7 @@ namespace ILXP
                         Kind = MemberKind(pair.Key),
                         FullName = pair.Key,
                         Change = ChangeKind.Changed,
-                        Detail = DescribeChange(pair.Value, rightHash)
+                        Detail = DescribeChange(pair.Key, pair.Value, rightHash)
                     });
                 }
             }
@@ -187,70 +187,72 @@ namespace ILXP
                 return string.Empty;
             }
 
-            StringBuilder text = new StringBuilder(name.Length);
-            int depth = 0;
-            for (int i = 0; i < name.Length; i++)
+            string result = name.Trim();
+
+            // Assembly scope prefix: "[mscorlib]System.Object".
+            if (result.StartsWith("[", StringComparison.Ordinal))
             {
-                char c = name[i];
-                if (c == '<')
+                int scopeEnd = result.IndexOf(']');
+                if (scopeEnd > 0)
                 {
-                    depth++;
-                    continue;
+                    result = result.Substring(scopeEnd + 1).Trim();
                 }
-                if (c == '>')
-                {
-                    if (depth > 0)
-                    {
-                        depth--;
-                    }
-                    continue;
-                }
-                if (depth > 0)
-                {
-                    continue;
-                }
-                if (c == '[')
-                {
-                    // Either a scope ("[mscorlib]") or an array suffix ("[]").
-                    int close = name.IndexOf(']', i);
-                    if (close > i && i + 1 < name.Length && char.IsLetter(name[i + 1]))
-                    {
-                        i = close; // skip the whole scope
-                        continue;
-                    }
-                    // Array suffix: drop the brackets but keep going.
-                    continue;
-                }
-                if (c == ']')
-                {
-                    continue;
-                }
-                if (c == '&' || c == '*')
-                {
-                    continue;
-                }
-                text.Append(c);
             }
 
-            string result = text.ToString();
+            // Generic arguments follow the arity marker ("List`1<...>"); a '<' without an
+            // arity marker is part of the name itself ("<PrivateImplementationDetails>").
             int tick = result.IndexOf('`');
+            if (tick > 0)
+            {
+                int angle = result.IndexOf('<', tick);
+                result = angle > tick ? result.Substring(0, angle) : result;
+            }
+
+            // Arrays, pointers and by-references are decoration, not identity.
+            bool trimmed = true;
+            while (trimmed)
+            {
+                trimmed = false;
+                string[] suffixes = { "[]", "[,]", "&", "*" };
+                foreach (string suffix in suffixes)
+                {
+                    if (result.EndsWith(suffix, StringComparison.Ordinal))
+                    {
+                        result = result.Substring(0, result.Length - suffix.Length).Trim();
+                        trimmed = true;
+                    }
+                }
+            }
+
+            tick = result.IndexOf('`');
             if (tick > 0)
             {
                 result = result.Substring(0, tick);
             }
 
-            result = result.Replace("/", ".").Trim();
+            // A trailing generic argument list ("Enumerator<T>") is not part of the name.
+            if (result.Length > 1 && result[result.Length - 1] == '>')
+            {
+                int angle = result.LastIndexOf('<');
+                if (angle > 0)
+                {
+                    result = result.Substring(0, angle);
+                }
+            }
 
             // Compare by the short name: the IL text writes primitive keywords ("object")
             // while metadata carries the full name ("System.Object"), and rebuilt type
             // references may omit the namespace. For a fidelity metric the short name is the
             // stable identity.
-            int dot = result.LastIndexOf('.');
-            if (dot > 0 && dot < result.Length - 1)
+            int separator = result.LastIndexOfAny(new[] { '.', '/' });
+            if (separator >= 0 && separator < result.Length - 1)
             {
-                result = result.Substring(dot + 1);
+                result = result.Substring(separator + 1);
             }
-            return result;
+
+            // Primitive keywords ("string") and metadata names ("String") must compare
+            // equal; type names that differ only in case do not exist in practice.
+            return result.ToLowerInvariant();
         }
 
         private static string MemberKind(string key)
@@ -263,10 +265,16 @@ namespace ILXP
             return "method";
         }
 
-        private static string DescribeChange(string left, string right)
+        private static string DescribeChange(string key, string left, string right)
         {
+            string kind = MemberKind(key);
+            if (kind == "field" || kind == "property" || kind == "event")
+            {
+                return kind + " metadata: " + left + " -> " + right;
+            }
+
             // The hashes are content hashes, so the only useful detail is whether one side
-            // was empty (abstract/extern) — otherwise just say the body differs.
+            // was empty (abstract/extern) - otherwise just say the body differs.
             if (left == "empty" && right != "empty")
             {
                 return "body added";
@@ -298,7 +306,7 @@ namespace ILXP
                 return;
             }
 
-            map[type.FullName] = Hash(DescribeType(type));
+            map[type.FullName] = DescribeType(type);
             foreach (TypeDefinition nested in type.NestedTypes)
             {
                 IndexType(nested, map);
@@ -309,10 +317,10 @@ namespace ILXP
         {
             StringBuilder text = new StringBuilder();
             text.Append(type.Attributes).Append('|');
-            text.Append(type.BaseType == null ? string.Empty : type.BaseType.FullName).Append('|');
+            text.Append(type.BaseType == null ? string.Empty : NormalizeTypeName(type.BaseType.FullName)).Append('|');
             foreach (TypeReference @interface in type.Interfaces)
             {
-                text.Append(@interface.FullName).Append(',');
+                text.Append(NormalizeTypeName(@interface.FullName)).Append(',');
             }
             return text.ToString();
         }
@@ -346,19 +354,19 @@ namespace ILXP
             foreach (FieldDefinition field in type.Fields)
             {
                 string key = type.FullName + "::field " + field.Name;
-                map[key] = field.FieldType.FullName + "|" + field.Attributes;
+                map[key] = NormalizeTypeName(field.FieldType.FullName) + "|" + field.Attributes;
             }
 
             foreach (PropertyDefinition property in type.Properties)
             {
                 string key = type.FullName + "::property " + property.Name;
-                map[key] = property.PropertyType.FullName;
+                map[key] = NormalizeTypeName(property.PropertyType.FullName);
             }
 
             foreach (EventDefinition @event in type.Events)
             {
                 string key = type.FullName + "::event " + @event.Name;
-                map[key] = @event.EventType.FullName;
+                map[key] = NormalizeTypeName(@event.EventType.FullName);
             }
 
             foreach (TypeDefinition nested in type.NestedTypes)
@@ -386,6 +394,12 @@ namespace ILXP
         /// </summary>
         private static string HashBody(MethodBody body)
         {
+            return Hash(BodyText(body));
+        }
+
+        /// <summary>The exact text a body is hashed from; useful when debugging a diff.</summary>
+        internal static string BodyText(MethodBody body)
+        {
             StringBuilder text = new StringBuilder();
             foreach (Instruction instruction in body.Instructions)
             {
@@ -396,7 +410,7 @@ namespace ILXP
                 }
                 text.Append(';');
             }
-            return Hash(text.ToString());
+            return text.ToString();
         }
 
         private static string DescribeOperand(object operand)

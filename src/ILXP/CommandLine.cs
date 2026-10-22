@@ -721,7 +721,7 @@ namespace ILXP
         private static int FixpointCommand(Options options)
         {
             FixpointResult result = Fixpoint.Run(options.Input, options.Iterations < 1 ? 1 : options.Iterations);
-            Console.Write(Fixpoint.Format(result));
+            Console.Write(Fixpoint.Format(result, options.MaxResults > 0 ? options.MaxResults : 25));
 
             if (!string.IsNullOrEmpty(result.Error))
             {

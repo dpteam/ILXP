@@ -19,8 +19,23 @@ namespace ILXP
         public int OriginalMembers;
         public int RoundTripTypes;
         public int RoundTripMethods;
+        public int TotalBodies;
+        public int ChangedBodies;
         public bool Reassembled;
         public string Error;
+
+        /// <summary>Percentage of method bodies that survived the round trip unchanged.</summary>
+        public double BodyFidelity
+        {
+            get
+            {
+                if (TotalBodies == 0)
+                {
+                    return 100.0;
+                }
+                return 100.0 * (TotalBodies - ChangedBodies) / TotalBodies;
+            }
+        }
 
         /// <summary>Percentage of members that survived the round trip unchanged.</summary>
         public double Fidelity
@@ -104,6 +119,8 @@ namespace ILXP
                         result.RoundTripTypes = rebuiltTypes;
                         result.RoundTripMethods = rebuiltMethods;
                         result.Diff = AssemblyDiff.Compare(original, rebuilt);
+                        CountBodies(original, result);
+                        DumpBodyIfRequested(original, rebuilt);
                     }
 
                     current = roundTrip;
@@ -116,6 +133,82 @@ namespace ILXP
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Diagnostic helper: when <c>ILXP_DEBUG_DIFF</c> names a method, both body texts are
+        /// written to the trace so a mismatch can be inspected instruction by instruction.
+        /// </summary>
+        private static void DumpBodyIfRequested(AssemblyDefinition original, AssemblyDefinition rebuilt)
+        {
+            string wanted = Environment.GetEnvironmentVariable("ILXP_DEBUG_DIFF");
+            if (string.IsNullOrEmpty(wanted))
+            {
+                return;
+            }
+
+            MethodDefinition left = FindMethodBySubstring(original, wanted);
+            MethodDefinition right = FindMethodBySubstring(rebuilt, wanted);
+            if (left == null || right == null || !left.HasBody || !right.HasBody)
+            {
+                return;
+            }
+
+            string leftText = AssemblyDiff.BodyText(left.Body);
+            string rightText = AssemblyDiff.BodyText(right.Body);
+            Console.WriteLine("DEBUG body left : " + leftText);
+            Console.WriteLine("DEBUG body right: " + rightText);
+
+            int length = Math.Min(leftText.Length, rightText.Length);
+            for (int i = 0; i < length; i++)
+            {
+                if (leftText[i] != rightText[i])
+                {
+                    int start = Math.Max(0, i - 60);
+                    Console.WriteLine("DEBUG first difference at " + i + ":");
+                    Console.WriteLine("  left : ..." + leftText.Substring(start, Math.Min(160, leftText.Length - start)));
+                    Console.WriteLine("  right: ..." + rightText.Substring(start, Math.Min(160, rightText.Length - start)));
+                    return;
+                }
+            }
+            Console.WriteLine("DEBUG bodies are identical (length " + leftText.Length + ")");
+        }
+
+        private static MethodDefinition FindMethodBySubstring(AssemblyDefinition assembly, string substring)
+        {
+            foreach (ModuleDefinition module in assembly.Modules)
+            {
+                foreach (TypeDefinition type in module.Types)
+                {
+                    MethodDefinition found = FindMethodBySubstring(type, substring);
+                    if (found != null)
+                    {
+                        return found;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private static MethodDefinition FindMethodBySubstring(TypeDefinition type, string substring)
+        {
+            foreach (MethodDefinition method in type.Methods)
+            {
+                if ((type.FullName + "::" + method.Name).IndexOf(substring, StringComparison.Ordinal) >= 0)
+                {
+                    return method;
+                }
+            }
+
+            foreach (TypeDefinition nested in type.NestedTypes)
+            {
+                MethodDefinition found = FindMethodBySubstring(nested, substring);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+            return null;
         }
 
         private static void CountMembers(AssemblyDefinition assembly, out int types, out int methods)
@@ -142,7 +235,76 @@ namespace ILXP
         /// <summary>Total number of comparable members (types, methods, fields, properties, events).</summary>
         public static int MemberCount { get; private set; }
 
+        /// <summary>Counts method bodies and how many of them changed in the round trip.</summary>
+        private static void CountBodies(AssemblyDefinition original, FixpointResult result)
+        {
+            int total = 0;
+            int changed = 0;
+
+            HashSet<string> changedKeys = new HashSet<string>(StringComparer.Ordinal);
+            foreach (DiffEntry entry in result.Diff.Entries)
+            {
+                if (entry.Change == ChangeKind.Changed && entry.Kind == "method")
+                {
+                    changedKeys.Add(entry.FullName);
+                }
+            }
+
+            foreach (ModuleDefinition module in original.Modules)
+            {
+                foreach (TypeDefinition type in module.Types)
+                {
+                    CountBodies(type, changedKeys, ref total, ref changed);
+                }
+            }
+
+            result.TotalBodies = total;
+            result.ChangedBodies = changed;
+        }
+
+        private static void CountBodies(TypeDefinition type, HashSet<string> changedKeys, ref int total, ref int changed)
+        {
+            foreach (MethodDefinition method in type.Methods)
+            {
+                if (!method.HasBody || method.Body.Instructions.Count == 0)
+                {
+                    continue;
+                }
+
+                total++;
+                string key = type.FullName + "::" + method.Name + "(" + BodyKeyParameters(method) + ")";
+                if (changedKeys.Contains(key))
+                {
+                    changed++;
+                }
+            }
+
+            foreach (TypeDefinition nested in type.NestedTypes)
+            {
+                CountBodies(nested, changedKeys, ref total, ref changed);
+            }
+        }
+
+        private static string BodyKeyParameters(MethodDefinition method)
+        {
+            StringBuilder text = new StringBuilder();
+            for (int i = 0; i < method.Parameters.Count; i++)
+            {
+                if (i > 0)
+                {
+                    text.Append(',');
+                }
+                text.Append(AssemblyDiff.NormalizeTypeName(method.Parameters[i].ParameterType.FullName));
+            }
+            return text.ToString();
+        }
+
         public static string Format(FixpointResult result)
+        {
+            return Format(result, 25);
+        }
+
+        public static string Format(FixpointResult result, int limit)
         {
             StringBuilder text = new StringBuilder();
             text.AppendLine("assembly      : " + result.OriginalPath);
@@ -157,6 +319,8 @@ namespace ILXP
 
             text.AppendLine("round trip    : " + result.RoundTripTypes + " types, " + result.RoundTripMethods + " methods");
             text.AppendLine(string.Format("fidelity      : {0:0.00}%", result.Fidelity));
+            text.AppendLine(string.Format("body fidelity : {0:0.00}%  ({1} of {2} method bodies unchanged)",
+                result.BodyFidelity, result.TotalBodies - result.ChangedBodies, result.TotalBodies));
 
             if (result.Diff != null)
             {
@@ -166,6 +330,9 @@ namespace ILXP
                     result.Diff.Count(ChangeKind.Changed)));
 
                 int shown = 0;
+                int total = result.Diff.Count(ChangeKind.Added) +
+                            result.Diff.Count(ChangeKind.Removed) +
+                            result.Diff.Count(ChangeKind.Changed);
                 foreach (DiffEntry entry in result.Diff.Entries)
                 {
                     if (entry.Change == ChangeKind.Unchanged)
@@ -173,11 +340,9 @@ namespace ILXP
                         continue;
                     }
 
-                    if (shown++ >= 25)
+                    if (shown++ >= limit)
                     {
-                        text.AppendLine("  ... " + (result.Diff.Count(ChangeKind.Added) +
-                                                     result.Diff.Count(ChangeKind.Removed) +
-                                                     result.Diff.Count(ChangeKind.Changed) - 25) + " more");
+                        text.AppendLine("  ... " + (total - limit) + " more");
                         break;
                     }
                     text.AppendLine("  " + entry);

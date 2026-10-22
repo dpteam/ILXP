@@ -66,10 +66,14 @@ Verified manually:
 2. The C#/VB writers are outline-oriented: attributes on properties/events, generic
    constraints and string escaping are still rough. `--bodies` appends bodies after the
    outline (inspection dump, not a compilable project).
-3. `ManagedIlAssembler` handles the IL that `ManagedIlDisassembler` emits, downgrading
-   anything unresolvable to `nop` (reported in `LastWarnings`). Exception handlers,
-   `switch`, `.property`/`.event` directives and `ldtoken` are not reconstructed yet — the
-   `--fixpoint` command measures exactly this gap (89.15 % fidelity on ILXP.exe).
+3. `ManagedIlAssembler` now round-trips the IL that `ManagedIlDisassembler` emits at
+   **100 % member fidelity / 99.97 % body fidelity** on ILXP.exe (99.99 % / 99.96 % on
+   `System.Core.dll`): properties, events, nested types, interfaces, generics, P/Invoke,
+   field data and the entry point are reconstructed. What is still missing is the exception
+   handler table (`.try`/`.catch`/`.finally`) — the emitted bodies keep the `leave` /
+   `endfinally` instructions but not the handlers, so a rebuilt method that catches
+   exceptions is not equivalent yet. `switch`, `.property`/`.event`, `ldtoken` and field RVA
+   data are covered.
 4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
 5. `--clean` does not preserve strong-name signatures and writes without symbols.
@@ -151,7 +155,9 @@ re-run on a fresh decompiled snapshot.
 2. Finish renaming `StatementDecompiler` internals.
 3. Port ILSpy/dnSpy features together with their settings, plus an ILSpy/dnSpy settings
    importer (see `IDEAS.md`, level 2).
-4. Improve `ManagedIlAssembler` coverage (exception handlers, `switch`, `ldtoken`).
+4. Add exception-handler support to `ManagedIlDisassembler`/`ManagedIlAssembler`
+   (`.try`/`.catch`/`.filter`/`.finally`/`.fault`) — the last piece needed for a rebuilt
+   assembly that is not just metadata-equivalent but runnable.
 5. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
    flattening / string encryption so deobfuscation can be measured numerically.
 6. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.

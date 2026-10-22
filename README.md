@@ -210,8 +210,14 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
   internal caller, recursion cycles (iterative Tarjan) and the number of external calls.
 * **Fixpoint test** (`--fixpoint`) — decompiles to IL, reassembles with the managed assembler
   and diffs the result against the original. This is the honest quality metric for the
-  pipeline: **89.15 %** fidelity on `ILXP.exe` today, with the remaining losses being real
-  assembler gaps (`.property` / `.event` directives, `<PrivateImplementationDetails>`).
+  pipeline: **100 %** member fidelity and **99.97 %** body fidelity on `ILXP.exe`
+  (3988 of 3989 method bodies byte-identical instruction streams), and 99.99 % / 99.96 % on
+  `System.Core.dll`. Repeating the round trip (`--iterations 3`) stays stable.
+* **Round-trip capable IL assembler** — `.property` / `.event` directives, nested types,
+  `implements` lists, generic types and generic methods, P/Invoke declarations, static field
+  data (`.data … at I_xxxx`), entry point, assembly scopes (`[System.Core]`) and public key
+  tokens. Exception handler tables (`.try` / `.catch` / `.finally`) are the remaining gap and
+  are reported as such by the fixpoint test.
 
 ## Repository layout
 
