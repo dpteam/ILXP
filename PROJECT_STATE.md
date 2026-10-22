@@ -20,7 +20,7 @@ date whenever a milestone is reached.
 dotnet build ILXP.slnx                              # 0 errors, single-file output
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x86
 dotnet build src/ILXP/ILXP.csproj -p:Platform=x64
-tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 79/79 checks pass
+tests\ILXP.Tests\bin\Debug\net40\ILXP.Tests.exe run # 89/89 checks pass
 powershell -File tools/Smoke-Test.ps1               # 11/11 checks pass
 ```
 
@@ -54,7 +54,7 @@ Verified manually:
   double-click navigation; CLI `--ilsearch`.
 * Edit → Copy as… (name, signature, IL, C#, VB, references, target framework, nav key).
 * Analysis tools: assembly health report with obfuscator fingerprint, version diff,
-  preservation bundle (CLI + GUI).
+  preservation bundle, call graph, fixpoint fidelity test (CLI + GUI).
 * Platform builds are verified (`tools/Test-Platform.ps1`): x64 → machine 0x8664,
   x86 → 32BitRequired, AnyCPU → neither.
 * Damaged-input baseline: PE carving from larger blobs; random garbage fails cleanly.
@@ -67,8 +67,9 @@ Verified manually:
    constraints and string escaping are still rough. `--bodies` appends bodies after the
    outline (inspection dump, not a compilable project).
 3. `ManagedIlAssembler` handles the IL that `ManagedIlDisassembler` emits, downgrading
-   anything unresolvable to `nop` (reported in `LastWarnings`). Exception handlers and
-   `switch` are not reconstructed yet.
+   anything unresolvable to `nop` (reported in `LastWarnings`). Exception handlers,
+   `switch`, `.property`/`.event` directives and `ldtoken` are not reconstructed yet — the
+   `--fixpoint` command measures exactly this gap (89.15 % fidelity on ILXP.exe).
 4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
 5. `--clean` does not preserve strong-name signatures and writes without symbols.

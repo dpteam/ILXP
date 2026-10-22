@@ -23,6 +23,7 @@ namespace ILXP
         private ToolStripMenuItem copyAsMenuItem;
         private ToolStripMenuItem healthMenuItem;
         private ToolStripMenuItem compareMenuItem;
+        private ToolStripMenuItem callGraphMenuItem;
         private ToolStripMenuItem bundleMenuItem;
         private ToolStripMenuItem findMenuItem;
         private ToolStripMenuItem copyMenuItem;
@@ -84,6 +85,7 @@ namespace ILXP
             this.copyAsMenuItem = new ToolStripMenuItem();
             this.healthMenuItem = new ToolStripMenuItem();
             this.compareMenuItem = new ToolStripMenuItem();
+            this.callGraphMenuItem = new ToolStripMenuItem();
             this.bundleMenuItem = new ToolStripMenuItem();
             this.findMenuItem = new ToolStripMenuItem();
             this.copyMenuItem = new ToolStripMenuItem();
@@ -254,7 +256,7 @@ namespace ILXP
             this.aboutMenuItem.Click += this.OnAbout;
 
             // edit menu
-            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.goToIlMenuItem, this.searchIlMenuItem, this.findMenuItem, this.copyMenuItem, this.copyAsMenuItem, this.healthMenuItem });
+            this.editMenu.DropDownItems.AddRange(new ToolStripItem[] { this.quickOpenMenuItem, this.goToIlMenuItem, this.searchIlMenuItem, this.findMenuItem, this.copyMenuItem, this.copyAsMenuItem, this.healthMenuItem, this.callGraphMenuItem });
             this.editMenu.Name = "EditToolStripMenuItem";
             this.editMenu.Size = new Size(39, 20);
             this.editMenu.Text = "&Edit";
@@ -291,6 +293,11 @@ namespace ILXP
             this.compareMenuItem.Size = new Size(155, 22);
             this.compareMenuItem.Text = "&Compare versions...";
             this.compareMenuItem.Click += this.OnCompareAssemblies;
+
+            this.callGraphMenuItem.Name = "MenuItemEditCallGraph";
+            this.callGraphMenuItem.Size = new Size(160, 22);
+            this.callGraphMenuItem.Text = "Call &graph...";
+            this.callGraphMenuItem.Click += this.OnCallGraph;
 
             this.bundleMenuItem.Name = "MenuItemFileBundle";
             this.bundleMenuItem.Size = new Size(155, 22);

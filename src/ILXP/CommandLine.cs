@@ -82,6 +82,10 @@ namespace ILXP
                         return DiffCommand(options);
                     case "bundle":
                         return BundleCommand(options);
+                    case "fixpoint":
+                        return FixpointCommand(options);
+                    case "callgraph":
+                        return CallGraphCommand(options);
                     case "headless":
                         return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
@@ -703,6 +707,29 @@ namespace ILXP
             return 0;
         }
 
+        /// <summary>Call graph: fan-in/fan-out, orphans and recursion cycles.</summary>
+        private static int CallGraphCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            CallGraphReport report = CallGraph.Build(assembly);
+            Console.WriteLine("assembly      : " + assembly.Name.FullName);
+            Console.Write(CallGraph.Format(report, options.MaxResults > 0 ? options.MaxResults : 10));
+            return 0;
+        }
+
+        /// <summary>Decompile → reassemble → compare: the honest decompiler quality metric.</summary>
+        private static int FixpointCommand(Options options)
+        {
+            FixpointResult result = Fixpoint.Run(options.Input, options.Iterations < 1 ? 1 : options.Iterations);
+            Console.Write(Fixpoint.Format(result));
+
+            if (!string.IsNullOrEmpty(result.Error))
+            {
+                return 2;
+            }
+            return result.Fidelity >= 99.0 ? 0 : 1;
+        }
+
         /// <summary>Writes a preservation bundle (original bytes, IL, sources, resources).</summary>
         private static int BundleCommand(Options options)
         {
@@ -1082,6 +1109,9 @@ namespace ILXP
             Console.WriteLine("  ILXP --health <assembly>                 PE facts, dependencies, obfuscation fingerprint");
             Console.WriteLine("  ILXP --diff <left> <right>               compare two versions (IL hashes)");
             Console.WriteLine("  ILXP --bundle <assembly> --output <dir>  write a preservation bundle");
+            Console.WriteLine("  ILXP --fixpoint <assembly> [--iterations <n>]");
+            Console.WriteLine("                                           decompile -> reassemble -> diff (quality metric)");
+            Console.WriteLine("  ILXP --callgraph <assembly> [--max <n>]  fan-in/fan-out, orphans, recursion cycles");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -1129,6 +1159,7 @@ namespace ILXP
             public bool IgnoreCase { get; private set; }
             public bool Literal { get; private set; }
             public int MaxResults { get; private set; }
+            public int Iterations { get; private set; }
             public bool UseNativeTools { get; private set; }
 
             public static Options Parse(string[] args)
@@ -1259,6 +1290,17 @@ namespace ILXP
                         case "--bundle":
                             options.Command = "bundle";
                             options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--fixpoint":
+                            options.Command = "fixpoint";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--callgraph":
+                            options.Command = "callgraph";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--iterations":
+                            options.Iterations = int.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
                             break;
                         case "--ignore-case":
                             options.IgnoreCase = true;

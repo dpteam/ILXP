@@ -175,6 +175,84 @@ namespace ILXP
             return report;
         }
 
+        /// <summary>
+        /// Normalizes a type name for comparison. Scope prefixes ("[mscorlib]"), generic
+        /// arguments, array suffixes and generic arity markers are dropped, so the same
+        /// semantic type compares equal even when one side was rebuilt from IL text.
+        /// </summary>
+        internal static string NormalizeTypeName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return string.Empty;
+            }
+
+            StringBuilder text = new StringBuilder(name.Length);
+            int depth = 0;
+            for (int i = 0; i < name.Length; i++)
+            {
+                char c = name[i];
+                if (c == '<')
+                {
+                    depth++;
+                    continue;
+                }
+                if (c == '>')
+                {
+                    if (depth > 0)
+                    {
+                        depth--;
+                    }
+                    continue;
+                }
+                if (depth > 0)
+                {
+                    continue;
+                }
+                if (c == '[')
+                {
+                    // Either a scope ("[mscorlib]") or an array suffix ("[]").
+                    int close = name.IndexOf(']', i);
+                    if (close > i && i + 1 < name.Length && char.IsLetter(name[i + 1]))
+                    {
+                        i = close; // skip the whole scope
+                        continue;
+                    }
+                    // Array suffix: drop the brackets but keep going.
+                    continue;
+                }
+                if (c == ']')
+                {
+                    continue;
+                }
+                if (c == '&' || c == '*')
+                {
+                    continue;
+                }
+                text.Append(c);
+            }
+
+            string result = text.ToString();
+            int tick = result.IndexOf('`');
+            if (tick > 0)
+            {
+                result = result.Substring(0, tick);
+            }
+
+            result = result.Replace("/", ".").Trim();
+
+            // Compare by the short name: the IL text writes primitive keywords ("object")
+            // while metadata carries the full name ("System.Object"), and rebuilt type
+            // references may omit the namespace. For a fidelity metric the short name is the
+            // stable identity.
+            int dot = result.LastIndexOf('.');
+            if (dot > 0 && dot < result.Length - 1)
+            {
+                result = result.Substring(dot + 1);
+            }
+            return result;
+        }
+
         private static string MemberKind(string key)
         {
             int index = key.IndexOf("::", StringComparison.Ordinal);
@@ -298,8 +376,7 @@ namespace ILXP
                 {
                     text.Append(',');
                 }
-                text.Append(method.Parameters[i].ParameterType.FullName);
-            }
+                text.Append(NormalizeTypeName(method.Parameters[i].ParameterType.FullName));            }
             return text.ToString();
         }
 
@@ -338,15 +415,30 @@ namespace ILXP
             }
             if (operand is MethodReference)
             {
-                return ((MethodReference)operand).FullName;
+                MethodReference method = (MethodReference)operand;
+                StringBuilder text = new StringBuilder();
+                text.Append(NormalizeTypeName(method.DeclaringType == null ? string.Empty : method.DeclaringType.FullName));
+                text.Append("::").Append(method.Name).Append('(');
+                for (int i = 0; i < method.Parameters.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        text.Append(',');
+                    }
+                    text.Append(NormalizeTypeName(method.Parameters[i].ParameterType.FullName));
+                }
+                text.Append(')');
+                return text.ToString();
             }
             if (operand is FieldReference)
             {
-                return ((FieldReference)operand).FullName;
+                FieldReference field = (FieldReference)operand;
+                return NormalizeTypeName(field.DeclaringType == null ? string.Empty : field.DeclaringType.FullName) +
+                       "::" + field.Name;
             }
             if (operand is TypeReference)
             {
-                return ((TypeReference)operand).FullName;
+                return NormalizeTypeName(((TypeReference)operand).FullName);
             }
             if (operand is VariableDefinition)
             {

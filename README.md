@@ -70,6 +70,8 @@ ILXP --ilsearch <assembly> <pattern> [--literal] [--max <n>]
 ILXP --health <assembly>
 ILXP --diff <left> <right>
 ILXP --bundle <assembly> --output <dir>
+ILXP --fixpoint <assembly> [--iterations <n>]
+ILXP --callgraph <assembly> [--max <n>]
 ILXP --headless
 ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
@@ -204,6 +206,12 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
 * **Preservation bundle** (`File → Export preservation bundle…`, `--bundle`) — one folder with
   the original bytes and PDB, the IL listing, decompiled IL/C#/VB, every embedded resource,
   the health report and a `manifest.txt` with a SHA-256 for each file.
+* **Call graph** (`Edit → Call graph…`, `--callgraph`) — fan-out, fan-in, methods with no
+  internal caller, recursion cycles (iterative Tarjan) and the number of external calls.
+* **Fixpoint test** (`--fixpoint`) — decompiles to IL, reassembles with the managed assembler
+  and diffs the result against the original. This is the honest quality metric for the
+  pipeline: **89.15 %** fidelity on `ILXP.exe` today, with the remaining losses being real
+  assembler gaps (`.property` / `.event` directives, `<PrivateImplementationDetails>`).
 
 ## Repository layout
 

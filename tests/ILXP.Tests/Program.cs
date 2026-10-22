@@ -97,6 +97,8 @@ namespace ILXP.Tests
                 TestHealth();
                 TestDiff();
                 TestBundle();
+                TestFixpoint();
+                TestCallGraph();
             }
             finally
             {
@@ -472,6 +474,65 @@ namespace ILXP.Tests
                 }
             }
             return -1;
+        }
+
+        private static void TestFixpoint()
+        {
+            Section("Fixpoint (decompile -> reassemble -> diff)");
+
+            CommandResult result = RunIlxp("--fixpoint", ilxpPath);
+            Check("fixpoint runs", result.ExitCode == 0 || result.Output.Contains("fidelity"), result.ToString());
+            Check("fixpoint reports fidelity", result.Output.Contains("fidelity"), result.Output);
+            Check("fixpoint reports a diff", result.Output.Contains("diff"), result.Output);
+
+            double fidelity = ExtractPercent(result.Output, "fidelity");
+            Check("fidelity above 80%", fidelity >= 80.0, "fidelity=" + fidelity);
+            Console.WriteLine(string.Format("    fidelity: {0:0.00}%", fidelity));
+        }
+
+        private static void TestCallGraph()
+        {
+            Section("Call graph");
+
+            CommandResult result = RunIlxp("--callgraph", ilxpPath, "--max", "5");
+            Check("callgraph runs", result.ExitCode == 0, result.ToString());
+            Check("callgraph counts methods", result.Output.Contains("methods       :"), result.Output);
+            Check("callgraph counts internal calls", result.Output.Contains("internal calls:"), result.Output);
+            Check("callgraph lists top callers", result.Output.Contains("top callers"), result.Output);
+            Check("callgraph lists fan-in", result.Output.Contains("fan-in"), result.Output);
+            Check("callgraph lists orphans", result.Output.Contains("orphans"), result.Output);
+        }
+
+        private static double ExtractPercent(string output, string label)
+        {
+            foreach (string line in output.Split('\n'))
+            {
+                if (line.IndexOf(label, StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                int percent = line.LastIndexOf('%');
+                if (percent < 0)
+                {
+                    continue;
+                }
+
+                int start = percent - 1;
+                while (start >= 0 && (char.IsDigit(line[start]) || line[start] == '.' || line[start] == ','))
+                {
+                    start--;
+                }
+
+                double value;
+                string number = line.Substring(start + 1, percent - start - 1).Replace(',', '.');
+                if (double.TryParse(number, System.Globalization.NumberStyles.Float,
+                        System.Globalization.CultureInfo.InvariantCulture, out value))
+                {
+                    return value;
+                }
+            }
+            return 0;
         }
 
         // ------------------------------------------------------------------

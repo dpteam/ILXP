@@ -15,6 +15,49 @@ namespace ILXP
     public sealed partial class MainForm
     {
         // ------------------------------------------------------------------
+        // Call graph
+        // ------------------------------------------------------------------
+
+        private void OnCallGraph(object sender, EventArgs e)
+        {
+            TreeNode node = treeView.SelectedNode;
+            while (node != null && node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            AssemblyItem item = node == null ? null : node.Tag as AssemblyItem;
+            if (item == null)
+            {
+                MessageBox.Show(this, "Open an assembly first.", AppInfo.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Cursor previous = Cursor;
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                CallGraphReport report = CallGraph.Build(item.Assembly);
+                string content = "assembly      : " + item.Assembly.Name.FullName + Environment.NewLine +
+                                 CallGraph.Format(report, 15);
+                using (HealthForm form = new HealthForm(item.Assembly.Name.Name + " (call graph)", content))
+                {
+                    form.ShowDialog(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unable to build the call graph.", ex);
+                MessageBox.Show(this, ex.Message, "Call graph", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                Cursor = previous;
+            }
+        }
+
+        // ------------------------------------------------------------------
         // Compare two assemblies
         // ------------------------------------------------------------------
 
