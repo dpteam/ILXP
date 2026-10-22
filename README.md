@@ -7,10 +7,8 @@ decompiled copy of the old **CodeReflect** decompiler (DevExtras) and is being r
 maintainable, deobfuscated application with additional functionality merged from other open
 tools (ILSpy, dnSpy, de4dot and the Unscrambler feature set).
 
-The About box doubles as a little demo of the built-in music engine and of the interactive
-water effect:
-
-![ILXP about box](docs/screenshot-about.png)
+The screenshot above is ILXP decompiling **itself**: the tree shows the real types of
+`ILXP.exe`, and the right pane shows the IL view of `ILXP.CodeEditor`.
 
 The project is deliberately conservative:
 
@@ -26,16 +24,22 @@ Requirements: .NET SDK (tested with 9.x) and the .NET Framework 4.0 reference as
 (installed with Visual Studio or the Windows SDK).
 
 ```powershell
+# Any CPU (default solution configuration)
 dotnet build ILXP.slnx
+
+# x86 / x64 (the .slnx only declares "Any CPU", so target the project directly)
+dotnet build src\ILXP\ILXP.csproj -c Release -p:Platform=x86
+dotnet build src\ILXP\ILXP.csproj -c Release -p:Platform=x64
 ```
 
 Output:
 
 * `src/ILXP/bin/Debug/net40/ILXP.exe` – AnyCPU application
-* `src/ILXP/bin/x86/Debug/net40/ILXP.exe` – x86 build (`-p:Platform=x86`)
-* `src/ILXP/bin/x64/Debug/net40/ILXP.exe` – x64 build (`-p:Platform=x64`)
+* `src/ILXP/bin/x86/Debug/net40/ILXP.exe` – x86 build
+* `src/ILXP/bin/x64/Debug/net40/ILXP.exe` – x64 build
 
-The `native/` folder (ILDasm, ILAsm, BeaEngine, fusion.dll) is copied next to the executable.
+The build produces a **single executable**: Mono.Cecil is compiled into `ILXP.exe`, and the
+`native/` folder is no longer shipped (all native tools have managed replacements).
 
 ## Running
 
@@ -58,7 +62,8 @@ ILXP --ilasm <file.il> [--output <assembly>] [--dll] [--x86|--x64] [--native]
 ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]
 ILXP --clean <assembly> [--output <assembly>]
 ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]
-ILXP --screenshot <out.png> [--window about|main]
+ILXP --screenshot <out.png> [--window about|main] [--open <assembly>] [--select <type>]
+ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
 ```
 
 Output dialects (`--dialect`): `cs1` C# 1.0 / VS 2002, `cs2` C# 2.0 / VS 2005, `cs3` C# 3.0,
@@ -75,6 +80,8 @@ Notes:
   assembly. Strong-name signatures are not preserved.
 * `--music` converts between `.mid` and the text format, and renders `.wav` with the built-in
   chiptune synthesizer.
+* `--screenshot --open <assembly> --select <type>` loads an assembly and selects a type before
+  capturing, which is how `docs/screenshot-main.png` is produced.
 
 ## Testing
 

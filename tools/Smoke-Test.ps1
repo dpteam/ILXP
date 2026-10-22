@@ -36,7 +36,25 @@ function Run([string[]]$arguments) {
 
 $target = Join-Path $root 'src\ILXP\bin\Debug\net40\ILXP.exe'
 if (-not (Test-Path $target)) { $target = $exe }
-$cecil = Join-Path $root 'src\Cecil\bin\Debug\net40\Mono.Cecil.dll'
+
+# Pick a sample assembly: Mono.Cecil when it is built for the same configuration as the
+# executable, otherwise fall back to the executable itself.
+function Find-Sample([string]$name) {
+    $configuration = 'Debug'
+    if ($Exe -match '\\Release\\') { $configuration = 'Release' }
+    $candidates = @(
+        (Join-Path $root ("src\{0}\bin\{1}\net40\{0}.dll" -f $name, $configuration)),
+        (Join-Path $root ("src\{0}\bin\Debug\net40\{0}.dll" -f $name)),
+        (Join-Path $root ("src\{0}\bin\Release\net40\{0}.dll" -f $name))
+    )
+    foreach ($candidate in $candidates) {
+        if (Test-Path $candidate) { return $candidate }
+    }
+    return $null
+}
+
+$cecil = Find-Sample 'Cecil'
+if (-not $cecil) { $cecil = $target }
 
 Write-Host "Smoke test using $exe"
 Write-Host "Temporary folder: $temp"

@@ -26,6 +26,110 @@ namespace ILXP
         /// <summary>Set by automation (screenshots, tests) to avoid modal startup dialogs.</summary>
         internal bool SuppressStartupDialogs { get; set; }
 
+        /// <summary>
+        /// Loads an assembly and selects a type, without any dialog. Used by the
+        /// <c>--screenshot</c> command so that documentation images show real content.
+        /// </summary>
+        internal bool LoadForCapture(string assemblyPath, string typeName)
+        {
+            try
+            {
+                // Synchronous on purpose: the capture runs on the UI thread without a
+                // message loop, so the asynchronous loader (and its overlay) must be skipped.
+                TreeNode node = BuildAssemblyTree(assemblyPath);
+                if (node == null)
+                {
+                    return false;
+                }
+
+                treeView.BeginUpdate();
+                try
+                {
+                    AddOrReplaceAssemblyNode(node);
+                    node.Expand();
+                    if (node.Nodes.Count > 0)
+                    {
+                        node.Nodes[0].Expand();
+                    }
+                }
+                finally
+                {
+                    treeView.EndUpdate();
+                }
+
+                TreeNode selected = string.IsNullOrEmpty(typeName) ? node : FindTypeNode(node, typeName);
+                if (selected == null)
+                {
+                    selected = node;
+                }
+
+                TreeNode parent = selected.Parent;
+                while (parent != null)
+                {
+                    parent.Expand();
+                    parent = parent.Parent;
+                }
+
+                treeView.SelectedNode = selected;
+                selected.EnsureVisible();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Unable to prepare the window for capture.", ex);
+                return false;
+            }
+        }
+
+        /// <summary>Finds a type node by full or short name, expanding only matching namespaces.</summary>
+        private TreeNode FindTypeNode(TreeNode node, string typeName)
+        {
+            if (node.Tag is TypeDefinition)
+            {
+                TypeDefinition type = (TypeDefinition)node.Tag;
+                if (string.Equals(type.FullName, typeName, StringComparison.Ordinal) ||
+                    string.Equals(type.Name, typeName, StringComparison.Ordinal) ||
+                    string.Equals(LanguageWriter.GetShortTypeName(type), typeName, StringComparison.Ordinal))
+                {
+                    return node;
+                }
+            }
+
+            // Only descend into namespaces that can actually contain the requested type.
+            // Expanding everything would load every reference and build every member,
+            // which looks like a hang on large assemblies.
+            string expectedNamespace = null;
+            int lastDot = typeName.LastIndexOf('.');
+            if (lastDot > 0)
+            {
+                expectedNamespace = typeName.Substring(0, lastDot);
+            }
+
+            ExpandLazyNode(node);
+            foreach (TreeNode child in node.Nodes)
+            {
+                ModuleItem module = child.Tag as ModuleItem;
+                if (module != null && expectedNamespace != null &&
+                    !string.Equals(module.Namespace, expectedNamespace, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                AssemblyNameReference reference = child.Tag as AssemblyNameReference;
+                if (reference != null)
+                {
+                    continue; // references are never expanded while searching
+                }
+
+                TreeNode found = FindTypeNode(child, typeName);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+            return null;
+        }
+
         public MainForm()
         {
             navigationHistory = new NavigationHistory();
@@ -888,7 +992,10 @@ namespace ILXP
             catch (Exception ex)
             {
                 Log.Error("Unable to load '" + path + "'.", ex);
-                MessageBox.Show(this, string.Format("Unable to load the file \"{0}\".", path), "Cannot Load File");
+                if (!SuppressStartupDialogs)
+                {
+                    MessageBox.Show(this, string.Format("Unable to load the file \"{0}\".", path), "Cannot Load File");
+                }
                 return null;
             }
         }

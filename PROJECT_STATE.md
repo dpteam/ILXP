@@ -104,9 +104,8 @@ src\ILXP\bin\Debug\net40\ILXP.exe --disasm-x86 file.bin --offset 0 --length 64
 src\ILXP\bin\Debug\net40\ILXP.exe --music src\ILXP\Music\Tracks\T2JD.txt --output out.mid
 src\ILXP\bin\Debug\net40\ILXP.exe --music out.mid --output out.wav
 
-# automation screenshots
-src\ILXP\bin\Debug\net40\ILXP.exe --screenshot docs\screenshot-about.png --window about
-src\ILXP\bin\Debug\net40\ILXP.exe --screenshot docs\screenshot-main.png --window main
+# automation screenshot (loads an assembly and selects a type)
+src\ILXP\bin\Debug\net40\ILXP.exe --screenshot docs\screenshot-main.png --window main --open src\ILXP\bin\Debug\net40\ILXP.exe --select ILXP.CodeEditor
 src\ILXP\bin\Debug\net40\ILXP.exe --render-water docs\water.png
 ```
 

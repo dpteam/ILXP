@@ -355,6 +355,17 @@ namespace ILXP
                     }
                 }
 
+                MainForm main = form as MainForm;
+                if (main != null && !string.IsNullOrEmpty(options.Input))
+                {
+                    main.LoadForCapture(options.Input, options.Select);
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(40);
+                    }
+                }
+
                 using (Bitmap bitmap = new Bitmap(form.Width, form.Height))
                 {
                     form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
@@ -408,7 +419,6 @@ namespace ILXP
             }
             return new AboutForm();
         }
-
         private static int MusicCommand(Options options)
         {
             string input = options.Input;
@@ -750,7 +760,7 @@ namespace ILXP
             Console.WriteLine("  ILXP --disasm-x86 <file> [--offset <n>] [--length <n>] [--x64]");
             Console.WriteLine("  ILXP --clean <assembly> [--output <assembly>]   run IL cleanup passes");
             Console.WriteLine("  ILXP --music <file.mid|file.txt> [--output <out.mid|out.txt|out.wav>]");
-            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main]");
+            Console.WriteLine("  ILXP --screenshot <out.png> [--window about|main] [--open <assembly>] [--select <type>]");
             Console.WriteLine();
             Console.WriteLine("Decompile options:");
             Console.WriteLine("  --language <il|cs|vb>   output language (default: il)");
@@ -783,6 +793,7 @@ namespace ILXP
             public int Height { get; private set; }
             public int Frames { get; private set; }
             public bool VerboseOutput { get; private set; }
+            public string Select { get; private set; }
             public bool UseNativeTools { get; private set; }
 
             public static Options Parse(string[] args)
@@ -853,6 +864,12 @@ namespace ILXP
                             break;
                         case "--window":
                             options.Window = Next(args, ref i, argument);
+                            break;
+                        case "--open":
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--select":
+                            options.Select = Next(args, ref i, argument);
                             break;
                         case "--volume":
                             options.MusicVolume = float.Parse(Next(args, ref i, argument), CultureInfo.InvariantCulture);
