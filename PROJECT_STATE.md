@@ -84,9 +84,16 @@ Verified manually:
    decompiles other assemblies at 100 % accuracy, and `PEVerify` reports the same 4 findings as
    for the original (unmanaged pointer code in `WaterLogo`). The test suite covers this end to
    end (`Rebuilt executable is usable`).
-   Remaining fidelity gap: 55 of 7852 bodies in System.Core.dll differ after a round trip
-   (100 % member fidelity). `--bodydiff` names the exact instruction; the known causes are a
-   `Func\`2`/`Func\`3` overload pick and a dropped generic argument on a nested member reference.
+   Fidelity is now exact on the assemblies used as fixtures: ILXP.exe (4083 bodies),
+   System.Core.dll (7 852), System.Xml.dll (12 251) and mscorlib.dll (25 337) all report 100 %
+   member and 100 % body fidelity with zero diff entries. What this needed: overloads matched by
+   exact parameter shape instead of name+arity, an instantiated declaring type keeping its
+   TypeSpec instead of collapsing to the open MethodDef, method names with angle brackets staying
+   intact, and field marshalling (`.marshal`, `notserialized`) round-tripping.
+   Known limits: marshalling types that need an extra payload (fixed-size strings/arrays, custom
+   marshalers) are skipped with a warning, because the rebuilt `MarshalInfo` has no room for it;
+   `System.Data.dll` still loses ~100 method bodies and reports P/Invoke related verifier
+   findings; PEVerify is only an oracle for an assembly that sits next to its dependencies.
 4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
 5. `--clean` does not preserve strong-name signatures and writes without symbols.
@@ -168,10 +175,9 @@ re-run on a fresh decompiled snapshot.
 2. Finish renaming `StatementDecompiler` internals.
 3. Port ILSpy/dnSpy features together with their settings, plus an ILSpy/dnSpy settings
    importer (see `IDEAS.md`, level 2).
-4. Finish the last round-trip gap on System.Core.dll (55 of 7852 bodies): `--bodydiff` points
-   at an overload picked by name+arity instead of exact parameter shape, and at a nested member
-   reference that loses its generic argument. Neither breaks the CLR (JIT and PEVerify accept
-   the rebuilt image), but both should be fixed for exact equivalence.
+4. Extend exact fidelity to `System.Data.dll` (it loses ~100 method bodies and the verifier
+   reports P/Invoke related findings the CLR accepts), and rebuild marshalling types that need
+   an extra payload (fixed-size strings/arrays, custom marshalers) once `MarshalInfo` carries it.
 5. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
    flattening / string encryption so deobfuscation can be measured numerically.
 6. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.

@@ -208,17 +208,24 @@ namespace ILXP
                 result = angle > tick ? result.Substring(0, angle) : result;
             }
 
-            // Arrays, pointers and by-references are decoration, not identity.
+            // Arrays, pointers and by-references are decoration, not identity. A suffix may be
+            // "[]", "[,]" or carry explicit bounds ("[0...,0...]"), so it is cut at its '['.
             bool trimmed = true;
             while (trimmed)
             {
                 trimmed = false;
-                string[] suffixes = { "[]", "[,]", "&", "*" };
-                foreach (string suffix in suffixes)
+                if (result.EndsWith("&", StringComparison.Ordinal) ||
+                    result.EndsWith("*", StringComparison.Ordinal))
                 {
-                    if (result.EndsWith(suffix, StringComparison.Ordinal))
+                    result = result.Substring(0, result.Length - 1).Trim();
+                    trimmed = true;
+                }
+                else if (result.EndsWith("]", StringComparison.Ordinal))
+                {
+                    int open = result.LastIndexOf('[');
+                    if (open > 0)
                     {
-                        result = result.Substring(0, result.Length - suffix.Length).Trim();
+                        result = result.Substring(0, open).Trim();
                         trimmed = true;
                     }
                 }

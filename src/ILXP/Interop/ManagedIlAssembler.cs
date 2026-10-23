@@ -738,7 +738,47 @@ namespace ILXP.Interop
             {
                 parameters.Add(parameter.ParameterType);
             }
-            return FindMethodByShape(declaring, reference.Name, parameters);
+            MethodDefinition found = FindMethodByShape(declaring, reference.Name, parameters);
+            if (Environment.GetEnvironmentVariable("ILXP_TRACE_OVL") == "1" && reference.Name == "SkipWhileIterator")
+            {
+                Console.WriteLine("  post " + (found == null ? "null" : found.Parameters[1].ParameterType.Name) +
+                    " from " + reference.Parameters.Count + " " +
+                    (reference.Parameters.Count > 1 ? AssemblyDiff.DescribeTypeKey(reference.Parameters[1].ParameterType) : "-"));
+            }
+            return found;
+        }
+
+        /// <summary>
+        /// Puts a one-byte integer operand into the CLR type the opcode requires: an sbyte for
+        /// <c>ldc.i4.s</c> and a byte for everything else (e.g. <c>unaligned</c>).
+        /// </summary>
+        private static object CoerceShortInlineI(Instruction instruction)
+        {
+            object operand = instruction.Operand;
+            if (operand == null)
+            {
+                return null;
+            }
+
+            int value;
+            if (operand is sbyte)
+            {
+                value = (sbyte)operand;
+            }
+            else if (operand is byte)
+            {
+                value = (byte)operand;
+            }
+            else if (operand is int)
+            {
+                value = (int)operand;
+            }
+            else
+            {
+                return null;
+            }
+
+            return instruction.OpCode.Code == Code.Ldc_I4_S ? (object)(sbyte)value : (object)(byte)value;
         }
 
         /// <summary>
@@ -879,7 +919,10 @@ namespace ILXP.Interop
                             valid = instruction.Operand is Instruction;
                             break;
                         case OperandType.ShortInlineI:
-                            valid = instruction.Operand is sbyte;
+                            // "ldc.i4.s" needs an sbyte and every other one-byte operand a
+                            // byte; the metadata writer casts to the exact CLR type.
+                            instruction.Operand = CoerceShortInlineI(instruction);
+                            valid = instruction.Operand is sbyte || instruction.Operand is byte;
                             break;
                         case OperandType.InlineI:
                             valid = instruction.Operand is int;
@@ -1497,6 +1540,26 @@ namespace ILXP.Interop
             int equals = rest.IndexOf(" = ", StringComparison.Ordinal);
             string declaration = equals >= 0 ? rest.Substring(0, equals).Trim() : rest;
 
+            // Marshalling info is written as a suffix: ".field ... name marshal(lpwstr)".
+            // It has to be removed before the declaration is split into type and name.
+            NativeType? pendingMarshal = null;
+            int marshalAt = declaration.LastIndexOf(" marshal(", StringComparison.Ordinal);
+            if (marshalAt > 0)
+            {
+                int marshalClose = declaration.LastIndexOf(')');
+                if (marshalClose > marshalAt)
+                {
+                    string nativeText = declaration.Substring(marshalAt + " marshal(".Length,
+                        marshalClose - marshalAt - " marshal(".Length);
+                    declaration = declaration.Substring(0, marshalAt).Trim();
+                    NativeType native = ParseNativeType(nativeText.Trim());
+                    if (native != NativeType.None)
+                    {
+                        pendingMarshal = native;
+                    }
+                }
+            }
+
             // Field data may be declared inline: ".field ... <name> at I_0000".
             int at = declaration.LastIndexOf(" at ", StringComparison.Ordinal);
             if (at > 0)
@@ -1522,6 +1585,7 @@ namespace ILXP.Interop
             if (HasKeyword(modifiers, "literal")) attributes |= FieldAttributes.Literal | FieldAttributes.Static;
             if (HasKeyword(modifiers, "specialname")) attributes |= FieldAttributes.SpecialName;
             if (HasKeyword(modifiers, "rtspecialname")) attributes |= FieldAttributes.RTSpecialName;
+            if (HasKeyword(modifiers, "notserialized")) attributes |= FieldAttributes.NotSerialized;
 
             FieldDefinition field = new FieldDefinition(fieldName, attributes,
                 ResolveTypeWithOwner(type.MainModule(), typeText, type, null));
@@ -1536,7 +1600,60 @@ namespace ILXP.Interop
                 }
             }
             type.Fields.Add(field);
+            if (pendingMarshal.HasValue)
+            {
+                field.MarshalInfo = new MarshalInfo(pendingMarshal.Value);
+
+                // HasFieldMarshal is a real metadata attribute (0x1000), not derived from the
+                // FieldMarshal row, so it has to be set explicitly.
+                field.Attributes |= FieldAttributes.HasFieldMarshal;
+            }
             return field;
+        }
+
+        /// <summary>Maps an ILAsm marshalling keyword to <see cref="NativeType"/>.</summary>
+        private static NativeType ParseNativeType(string text)
+        {
+            switch (text.ToLowerInvariant())
+            {
+                case "bool": return NativeType.Boolean;
+                case "int8": return NativeType.I1;
+                case "unsigned int8": return NativeType.U1;
+                case "int16": return NativeType.I2;
+                case "unsigned int16": return NativeType.U2;
+                case "int32": return NativeType.I4;
+                case "unsigned int32": return NativeType.U4;
+                case "int64": return NativeType.I8;
+                case "unsigned int64": return NativeType.U8;
+                case "float32": return NativeType.R4;
+                case "float64": return NativeType.R8;
+                case "lpstr": return NativeType.LPStr;
+                case "lpwstr": return NativeType.LPWStr;
+                case "lptstr": return NativeType.LPTStr;
+                case "int": return NativeType.Int;
+                case "unsigned int": return NativeType.UInt;
+                case "bstr": return NativeType.BStr;
+                case "ansi bstr": return NativeType.ANSIBStr;
+                case "tbstr": return NativeType.TBStr;
+                case "variant bool": return NativeType.VariantBool;
+                case "iunknown": return NativeType.IUnknown;
+                case "idispatch": return NativeType.IDispatch;
+                case "struct": return NativeType.Struct;
+                case "interface": return NativeType.IntF;
+                case "safearray": return NativeType.SafeArray;
+                case "byvalstr": return NativeType.ByValStr;
+                case "as any": return NativeType.ASAny;
+                case "lpstruct": return NativeType.LPStruct;
+                case "func": return NativeType.Func;
+                case "currency": return NativeType.Currency;
+                case "error": return NativeType.Error;
+            }
+
+            // A numeric fallback keeps unusual native types round-tripping.
+            int value;
+            return int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value)
+                ? (NativeType)value
+                : NativeType.None;
         }
 
         /// <summary>
@@ -3528,17 +3645,15 @@ namespace ILXP.Interop
 
                 // A generic method instantiation ends the method name ("Select<int32,string>").
                 // A '<' followed by more name text belongs to an explicit interface name
-                // ("IEnumerable`1<T>.GetEnumerator") and must stay part of the name.
+                // ("IEnumerable`1<T>.GetEnumerator") and must stay part of the name. A method
+                // whose name itself starts with brackets ("<Show>b__0") keeps them too, so the
+                // generic argument list is the one that closes at the very end.
                 string genericArguments = null;
-                int genericOpen = methodName.IndexOf('<');
+                int genericOpen = TrailingGenericOpen(methodName);
                 if (genericOpen > 0)
                 {
-                    int genericClose = MatchAngle(methodName, genericOpen);
-                    if (genericClose == methodName.Length - 1)
-                    {
-                        genericArguments = methodName.Substring(genericOpen + 1, genericClose - genericOpen - 1);
-                        methodName = methodName.Substring(0, genericOpen).Trim();
-                    }
+                    genericArguments = methodName.Substring(genericOpen + 1, methodName.Length - genericOpen - 2);
+                    methodName = methodName.Substring(0, genericOpen).Trim();
                 }
 
                 int space = LastTopLevelSpace(typePart);
@@ -3598,7 +3713,9 @@ namespace ILXP.Interop
 
                 // External generic methods: match against the real definition so the
                 // signature comes from metadata instead of being reconstructed from text.
-                if (target == null && genericArguments != null)
+                // An instantiated declaring type must keep its own TypeSpec, so the open
+                // definition is only reusable when the call is not instantiated.
+                if (target == null && genericArguments != null && !instantiated)
                 {
                     TypeDefinition external = Resolver.TryResolveType(declaring);
                     if (external != null)
@@ -3691,7 +3808,16 @@ namespace ILXP.Interop
             {
                 return exact;
             }
-            return matches == 1 ? single : null;
+
+            // A name+arity match alone is not enough to pick an overload: two overloads can
+            // differ exactly in a parameter type (Func`2 vs Func`3). Guessing here silently
+            // rewrites a call to the wrong method, so only accept a lone candidate when there
+            // is nothing to compare against.
+            if (parameterCount == 0 && parameters == null)
+            {
+                return matches == 1 ? single : null;
+            }
+            return null;
         }
 
         private static bool SameShape(MethodDefinition method, List<TypeReference> parameters)
@@ -3753,6 +3879,37 @@ namespace ILXP.Interop
         }
 
         /// <summary>
+        /// Returns the index of the '&lt;' that opens the generic argument list at the very end
+        /// of a method name, or -1. Names may contain brackets themselves ("&lt;Show&gt;b__0"),
+        /// so the matching '<' is found by scanning back from the final '&gt;'.
+        /// </summary>
+        private static int TrailingGenericOpen(string name)
+        {
+            if (string.IsNullOrEmpty(name) || name[name.Length - 1] != '>')
+            {
+                return -1;
+            }
+
+            int depth = 0;
+            for (int i = name.Length - 1; i >= 0; i--)
+            {
+                if (name[i] == '>')
+                {
+                    depth++;
+                }
+                else if (name[i] == '<')
+                {
+                    depth--;
+                    if (depth == 0)
+                    {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        /// <summary>
         /// Finds a method by name, parameter shape and (optionally) generic arity. Matching on
         /// arity matters for overloads such as <c>Read(item, fn)</c> and
         /// <c>Read(ref item, fn)</c> that differ only in arity.
@@ -3793,6 +3950,10 @@ namespace ILXP.Interop
                     // different overloads of the same method.
                     string left = AssemblyDiff.DescribeTypeKey(method.Parameters[i].ParameterType);
                     string right = AssemblyDiff.DescribeTypeKey(parameters[i]);
+                    if (Environment.GetEnvironmentVariable("ILXP_TRACE_OVL") == "1" && name == "SkipWhileIterator")
+                    {
+                        Console.WriteLine("    cmp " + method.GenericParameters.Count + " [" + left + "] [" + right + "]");
+                    }
                     if (!string.Equals(left, right, StringComparison.Ordinal))
                     {
                         match = false;

@@ -175,6 +175,24 @@ namespace ILXP.Interop
                     data.Add(new FieldData { Label = label, Bytes = field.InitialValue });
                     text.Append(" at ").Append(label);
                 }
+
+                // Marshalling info is a metadata row of its own: dropping it changes the
+                // field's interop signature, so it is written as .marshal(<native type>).
+                // Types that need extra payload (fixed-size strings/arrays, custom marshalers)
+                // are skipped: they cannot be expressed with the plain MarshalInfo we rebuild.
+                if (field.HasMarshalInfo && field.MarshalInfo != null)
+                {
+                    string native = NativeTypeText(field.MarshalInfo.NativeType);
+                    if (IsKeywordNativeType(native))
+                    {
+                        text.Append(" marshal(").Append(native).Append(')');
+                    }
+                    else
+                    {
+                        Log.Warn("Marshalling info of " + type.FullName + "." + field.Name +
+                                 " cannot be represented (" + field.MarshalInfo.NativeType + ").");
+                    }
+                }
                 text.AppendLine();
             }
             if (type.Fields.Count > 0)
@@ -271,8 +289,65 @@ namespace ILXP.Interop
             text.Append(pad).AppendLine("}");
         }
 
-        private static string PropertyAttributesText(PropertyDefinition property)
+        /// <summary>ILAsm keyword for a native marshalling type.</summary>
+        private static string NativeTypeText(NativeType native)
         {
+            switch (native)
+            {
+                case NativeType.Boolean: return "bool";
+                case NativeType.I1: return "int8";
+                case NativeType.U1: return "unsigned int8";
+                case NativeType.I2: return "int16";
+                case NativeType.U2: return "unsigned int16";
+                case NativeType.I4: return "int32";
+                case NativeType.U4: return "unsigned int32";
+                case NativeType.I8: return "int64";
+                case NativeType.U8: return "unsigned int64";
+                case NativeType.R4: return "float32";
+                case NativeType.R8: return "float64";
+                case NativeType.LPStr: return "lpstr";
+                case NativeType.LPWStr: return "lpwstr";
+                case NativeType.LPTStr: return "lptstr";
+                case NativeType.Int: return "int";
+                case NativeType.UInt: return "unsigned int";
+                case NativeType.BStr: return "bstr";
+                case NativeType.ANSIBStr: return "ansi bstr";
+                case NativeType.TBStr: return "tbstr";
+                case NativeType.VariantBool: return "variant bool";
+                case NativeType.IUnknown: return "iunknown";
+                case NativeType.IDispatch: return "idispatch";
+                case NativeType.Struct: return "struct";
+                case NativeType.IntF: return "interface";
+                case NativeType.SafeArray: return "safearray";
+                case NativeType.ByValStr: return "byvalstr";
+                case NativeType.ASAny: return "as any";
+                case NativeType.LPStruct: return "lpstruct";
+                case NativeType.Func: return "func";
+                case NativeType.Currency: return "currency";
+                case NativeType.Error: return "error";
+                default: return ((int)native).ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        /// <summary>True when the native type has a plain ILAsm keyword (no extra payload).</summary>
+        private static bool IsKeywordNativeType(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return false;
+            }
+
+            foreach (char c in text)
+            {
+                if (char.IsLetter(c))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static string PropertyAttributesText(PropertyDefinition property)        {
             List<string> parts = new List<string>();
             if (property.HasThis)
             {
@@ -444,8 +519,11 @@ namespace ILXP.Interop
 
                 group.Handlers.Add(handler);
 
-                // The construct ends where the last block of the group ends.
-                int handlerEnd = indices.ContainsKey(handler.HandlerEnd) ? indices[handler.HandlerEnd] : tryEnd;
+                // The construct ends where the last block of the group ends. A handler may have
+                // no explicit end (it runs to the end of the body), so null is handled here.
+                int handlerEnd = handler.HandlerEnd != null && indices.ContainsKey(handler.HandlerEnd)
+                    ? indices[handler.HandlerEnd]
+                    : indices.Count;
                 if (handlerEnd > group.SpanEnd)
                 {
                     group.SpanEnd = handlerEnd;
@@ -456,8 +534,8 @@ namespace ILXP.Interop
             {
                 group.Handlers.Sort(delegate(ExceptionHandler a, ExceptionHandler b)
                 {
-                    int left = indices.ContainsKey(a.HandlerStart) ? indices[a.HandlerStart] : 0;
-                    int right = indices.ContainsKey(b.HandlerStart) ? indices[b.HandlerStart] : 0;
+                    int left = IndexOf(indices, a.HandlerStart);
+                    int right = IndexOf(indices, b.HandlerStart);
                     return left.CompareTo(right);
                 });
             }
@@ -562,6 +640,18 @@ namespace ILXP.Interop
             return string.Join(" ", parts.ToArray());
         }
 
+        /// <summary>Index of an instruction in the body, or -1 when it is not present.</summary>
+        private static int IndexOf(Dictionary<Instruction, int> indices, Instruction instruction)
+        {
+            if (instruction == null)
+            {
+                return -1;
+            }
+
+            int index;
+            return indices.TryGetValue(instruction, out index) ? index : -1;
+        }
+
         /// <summary>Emits instructions [start, end) and the protected regions nested in them.</summary>
         private static void WriteRange(StringBuilder text, MethodDefinition method, List<HandlerGroup> groups,
             Dictionary<Instruction, int> indices, int start, int end, string pad)
@@ -628,12 +718,12 @@ namespace ILXP.Interop
 
             foreach (ExceptionHandler handler in group.Handlers)
             {
-                int handlerStart = indices.ContainsKey(handler.HandlerStart) ? indices[handler.HandlerStart] : group.TryEnd;
-                int handlerEnd = indices.ContainsKey(handler.HandlerEnd) ? indices[handler.HandlerEnd] : group.TryEnd;
+                int handlerStart = IndexOf(indices, handler.HandlerStart);
+                int handlerEnd = handler.HandlerEnd == null ? indices.Count : IndexOf(indices, handler.HandlerEnd);
 
                 if (handler.HandlerType == ExceptionHandlerType.Filter)
                 {
-                    int filterStart = indices.ContainsKey(handler.FilterStart) ? indices[handler.FilterStart] : handlerStart;
+                    int filterStart = IndexOf(indices, handler.FilterStart);
                     text.Append(pad).AppendLine("filter");
                     text.Append(pad).AppendLine("{");
                     WriteRange(text, method, groups, indices, filterStart, handlerStart, pad + "  ");
@@ -990,6 +1080,7 @@ namespace ILXP.Interop
             if (field.IsStatic) parts.Add("static");
             if (field.IsInitOnly) parts.Add("initonly");
             if (field.IsLiteral) parts.Add("literal");
+            if ((field.Attributes & FieldAttributes.NotSerialized) != 0) parts.Add("notserialized");
             if (field.IsSpecialName) parts.Add("specialname");
             if (field.IsRuntimeSpecialName) parts.Add("rtspecialname");
             if (field.IsPublic) parts.Add("public");

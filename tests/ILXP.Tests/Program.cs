@@ -102,6 +102,7 @@ namespace ILXP.Tests
                 TestExceptionHandlers();
                 TestRebuiltToolRuns();
                 TestBodyDiff();
+                TestOverloadAndMarshalRoundTrip();
                 TestIlVerifier();
                 TestFixpointExceptionHandlers();
             }
@@ -576,6 +577,47 @@ namespace ILXP.Tests
             Check("changed body is reported", differs.Output.Contains("changed bodies: 1"), differs.Output);
             Check("the differing method is named", differs.Output.Contains("Value"), differs.Output);
             Check("the difference is located", differs.Output.Contains("left :"), differs.Output);
+        }
+
+        private static void TestOverloadAndMarshalRoundTrip()
+        {
+            Section("Overload selection and marshalling");
+
+            string source =
+                ".assembly extern mscorlib { }\r\n" +
+                ".assembly 'Overload' { }\r\n" +
+                ".class public auto ansi 'O' extends [mscorlib]System.Object\r\n" +
+                "{\r\n" +
+                "  .field public notserialized string Name marshal(lpwstr)\r\n" +
+                "  .method public hidebysig static class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0> 'Pick'<T>(class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0> s, class [mscorlib]System.Func`2<!!0, bool> p) cil managed\r\n" +
+                "  { .maxstack 2  IL_0000: ldnull  IL_0001: ret }\r\n" +
+                "  .method public hidebysig static class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0> 'Pick'<T>(class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0> s, class [mscorlib]System.Func`3<!!0, int32, bool> p) cil managed\r\n" +
+                "  { .maxstack 2  IL_0000: ldnull  IL_0001: ret }\r\n" +
+                "  .method public hidebysig static class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0> 'Caller'<T>(class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0> s, class [mscorlib]System.Func`3<!!0, int32, bool> p) cil managed\r\n" +
+                "  {\r\n" +
+                "    .maxstack 2\r\n" +
+                "    IL_0000: ldarg.0\r\n" +
+                "    IL_0001: ldarg.1\r\n" +
+                "    IL_0002: call class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0> 'O'::'Pick'<!!0>(class [mscorlib]System.Collections.Generic.IEnumerable`1<!!0>, class [mscorlib]System.Func`3<!!0, int32, bool>)\r\n" +
+                "    IL_0007: ret\r\n" +
+                "  }\r\n" +
+                "}\r\n";
+
+            string il = Path.Combine(workspace, "overload.il");
+            File.WriteAllText(il, source);
+            string assembly = Path.Combine(workspace, "overload.dll");
+            CommandResult asm = RunIlxp("--ilasm", il, "--output", assembly, "--dll");
+            Check("overload fixture assembles", asm.ExitCode == 0, asm.ToString());
+
+            CommandResult disasm = RunIlxp("--ildasm", assembly);
+            Check("marshalling survives", disasm.Output.Contains("marshal(lpwstr)"), disasm.Output);
+            Check("notserialized survives", disasm.Output.Contains("notserialized"), disasm.Output);
+
+            // The call must stay bound to the Func`3 overload, not to its Func`2 sibling.
+            string caller = ExtractLine(disasm.Output, "IL_0002: call");
+            Check("overload picked by exact shape",
+                caller != null && caller.Contains("Func`3"), caller ?? "call not found");
+            Console.WriteLine("    " + (caller == null ? "?" : caller.Trim()));
         }
 
         private static void TestIlVerifier()

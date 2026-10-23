@@ -213,10 +213,9 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
   and diffs the result against the original, including the exception-handler tables. Every body
   is also run through the structural verifier (stack depth, `maxstack`, branch ranges, handler
   boundaries), so a body that is textually identical but invalid for the CLR is reported:
-  **100 %** member fidelity, **100 %** body fidelity (4077 of 4077 bodies) and *0 invalid
-  bodies before and after* the round trip on `ILXP.exe`; on `System.Core.dll` 100 % member
-  fidelity and 99.30 % body fidelity (55 of 7852 bodies differ - `--bodydiff` names the exact
-  instruction where each one diverges).
+  **100 %** member fidelity and **100 %** body fidelity, with *0 invalid bodies* before and after
+  the round trip on `ILXP.exe` (4083 bodies), `System.Core.dll` (7 852), `System.Xml.dll`
+  (12 251) and `mscorlib.dll` (25 337 bodies; 100 % member fidelity there too).
 * **IL verifier** (`--ilverify`) - simulates the evaluation stack through every method body and
   reports stack underflow/overflow against `.maxstack`, a non-empty stack at `ret`, out-of-range
   or backwards branch/handler boundaries, invalid filter placement and impossible local/argument
@@ -235,7 +234,10 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
   key tokens. Types are pre-declared before any body is parsed, so a body may reference a type
   that appears later in the listing; local names carry their slot index, because compilers
   reuse names such as `value` for temporaries and a name-based reference would bind to the
-  wrong slot.
+  wrong slot. Overloads are matched by exact parameter shape (not by name and arity), an
+  instantiated declaring type keeps its `TypeSpec`, method names that contain angle brackets
+  (`<Show>b__0`) stay intact, and field marshalling (`marshal(lpwstr)`, `notserialized`) is
+  preserved.
   A small program with lambdas, LINQ, generic delegates, `switch`, `foreach` over
   `List<T>` and `try/catch/finally` round-trips into a working executable — and so does ILXP
   itself: `--ildasm ILXP.exe` → `--ilasm` produces an `ilxp.exe` that starts the GUI and
