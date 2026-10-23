@@ -384,7 +384,11 @@ namespace ILXP
                 {
                     text.Append(',');
                 }
-                text.Append(NormalizeTypeName(method.Parameters[i].ParameterType.FullName));            }
+
+                // The identity key stays coarse on purpose: overloads that differ only in
+                // generic arguments are rare, and a coarse key keeps the diff readable.
+                text.Append(NormalizeTypeName(method.Parameters[i].ParameterType.FullName));
+            }
             return text.ToString();
         }
 
@@ -507,7 +511,7 @@ namespace ILXP
             {
                 MethodReference method = (MethodReference)operand;
                 StringBuilder text = new StringBuilder();
-                text.Append(NormalizeTypeName(method.DeclaringType == null ? string.Empty : method.DeclaringType.FullName));
+                text.Append(DescribeTypeKey(method.DeclaringType));
                 text.Append("::").Append(method.Name).Append('(');
                 for (int i = 0; i < method.Parameters.Count; i++)
                 {
@@ -515,7 +519,7 @@ namespace ILXP
                     {
                         text.Append(',');
                     }
-                    text.Append(NormalizeTypeName(method.Parameters[i].ParameterType.FullName));
+                    text.Append(DescribeTypeKey(method.Parameters[i].ParameterType));
                 }
                 text.Append(')');
                 return text.ToString();
@@ -523,12 +527,11 @@ namespace ILXP
             if (operand is FieldReference)
             {
                 FieldReference field = (FieldReference)operand;
-                return NormalizeTypeName(field.DeclaringType == null ? string.Empty : field.DeclaringType.FullName) +
-                       "::" + field.Name;
+                return DescribeTypeKey(field.DeclaringType) + "::" + field.Name;
             }
             if (operand is TypeReference)
             {
-                return NormalizeTypeName(((TypeReference)operand).FullName);
+                return DescribeTypeKey((TypeReference)operand);
             }
             if (operand is VariableDefinition)
             {
@@ -539,6 +542,55 @@ namespace ILXP
                 return "arg" + ((ParameterDefinition)operand).Index.ToString(CultureInfo.InvariantCulture);
             }
             return Convert.ToString(operand, CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Stable identity of a type for comparison. Generic parameters are described by
+        /// position (!0 / !!0) because a name is only present on definitions: the two sides
+        /// of a round trip otherwise differ ("T" versus "!0") without being different.
+        /// </summary>
+        internal static string DescribeTypeKey(TypeReference type)
+        {
+            if (type == null)
+            {
+                return string.Empty;
+            }
+
+            GenericParameter parameter = type as GenericParameter;
+            if (parameter != null)
+            {
+                return (parameter.Type == GenericParameterType.Method ? "!!" : "!") +
+                       parameter.Position.ToString(CultureInfo.InvariantCulture);
+            }
+
+            GenericInstanceType instance = type as GenericInstanceType;
+            if (instance != null)
+            {
+                StringBuilder text = new StringBuilder(DescribeTypeKey(instance.ElementType)).Append('<');
+                for (int i = 0; i < instance.GenericArguments.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        text.Append(',');
+                    }
+                    text.Append(DescribeTypeKey(instance.GenericArguments[i]));
+                }
+                return text.Append('>').ToString();
+            }
+
+            // Arrays, pointers and by-references are decoration around a type; keep the
+            // decoration but describe the element with the same rules.
+            TypeSpecification specification = type as TypeSpecification;
+            if (specification != null)
+            {
+                string suffix = type is ByReferenceType ? "&"
+                              : type is PointerType ? "*"
+                              : type is ArrayType ? (type is ArrayType && ((ArrayType)type).Rank > 1 ? "[,]" : "[]")
+                              : string.Empty;
+                return DescribeTypeKey(specification.ElementType) + suffix;
+            }
+
+            return NormalizeTypeName(type.FullName);
         }
 
         /// <summary>FNV-1a, stable across runs and platforms.</summary>

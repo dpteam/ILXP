@@ -69,13 +69,16 @@ Verified manually:
 3. `ManagedIlAssembler` round-trips the IL that `ManagedIlDisassembler` emits at
    **100 % member fidelity / 100 % body fidelity** on ILXP.exe, including exception-handler
    tables (753 protected regions) and `.override` entries; 99.99 % / 99.95 % on
-   `System.Core.dll`. Properties, events, nested types, interfaces, generics, P/Invoke,
-   field data, scopes (`[.module]` for forward references) and the entry point are all
-   reconstructed. The remaining gaps on `System.Core.dll` are field marshalling metadata
-   (`HasFieldMarshal`) and one ctor whose generic parameter is rendered with an empty
-   argument. A rebuilt assembly executes correctly for ordinary code; a full rebuild of
-   ILXP.exe itself still fails at load with `MissingMethodException` on
-   `Mono.Cecil.AssemblyDefinition::get_CustomAttributes()`, which is not yet understood.
+   `System.Core.dll`. Properties, events, nested types (also generic ones such as
+   `Collection<T>.Enumerator`), interfaces, generics (`!N`/`!!N`, generic arguments,
+   `.genericparams` names), P/Invoke, field data, scopes (`[.module]` for forward references)
+   and the entry point are reconstructed. Small assemblies really do run after a round trip:
+   lambdas, LINQ, generic delegates, `switch`, `foreach` over `List<T>` and
+   `try/catch/finally` were verified end to end.
+   Limit: a full rebuild of ILXP.exe itself is textually identical yet the CLR rejects one
+   method at JIT time (`System.InvalidProgramException` inside
+   `Mono.Cecil.ImmediateModuleReader.ReadModule`), so the rebuilt binary cannot read
+   assemblies. Finding that body needs a verifier, not a text diff — see `IDEAS.md`.
 4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
 5. `--clean` does not preserve strong-name signatures and writes without symbols.
@@ -157,9 +160,10 @@ re-run on a fresh decompiled snapshot.
 2. Finish renaming `StatementDecompiler` internals.
 3. Port ILSpy/dnSpy features together with their settings, plus an ILSpy/dnSpy settings
    importer (see `IDEAS.md`, level 2).
-4. Debug the last load-time failure of a fully rebuilt ILXP.exe
-   (`MissingMethodException: Mono.Cecil.AssemblyDefinition::get_CustomAttributes`) — every
-   smaller assembly round-trips into a working executable, so this is a narrow metadata case.
+4. Add a body verifier to `--fixpoint` (stack depth per instruction, operand types, short-form
+   ranges) so a body that is textually identical but invalid for the CLR is reported with the
+   method name; use it to find the body in a rebuilt ILXP.exe that trips
+   `InvalidProgramException` at JIT time.
 5. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
    flattening / string encryption so deobfuscation can be measured numerically.
 6. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.

@@ -139,6 +139,12 @@ namespace ILXP.Interop
             AssemblyNameReference scope = element.Scope as AssemblyNameReference;
             if (scope == null)
             {
+                // A type of the module being built (or of any module already loaded).
+                ModuleDefinition module = element.Module;
+                if (module != null)
+                {
+                    return FindType(module, element.FullName);
+                }
                 return null;
             }
 

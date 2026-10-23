@@ -211,15 +211,18 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
 * **Fixpoint test** (`--fixpoint`) — decompiles to IL, reassembles with the managed assembler
   and diffs the result against the original, including the exception-handler tables. This is
   the honest quality metric for the pipeline: **100 %** member fidelity and **100 %** body
-  fidelity on `ILXP.exe` (4012 of 4012 method bodies identical, 753 protected regions), and
+  fidelity on `ILXP.exe` (4021 of 4021 method bodies identical, 753 protected regions), and
   99.99 % / 99.95 % on `System.Core.dll`. Repeating the round trip (`--iterations 3`) is stable.
 * **Round-trip capable IL assembler** — `.property` / `.event` directives, `.try` / `catch` /
   `finally` / `filter` / `fault` handler tables, `.override` (explicit interface
-  implementations), nested types, `implements` lists, generic types and generic methods,
-  P/Invoke declarations, static field data (`.data … at I_xxxx`), entry point, assembly scopes
-  (`[System.Core]`), `[.module]` for forward references and public key tokens.
-  Assemblies that are reassembled at this level actually run: a small program with lambdas,
-  LINQ, generics, delegates and `try/catch/finally` round-trips into a working executable.
+  implementations), nested types (including generic ones such as `Collection<T>.Enumerator`),
+  `implements` lists, generic types and generic methods (with `!N` / `!!N`, generic arguments
+  and `.genericparams` names), P/Invoke declarations, static field data (`.data … at I_xxxx`),
+  entry point, assembly scopes (`[System.Core]`), `[.module]` for forward references and public
+  key tokens. A small program with lambdas, LINQ, generic delegates, `switch`, `foreach` over
+  `List<T>` and `try/catch/finally` round-trips into a working executable. Rebuilding ILXP.exe
+  itself still produces one method body the CLR rejects at JIT time (`InvalidProgramException`),
+  so that last case is not equivalent yet.
 
 ## Repository layout
 

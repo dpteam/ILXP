@@ -146,6 +146,20 @@ namespace ILXP.Interop
             text.AppendLine();
             text.Append(pad).AppendLine("{");
 
+            if (type.HasGenericParameters)
+            {
+                text.Append(pad).Append("  .genericparams (");
+                for (int i = 0; i < type.GenericParameters.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        text.Append(", ");
+                    }
+                    text.Append(type.GenericParameters[i].Name);
+                }
+                text.AppendLine(")");
+            }
+
             foreach (FieldDefinition field in type.Fields)
             {
                 text.Append(pad).Append("  .field ").Append(FieldAttributesText(field)).Append(' ');
@@ -182,6 +196,8 @@ namespace ILXP.Interop
                 WriteEvent(text, @event, indent + 2);
             }
 
+            // Nested types come last; a method body that refers to one is handled by the
+            // assembler through a forward reference.
             foreach (TypeDefinition nested in type.NestedTypes)
             {
                 WriteType(text, nested, indent + 2, includeBytes, data);
@@ -303,6 +319,20 @@ namespace ILXP.Interop
                 }
             }
             text.Append(')');
+
+            if (method.HasGenericParameters)
+            {
+                text.Append(" genericparams (");
+                for (int i = 0; i < method.GenericParameters.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        text.Append(", ");
+                    }
+                    text.Append(method.GenericParameters[i].Name);
+                }
+                text.Append(')');
+            }
 
             if (method.IsAbstract || method.IsPInvokeImpl)
             {
@@ -682,10 +712,18 @@ namespace ILXP.Interop
                 return "void";
             }
 
+            // Generic parameters must be written by position (!0 / !!0), not by name: a
+            // literal "T" would be read back as a type called T.
+            GenericParameter parameter = type as GenericParameter;
+            if (parameter != null)
+            {
+                return (parameter.Type == GenericParameterType.Method ? "!!" : "!") +
+                       parameter.Position.ToString(CultureInfo.InvariantCulture);
+            }
+
             switch (type.MetadataType)
             {
-                case MetadataType.Void: return "void";
-                case MetadataType.Boolean: return "bool";
+                case MetadataType.Void: return "void";                case MetadataType.Boolean: return "bool";
                 case MetadataType.Char: return "char";
                 case MetadataType.SByte: return "int8";
                 case MetadataType.Byte: return "uint8";
@@ -730,7 +768,73 @@ namespace ILXP.Interop
         /// </summary>
         private static string ScopedName(TypeReference type)
         {
-            string fullName = type.FullName;
+            GenericInstanceType generic = type as GenericInstanceType;
+            if (generic != null)
+            {
+                // FullName does not carry scope prefixes for the generic arguments, and an
+                // argument that lives in this module must be marked as such, otherwise a
+                // forward reference would be resolved against mscorlib.
+                StringBuilder text = new StringBuilder(ScopePrefix(generic));
+                text.Append(generic.ElementType.FullName).Append('<');
+                for (int i = 0; i < generic.GenericArguments.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        text.Append(", ");
+                    }
+                    text.Append(TypeName(generic.GenericArguments[i]));
+                }
+                return text.Append('>').ToString();
+            }
+
+            // A nested type of an instantiated generic type ("List<T>/Enumerator") must keep
+            // the parent's arguments, written at the end of the name, or the reference would
+            // point at the open definition.
+            if (type.IsNested && type.DeclaringType != null)
+            {
+                List<TypeReference> arguments = new List<TypeReference>();
+                TypeReference outermost = null;
+                TypeReference cursor = type.DeclaringType;
+                while (cursor != null)
+                {
+                    GenericInstanceType instance = cursor as GenericInstanceType;
+                    if (instance != null)
+                    {
+                        if (outermost == null)
+                        {
+                            outermost = instance.ElementType;
+                        }
+                        foreach (TypeReference argument in instance.GenericArguments)
+                        {
+                            arguments.Add(argument);
+                        }
+                    }
+                    cursor = cursor.DeclaringType;
+                }
+
+                if (arguments.Count > 0)
+                {
+                    StringBuilder text = new StringBuilder(ScopePrefix(type));
+                    text.Append(outermost == null ? type.DeclaringType.FullName : outermost.FullName);
+                    text.Append('/').Append(type.Name).Append('<');
+                    for (int i = 0; i < arguments.Count; i++)
+                    {
+                        if (i > 0)
+                        {
+                            text.Append(", ");
+                        }
+                        text.Append(TypeName(arguments[i]));
+                    }
+                    return text.Append('>').ToString();
+                }
+            }
+
+            return ScopePrefix(type) + type.FullName;
+        }
+
+        /// <summary>Returns "" for mscorlib, "[asm]" otherwise (including "[.module]").</summary>
+        private static string ScopePrefix(TypeReference type)
+        {
             IMetadataScope scope = type.Scope;
 
             // A type defined in this very module is written as "[.module]" so the assembler
@@ -738,16 +842,16 @@ namespace ILXP.Interop
             // i.e. when a base type or interface is declared further down in the file.
             if (scope is ModuleDefinition)
             {
-                return "[.module]" + fullName;
+                return "[.module]";
             }
 
             AssemblyNameReference reference = scope as AssemblyNameReference;
             if (reference == null || string.Equals(reference.Name, "mscorlib", StringComparison.OrdinalIgnoreCase))
             {
-                return fullName;
+                return string.Empty;
             }
 
-            return "[" + reference.Name + "]" + fullName;
+            return "[" + reference.Name + "]";
         }
 
         private static string TypeAttributesText(TypeDefinition type)
@@ -798,6 +902,8 @@ namespace ILXP.Interop
             if (method.IsAbstract) parts.Add("abstract");
             if (method.IsNewSlot) parts.Add("newslot");
             if (method.IsReuseSlot) parts.Add("reuseslot");
+            if (method.IsFinal) parts.Add("final");
+            if ((method.Attributes & MethodAttributes.CheckAccessOnOverride) != 0) parts.Add("strict");
             if (method.IsHideBySig) parts.Add("hidebysig");
             if (method.IsSpecialName) parts.Add("specialname");
             if (method.IsPInvokeImpl)
