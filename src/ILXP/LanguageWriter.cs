@@ -21,9 +21,11 @@ namespace ILXP
 
         /// <summary>
         /// When set, <c>WriteType</c> emits method and property bodies instead of signatures
-        /// only. Used by the project exporter; the GUI keeps signatures for a compact outline.
+        /// only. Used by the code preview and the project exporter; the tree outline stays
+        /// compact. Instance-scoped so a background preview cannot change what another writer
+        /// renders.
         /// </summary>
-        public static bool EmitBodies { get; set; }
+        public bool EmitBodies { get; set; }
 
         /// <summary>Comment prefix used when writing the dialect header.</summary>
         protected virtual string CommentPrefix

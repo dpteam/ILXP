@@ -323,7 +323,7 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>' Nested Types<<>>");
     					foreach (TypeDefinition nestedType in typeDefinition_0.NestedTypes)
     					{
-    						stringBuilder2.AppendLine(WriteType(nestedType, bool_0: !LanguageWriter.EmitBodies));
+    						stringBuilder2.AppendLine(WriteType(nestedType, bool_0: !EmitBodies));
     					}
     					stringBuilder2.AppendLine();
     				}
@@ -344,7 +344,7 @@ namespace ILXP
     					stringBuilder2.AppendLine("<<g>>' Properties<<>>");
     					foreach (PropertyDefinition property in typeDefinition_0.Properties)
     					{
-    						stringBuilder2.AppendLine(WriteProperty(property, bool_0: !LanguageWriter.EmitBodies));
+    						stringBuilder2.AppendLine(WriteProperty(property, bool_0: !EmitBodies));
     					}
     					stringBuilder2.AppendLine();
     				}
@@ -385,7 +385,7 @@ namespace ILXP
     					{
     						if (!list.Contains(method2.Name) && !LanguageWriter.IsCompilerGeneratedName(method2.Name))
     						{
-    							stringBuilder2.AppendLine(WriteMethod(method2, bool_0: !LanguageWriter.EmitBodies));
+    							stringBuilder2.AppendLine(WriteMethod(method2, bool_0: !EmitBodies));
     						}
     					}
     					stringBuilder2.AppendLine();

@@ -54,6 +54,9 @@ namespace ILXP
         private SplitContainer splitContainer;
         private TreeView treeView;
         private Panel contentPanel;
+        private Panel previewBar;
+        private Label previewLabel;
+        private Button previewCancelButton;
         private CodeEditor codeEditor;
         private BorderPanel imageBox;
         private TextBox textViewer;
@@ -117,6 +120,9 @@ namespace ILXP
             this.splitContainer = new SplitContainer();
             this.treeView = new TreeView();
             this.contentPanel = new Panel();
+            this.previewBar = new Panel();
+            this.previewLabel = new Label();
+            this.previewCancelButton = new Button();
             this.codeEditor = new CodeEditor();
             this.imageBox = new BorderPanel();
             this.textViewer = new TextBox();
@@ -520,6 +526,7 @@ namespace ILXP
             // content panel
             this.contentPanel.BackColor = SystemColors.Window;
             this.contentPanel.Controls.Add(this.codeEditor);
+            this.contentPanel.Controls.Add(this.previewBar);
             this.contentPanel.Controls.Add(this.imageBox);
             this.contentPanel.Controls.Add(this.textViewer);
             this.contentPanel.Dock = DockStyle.Fill;
@@ -529,6 +536,30 @@ namespace ILXP
             this.contentPanel.Size = new Size(453, 468);
             this.contentPanel.TabIndex = 0;
             this.contentPanel.Paint += this.OnContentPanelPaint;
+            // preview bar: shown while a large type is decompiled in the background
+            this.previewBar.BackColor = SystemColors.Info;
+            this.previewBar.Controls.Add(this.previewLabel);
+            this.previewBar.Controls.Add(this.previewCancelButton);
+            this.previewBar.Dock = DockStyle.Top;
+            this.previewBar.Location = new Point(1, 1);
+            this.previewBar.Name = "PanelPreview";
+            this.previewBar.Padding = new Padding(6, 4, 6, 4);
+            this.previewBar.Size = new Size(451, 30);
+            this.previewBar.TabIndex = 3;
+            this.previewBar.Visible = false;
+
+            this.previewLabel.AutoSize = false;
+            this.previewLabel.Dock = DockStyle.Fill;
+            this.previewLabel.Name = "LabelPreview";
+            this.previewLabel.TextAlign = ContentAlignment.MiddleLeft;
+            this.previewLabel.Text = "Decompiling...";
+
+            this.previewCancelButton.Dock = DockStyle.Right;
+            this.previewCancelButton.Name = "ButtonPreviewCancel";
+            this.previewCancelButton.Size = new Size(88, 22);
+            this.previewCancelButton.Text = "Cancel";
+            this.previewCancelButton.UseVisualStyleBackColor = true;
+            this.previewCancelButton.Click += this.OnPreviewCancel;
 
             this.textViewer.BackColor = SystemColors.Info;
             this.textViewer.BorderStyle = BorderStyle.None;
@@ -545,7 +576,6 @@ namespace ILXP
             this.textViewer.Visible = false;
             this.textViewer.WordWrap = false;
 
-            this.codeEditor.BackColor = SystemColors.Info;
             this.codeEditor.Dock = DockStyle.Fill;
             this.codeEditor.Location = new Point(1, 1);
             this.codeEditor.Name = "SyntaxBox1";

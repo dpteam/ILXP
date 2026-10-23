@@ -26,6 +26,28 @@ namespace ILXP
         }
 
         /// <summary>A clickable link to a type that lives in another assembly.</summary>
+        /// <summary>
+        /// A reference to another assembly. It becomes browsable in place: the same node shows
+        /// the assembly code and its namespaces, instead of a metadata-only file node plus a
+        /// separate module node for the code.
+        /// </summary>
+        private sealed class ReferenceItem
+        {
+            public ReferenceItem(AssemblyNameReference reference)
+            {
+                Reference = reference;
+            }
+
+            public AssemblyNameReference Reference { get; private set; }
+
+            /// <summary>Loaded on first use; null when the file cannot be found.</summary>
+            public AssemblyDefinition Assembly { get; set; }
+
+            public string Path { get; set; }
+
+            public bool Tried { get; set; }
+        }
+
         private sealed class TypeLink
         {
             public TypeLink(TypeReference type)
@@ -103,34 +125,58 @@ namespace ILXP
         /// Creates a node for a reference. Expanding it loads the referenced assembly and
         /// exposes its namespaces.
         /// </summary>
+        /// <summary>
+        /// Creates a node for a reference. The node itself carries the assembly (code and
+        /// metadata), and expanding it lists the namespaces of the referenced assembly.
+        /// </summary>
         private TreeNode CreateReferenceNode(AssemblyNameReference reference)
         {
+            ReferenceItem item = new ReferenceItem(reference);
             TreeNode node = new TreeNode(string.Format("{0} ({1})", reference.Name, reference.Version));
-            node.Tag = reference;
+            node.Tag = item;
             SetImage(node, "5VSProject_reference.bmp");
+            node.ToolTipText = reference.FullName;
 
-            string display = reference.FullName;
-            node.ToolTipText = display;
             TreeNode placeholder = new TreeNode("...");
-            placeholder.Tag = new LazyNode(delegate { return BuildReferenceChildren(reference); });
+            placeholder.Tag = new LazyNode(delegate { return BuildReferenceChildren(node, item); });
             node.Nodes.Add(placeholder);
             return node;
         }
 
-        private List<TreeNode> BuildReferenceChildren(AssemblyNameReference reference)
+        /// <summary>
+        /// Loads the referenced assembly and returns its namespaces. One node per reference keeps
+        /// code, metadata and namespaces together instead of a metadata-only file node plus a
+        /// separate module node.
+        /// </summary>
+        private List<TreeNode> BuildReferenceChildren(TreeNode node, ReferenceItem item)
         {
             List<TreeNode> children = new List<TreeNode>();
-            string path = null;
-            try
+
+            if (!item.Tried)
             {
-                path = AssemblyResolver.ResolveFromTree(reference.FullName, treeView.Nodes);
-            }
-            catch (Exception ex)
-            {
-                Log.Info("Reference '" + reference.Name + "' is not available on disk: " + ex.Message);
+                item.Tried = true;
+                try
+                {
+                    item.Path = AssemblyResolver.ResolveFromTree(item.Reference.FullName, treeView.Nodes);
+                }
+                catch (Exception ex)
+                {
+                    Log.Info("Reference '" + item.Reference.Name + "' is not available on disk: " + ex.Message);
+                }
+
+                if (!string.IsNullOrEmpty(item.Path))
+                {
+                    item.Assembly = GetCachedAssembly(item.Path);
+                }
+
+                if (item.Assembly != null)
+                {
+                    // The code is available now, so selecting the node shows the assembly.
+                    node.ToolTipText = item.Path;
+                }
             }
 
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(item.Path))
             {
                 TreeNode missing = new TreeNode("(assembly not found)");
                 missing.ForeColor = System.Drawing.Color.Gray;
@@ -138,79 +184,90 @@ namespace ILXP
                 return children;
             }
 
-            AssemblyDefinition assembly = GetCachedAssembly(path);
-            if (assembly == null)
+            if (item.Assembly == null)
             {
-                TreeNode failed = new TreeNode("(unable to read " + Path.GetFileName(path) + ")");
+                TreeNode failed = new TreeNode("(unable to read " + Path.GetFileName(item.Path) + ")");
                 failed.ForeColor = System.Drawing.Color.Firebrick;
                 children.Add(failed);
                 return children;
             }
 
-            TreeNode header = new TreeNode(Path.GetFileName(path));
-            header.ForeColor = System.Drawing.Color.Gray;
-            header.Tag = new AssemblyItem(path, assembly);
-            SetImage(header, "1VSObject_Library.bmp");
-            children.Add(header);
+            return BuildNamespaceNodes(item.Assembly);
+        }
+
+        /// <summary>
+        /// Groups the types of every module by namespace, so one namespace is one node even when
+        /// the assembly is split over several modules.
+        /// </summary>
+        private List<TreeNode> BuildNamespaceNodes(AssemblyDefinition assembly)
+        {
+            Dictionary<string, List<ModuleDefinition>> namespaces =
+                new Dictionary<string, List<ModuleDefinition>>(StringComparer.Ordinal);
+            List<string> order = new List<string>();
 
             foreach (ModuleDefinition module in assembly.Modules)
             {
-                TreeNode moduleNode = new TreeNode(module.Name);
-                SetImage(moduleNode, "1VSObject_Library.bmp");
-                moduleNode.Tag = module;
-                moduleNode.Nodes.Add(CreateLazyNode("...", "6VSObject_Namespace.bmp",
-                    CreateModuleNamespacesFactory(module)));
-                children.Add(moduleNode);
-            }
-            return children;
-        }
-
-        private Func<List<TreeNode>> CreateModuleNamespacesFactory(ModuleDefinition module)
-        {
-            return delegate
-            {
-                List<TreeNode> list = new List<TreeNode>();
-                Dictionary<string, TreeNode> namespaces = new Dictionary<string, TreeNode>(StringComparer.Ordinal);
                 foreach (TypeDefinition type in module.Types)
                 {
-                    TreeNode namespaceNode;
-                    if (!namespaces.TryGetValue(type.Namespace, out namespaceNode))
-                    {
-                        namespaceNode = CreateLazyNode(
-                            string.IsNullOrEmpty(type.Namespace) ? "-" : type.Namespace,
-                            "6VSObject_Namespace.bmp",
-                            CreateNamespaceFactory(type.Namespace, module));
-                        namespaceNode.Tag = new ModuleItem(type.Namespace, module);
-                        namespaces.Add(type.Namespace, namespaceNode);
-                        list.Add(namespaceNode);
-                    }
-                }
-                return list;
-            };
-        }
-
-        private Func<List<TreeNode>> CreateNamespaceFactory(string namespaceName, ModuleDefinition module)
-        {
-            return delegate
-            {
-                List<TreeNode> list = new List<TreeNode>();
-                foreach (TypeDefinition type in module.Types)
-                {
-                    if (!string.Equals(type.Namespace, namespaceName, StringComparison.Ordinal))
+                    if (type.Name == "<Module>")
                     {
                         continue;
                     }
 
-                    TreeNode typeNode = new TreeNode(LanguageWriter.GetShortTypeName(type));
-                    typeNode.Tag = type;
-                    SetImage(typeNode, GetTypeImageKey(type));
-                    if (type.IsNotPublic)
+                    List<ModuleDefinition> modules;
+                    if (!namespaces.TryGetValue(type.Namespace, out modules))
                     {
-                        typeNode.ForeColor = System.Drawing.Color.Gray;
+                        modules = new List<ModuleDefinition>();
+                        namespaces.Add(type.Namespace, modules);
+                        order.Add(type.Namespace);
                     }
-                    typeNode.Nodes.Add(CreateLazyNode("...", "8VSObject_Method.bmp",
-                        CreateTypeMembersFactory(type)));
-                    list.Add(typeNode);
+                    if (!modules.Contains(module))
+                    {
+                        modules.Add(module);
+                    }
+                }
+            }
+
+            List<TreeNode> result = new List<TreeNode>();
+            foreach (string namespaceName in order)
+            {
+                List<ModuleDefinition> modules = namespaces[namespaceName];
+                TreeNode namespaceNode = CreateLazyNode(
+                    string.IsNullOrEmpty(namespaceName) ? "-" : namespaceName,
+                    "6VSObject_Namespace.bmp",
+                    CreateNamespaceFactory(namespaceName, modules));
+                namespaceNode.Tag = new ModuleItem(namespaceName, modules[0], modules);
+                result.Add(namespaceNode);
+            }
+            return result;
+        }
+
+        private Func<List<TreeNode>> CreateNamespaceFactory(string namespaceName,
+            IList<ModuleDefinition> modules)
+        {
+            return delegate
+            {
+                List<TreeNode> list = new List<TreeNode>();
+                foreach (ModuleDefinition module in modules)
+                {
+                    foreach (TypeDefinition type in module.Types)
+                    {
+                        if (!string.Equals(type.Namespace, namespaceName, StringComparison.Ordinal))
+                        {
+                            continue;
+                        }
+
+                        TreeNode typeNode = new TreeNode(LanguageWriter.GetShortTypeName(type));
+                        typeNode.Tag = type;
+                        SetImage(typeNode, GetTypeImageKey(type));
+                        if (type.IsNotPublic)
+                        {
+                            typeNode.ForeColor = System.Drawing.Color.Gray;
+                        }
+                        typeNode.Nodes.Add(CreateLazyNode("...", "8VSObject_Method.bmp",
+                            CreateTypeMembersFactory(type)));
+                        list.Add(typeNode);
+                    }
                 }
                 return list;
             };

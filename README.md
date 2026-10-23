@@ -75,6 +75,7 @@ ILXP --fixpoint <assembly> [--iterations <n>]
 ILXP --callgraph <assembly> [--max <n>]
 ILXP --ilverify <assembly> [--max <n>]
 ILXP --bodydiff <left> <right> [--match <text>] [--max <n>]
+ILXP --ui-selfcheck <assembly>
 ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
 ```
@@ -226,7 +227,16 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
 * **Body diff** (`--bodydiff <left> <right> [--match <text>]`) - for every changed body, prints
   the first position where the two hashed instruction streams diverge, with context; turns
   "body differs" into something actionable.
-* **Export to project** (`--project`, `File → Export project…`) — the ILSpy/dnSpy-style export:
+* **Instant code preview** — selecting a type, namespace or assembly decompiles it on a worker
+  thread and shows the result as soon as it is ready (no "signatures only" outline, like
+  ILSpy/dnSpy). While a large type is being rendered a bar offers **Cancel**: it throws the
+  pending result away and restores exactly the document that was on screen before.
+* **References are one node** — `References → SomeAssembly (1.0.0.0)` expands straight into its
+  namespaces and shows both code and metadata for the referenced assembly, instead of a
+  metadata-only file node plus a separate module node for the code.
+* **Quiet startup** — the window opens empty; the first assembly is opened on request
+  (`Ctrl+O`, drag and drop). `Del` closes the current assembly, just like Close in the context
+  menu.* **Export to project** (`--project`, `File → Export project…`) — the ILSpy/dnSpy-style export:
   a `.csproj`/`.vbproj` with the detected `TargetFrameworkVersion`, `HintPath` for every
   resolvable reference, one source file per top-level type in namespace-named folders,
   `Properties/AssemblyInfo.cs`, embedded resources under `Resources/`, `manifest.txt` and a

@@ -167,7 +167,8 @@ namespace ILXP
                 }
 
                 AssemblyNameReference reference = child.Tag as AssemblyNameReference;
-                if (reference != null)
+                ReferenceItem referenceItem = child.Tag as ReferenceItem;
+                if (reference != null || referenceItem != null)
                 {
                     continue; // references are never expanded while searching
                 }
@@ -253,10 +254,9 @@ namespace ILXP
                     treeView.EndUpdate();
                 }
             }
-            else
-            {
-                OpenFile();
-            }
+
+            // No file dialog on startup: the window opens empty and the first assembly is opened
+            // when the user asks for it (File → Open, or drag and drop).
         }
 
         private void OnOpenFile(object sender, EventArgs e)
@@ -468,6 +468,13 @@ namespace ILXP
             {
                 e.SuppressKeyPress = true;
                 OnGoToIlOffset(sender, EventArgs.Empty);
+            }
+            else if (e.KeyCode == Keys.Delete && treeView.Focused)
+            {
+                // Del closes the current assembly, like Close in the context menu. Only while
+                // the tree has focus, so deleting text in the editor stays untouched.
+                e.SuppressKeyPress = true;
+                CloseCurrentAssembly();
             }
         }
 
@@ -700,12 +707,27 @@ namespace ILXP
 
         private void OnCloseAssembly(object sender, EventArgs e)
         {
-            if (treeView.SelectedNode == null)
+            CloseCurrentAssembly();
+        }
+
+        /// <summary>
+        /// Closes the assembly that contains the current selection (the whole root node, not
+        /// just the selected child). Bound to Close in the context menu and to the Del key.
+        /// </summary>
+        private void CloseCurrentAssembly()
+        {
+            TreeNode node = treeView.SelectedNode;
+            if (node == null)
             {
                 return;
             }
 
-            treeView.SelectedNode.Remove();
+            while (node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            node.Remove();
             InvalidateQuickOpenIndex();
             navigationHistory.Clear();
             backButton.Enabled = navigationHistory.CanGoBack;
@@ -716,6 +738,7 @@ namespace ILXP
             textViewer.Visible = false;
             imageBox.Visible = false;
             codeEditor.Clear();
+            CancelPreview();
         }
 
         private void OnCopyNodeText(object sender, EventArgs e)
@@ -858,6 +881,14 @@ namespace ILXP
                 return;
             }
 
+            // A reference shows its assembly, so make sure the file is loaded before the
+            // preview asks for it (loading is cheap; decompiling is what gets deferred).
+            ReferenceItem reference = e.Node.Tag as ReferenceItem;
+            if (reference != null && !reference.Tried)
+            {
+                ExpandLazyNode(e.Node);
+            }
+
             UpdateStatusAndHistory();
             DisplayNode(e.Node);
         }
@@ -901,6 +932,21 @@ namespace ILXP
                 return;
             }
 
+            // Large nodes are decompiled on a worker thread so the tree stays responsive; the
+            // preview bar offers Cancel while it runs.
+            if (TryDeferPreview(node, value))
+            {
+                return;
+            }
+
+            // A synchronous node wins over a pending background preview: drop that result.
+            if (previewRunning)
+            {
+                previewGeneration++;
+                previewRunning = false;
+                HidePreviewBar();
+            }
+
             codeEditor.Visible = true;
             textViewer.Visible = false;
             imageBox.Visible = false;
@@ -929,6 +975,26 @@ namespace ILXP
             {
                 writer.Runtime = RuntimeProfile.Detect(((AssemblyItem)value).Assembly);
                 codeEditor.Text = writer.WriteAssembly((AssemblyItem)value);
+            }
+            else if (value is MainForm.ReferenceItem)
+            {
+                // A reference node shows the referenced assembly itself: code and metadata in
+                // one place, exactly like the root assembly node.
+                MainForm.ReferenceItem reference = (MainForm.ReferenceItem)value;
+                if (reference.Assembly != null)
+                {
+                    AssemblyItem referenced = new AssemblyItem(reference.Path, reference.Assembly);
+                    writer.Runtime = RuntimeProfile.Detect(reference.Assembly);
+                    codeEditor.Text = writer.WriteAssembly(referenced);
+                }
+                else
+                {
+                    ShowTextViewer("Reference: " + reference.Reference.FullName + Environment.NewLine +
+                                   "Path: " + (string.IsNullOrEmpty(reference.Path)
+                                       ? "(not found on disk)"
+                                       : reference.Path) + Environment.NewLine +
+                                   "Expand the node to load the assembly.");
+                }
             }
             else if (value is ModuleDefinition)
             {

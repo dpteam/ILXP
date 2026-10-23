@@ -103,6 +103,7 @@ namespace ILXP.Tests
                 TestRebuiltToolRuns();
                 TestBodyDiff();
                 TestProjectExport();
+                TestCodePreview();
                 TestOverloadAndMarshalRoundTrip();
                 TestIlVerifier();
                 TestFixpointExceptionHandlers();
@@ -532,6 +533,28 @@ namespace ILXP.Tests
             CommandResult list = RunProcess(rebuilt, "--list", ilxpPath);
             Check("rebuilt tool reads an assembly", list.ExitCode == 0, list.ToString());
             Check("rebuilt tool lists types", list.Output.Contains("ILXP.MainForm"), list.Output);
+        }
+
+        private static void TestCodePreview()
+        {
+            Section("Code preview (background decompile + cancel)");
+
+            CommandResult result = RunIlxp("--ui-selfcheck", ilxpPath);
+            Check("self check runs", result.ExitCode == 0, result.ToString());
+            Check("preview renders code", result.Output.Contains("preview rendered"), result.Output);
+            Check("cancel restores the view", result.Output.Contains("cancel restored"), result.Output);
+            Check("self check passes", result.Output.Contains("ui selfcheck passed"), result.Output);
+            Check("reference node is single",
+                result.Output.Contains("reference node exposes namespaces directly"), result.Output);
+            Check("closing removes the assembly", result.Output.Contains("closing removes the assembly node"), result.Output);
+
+            // The screenshot path waits for the preview, so the code (not the bar) is captured.
+            string shot = Path.Combine(workspace, "preview.png");
+            CommandResult capture = RunIlxp("--screenshot", shot, "--window", "main",
+                "--open", ilxpPath, "--select", "ILXP.CodeToken");
+            Check("screenshot with preview succeeds", capture.ExitCode == 0, capture.ToString());
+            Check("screenshot file written", File.Exists(shot) && new FileInfo(shot).Length > 1000,
+                "no image");
         }
 
         private static void TestProjectExport()

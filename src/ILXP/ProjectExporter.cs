@@ -107,9 +107,8 @@ namespace ILXP
             {
                 writer.Dialect = dialect;
             }
+            writer.EmitBodies = includeBodies;
 
-            bool previous = LanguageWriter.EmitBodies;
-            LanguageWriter.EmitBodies = includeBodies;
             try
             {
                 ExporterContext context = new ExporterContext
@@ -130,7 +129,7 @@ namespace ILXP
             }
             finally
             {
-                LanguageWriter.EmitBodies = previous;
+                writer.EmitBodies = false;
             }
 
             return result;

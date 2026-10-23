@@ -61,21 +61,23 @@ Verified manually:
 
 ## Known issues / next fixes
 
-1. `StatementDecompiler` reconstructs simple bodies correctly (`return 1;`, field and property
-   access, plain calls), but loop and try/catch shapes are still wrong - it emits `while (try {)`
-   and a stray `}`. That is the main limit on how useful `--project` is, and the export README
-   says so. The C#/VB writers are outline-oriented for the GUI; bodies are only emitted when
-   `LanguageWriter.EmitBodies` is set (project export).
-2. `ManagedIlAssembler` round-trips the IL that `ManagedIlDisassembler` emits at
+1. The code preview decompiles with bodies on a worker thread and can be cancelled, but the
+   renderer is still `StatementDecompiler`, so the preview is only as good as that: loops and
+   try/catch come out wrong (`while (try {)`), which is immediately visible in the preview and
+   is the main limit on how useful `--project` is. Bodies are rendered only when
+   `LanguageWriter.EmitBodies` is set (preview and project export); the tree outline stays
+   compact.
+2. `StatementDecompiler` still has `smethod_N` names for internal helpers. Public entry points
+   are `WriteVisualBasicBody` / `WriteCSharpBody`.
+3. `ManagedIlAssembler` round-trips the IL that `ManagedIlDisassembler` emits at
    **100 % member fidelity / 100 % body fidelity** on ILXP.exe, including exception-handler
-   tables (753 protected regions) and `.override` entries; 99.99 % / 98.15 % on
-   `System.Core.dll`. Properties, events, nested types (also generic ones such as
-   `Collection<T>.Enumerator`), interfaces, generics (`!N`/`!!N`, generic arguments,
-   `.genericparams` names), P/Invoke, field data, scopes (`[.module]` for forward references)
-   and the entry point are reconstructed. Types are pre-declared before any body is parsed, so
-   a forward reference resolves to a real definition with generic parameters. Small assemblies
-   really do run after a round trip: lambdas, LINQ, generic delegates, `switch`, `foreach` over
-   `List<T>` and `try/catch/finally` were verified end to end.
+   tables (753 protected regions) and `.override` entries. Properties, events, nested types
+   (also generic ones such as `Collection<T>.Enumerator`), interfaces, generics (`!N`/`!!N`,
+   generic arguments, `.genericparams` names), P/Invoke, field data, scopes (`[.module]` for
+   forward references) and the entry point are reconstructed. Types are pre-declared before any
+   body is parsed, so a forward reference resolves to a real definition with generic parameters.
+   Small assemblies really do run after a round trip: lambdas, LINQ, generic delegates,
+   `switch`, `foreach` over `List<T>` and `try/catch/finally` were verified end to end.
    `--fixpoint` also runs the structural verifier (`--ilverify`) over both sides: **0 invalid
    bodies before and after** on ILXP.exe. The verifier is calibrated against real framework
    assemblies - 0 findings on mscorlib (25 337 bodies), System (16 389), System.Core (7 852)
@@ -84,24 +86,24 @@ Verified manually:
    decompiles other assemblies at 100 % accuracy, and `PEVerify` reports the same 4 findings as
    for the original (unmanaged pointer code in `WaterLogo`). The test suite covers this end to
    end (`Rebuilt executable is usable`).
-   Fidelity is now exact on the assemblies used as fixtures: ILXP.exe (4083 bodies),
-   System.Core.dll (7 852), System.Xml.dll (12 251) and mscorlib.dll (25 337) all report 100 %
-   member and 100 % body fidelity with zero diff entries. What this needed: overloads matched by
-   exact parameter shape instead of name+arity, an instantiated declaring type keeping its
-   TypeSpec instead of collapsing to the open MethodDef, method names with angle brackets staying
-   intact, and field marshalling (`.marshal`, `notserialized`) round-tripping.
-   Known limits: marshalling types that need an extra payload (fixed-size strings/arrays, custom
-   marshalers) are skipped with a warning, because the rebuilt `MarshalInfo` has no room for it;
-   `System.Data.dll` still loses ~100 method bodies and reports P/Invoke related verifier
+   Fidelity is exact on the assemblies used as fixtures: ILXP.exe, System.Core.dll,
+   System.Xml.dll and mscorlib.dll all report 100 % member and 100 % body fidelity with zero
+   diff entries. What this needed: overloads matched by exact parameter shape instead of
+   name+arity, an instantiated declaring type keeping its TypeSpec instead of collapsing to the
+   open MethodDef, method names with angle brackets staying intact, and field marshalling
+   (`.marshal`, `notserialized`) round-tripping.
+   Known limits: marshalling types that need an extra payload (fixed-size strings/arrays,
+   custom marshalers) are skipped with a warning, because the rebuilt `MarshalInfo` has no room
+   for it; `System.Data.dll` still loses ~100 method bodies and reports P/Invoke related verifier
    findings; PEVerify is only an oracle for an assembly that sits next to its dependencies.
-3. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
+4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
-4. `--clean` does not preserve strong-name signatures and writes without symbols.
-5. `AssemblyResolver` probes the GAC by directory layout; it does not use the Fusion API.
-6. `VbWriter.GetTypeName` prints .NET type names (`Int32`, `String`) — valid VB, not idiomatic.
-7. Output dialects currently affect the header and expose capability flags; the full
+5. `--clean` does not preserve strong-name signatures and writes without symbols.
+6. `AssemblyResolver` probes the GAC by directory layout; it does not use the Fusion API.
+7. `VbWriter.GetTypeName` prints .NET type names (`Int32`, `String`) — valid VB, not idiomatic.
+8. Output dialects currently affect the header and expose capability flags; the full
    version-specific syntax matrix is tracked in `IDEAS.md`.
-8. Music rendering takes ~15 s for a 2-minute tune on first play (cached afterwards). A
+9. Music rendering takes ~15 s for a 2-minute tune on first play (cached afterwards). A
    streaming/real-time synth would remove the wait.
 
 ## Useful commands

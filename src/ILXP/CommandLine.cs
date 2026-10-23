@@ -100,6 +100,8 @@ namespace ILXP
                         return Screenshot(options);
                     case "render-water":
                         return RenderWater(options);
+                    case "ui-selfcheck":
+                        return UiSelfCheck(options);
                     default:
                         Console.Error.WriteLine("error: unknown command '" + options.Command + "'");
                         return 2;
@@ -433,6 +435,9 @@ namespace ILXP
                         // Expanding reorders the visible nodes; bring the selection back.
                         main.LoadForCapture(options.Input, options.Select);
                     }
+                    // The preview decompiles in the background; wait for it so the capture
+                    // shows the code and not the "Decompiling..." bar.
+                    main.WaitForPreview(10000);
                     for (int i = 0; i < 25; i++)
                     {
                         Application.DoEvents();
@@ -450,6 +455,97 @@ namespace ILXP
 
             Console.WriteLine("screenshot written to " + options.Output);
             return 0;
+        }
+
+        /// <summary>
+        /// Diagnostic: drives the code preview on a hidden MainForm and reports whether the
+        /// background decompilation and its Cancel button behave. Used by the test suite, so the
+        /// preview path is covered without a real user session.
+        /// </summary>
+        private static int UiSelfCheck(Options options)
+        {
+            if (string.IsNullOrEmpty(options.Input))
+            {
+                Console.Error.WriteLine("error: --ui-selfcheck <assembly>");
+                return 2;
+            }
+
+            int failures = 0;
+            using (MainForm form = new MainForm())
+            {
+                form.SuppressStartupDialogs = true;
+                form.Show();
+
+                if (!form.LoadForCapture(options.Input, null))
+                {
+                    Console.WriteLine("FAIL  assembly did not load");
+                    return 1;
+                }
+
+                // 1. A type preview is decompiled in the background and then shown.
+                string first = form.SelectForCheck("ILXP.StatementDecompiler");
+                Application.DoEvents();
+                if (!form.WaitForPreview(20000))
+                {
+                    Console.WriteLine("FAIL  preview did not finish");
+                    failures++;
+                }
+
+                string previewed = form.CurrentPreviewText();
+                if (string.IsNullOrEmpty(previewed) || previewed == first)
+                {
+                    Console.WriteLine("FAIL  preview produced no new text");
+                    failures++;
+                }
+                else
+                {
+                    Console.WriteLine("ok    preview rendered " + previewed.Length + " chars");
+                }
+
+                // 2. Cancel while a preview is still running restores the previous document.
+                string beforeCancel = form.SelectForCheck("ILXP.StatementDecompiler");
+                form.CancelPreviewForCheck();
+                string restored = form.CurrentPreviewText();
+                if (restored != beforeCancel)
+                {
+                    Console.WriteLine("FAIL  cancel did not restore the previous view");
+                    failures++;
+                }
+                else
+                {
+                    Console.WriteLine("ok    cancel restored the previous view");
+                }
+
+                // 3. A reference node shows code and metadata in one place: expanding it must
+                //    list namespaces directly, not a file node plus a module node.
+                string referenceCheck = form.CheckReferenceNodeShape();
+                if (referenceCheck != null)
+                {
+                    Console.WriteLine("FAIL  " + referenceCheck);
+                    failures++;
+                }
+                else
+                {
+                    Console.WriteLine("ok    reference node exposes namespaces directly");
+                }
+
+                // 4. Closing (Del) removes the assembly node.
+                string closeCheck = form.CheckCloseForCheck();
+                if (closeCheck != null)
+                {
+                    Console.WriteLine("FAIL  " + closeCheck);
+                    failures++;
+                }
+                else
+                {
+                    Console.WriteLine("ok    closing removes the assembly node");
+                }
+
+                form.Close();
+            }
+
+            Console.WriteLine(failures == 0 ? "ui selfcheck passed" : "ui selfcheck failed");
+            return failures == 0 ? 0 : 1;
         }
 
         private static int RenderWater(Options options)
@@ -1375,6 +1471,10 @@ namespace ILXP
                         case "--screenshot":
                             options.Command = "screenshot";
                             options.Output = Next(args, ref i, argument);
+                            break;
+                        case "--ui-selfcheck":
+                            options.Command = "ui-selfcheck";
+                            options.Input = Next(args, ref i, argument);
                             break;
                         case "--render-water":
                             options.Command = "render-water";
