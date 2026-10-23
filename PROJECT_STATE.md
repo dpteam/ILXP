@@ -1,4 +1,4 @@
-﻿# Project state (for continuing work)
+# Project state (for continuing work)
 
 This file is the hand-off note for future sessions and for context compaction. Keep it up to
 date whenever a milestone is reached.
@@ -54,7 +54,7 @@ Verified manually:
   double-click navigation; CLI `--ilsearch`.
 * Edit → Copy as… (name, signature, IL, C#, VB, references, target framework, nav key).
 * Analysis tools: assembly health report with obfuscator fingerprint, version diff,
-  preservation bundle, call graph, fixpoint fidelity test (CLI + GUI).
+  preservation bundle, call graph, fixpoint fidelity test and IL body verifier (CLI + GUI).
 * Platform builds are verified (`tools/Test-Platform.ps1`): x64 → machine 0x8664,
   x86 → 32BitRequired, AnyCPU → neither.
 * Damaged-input baseline: PE carving from larger blobs; random garbage fails cleanly.
@@ -68,17 +68,19 @@ Verified manually:
    outline (inspection dump, not a compilable project).
 3. `ManagedIlAssembler` round-trips the IL that `ManagedIlDisassembler` emits at
    **100 % member fidelity / 100 % body fidelity** on ILXP.exe, including exception-handler
-   tables (753 protected regions) and `.override` entries; 99.99 % / 99.95 % on
+   tables (753 protected regions) and `.override` entries; 99.99 % / 98.15 % on
    `System.Core.dll`. Properties, events, nested types (also generic ones such as
    `Collection<T>.Enumerator`), interfaces, generics (`!N`/`!!N`, generic arguments,
    `.genericparams` names), P/Invoke, field data, scopes (`[.module]` for forward references)
-   and the entry point are reconstructed. Small assemblies really do run after a round trip:
-   lambdas, LINQ, generic delegates, `switch`, `foreach` over `List<T>` and
-   `try/catch/finally` were verified end to end.
-   Limit: a full rebuild of ILXP.exe itself is textually identical yet the CLR rejects one
-   method at JIT time (`System.InvalidProgramException` inside
-   `Mono.Cecil.ImmediateModuleReader.ReadModule`), so the rebuilt binary cannot read
-   assemblies. Finding that body needs a verifier, not a text diff — see `IDEAS.md`.
+   and the entry point are reconstructed. Types are pre-declared before any body is parsed, so
+   a forward reference resolves to a real definition with generic parameters. Small assemblies
+   really do run after a round trip: lambdas, LINQ, generic delegates, `switch`, `foreach` over
+   `List<T>` and `try/catch/finally` were verified end to end.
+   `--fixpoint` also runs the structural verifier (`--ilverify`) over both sides: **0 invalid
+   bodies before and after** on ILXP.exe. Limit: a full rebuild of ILXP.exe is textually and
+   structurally identical for every body, but `PEVerify` still reports ~204 metadata/IL issues
+   in the rebuilt image (437 before the generic and predeclaration fixes), so the rebuilt
+   binary still cannot read assemblies. That is now measurable instead of guesswork.
 4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
 5. `--clean` does not preserve strong-name signatures and writes without symbols.
@@ -160,13 +162,14 @@ re-run on a fresh decompiled snapshot.
 2. Finish renaming `StatementDecompiler` internals.
 3. Port ILSpy/dnSpy features together with their settings, plus an ILSpy/dnSpy settings
    importer (see `IDEAS.md`, level 2).
-4. Add a body verifier to `--fixpoint` (stack depth per instruction, operand types, short-form
-   ranges) so a body that is textually identical but invalid for the CLR is reported with the
-   method name; use it to find the body in a rebuilt ILXP.exe that trips
-   `InvalidProgramException` at JIT time.
-5. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
+4. Work through the remaining `PEVerify` findings of a rebuilt ILXP.exe (~204): the first
+   batches are metadata-scope errors on TypeRefs (`0x80131b18`) and a handful of bodies whose
+   member references still carry an unsubstituted generic parameter.
+5. Improve the member key used by `--fixpoint` so third-party assemblies stop reporting
+   "body differs" for identical bodies (overloaded closure methods collide on the coarse key).
+6. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
    flattening / string encryption so deobfuscation can be measured numerically.
-6. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.
+7. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.
 
 ## Commit style
 

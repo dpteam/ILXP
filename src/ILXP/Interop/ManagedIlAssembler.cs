@@ -137,6 +137,17 @@ namespace ILXP.Interop
                 {
                     DeclaredValueTypes.Add(declared);
                 }
+
+                // Create the skeleton now, so a reference from any method body (even one that
+                // appears earlier in the text) finds a real definition with generic parameters.
+                try
+                {
+                    CreateType(assembly, line);
+                }
+                catch (Exception ex)
+                {
+                    LastWarnings.Add("Unable to predeclare " + declared + ": " + ex.Message);
+                }
             }
             foreach (string rawLine in lines)
             {
@@ -169,6 +180,8 @@ namespace ILXP.Interop
                     {
                         typeStack.Push(currentType);
                         typeDepth = open - close;
+                        CurrentTypeOwner = currentType;
+                        CurrentMethodOwner = null;
                     }
                     continue;
                 }
@@ -202,6 +215,8 @@ namespace ILXP.Interop
                         currentMethod = CreateMethod(currentType, line);
                         methodContext = currentMethod == null ? null : new MethodContext { Method = currentMethod };
                         methodDepth = open - close;
+                        CurrentMethodOwner = currentMethod;
+                        CurrentTypeOwner = currentType;
                     }
                     continue;
                 }
@@ -583,6 +598,14 @@ namespace ILXP.Interop
                     MethodReference target = instruction.Operand as MethodReference;
                     if (target != null && !(target is MethodDefinition))
                     {
+                        // A MethodSpec (generic instantiation such as IsNullOrEmpty<byte>) must
+                        // stay a member reference: replacing it with the open definition would
+                        // leave !!0 unbound and the JIT rejects the body.
+                        if (target is MethodSpecification)
+                        {
+                            continue;
+                        }
+
                         // Interface calls must stay member references: a callvirt with a
                         // MethodDef token of an interface method is not valid IL.
                         TypeDefinition declaring = target.DeclaringType == null
@@ -591,7 +614,7 @@ namespace ILXP.Interop
                         if (declaring == null || !declaring.IsInterface)
                         {
                             MethodDefinition definition = FindMethodDefinition(module, target);
-                            if (definition != null)
+                            if (definition != null && !definition.HasGenericParameters)
                             {
                                 instruction.Operand = definition;
                             }
@@ -1005,10 +1028,21 @@ namespace ILXP.Interop
                 name = name.Substring(dot + 1);
             }
 
-            TypeDefinition type = new TypeDefinition(namespaceName, name, attributes);
+            TypeDefinition type = FindTopLevel(assembly.MainModule, namespaceName, name);
+            if (type == null)
+            {
+                type = new TypeDefinition(namespaceName, name, attributes);
+                assembly.MainModule.Types.Add(type);
+            }
+            else
+            {
+                type.Attributes = attributes;
+            }
 
-            // Generic parameters first: base type and interface list can refer to them.
+            // The base type and interface list can refer to this type's own parameters,
+            // so the parameters and the owner context come first.
             ApplyGenericParameters(type, name);
+            CurrentTypeOwner = type;
 
             if (!string.IsNullOrEmpty(extends))
             {
@@ -1019,7 +1053,6 @@ namespace ILXP.Interop
                 type.BaseType = assembly.MainModule.TypeSystem.Object;
             }
             AttachInterfaces(type, assembly.MainModule, interfaces);
-            assembly.MainModule.Types.Add(type);
             ApplyArrayInitSize(type);
             return type;
         }
@@ -1140,8 +1173,39 @@ namespace ILXP.Interop
                 // Interface references keep their shape, including generic arguments, so
                 // an assembly that implements the same interface for several type arguments
                 // keeps all of its entries. The type itself is the owner of "!N".
-                type.Interfaces.Add(ResolveTypeWithOwner(module, name, type, null));
+                TypeReference reference = ResolveTypeWithOwner(module, name, type, null);
+                if (reference == null)
+                {
+                    continue;
+                }
+
+                bool exists = false;
+                foreach (TypeReference existing in type.Interfaces)
+                {
+                    if (string.Equals(existing.FullName, reference.FullName, StringComparison.Ordinal))
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    type.Interfaces.Add(reference);
+                }
             }
+        }
+
+        private static TypeDefinition FindTopLevel(ModuleDefinition module, string namespaceName, string name)
+        {
+            foreach (TypeDefinition type in module.Types)
+            {
+                if (string.Equals(type.Namespace, namespaceName, StringComparison.Ordinal) &&
+                    string.Equals(type.Name, name, StringComparison.Ordinal))
+                {
+                    return type;
+                }
+            }
+            return null;
         }
 
         /// <summary>Field visibility keyword to attribute, mirroring the IL text.</summary>
@@ -1763,7 +1827,8 @@ namespace ILXP.Interop
                 ApplyGenericParameterNames(method, genericNames);
             }
 
-            method.ReturnType = ResolveTypeWithOwner(type.MainModule(), returnTypeName, type, method);
+            method.ReturnType = ResolveTypeWithOwner(type.MainModule(), returnTypeName, type, method)
+                ?? type.MainModule().TypeSystem.Object;
 
             if (parameters.Length > 0)
             {
@@ -1779,7 +1844,8 @@ namespace ILXP.Interop
                     string parameterType = space > 0 ? parameter.Substring(0, space).Trim() : parameter;
                     string parameterName = space > 0 ? parameter.Substring(space + 1).Trim() : "arg" + method.Parameters.Count;
                     method.Parameters.Add(new ParameterDefinition(parameterName, ParameterAttributes.None,
-                        ResolveTypeWithOwner(type.MainModule(), parameterType, type, method)));
+                        ResolveTypeWithOwner(type.MainModule(), parameterType, type, method)
+                            ?? type.MainModule().TypeSystem.Object));
                 }
             }
 
@@ -2457,11 +2523,12 @@ namespace ILXP.Interop
 
             string clean = name.Trim();
 
-            if (clean.StartsWith("!", StringComparison.Ordinal) &&
-                Environment.GetEnvironmentVariable("ILXP_TRACE_GENERIC") == "1")
+            // A generic parameter without an explicit owner is resolved against the member
+            // currently being built (see CurrentTypeOwner / CurrentMethodOwner).
+            if (clean.StartsWith("!", StringComparison.Ordinal))
             {
-                System.IO.File.AppendAllText(System.IO.Path.Combine(System.IO.Path.GetTempPath(), "ilxp-generic.txt"),
-                    "ResolveType('" + name + "')" + Environment.NewLine + Environment.StackTrace + Environment.NewLine);
+                TypeReference parameter = ResolveTypeWithOwner(module, clean, CurrentTypeOwner, CurrentMethodOwner);
+                return parameter ?? module.TypeSystem.Object;
             }
 
             // "&" marks a by-reference type, "*" a pointer; "[,]" and "[]" may nest.
@@ -2521,7 +2588,8 @@ namespace ILXP.Interop
                             string text = argument.Trim();
                             if (text.Length > 0)
                             {
-                                instance.GenericArguments.Add(ResolveTypeWithOwner(module, text, genericBase));
+                                instance.GenericArguments.Add(ResolveTypeWithOwner(module, text, genericBase, null)
+                                    ?? module.TypeSystem.Object);
                             }
                         }
                         return WrapType(instance, ranks, byRef, pointers);
@@ -2745,6 +2813,10 @@ namespace ILXP.Interop
             return -1;
         }
 
+        /// <summary>Declaring type / method of the member currently being built.</summary>
+        private static TypeReference CurrentTypeOwner;
+        private static MethodDefinition CurrentMethodOwner;
+
         /// <summary>Resolver used for signature checks (value types) while assembling.</summary>
         private static readonly CecilAssemblyResolver Resolver = new CecilAssemblyResolver();
 
@@ -2817,7 +2889,20 @@ namespace ILXP.Interop
                     }
                 }
 
-                return ResolveType(module, text);
+                // The operand may belong to the caller (a MethodSpec argument such as
+                // "Array.IndexOf<!0>"), so retry in the context of the member being built.
+                if (CurrentTypeOwner != null || CurrentMethodOwner != null)
+                {
+                    if (!ReferenceEquals(typeOwner, CurrentTypeOwner) ||
+                        !ReferenceEquals(methodOwner, CurrentMethodOwner))
+                    {
+                        return DecorateType(
+                            ResolveTypeWithOwner(module, text, CurrentTypeOwner, CurrentMethodOwner),
+                            string.Empty);
+                    }
+                }
+
+                return null;
             }
 
             int tick = name.IndexOf('`');
@@ -2834,7 +2919,8 @@ namespace ILXP.Interop
                         string part = argument.Trim();
                         if (part.Length > 0)
                         {
-                            instance.GenericArguments.Add(ResolveTypeWithOwner(module, part, typeOwner, methodOwner));
+                            instance.GenericArguments.Add(ResolveTypeWithOwner(module, part, typeOwner, methodOwner)
+                                        ?? module.TypeSystem.Object);
                         }
                     }
                     // Anything after the closing '>' is decoration ("List`1<Int32>&").
@@ -3034,14 +3120,16 @@ namespace ILXP.Interop
                     method.GenericParameters.Add(new GenericParameter(method));
                 }
 
-                method.ReturnType = ResolveTypeWithOwner(module, returnTypeName, declaring, method);
+                method.ReturnType = ResolveTypeWithOwner(module, returnTypeName, declaring, method)
+                    ?? module.TypeSystem.Object;
 
                 List<TypeReference> parameterTypes = new List<TypeReference>();
                 foreach (string parameter in parameterTexts)
                 {
                     // The signature belongs to the member reference being built, so its VAR
                     // indices refer to that method's own generic parameters.
-                    parameterTypes.Add(ResolveTypeWithOwner(module, parameter, declaring, method));
+                    parameterTypes.Add(ResolveTypeWithOwner(module, parameter, declaring, method)
+                        ?? module.TypeSystem.Object);
                 }
 
                 // Prefer the real definition: it carries the correct static/instance flag and
@@ -3101,7 +3189,8 @@ namespace ILXP.Interop
                         string argument = part.Trim();
                         if (argument.Length > 0)
                         {
-                            spec.GenericArguments.Add(ResolveTypeWithOwner(module, argument, declaring, method));
+                            spec.GenericArguments.Add(ResolveTypeWithOwner(module, argument, declaring, method)
+                            ?? module.TypeSystem.Object);
                         }
                     }
                     return spec;
@@ -3382,7 +3471,8 @@ namespace ILXP.Interop
                                     if (part.Length > 0)
                                     {
                                         instance.GenericArguments.Add(
-                                            ResolveTypeWithOwner(module, part, genericBase, owner));
+                                            ResolveTypeWithOwner(module, part, genericBase, owner)
+                                                ?? module.TypeSystem.Object);
                                     }
                                 }
                                 return WrapType(instance, ranks, byRef, pointers);

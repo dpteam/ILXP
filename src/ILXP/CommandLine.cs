@@ -86,6 +86,8 @@ namespace ILXP
                         return FixpointCommand(options);
                     case "callgraph":
                         return CallGraphCommand(options);
+                    case "ilverify":
+                        return IlVerifyCommand(options);
                     case "headless":
                         return HeadlessShell.Run(Console.In, Console.Out);
                     case "music":
@@ -707,6 +709,16 @@ namespace ILXP
             return 0;
         }
 
+        /// <summary>Structural verification of every method body (stack, branches, handlers).</summary>
+        private static int IlVerifyCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            VerificationReport report = IlVerifier.Verify(assembly);
+            Console.WriteLine("assembly      : " + assembly.Name.FullName);
+            Console.Write(report.Format(options.MaxResults > 0 ? options.MaxResults : 20));
+            return report.InvalidBodies == 0 ? 0 : 1;
+        }
+
         /// <summary>Call graph: fan-in/fan-out, orphans and recursion cycles.</summary>
         private static int CallGraphCommand(Options options)
         {
@@ -1112,6 +1124,7 @@ namespace ILXP
             Console.WriteLine("  ILXP --fixpoint <assembly> [--iterations <n>]");
             Console.WriteLine("                                           decompile -> reassemble -> diff (quality metric)");
             Console.WriteLine("  ILXP --callgraph <assembly> [--max <n>]  fan-in/fan-out, orphans, recursion cycles");
+            Console.WriteLine("  ILXP --ilverify <assembly> [--max <n>]  structural check of every method body");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
@@ -1297,6 +1310,10 @@ namespace ILXP
                             break;
                         case "--callgraph":
                             options.Command = "callgraph";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--ilverify":
+                            options.Command = "ilverify";
                             options.Input = Next(args, ref i, argument);
                             break;
                         case "--iterations":

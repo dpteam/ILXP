@@ -373,10 +373,7 @@ namespace ILXP.Interop
             for (int i = 0; i < body.Variables.Count; i++)
             {
                 VariableDefinition variable = body.Variables[i];
-                // PDB names are optional; a synthetic name keeps the IL text self-consistent,
-                // because instructions refer to locals by name.
-                string name = string.IsNullOrEmpty(variable.Name) ? "V_" + i : variable.Name;
-                text.Append(pad).Append("  .locals init (").Append(TypeName(variable.VariableType)).Append(' ').AppendLine(name + ")");
+                text.Append(pad).Append("  .locals init (").Append(TypeName(variable.VariableType)).Append(' ').AppendLine(LocalName(variable) + ")");
             }
 
             Dictionary<Instruction, int> indices = new Dictionary<Instruction, int>(body.Instructions.Count);
@@ -463,6 +460,51 @@ namespace ILXP.Interop
 
             groups.Sort(delegate(HandlerGroup a, HandlerGroup b) { return a.TryStart.CompareTo(b.TryStart); });
             return groups;
+        }
+
+        /// <summary>True when no other parameter of the same method shares this name.</summary>
+        private static bool IsUniqueParameterName(ParameterDefinition parameter)
+        {
+            IMethodSignature method = parameter.Method;
+            if (method == null)
+            {
+                return true;
+            }
+
+            int matches = 0;
+            foreach (ParameterDefinition candidate in method.Parameters)
+            {
+                if (string.Equals(candidate.Name, parameter.Name, StringComparison.Ordinal))
+                {
+                    matches++;
+                    if (matches > 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Name used for a local in the IL text: the slot index plus the PDB name, if any.
+        /// The index prefix makes the name unique — compilers reuse names such as "value",
+        /// and instructions refer to locals by name.
+        /// </summary>
+        private static string LocalName(VariableDefinition variable)
+        {
+            string prefix = "V_" + variable.Index.ToString(CultureInfo.InvariantCulture);
+            if (string.IsNullOrEmpty(variable.Name))
+            {
+                return prefix;
+            }
+
+            StringBuilder text = new StringBuilder(prefix).Append('_');
+            foreach (char c in variable.Name)
+            {
+                text.Append(char.IsLetterOrDigit(c) || c == '_' ? c : '_');
+            }
+            return text.ToString();
         }
 
         /// <summary>Emits instructions [start, end) and the protected regions nested in them.</summary>
@@ -625,14 +667,13 @@ namespace ILXP.Interop
 
             if (operand is VariableDefinition)
             {
-                VariableDefinition variable = (VariableDefinition)operand;
-                return name + " " + (string.IsNullOrEmpty(variable.Name) ? "V_" + variable.Index : variable.Name);
+                return name + " " + LocalName((VariableDefinition)operand);
             }
 
             if (operand is ParameterDefinition)
             {
                 ParameterDefinition parameter = (ParameterDefinition)operand;
-                if (!string.IsNullOrEmpty(parameter.Name))
+                if (!string.IsNullOrEmpty(parameter.Name) && IsUniqueParameterName(parameter))
                 {
                     return name + " " + parameter.Name;
                 }

@@ -100,6 +100,8 @@ namespace ILXP.Tests
                 TestFixpoint();
                 TestCallGraph();
                 TestExceptionHandlers();
+                TestIlVerifier();
+                TestFixpointExceptionHandlers();
             }
             finally
             {
@@ -502,6 +504,52 @@ namespace ILXP.Tests
             Check("callgraph lists top callers", result.Output.Contains("top callers"), result.Output);
             Check("callgraph lists fan-in", result.Output.Contains("fan-in"), result.Output);
             Check("callgraph lists orphans", result.Output.Contains("orphans"), result.Output);
+        }
+
+        private static void TestIlVerifier()
+        {
+            Section("IL verifier");
+
+            CommandResult clean = RunIlxp("--ilverify", ilxpPath, "--max", "5");
+            Check("ilverify runs", clean.ExitCode == 0, clean.ToString());
+            Check("ilverify checks every body", clean.Output.Contains("bodies checked:"), clean.Output);
+            Check("ilverify finds no invalid body in the original", clean.Output.Contains("invalid bodies: 0"), clean.Output);
+
+            // A hand-written body with a stack imbalance must be reported.
+            string broken = Path.Combine(workspace, "broken.il");
+            File.WriteAllText(broken,
+                ".assembly extern mscorlib { }\r\n" +
+                ".assembly 'Broken' { }\r\n" +
+                ".class public auto ansi 'B' extends [mscorlib]System.Object\r\n" +
+                "{\r\n" +
+                "  .method public hidebysig static int32 'Bad'() cil managed\r\n" +
+                "  {\r\n" +
+                "    .maxstack 1\r\n" +
+                "    IL_0000: ldc.i4.1\r\n" +
+                "    IL_0001: ldc.i4.2\r\n" +
+                "    IL_0002: ret\r\n" +
+                "  }\r\n" +
+                "}\r\n");
+
+            string brokenDll = Path.Combine(workspace, "broken.dll");
+            CommandResult asm = RunIlxp("--ilasm", broken, "--output", brokenDll, "--dll");
+            Check("broken IL assembles", asm.ExitCode == 0, asm.ToString());
+
+            CommandResult verify = RunIlxp("--ilverify", brokenDll, "--max", "5");
+            Check("ilverify fails on a bad body", verify.ExitCode != 0, verify.ToString());
+            Check("ilverify names the offending method", verify.Output.Contains("Bad"), verify.Output);
+            Check("ilverify reports the problem", verify.Output.Contains("stack"), verify.Output);
+        }
+
+        private static void TestFixpointExceptionHandlers()
+        {
+            Section("Fixpoint covers exception handlers");
+
+            CommandResult result = RunIlxp("--fixpoint", ilxpPath, "--max", "3");
+            Check("fixpoint reports verification", result.Output.Contains("verification"), result.Output);
+            Check("round trip keeps every body valid",
+                result.Output.Contains("0 invalid bodies in the original, 0 after the round trip"),
+                result.Output);
         }
 
         private static void TestExceptionHandlers()

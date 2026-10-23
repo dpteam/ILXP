@@ -21,6 +21,8 @@ namespace ILXP
         public int RoundTripMethods;
         public int TotalBodies;
         public int ChangedBodies;
+        public VerificationReport OriginalVerification;
+        public VerificationReport RoundTripVerification;
         public bool Reassembled;
         public string Error;
 
@@ -121,6 +123,8 @@ namespace ILXP
                         result.Diff = AssemblyDiff.Compare(original, rebuilt);
                         CountBodies(original, result);
                         DumpBodyIfRequested(original, rebuilt);
+                        result.OriginalVerification = IlVerifier.Verify(original);
+                        result.RoundTripVerification = IlVerifier.Verify(rebuilt);
                     }
 
                     current = roundTrip;
@@ -321,6 +325,20 @@ namespace ILXP
             text.AppendLine(string.Format("fidelity      : {0:0.00}%", result.Fidelity));
             text.AppendLine(string.Format("body fidelity : {0:0.00}%  ({1} of {2} method bodies unchanged)",
                 result.BodyFidelity, result.TotalBodies - result.ChangedBodies, result.TotalBodies));
+
+            if (result.RoundTripVerification != null)
+            {
+                VerificationReport originalCheck = result.OriginalVerification;
+                VerificationReport rebuiltCheck = result.RoundTripVerification;
+                text.AppendLine(string.Format("verification  : {0} invalid bodies in the original, {1} after the round trip",
+                    originalCheck == null ? 0 : originalCheck.InvalidBodies,
+                    rebuiltCheck.InvalidBodies));
+
+                foreach (VerificationIssue issue in rebuiltCheck.Issues)
+                {
+                    text.AppendLine("  ! " + issue);
+                }
+            }
 
             if (result.Diff != null)
             {
