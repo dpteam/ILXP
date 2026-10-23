@@ -328,6 +328,13 @@ namespace ILXP.Interop
 
             MethodBody body = method.Body;
             text.Append(pad).Append("  .maxstack ").AppendLine(body.MaxStackSize.ToString(CultureInfo.InvariantCulture));
+
+            // Explicit interface implementations and method overrides live in the MethodImpl
+            // table; without them interface dispatch fails at runtime.
+            foreach (MethodReference @override in method.Overrides)
+            {
+                text.Append(pad).Append("  .override ").AppendLine(MemberName(@override));
+            }
             if (method.Module != null && ReferenceEquals(method.Module.EntryPoint, method))
             {
                 text.Append(pad).AppendLine("  .entrypoint");
@@ -342,15 +349,199 @@ namespace ILXP.Interop
                 text.Append(pad).Append("  .locals init (").Append(TypeName(variable.VariableType)).Append(' ').AppendLine(name + ")");
             }
 
-            foreach (Instruction instruction in body.Instructions)
+            Dictionary<Instruction, int> indices = new Dictionary<Instruction, int>(body.Instructions.Count);
+            for (int i = 0; i < body.Instructions.Count; i++)
             {
-                text.Append(pad).Append("  IL_").Append(instruction.Offset.ToString("x4", CultureInfo.InvariantCulture)).Append(": ");
-                text.Append(OpCodeText(instruction));
-                text.AppendLine();
+                indices[body.Instructions[i]] = i;
             }
+
+            List<HandlerGroup> groups = BuildHandlerGroups(body, indices);
+            WriteRange(text, method, groups, indices, 0, body.Instructions.Count, pad + "  ");
 
             text.Append(pad).AppendLine("}");
             text.AppendLine();
+        }
+
+        /// <summary>
+        /// All exception handlers that share one protected region. ILAsm writes such a group as
+        /// a single <c>.try</c> block followed by one clause per handler, so the handlers are
+        /// grouped here to keep that structure.
+        /// </summary>
+        private sealed class HandlerGroup
+        {
+            public int TryStart;
+            public int TryEnd;
+            public int SpanEnd;
+            public List<ExceptionHandler> Handlers = new List<ExceptionHandler>();
+        }
+
+        private static List<HandlerGroup> BuildHandlerGroups(MethodBody body,
+            Dictionary<Instruction, int> indices)
+        {
+            List<HandlerGroup> groups = new List<HandlerGroup>();
+            if (!body.HasExceptionHandlers)
+            {
+                return groups;
+            }
+
+            foreach (ExceptionHandler handler in body.ExceptionHandlers)
+            {
+                int tryStart;
+                int tryEnd;
+                if (!indices.TryGetValue(handler.TryStart, out tryStart) ||
+                    !indices.TryGetValue(handler.TryEnd, out tryEnd))
+                {
+                    Log.Warn("Exception handler with unknown boundaries skipped.");
+                    continue;
+                }
+
+                HandlerGroup group = null;
+                foreach (HandlerGroup candidate in groups)
+                {
+                    if (candidate.TryStart == tryStart && candidate.TryEnd == tryEnd)
+                    {
+                        group = candidate;
+                        break;
+                    }
+                }
+
+                if (group == null)
+                {
+                    group = new HandlerGroup { TryStart = tryStart, TryEnd = tryEnd };
+                    groups.Add(group);
+                }
+
+                group.Handlers.Add(handler);
+
+                // The construct ends where the last block of the group ends.
+                int handlerEnd = indices.ContainsKey(handler.HandlerEnd) ? indices[handler.HandlerEnd] : tryEnd;
+                if (handlerEnd > group.SpanEnd)
+                {
+                    group.SpanEnd = handlerEnd;
+                }
+            }
+
+            foreach (HandlerGroup group in groups)
+            {
+                group.Handlers.Sort(delegate(ExceptionHandler a, ExceptionHandler b)
+                {
+                    int left = indices.ContainsKey(a.HandlerStart) ? indices[a.HandlerStart] : 0;
+                    int right = indices.ContainsKey(b.HandlerStart) ? indices[b.HandlerStart] : 0;
+                    return left.CompareTo(right);
+                });
+            }
+
+            groups.Sort(delegate(HandlerGroup a, HandlerGroup b) { return a.TryStart.CompareTo(b.TryStart); });
+            return groups;
+        }
+
+        /// <summary>Emits instructions [start, end) and the protected regions nested in them.</summary>
+        private static void WriteRange(StringBuilder text, MethodDefinition method, List<HandlerGroup> groups,
+            Dictionary<Instruction, int> indices, int start, int end, string pad)
+        {
+            int cursor = start;
+            foreach (HandlerGroup group in DirectChildren(groups, start, end))
+            {
+                WriteInstructions(text, method, cursor, group.TryStart, pad);
+                WriteGroup(text, method, groups, indices, group, pad);
+                cursor = group.SpanEnd;
+            }
+            WriteInstructions(text, method, cursor, end, pad);
+        }
+
+        /// <summary>
+        /// Groups contained in [start, end) that are not contained in another such group.
+        /// Choosing only the outermost ones keeps every construct emitted exactly once.
+        /// </summary>
+        private static List<HandlerGroup> DirectChildren(List<HandlerGroup> groups, int start, int end)
+        {
+            List<HandlerGroup> inside = new List<HandlerGroup>();
+            foreach (HandlerGroup group in groups)
+            {
+                if (group.TryStart >= start && group.SpanEnd <= end)
+                {
+                    inside.Add(group);
+                }
+            }
+
+            List<HandlerGroup> direct = new List<HandlerGroup>();
+            foreach (HandlerGroup group in inside)
+            {
+                bool nested = false;
+                foreach (HandlerGroup other in inside)
+                {
+                    if (ReferenceEquals(other, group))
+                    {
+                        continue;
+                    }
+                    if (other.TryStart <= group.TryStart && other.SpanEnd >= group.SpanEnd)
+                    {
+                        nested = true;
+                        break;
+                    }
+                }
+                if (!nested)
+                {
+                    direct.Add(group);
+                }
+            }
+
+            direct.Sort(delegate(HandlerGroup a, HandlerGroup b) { return a.TryStart.CompareTo(b.TryStart); });
+            return direct;
+        }
+
+        /// <summary>Emits one <c>.try</c> block with its <c>catch</c>/<c>finally</c> clauses.</summary>
+        private static void WriteGroup(StringBuilder text, MethodDefinition method, List<HandlerGroup> groups,
+            Dictionary<Instruction, int> indices, HandlerGroup group, string pad)
+        {
+            text.Append(pad).AppendLine(".try");
+            text.Append(pad).AppendLine("{");
+            WriteRange(text, method, groups, indices, group.TryStart, group.TryEnd, pad + "  ");
+            text.Append(pad).AppendLine("}");
+
+            foreach (ExceptionHandler handler in group.Handlers)
+            {
+                int handlerStart = indices.ContainsKey(handler.HandlerStart) ? indices[handler.HandlerStart] : group.TryEnd;
+                int handlerEnd = indices.ContainsKey(handler.HandlerEnd) ? indices[handler.HandlerEnd] : group.TryEnd;
+
+                if (handler.HandlerType == ExceptionHandlerType.Filter)
+                {
+                    int filterStart = indices.ContainsKey(handler.FilterStart) ? indices[handler.FilterStart] : handlerStart;
+                    text.Append(pad).AppendLine("filter");
+                    text.Append(pad).AppendLine("{");
+                    WriteRange(text, method, groups, indices, filterStart, handlerStart, pad + "  ");
+                    text.Append(pad).AppendLine("}");
+                }
+                else if (handler.HandlerType == ExceptionHandlerType.Catch)
+                {
+                    text.Append(pad).Append("catch ").AppendLine(TypeName(handler.CatchType));
+                }
+                else if (handler.HandlerType == ExceptionHandlerType.Finally)
+                {
+                    text.Append(pad).AppendLine("finally");
+                }
+                else
+                {
+                    text.Append(pad).AppendLine("fault");
+                }
+
+                text.Append(pad).AppendLine("{");
+                WriteRange(text, method, groups, indices, handlerStart, handlerEnd, pad + "  ");
+                text.Append(pad).AppendLine("}");
+            }
+        }
+
+        private static void WriteInstructions(StringBuilder text, MethodDefinition method, int start, int end,
+            string pad)
+        {
+            IList<Instruction> instructions = method.Body.Instructions;
+            for (int i = start; i < end && i < instructions.Count; i++)
+            {
+                Instruction instruction = instructions[i];
+                text.Append(pad).Append("IL_").Append(instruction.Offset.ToString("x4", CultureInfo.InvariantCulture)).Append(": ");
+                text.Append(OpCodeText(instruction));
+                text.AppendLine();
+            }
         }
 
         private static string OpCodeText(Instruction instruction)
@@ -541,6 +732,15 @@ namespace ILXP.Interop
         {
             string fullName = type.FullName;
             IMetadataScope scope = type.Scope;
+
+            // A type defined in this very module is written as "[.module]" so the assembler
+            // does not mistake it for a mscorlib type; that matters for forward references,
+            // i.e. when a base type or interface is declared further down in the file.
+            if (scope is ModuleDefinition)
+            {
+                return "[.module]" + fullName;
+            }
+
             AssemblyNameReference reference = scope as AssemblyNameReference;
             if (reference == null || string.Equals(reference.Name, "mscorlib", StringComparison.OrdinalIgnoreCase))
             {

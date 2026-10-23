@@ -99,6 +99,7 @@ namespace ILXP.Tests
                 TestBundle();
                 TestFixpoint();
                 TestCallGraph();
+                TestExceptionHandlers();
             }
             finally
             {
@@ -501,6 +502,110 @@ namespace ILXP.Tests
             Check("callgraph lists top callers", result.Output.Contains("top callers"), result.Output);
             Check("callgraph lists fan-in", result.Output.Contains("fan-in"), result.Output);
             Check("callgraph lists orphans", result.Output.Contains("orphans"), result.Output);
+        }
+
+        private static void TestExceptionHandlers()
+        {
+            Section("Exception handlers (try / catch / finally / filter)");
+
+            // Hand-written IL exercises the parser directly, including the handler block
+            // that follows a filter without a keyword.
+            string source = Path.Combine(workspace, "handlers.il");
+            File.WriteAllText(source,
+                ".assembly extern mscorlib { }\r\n" +
+                ".assembly 'Handlers' { }\r\n" +
+                ".class public auto ansi 'T' extends [mscorlib]System.Object\r\n" +
+                "{\r\n" +
+                "  .method public hidebysig static void 'Run'() cil managed\r\n" +
+                "  {\r\n" +
+                "    .maxstack 2\r\n" +
+                "    .locals init (object V_0)\r\n" +
+                "    .try\r\n" +
+                "    {\r\n" +
+                "      IL_0000: nop\r\n" +
+                "      IL_0001: newobj instance void [mscorlib]System.Exception::.ctor()\r\n" +
+                "      IL_0006: throw\r\n" +
+                "    }\r\n" +
+                "    catch [mscorlib]System.Exception\r\n" +
+                "    {\r\n" +
+                "      IL_0007: stloc.0\r\n" +
+                "      IL_0008: leave.s IL_0010\r\n" +
+                "    }\r\n" +
+                "    IL_0010: ret\r\n" +
+                "  }\r\n" +
+                "  .method public hidebysig static void 'Guarded'() cil managed\r\n" +
+                "  {\r\n" +
+                "    .maxstack 1\r\n" +
+                "    .try\r\n" +
+                "    {\r\n" +
+                "      IL_0000: nop\r\n" +
+                "      IL_0001: leave.s IL_0003\r\n" +
+                "    }\r\n" +
+                "    finally\r\n" +
+                "    {\r\n" +
+                "      IL_0002: endfinally\r\n" +
+                "    }\r\n" +
+                "    IL_0003: ret\r\n" +
+                "  }\r\n" +
+                "  .method public hidebysig static void 'Filtered'() cil managed\r\n" +
+                "  {\r\n" +
+                "    .maxstack 1\r\n" +
+                "    .try\r\n" +
+                "    {\r\n" +
+                "      IL_0000: nop\r\n" +
+                "      IL_0001: leave.s IL_0004\r\n" +
+                "    }\r\n" +
+                "    filter\r\n" +
+                "    {\r\n" +
+                "      IL_0002: ldc.i4.1\r\n" +
+                "      IL_0003: endfilter\r\n" +
+                "    }\r\n" +
+                "    {\r\n" +
+                "      IL_0004: nop\r\n" +
+                "      IL_0005: leave.s IL_0006\r\n" +
+                "    }\r\n" +
+                "    IL_0006: ret\r\n" +
+                "  }\r\n" +
+                "}\r\n");
+
+            string assembly = Path.Combine(workspace, "handlers.dll");
+            CommandResult asm = RunIlxp("--ilasm", source, "--output", assembly, "--dll");
+            Check("handler IL assembles", asm.ExitCode == 0, asm.ToString());
+            Check("handler IL assembles without warnings", !asm.Output.Contains("warning"), asm.Output);
+
+            CommandResult disasm = RunIlxp("--ildasm", assembly);
+            Check("assembled handlers disassemble", disasm.ExitCode == 0, disasm.ToString());
+            Check("catch clause round-trips", disasm.Output.Contains("catch System.Exception"), disasm.Output);
+            Check("finally clause round-trips", disasm.Output.Contains("finally"), disasm.Output);
+            Check("filter clause round-trips", disasm.Output.Contains("filter"), disasm.Output);
+
+            // The real assembly must round-trip its handler tables as well.
+            string il = Path.Combine(workspace, "handlers-ilxp.il");
+            RunIlxp("--ildasm", ilxpPath, "--output", il);
+            int original = CountOccurrences(File.ReadAllText(il), ".try");
+
+            string rebuilt = Path.Combine(workspace, "handlers-ilxp.dll");
+            RunIlxp("--ilasm", il, "--output", rebuilt, "--dll");
+            string second = Path.Combine(workspace, "handlers-ilxp-2.il");
+            RunIlxp("--ildasm", rebuilt, "--output", second);
+            int roundTripped = CountOccurrences(File.ReadAllText(second), ".try");
+
+            Check("ILXP.exe has protected regions", original > 0, "no .try found");
+            Check("handler count survives reassembly", original == roundTripped,
+                original + " vs " + roundTripped);
+            Console.WriteLine("    protected regions: " + original);
+        }
+
+        private static int CountOccurrences(string text, string value)
+        {
+            int count = 0;
+            int index = 0;
+            while ((index = text.IndexOf(value, index, StringComparison.Ordinal)) >= 0)
+            {
+                count++;
+                index += value.Length;
+            }
+            return count;
         }
 
         private static double ExtractPercent(string output, string label)

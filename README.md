@@ -209,15 +209,17 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
 * **Call graph** (`Edit → Call graph…`, `--callgraph`) — fan-out, fan-in, methods with no
   internal caller, recursion cycles (iterative Tarjan) and the number of external calls.
 * **Fixpoint test** (`--fixpoint`) — decompiles to IL, reassembles with the managed assembler
-  and diffs the result against the original. This is the honest quality metric for the
-  pipeline: **100 %** member fidelity and **99.97 %** body fidelity on `ILXP.exe`
-  (3988 of 3989 method bodies byte-identical instruction streams), and 99.99 % / 99.96 % on
-  `System.Core.dll`. Repeating the round trip (`--iterations 3`) stays stable.
-* **Round-trip capable IL assembler** — `.property` / `.event` directives, nested types,
-  `implements` lists, generic types and generic methods, P/Invoke declarations, static field
-  data (`.data … at I_xxxx`), entry point, assembly scopes (`[System.Core]`) and public key
-  tokens. Exception handler tables (`.try` / `.catch` / `.finally`) are the remaining gap and
-  are reported as such by the fixpoint test.
+  and diffs the result against the original, including the exception-handler tables. This is
+  the honest quality metric for the pipeline: **100 %** member fidelity and **100 %** body
+  fidelity on `ILXP.exe` (4012 of 4012 method bodies identical, 753 protected regions), and
+  99.99 % / 99.95 % on `System.Core.dll`. Repeating the round trip (`--iterations 3`) is stable.
+* **Round-trip capable IL assembler** — `.property` / `.event` directives, `.try` / `catch` /
+  `finally` / `filter` / `fault` handler tables, `.override` (explicit interface
+  implementations), nested types, `implements` lists, generic types and generic methods,
+  P/Invoke declarations, static field data (`.data … at I_xxxx`), entry point, assembly scopes
+  (`[System.Core]`), `[.module]` for forward references and public key tokens.
+  Assemblies that are reassembled at this level actually run: a small program with lambdas,
+  LINQ, generics, delegates and `try/catch/finally` round-trips into a working executable.
 
 ## Repository layout
 

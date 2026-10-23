@@ -397,7 +397,11 @@ namespace ILXP
             return Hash(BodyText(body));
         }
 
-        /// <summary>The exact text a body is hashed from; useful when debugging a diff.</summary>
+        /// <summary>
+        /// The exact text a body is hashed from; useful when debugging a diff. Exception
+        /// handlers are part of the body: without them a method that catches exceptions is
+        /// not equivalent, so their shape is included in the hash.
+        /// </summary>
         internal static string BodyText(MethodBody body)
         {
             StringBuilder text = new StringBuilder();
@@ -410,7 +414,79 @@ namespace ILXP
                 }
                 text.Append(';');
             }
+
+            if (body.HasExceptionHandlers)
+            {
+                Dictionary<Instruction, int> indices = new Dictionary<Instruction, int>(body.Instructions.Count);
+                for (int i = 0; i < body.Instructions.Count; i++)
+                {
+                    indices[body.Instructions[i]] = i;
+                }
+
+                text.Append("|handlers:");
+
+                // Handlers that guard the same region form a group whose order is semantic
+                // (first match wins). Nested groups are reordered by the IL text form, so
+                // groups are compared by their protected region instead of by table order.
+                List<KeyValuePair<long, List<ExceptionHandler>>> groups =
+                    new List<KeyValuePair<long, List<ExceptionHandler>>>();
+                foreach (ExceptionHandler handler in body.ExceptionHandlers)
+                {
+                    int tryStart = Index(indices, handler.TryStart);
+                    int tryEnd = Index(indices, handler.TryEnd);
+                    long key = ((long)tryStart << 32) | (uint)tryEnd;
+
+                    List<ExceptionHandler> group = null;
+                    foreach (KeyValuePair<long, List<ExceptionHandler>> candidate in groups)
+                    {
+                        if (candidate.Key == key)
+                        {
+                            group = candidate.Value;
+                            break;
+                        }
+                    }
+                    if (group == null)
+                    {
+                        group = new List<ExceptionHandler>();
+                        groups.Add(new KeyValuePair<long, List<ExceptionHandler>>(key, group));
+                    }
+                    group.Add(handler);
+                }
+
+                groups.Sort(delegate(KeyValuePair<long, List<ExceptionHandler>> a,
+                    KeyValuePair<long, List<ExceptionHandler>> b) { return a.Key.CompareTo(b.Key); });
+
+                foreach (KeyValuePair<long, List<ExceptionHandler>> pair in groups)
+                {
+                    text.Append('{');
+                    foreach (ExceptionHandler handler in pair.Value)
+                    {
+                        text.Append(handler.HandlerType).Append('@');
+                        text.Append(Index(indices, handler.TryStart)).Append('-')
+                            .Append(Index(indices, handler.TryEnd)).Append('>')
+                            .Append(Index(indices, handler.HandlerStart)).Append('-')
+                            .Append(Index(indices, handler.HandlerEnd));
+                        if (handler.CatchType != null)
+                        {
+                            text.Append('/').Append(NormalizeTypeName(handler.CatchType.FullName));
+                        }
+                        if (handler.FilterStart != null)
+                        {
+                            text.Append("/filter").Append(Index(indices, handler.FilterStart));
+                        }
+                        text.Append(';');
+                    }
+                    text.Append('}');
+                }
+            }
+
             return text.ToString();
+        }
+
+        private static int Index(Dictionary<Instruction, int> indices, Instruction instruction)
+        {
+            int index;
+            return instruction != null && indices.TryGetValue(instruction, out index) ? index : -1;
         }
 
         private static string DescribeOperand(object operand)

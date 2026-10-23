@@ -34,6 +34,55 @@ namespace ILXP.Interop
             public MethodDefinition Method;
             public Dictionary<string, Instruction> Labels = new Dictionary<string, Instruction>(StringComparer.OrdinalIgnoreCase);
             public List<KeyValuePair<Instruction, string>> PendingTargets = new List<KeyValuePair<Instruction, string>>();
+
+            /// <summary>Nested blocks (.try / catch / finally / filter / fault) of the body.</summary>
+            public Stack<BlockInfo> Blocks = new Stack<BlockInfo>();
+
+            /// <summary>Block kind of the next "{" line, set by the preceding directive.</summary>
+            public BlockKind PendingKind;
+            public string PendingCatchType;
+
+            /// <summary>Handlers grouped by their protected region, resolved when the method ends.</summary>
+            public List<HandlerGroup> Groups = new List<HandlerGroup>();
+            public HandlerGroup CurrentGroup;
+            public HandlerRecord PendingFilter;
+        }
+
+        private enum BlockKind
+        {
+            None,
+            Try,
+            Catch,
+            Finally,
+            Fault,
+            Filter,
+            Handler
+        }
+
+        private sealed class BlockInfo
+        {
+            public BlockKind Kind;
+            public int StartIndex;
+            public string CatchType;
+
+            /// <summary>The protected region this handler clause belongs to.</summary>
+            public HandlerGroup Group;
+        }
+
+        private sealed class HandlerGroup
+        {
+            public int TryStart;
+            public int TryEnd;
+            public List<HandlerRecord> Handlers = new List<HandlerRecord>();
+        }
+
+        private sealed class HandlerRecord
+        {
+            public ExceptionHandlerType Kind;
+            public string CatchType;
+            public int HandlerStart;
+            public int HandlerEnd;
+            public int FilterStart;
         }
 
         public static List<string> LastWarnings { get; private set; }
@@ -227,18 +276,64 @@ namespace ILXP.Interop
                         ParseLocals(currentMethod, line);
                         continue;
                     }
-                    if (line.StartsWith(".try", StringComparison.OrdinalIgnoreCase) ||
-                        line.StartsWith(".catch", StringComparison.OrdinalIgnoreCase) ||
-                        line.StartsWith(".finally", StringComparison.OrdinalIgnoreCase) ||
-                        line.StartsWith(".filter", StringComparison.OrdinalIgnoreCase) ||
-                        line.StartsWith(".fault", StringComparison.OrdinalIgnoreCase))
+                    if (line.StartsWith(".override", StringComparison.OrdinalIgnoreCase))
                     {
-                        LastWarnings.Add("Exception handler directive skipped: " + line);
+                        object target = ResolveMethodOperand(currentMethod.Module,
+                            line.Substring(".override".Length).Trim(), OpCodes.Callvirt);
+                        MethodReference overridden = target as MethodReference;
+                        if (overridden != null)
+                        {
+                            currentMethod.Overrides.Add(overridden);
+                        }
+                        else
+                        {
+                            LastWarnings.Add("Unresolved .override skipped: " + line);
+                        }
                         continue;
                     }
+
+                    if (line.StartsWith(".try", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (line.IndexOf(" to ", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            LastWarnings.Add("Long-form .try directive skipped: " + line);
+                            continue;
+                        }
+
+                        methodContext.PendingKind = BlockKind.Try;
+                    }
+                    else if (line.StartsWith("catch", StringComparison.OrdinalIgnoreCase))
+                    {
+                        methodContext.PendingKind = BlockKind.Catch;
+                        methodContext.PendingCatchType = line.Substring(5).Trim();
+                    }
+                    else if (line.StartsWith("finally", StringComparison.OrdinalIgnoreCase))
+                    {
+                        methodContext.PendingKind = BlockKind.Finally;
+                    }
+                    else if (line.StartsWith("fault", StringComparison.OrdinalIgnoreCase))
+                    {
+                        methodContext.PendingKind = BlockKind.Fault;
+                    }
+                    else if (line.StartsWith("filter", StringComparison.OrdinalIgnoreCase))
+                    {
+                        methodContext.PendingKind = BlockKind.Filter;
+                    }
+
                     if (line.StartsWith("IL_", StringComparison.OrdinalIgnoreCase))
                     {
                         ParseInstruction(methodContext, line);
+                    }
+
+                    // Handler blocks are plain brace blocks; their boundaries are instruction
+                    // indices, so they are recorded while the body is still being read.
+                    for (int opened = 0; opened < open; opened++)
+                    {
+                        OpenBlock(methodContext);
+                    }
+                    for (int closed = 0; closed < close; closed++)
+                    {
+                        CloseBlock(methodContext);
                     }
 
                     // A method owns its braces: nested .try blocks must not close the
@@ -246,6 +341,7 @@ namespace ILXP.Interop
                     methodDepth += open - close;
                     if (methodDepth <= 0)
                     {
+                        MaterializeHandlers(methodContext);
                         ResolveBranches(methodContext);
                         currentMethod = null;
                         methodContext = null;
@@ -456,10 +552,18 @@ namespace ILXP.Interop
                     MethodReference target = instruction.Operand as MethodReference;
                     if (target != null && !(target is MethodDefinition))
                     {
-                        MethodDefinition definition = FindMethodDefinition(module, target);
-                        if (definition != null)
+                        // Interface calls must stay member references: a callvirt with a
+                        // MethodDef token of an interface method is not valid IL.
+                        TypeDefinition declaring = target.DeclaringType == null
+                            ? null
+                            : FindTypeDefinition(module, target.DeclaringType.FullName);
+                        if (declaring == null || !declaring.IsInterface)
                         {
-                            instruction.Operand = definition;
+                            MethodDefinition definition = FindMethodDefinition(module, target);
+                            if (definition != null)
+                            {
+                                instruction.Operand = definition;
+                            }
                         }
                     }
                 }
@@ -1223,6 +1327,36 @@ namespace ILXP.Interop
         }
 
         /// <summary>
+        /// Builds a type reference from a dotted namespace and a name that may still contain
+        /// nested separators ("List`1/Enumerator"). Nested parts become declaring types, which
+        /// is what the metadata requires.
+        /// </summary>
+        private static TypeReference BuildTypeReference(ModuleDefinition module, IMetadataScope scope,
+            string namespaceName, string typeName)
+        {
+            int slash = typeName.IndexOf('/');
+            if (slash < 0)
+            {
+                return new TypeReference(namespaceName, typeName, module, scope);
+            }
+
+            TypeReference current = new TypeReference(namespaceName, typeName.Substring(0, slash), module, scope);
+            string[] parts = typeName.Substring(slash + 1).Split('/');
+            foreach (string part in parts)
+            {
+                if (part.Length == 0)
+                {
+                    continue;
+                }
+
+                TypeReference nested = new TypeReference(string.Empty, part, module, scope);
+                nested.DeclaringType = current;
+                current = nested;
+            }
+            return current;
+        }
+
+        /// <summary>
         /// Returns the index of the last space outside angle brackets. Type names can contain
         /// spaces inside generic arguments ("Dictionary`2&lt;String, Int32&gt;"), so a plain
         /// LastIndexOf(' ') would split inside the type.
@@ -1664,6 +1798,175 @@ namespace ILXP.Interop
             }
         }
 
+        /// <summary>Records the start of a "{ ... }" block of the current method body.</summary>
+        private static void OpenBlock(MethodContext context)
+        {
+            BlockKind kind = context.PendingKind;
+            string catchType = context.PendingCatchType;
+            context.PendingKind = BlockKind.None;
+            context.PendingCatchType = null;
+
+            // The handler block of a filter follows the filter block without a keyword.
+            if (kind == BlockKind.None && context.PendingFilter != null)
+            {
+                kind = BlockKind.Handler;
+            }
+
+            BlockInfo block = new BlockInfo
+            {
+                Kind = kind,
+                StartIndex = context.Method.Body.Instructions.Count,
+                CatchType = catchType,
+                Group = context.CurrentGroup
+            };
+            context.Blocks.Push(block);
+        }
+
+        /// <summary>Records the end of a block and turns handler clauses into records.</summary>
+        private static void CloseBlock(MethodContext context)
+        {
+            if (context.Blocks.Count == 0)
+            {
+                return; // the method's own closing brace
+            }
+
+            BlockInfo block = context.Blocks.Pop();
+            int endIndex = context.Method.Body.Instructions.Count;
+
+            switch (block.Kind)
+            {
+                case BlockKind.Try:
+                    context.CurrentGroup = new HandlerGroup
+                    {
+                        TryStart = block.StartIndex,
+                        TryEnd = endIndex
+                    };
+                    context.Groups.Add(context.CurrentGroup);
+                    break;
+
+                case BlockKind.Catch:
+                case BlockKind.Finally:
+                case BlockKind.Fault:
+                {
+                    HandlerGroup group = block.Group ?? context.CurrentGroup;
+                    if (group == null)
+                    {
+                        LastWarnings.Add("Exception handler without a .try block ignored.");
+                        break;
+                    }
+
+                    HandlerRecord record = new HandlerRecord
+                    {
+                        Kind = block.Kind == BlockKind.Catch ? ExceptionHandlerType.Catch
+                             : block.Kind == BlockKind.Finally ? ExceptionHandlerType.Finally
+                             : ExceptionHandlerType.Fault,
+                        CatchType = block.CatchType,
+                        HandlerStart = block.StartIndex,
+                        HandlerEnd = endIndex
+                    };
+                    group.Handlers.Add(record);
+                    break;
+                }
+
+                case BlockKind.Filter:
+                {
+                    HandlerGroup group = block.Group ?? context.CurrentGroup;
+                    if (group == null)
+                    {
+                        LastWarnings.Add("Filter without a .try block ignored.");
+                        break;
+                    }
+
+                    HandlerRecord record = new HandlerRecord
+                    {
+                        Kind = ExceptionHandlerType.Filter,
+                        HandlerStart = endIndex,
+                        HandlerEnd = endIndex,
+                        FilterStart = block.StartIndex
+                    };
+                    group.Handlers.Add(record);
+                    context.PendingFilter = record;
+                    break;
+                }
+
+                case BlockKind.Handler:
+                {
+                    if (context.PendingFilter != null)
+                    {
+                        context.PendingFilter.HandlerStart = block.StartIndex;
+                        context.PendingFilter.HandlerEnd = endIndex;
+                        context.PendingFilter = null;
+                    }
+                    break;
+                }
+            }
+        }
+
+        /// <summary>Converts the recorded index ranges into Cecil exception handlers.</summary>
+        private static void MaterializeHandlers(MethodContext context)
+        {
+            IList<Instruction> instructions = context.Method.Body.Instructions;
+
+            foreach (HandlerGroup group in context.Groups)
+            {
+                Instruction tryStart = InstructionAt(instructions, group.TryStart);
+                Instruction tryEnd = InstructionAt(instructions, group.TryEnd);
+                if (tryStart == null || tryEnd == null)
+                {
+                    LastWarnings.Add("Try block without a following instruction ignored.");
+                    continue;
+                }
+
+                foreach (HandlerRecord record in group.Handlers)
+                {
+                    Instruction handlerStart = InstructionAt(instructions, record.HandlerStart);
+                    Instruction handlerEnd = InstructionAt(instructions, record.HandlerEnd);
+                    if (handlerStart == null)
+                    {
+                        LastWarnings.Add("Empty exception handler ignored.");
+                        continue;
+                    }
+
+                    ExceptionHandler handler = new ExceptionHandler(record.Kind)
+                    {
+                        TryStart = tryStart,
+                        TryEnd = tryEnd,
+                        HandlerStart = handlerStart,
+                        HandlerEnd = handlerEnd
+                    };
+
+                    if (record.Kind == ExceptionHandlerType.Catch)
+                    {
+                        handler.CatchType = ResolveType(context.Method.Module, record.CatchType);
+                        if (handler.CatchType == null)
+                        {
+                            LastWarnings.Add("Catch type '" + record.CatchType + "' could not be resolved.");
+                            continue;
+                        }
+                    }
+                    else if (record.Kind == ExceptionHandlerType.Filter)
+                    {
+                        Instruction filterStart = InstructionAt(instructions, record.FilterStart);
+                        if (filterStart == null)
+                        {
+                            LastWarnings.Add("Filter block without a start instruction ignored.");
+                            continue;
+                        }
+                        handler.FilterStart = filterStart;
+                    }
+
+                    context.Method.Body.ExceptionHandlers.Add(handler);
+                }
+            }
+
+            context.Groups.Clear();
+        }
+
+        private static Instruction InstructionAt(IList<Instruction> instructions, int index)
+        {
+            return index >= 0 && index < instructions.Count ? instructions[index] : null;
+        }
+
         /// <summary>Sentinel returned by <see cref="ParseOperand"/> for tokens we cannot resolve.</summary>
         private static readonly object Unresolved = new object();
 
@@ -1995,6 +2298,14 @@ namespace ILXP.Interop
                 case "double": return module.TypeSystem.Double;
                 case "string": return module.TypeSystem.String;
                 case "object": return module.TypeSystem.Object;
+                case "native int":
+                case "intptr":
+                case "System.IntPtr": return module.TypeSystem.IntPtr;
+                case "native uint":
+                case "uintptr":
+                case "System.UIntPtr": return module.TypeSystem.UIntPtr;
+                case "typedref":
+                case "System.TypedReference": return module.TypeSystem.TypedReference;
             }
 
             string clean = name.Trim();
@@ -2101,7 +2412,8 @@ namespace ILXP.Interop
             string namespaceName = dot > 0 ? clean.Substring(0, dot) : string.Empty;
             string typeName = dot > 0 ? clean.Substring(dot + 1) : clean;
 
-            TypeReference reference = new TypeReference(namespaceName, typeName, module, NormalizeScope(module, module.TypeSystem.Object.Scope));
+            TypeReference reference = BuildTypeReference(module,
+                NormalizeScope(module, module.TypeSystem.Object.Scope), namespaceName, typeName);
             return WrapType(MarkValueType(reference), ranks, byRef, pointers);
         }
 
@@ -2335,6 +2647,14 @@ namespace ILXP.Interop
                 case "double": return module.TypeSystem.Double;
                 case "string": return module.TypeSystem.String;
                 case "object": return module.TypeSystem.Object;
+                case "native int":
+                case "intptr":
+                case "System.IntPtr": return module.TypeSystem.IntPtr;
+                case "native uint":
+                case "uintptr":
+                case "System.UIntPtr": return module.TypeSystem.UIntPtr;
+                case "typedref":
+                case "System.TypedReference": return module.TypeSystem.TypedReference;
                 default: return null;
             }
         }
@@ -2378,13 +2698,15 @@ namespace ILXP.Interop
                 string typePart = signature.Substring(0, separator).Trim();
                 string methodName = signature.Substring(separator + 2).Trim();
 
-                // A generic method instantiation is written as Name<Arg1,Arg2>.
+                // A generic method instantiation ends the method name ("Select<int32,string>").
+                // A '<' followed by more name text belongs to an explicit interface name
+                // ("IEnumerable`1<T>.GetEnumerator") and must stay part of the name.
                 string genericArguments = null;
                 int genericOpen = methodName.IndexOf('<');
                 if (genericOpen > 0)
                 {
                     int genericClose = MatchAngle(methodName, genericOpen);
-                    if (genericClose > genericOpen)
+                    if (genericClose == methodName.Length - 1)
                     {
                         genericArguments = methodName.Substring(genericOpen + 1, genericClose - genericOpen - 1);
                         methodName = methodName.Substring(0, genericOpen).Trim();
@@ -2405,9 +2727,13 @@ namespace ILXP.Interop
                 method.HasThis = hasThis;
 
                 // Generic method parameters must exist before the signature is resolved,
-                // because the signature can reference them (!!0, !!1).
+                // because the signature can reference them (!!0, including inside generic
+                // arguments such as Func`2<!!0,!!1>).
                 List<string> parameterTexts = new List<string>();
-                int maxMethodParameter = -1;
+                int maxMethodParameter = Math.Max(
+                    MaxMethodGenericParameter(returnTypeName),
+                    MaxMethodGenericParameter(text));
+
                 foreach (string part in SplitTopLevel(parameters))
                 {
                     string parameter = part.Trim();
@@ -2417,15 +2743,6 @@ namespace ILXP.Interop
                     }
 
                     parameterTexts.Add(parameter);
-                    if (parameter.StartsWith("!!", StringComparison.Ordinal))
-                    {
-                        int position;
-                        if (int.TryParse(parameter.Substring(2), NumberStyles.Integer,
-                                CultureInfo.InvariantCulture, out position) && position > maxMethodParameter)
-                        {
-                            maxMethodParameter = position;
-                        }
-                    }
                 }
 
                 for (int i = 0; i <= maxMethodParameter; i++)
@@ -2445,7 +2762,13 @@ namespace ILXP.Interop
                 // lets the call site reference a MethodDef token instead of a MemberRef.
                 MethodReference target = null;
                 TypeDefinition definition = declaring as TypeDefinition ?? FindTypeDefinition(module, typeName);
-                if (definition != null && maxMethodParameter < 0)
+
+                // A member of a generic instantiation ("Action`2<Object,EventArgs>") cannot be
+                // referenced by its open definition; the call site needs the instantiated
+                // declaring type, so a member reference is built from the text instead.
+                bool instantiated = declaring is GenericInstanceType;
+
+                if (definition != null && !instantiated && maxMethodParameter < 0)
                 {
                     target = FindMethodByShape(definition, methodName, parameterTypes);
                 }
@@ -2528,6 +2851,38 @@ namespace ILXP.Interop
                 matches++;
             }
             return matches == 1 ? single : null;
+        }
+
+        /// <summary>Returns the highest <c>!!N</c> position referenced by a signature text.</summary>
+        private static int MaxMethodGenericParameter(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return -1;
+            }
+
+            int max = -1;
+            int index = 0;
+            while ((index = text.IndexOf("!!", index, StringComparison.Ordinal)) >= 0)
+            {
+                int start = index + 2;
+                int end = start;
+                while (end < text.Length && char.IsDigit(text[end]))
+                {
+                    end++;
+                }
+
+                int position;
+                if (end > start &&
+                    int.TryParse(text.Substring(start, end - start), NumberStyles.Integer,
+                        CultureInfo.InvariantCulture, out position) && position > max)
+                {
+                    max = position;
+                }
+
+                index = end > start ? end : start;
+            }
+            return max;
         }
 
         /// <summary>Finds a method by name and normalized parameter types (overload-safe).</summary>
@@ -2617,6 +2972,7 @@ namespace ILXP.Interop
             {
                 text = text.Trim();
                 IMetadataScope scope = NormalizeScope(module, module.TypeSystem.Object.Scope);
+                bool moduleScope = false;
 
                 if (text.StartsWith("[", StringComparison.Ordinal))
                 {
@@ -2625,12 +2981,26 @@ namespace ILXP.Interop
                     {
                         string assemblyName = text.Substring(1, close - 1);
                         text = text.Substring(close + 1).Trim();
-                        AssemblyNameReference reference = FindOrCreateReference(module, assemblyName);
-                        if (reference != null)
+                        if (string.Equals(assemblyName, ".module", StringComparison.OrdinalIgnoreCase))
                         {
-                            scope = reference;
+                            // A type defined in this module; the module itself is the scope.
+                            moduleScope = true;
+                            scope = module;
+                        }
+                        else
+                        {
+                            AssemblyNameReference reference = FindOrCreateReference(module, assemblyName);
+                            if (reference != null)
+                            {
+                                scope = reference;
+                            }
                         }
                     }
+                }
+
+                if (!moduleScope)
+                {
+                    scope = NormalizeScope(module, scope);
                 }
 
                 bool byRef = false;
@@ -2733,7 +3103,7 @@ namespace ILXP.Interop
                     return Unresolved;
                 }
 
-                TypeReference element = new TypeReference(namespaceName, typeName, module, NormalizeScope(module, scope));
+                TypeReference element = BuildTypeReference(module, scope, namespaceName, typeName);
                 return WrapType(MarkValueType(element), ranks, byRef, pointers);
             }
             catch (Exception)
