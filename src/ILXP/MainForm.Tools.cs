@@ -57,6 +57,57 @@ namespace ILXP
             }
         }
 
+        /// <summary>
+        /// Exports the selected assembly as a decompiled project: a project file, one source
+        /// file per type, AssemblyInfo, resources and a README that states the limitations.
+        /// </summary>
+        private void OnExportProject(object sender, EventArgs e)
+        {
+            TreeNode node = treeView.SelectedNode;
+            while (node != null && node.Parent != null)
+            {
+                node = node.Parent;
+            }
+
+            AssemblyItem item = node == null ? null : node.Tag as AssemblyItem;
+            if (item == null)
+            {
+                MessageBox.Show(this, "Open an assembly first.", AppInfo.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = "Select the folder for the exported project";
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                Cursor previous = Cursor;
+                Cursor = Cursors.WaitCursor;
+                try
+                {
+                    ProjectExportResult result = ProjectExporter.Export(item, dialog.SelectedPath,
+                        "cs", true, null);
+                    MessageBox.Show(this,
+                        "Project written to:" + Environment.NewLine + result.OutputDirectory +
+                        Environment.NewLine + Environment.NewLine + result.Summary(),
+                        AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unable to export the project.", ex);
+                    MessageBox.Show(this, ex.Message, "Export project", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                finally
+                {
+                    Cursor = previous;
+                }
+            }
+        }
+
         // ------------------------------------------------------------------
         // Compare two assemblies
         // ------------------------------------------------------------------

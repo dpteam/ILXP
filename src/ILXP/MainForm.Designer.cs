@@ -25,6 +25,7 @@ namespace ILXP
         private ToolStripMenuItem compareMenuItem;
         private ToolStripMenuItem callGraphMenuItem;
         private ToolStripMenuItem bundleMenuItem;
+        private ToolStripMenuItem projectMenuItem;
         private ToolStripMenuItem findMenuItem;
         private ToolStripMenuItem copyMenuItem;
         private ToolStripMenuItem outputMenu;
@@ -87,6 +88,7 @@ namespace ILXP
             this.compareMenuItem = new ToolStripMenuItem();
             this.callGraphMenuItem = new ToolStripMenuItem();
             this.bundleMenuItem = new ToolStripMenuItem();
+            this.projectMenuItem = new ToolStripMenuItem();
             this.findMenuItem = new ToolStripMenuItem();
             this.copyMenuItem = new ToolStripMenuItem();
             this.outputMenu = new ToolStripMenuItem();
@@ -156,6 +158,7 @@ namespace ILXP
                 this.cleanAssemblyMenuItem,
                 this.compareMenuItem,
                 this.bundleMenuItem,
+                this.projectMenuItem,
                 this.fileSeparator,
                 this.exitMenuItem
             });
@@ -303,6 +306,11 @@ namespace ILXP
             this.bundleMenuItem.Size = new Size(155, 22);
             this.bundleMenuItem.Text = "Export preservation &bundle...";
             this.bundleMenuItem.Click += this.OnExportBundle;
+
+            this.projectMenuItem.Name = "MenuItemFileProject";
+            this.projectMenuItem.Size = new Size(155, 22);
+            this.projectMenuItem.Text = "Export &project...";
+            this.projectMenuItem.Click += this.OnExportProject;
 
             this.findMenuItem.Name = "MenuItemEditFind";
             this.findMenuItem.ShortcutKeys = Keys.Control | Keys.F;

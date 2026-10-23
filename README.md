@@ -56,6 +56,7 @@ ILXP --version
 ILXP --list <assembly>
 ILXP --tree <assembly> [--deep]
 ILXP --decompile <assembly> [--language il|cs|vb] [--dialect <id>] [--bodies] [--output <dir>]
+ILXP --project <assembly> --output <dir> [--language cs|vb] [--no-bodies]
 ILXP --resources <assembly> --output <dir>
 ILXP --ildasm <assembly> [--output <file.il>] [--bytes] [--native]
 ILXP --ilasm <file.il> [--output <assembly>] [--dll] [--x86|--x64] [--native]
@@ -225,7 +226,13 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
 * **Body diff** (`--bodydiff <left> <right> [--match <text>]`) - for every changed body, prints
   the first position where the two hashed instruction streams diverge, with context; turns
   "body differs" into something actionable.
-* **Round-trip capable IL assembler** — `.property` / `.event` directives, `.try` / `catch` /
+* **Export to project** (`--project`, `File → Export project…`) — the ILSpy/dnSpy-style export:
+  a `.csproj`/`.vbproj` with the detected `TargetFrameworkVersion`, `HintPath` for every
+  resolvable reference, one source file per top-level type in namespace-named folders,
+  `Properties/AssemblyInfo.cs`, embedded resources under `Resources/`, `manifest.txt` and a
+  `README.md` listing what is and is not faithful. Method bodies are included by default
+  (`--no-bodies` for a signatures-only skeleton); a small exported project compiles with
+  `csc` unchanged.* **Round-trip capable IL assembler** — `.property` / `.event` directives, `.try` / `catch` /
   `finally` / `filter` / `fault` handler tables, `.override` (explicit interface
   implementations), nested types (including generic ones such as `Collection<T>.Enumerator`),
   `implements` lists, generic types and generic methods (with `!N` / `!!N`, generic arguments

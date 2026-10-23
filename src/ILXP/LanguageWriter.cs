@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Text;
 using Mono.Cecil;
 
 namespace ILXP
@@ -18,6 +18,12 @@ namespace ILXP
 
         /// <summary>Runtime the input assembly targets (informational).</summary>
         public RuntimeProfile Runtime { get; set; }
+
+        /// <summary>
+        /// When set, <c>WriteType</c> emits method and property bodies instead of signatures
+        /// only. Used by the project exporter; the GUI keeps signatures for a compact outline.
+        /// </summary>
+        public static bool EmitBodies { get; set; }
 
         /// <summary>Comment prefix used when writing the dialect header.</summary>
         protected virtual string CommentPrefix
@@ -150,9 +156,58 @@ namespace ILXP
         /// <summary>Removes the markup tags from a generated fragment.</summary>
         public string StripMarkup(string text)
         {
-            text = Regex.Replace(text, "\\<\\<[r|g|b]?\\>\\>", string.Empty);
-            text = Regex.Replace(text, "\\<\\<\\#[^\\>|\\<]+\\>\\>", string.Empty);
-            return text;
+            if (string.IsNullOrEmpty(text))
+            {
+                return text;
+            }
+
+            // A scanner instead of a regex: navigation keys embed arbitrary metadata names,
+            // which may themselves contain angle brackets ("FCS$<>9__Cached..."), and a
+            // character class cannot know where the key ends.
+            StringBuilder result = new StringBuilder(text.Length);
+            int index = 0;
+            while (index < text.Length)
+            {
+                if (text[index] == '<' && index + 1 < text.Length && text[index + 1] == '<')
+                {
+                    char tag = index + 2 < text.Length ? text[index + 2] : '\0';
+
+                    // A navigation key runs from "<<#" to the next ">>".
+                    if (tag == '#')
+                    {
+                        int close = text.IndexOf(">>", index + 3, StringComparison.Ordinal);
+                        index = close < 0 ? index + 2 : close + 2;
+                        continue;
+                    }
+
+                    // Colour tags are exactly five characters: <<g>>, <<b>>, <<r>>.
+                    if ((tag == 'g' || tag == 'b' || tag == 'r') &&
+                        index + 4 < text.Length && text[index + 3] == '>' && text[index + 4] == '>')
+                    {
+                        index += 5;
+                        continue;
+                    }
+
+                    // "<<>>" closes a coloured token (4 chars).
+                    if (tag == '>' && index + 3 < text.Length && text[index + 3] == '>')
+                    {
+                        index += 4;
+                        continue;
+                    }
+
+                    // Not a tag: this is a '<' of the generated code itself (a generic argument
+                    // list directly followed by a key, "Func<<#...>>"), so emit it and retry
+                    // one character later.
+                    result.Append(text[index]);
+                    index++;
+                    continue;
+                }
+
+                result.Append(text[index]);
+                index++;
+            }
+
+            return result.ToString();
         }
 
         public static string GetFullTypeName(TypeReference type)

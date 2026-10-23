@@ -102,6 +102,7 @@ namespace ILXP.Tests
                 TestExceptionHandlers();
                 TestRebuiltToolRuns();
                 TestBodyDiff();
+                TestProjectExport();
                 TestOverloadAndMarshalRoundTrip();
                 TestIlVerifier();
                 TestFixpointExceptionHandlers();
@@ -531,6 +532,62 @@ namespace ILXP.Tests
             CommandResult list = RunProcess(rebuilt, "--list", ilxpPath);
             Check("rebuilt tool reads an assembly", list.ExitCode == 0, list.ToString());
             Check("rebuilt tool lists types", list.Output.Contains("ILXP.MainForm"), list.Output);
+        }
+
+        private static void TestProjectExport()
+        {
+            Section("Export to project");
+
+            string source =
+                ".assembly extern mscorlib { }\r\n" +
+                ".assembly 'ExportSample' { }\r\n" +
+                ".class public auto ansi beforefieldinit 'Sample' extends [mscorlib]System.Object\r\n" +
+                "{\r\n" +
+                "  .method public hidebysig static int32 'Answer'() cil managed\r\n" +
+                "  {\r\n" +
+                "    .maxstack 1\r\n" +
+                "    IL_0000: ldc.i4.s 42\r\n" +
+                "    IL_0002: ret\r\n" +
+                "  }\r\n" +
+                "}\r\n";
+
+            string il = Path.Combine(workspace, "export.il");
+            File.WriteAllText(il, source);
+            string assembly = Path.Combine(workspace, "ExportSample.dll");
+            CommandResult asm = RunIlxp("--ilasm", il, "--output", assembly, "--dll");
+            Check("export fixture assembles", asm.ExitCode == 0, asm.ToString());
+
+            string project = Path.Combine(workspace, "exported");
+            Directory.CreateDirectory(project);
+            CommandResult export = RunIlxp("--project", assembly, "--output", project);
+            Check("--project succeeds", export.ExitCode == 0, export.ToString());
+            Check("export reports types", export.Output.Contains("1 types"), export.Output);
+
+            string projectFile = Path.Combine(project, "ExportSample.csproj");
+            Check("project file exists", File.Exists(projectFile), "no .csproj");
+            string projectText = File.ReadAllText(projectFile);
+            Check("project targets .NET 4.0", projectText.Contains("<TargetFrameworkVersion>v4.0<"), projectText);
+            Check("project lists the source file", projectText.Contains("Sample.cs"), projectText);
+            Check("project references mscorlib", projectText.Contains("mscorlib"), projectText);
+
+            string sourceFile = Path.Combine(project, "Sample.cs");
+            Check("type file exists", File.Exists(sourceFile), "no Sample.cs");
+            string sourceText = File.ReadAllText(sourceFile);
+            Check("method body is exported", sourceText.Contains("42"), sourceText);
+            Check("source declares the type", sourceText.Contains("class Sample"), sourceText);
+
+            Check("AssemblyInfo exists",
+                File.Exists(Path.Combine(project, "Properties", "AssemblyInfo.cs")), "no AssemblyInfo.cs");
+            Check("README exists", File.Exists(Path.Combine(project, "README.md")), "no README");
+            Check("manifest exists", File.Exists(Path.Combine(project, "manifest.txt")), "no manifest");
+
+            // Signatures-only mode must still produce a project, just without bodies.
+            string bare = Path.Combine(workspace, "exported-bare");
+            Directory.CreateDirectory(bare);
+            CommandResult minimal = RunIlxp("--project", assembly, "--output", bare, "--no-bodies");
+            Check("--no-bodies works", minimal.ExitCode == 0, minimal.ToString());
+            Check("--no-bodies omits bodies",
+                !File.ReadAllText(Path.Combine(bare, "Sample.cs")).Contains("42"), "body was exported");
         }
 
         private static void TestBodyDiff()

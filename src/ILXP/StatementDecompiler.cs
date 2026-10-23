@@ -513,8 +513,18 @@ namespace ILXP
     						break;
     					}
     					case "<CONSTRUCTOR=":
-    						stringBuilder.Append(text2);
+    					{
+    						// A constructor chain is written as "base(...)" or "this(...)": keep the
+    						// reference part of the token and drop the declaring type name and the
+    						// separating dot that was emitted before it.
+    						string constructorTarget = text2.Substring(0, text2.Substring(0, text2.Length - 4).LastIndexOf(">>") + 2);
+    						if (stringBuilder.Length > 0 && stringBuilder[stringBuilder.Length - 1] == '.')
+    						{
+    							stringBuilder.Length--;
+    						}
+    						stringBuilder.Append(constructorTarget);
     						break;
+    					}
     					case "<FOREACHSTART=":
     					{
     						string text3 = stringBuilder.ToString();
@@ -2325,7 +2335,9 @@ namespace ILXP
     										{
     											arrayList_[j - 1] = "<MYBASE>";
     										}
-    										text6 = string.Format("{0}.{1}", RuntimeHelpers.GetObjectValue(arrayList_[j - 1]), LanguageWriter.GetReferenceKey(methodReference5) + text6 + "<<>>");
+    										// A constructor chain ("base(...)" / "this(...)") takes no dot before the call.
+    										string constructorSeparator = text6.StartsWith("<CONSTRUCTOR=") ? string.Empty : ".";
+    										text6 = Conversions.ToString(arrayList_[j - 1]) + constructorSeparator + LanguageWriter.GetReferenceKey(methodReference5) + text6 + "<<>>";
     										arrayList_.RemoveAt(j - 1);
     										j--;
     									}

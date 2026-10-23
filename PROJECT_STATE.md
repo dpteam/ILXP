@@ -61,12 +61,12 @@ Verified manually:
 
 ## Known issues / next fixes
 
-1. `StatementDecompiler` still has `smethod_N` names for internal helpers. Public entry points
-   are `WriteVisualBasicBody` / `WriteCSharpBody`.
-2. The C#/VB writers are outline-oriented: attributes on properties/events, generic
-   constraints and string escaping are still rough. `--bodies` appends bodies after the
-   outline (inspection dump, not a compilable project).
-3. `ManagedIlAssembler` round-trips the IL that `ManagedIlDisassembler` emits at
+1. `StatementDecompiler` reconstructs simple bodies correctly (`return 1;`, field and property
+   access, plain calls), but loop and try/catch shapes are still wrong - it emits `while (try {)`
+   and a stray `}`. That is the main limit on how useful `--project` is, and the export README
+   says so. The C#/VB writers are outline-oriented for the GUI; bodies are only emitted when
+   `LanguageWriter.EmitBodies` is set (project export).
+2. `ManagedIlAssembler` round-trips the IL that `ManagedIlDisassembler` emits at
    **100 % member fidelity / 100 % body fidelity** on ILXP.exe, including exception-handler
    tables (753 protected regions) and `.override` entries; 99.99 % / 98.15 % on
    `System.Core.dll`. Properties, events, nested types (also generic ones such as
@@ -94,14 +94,14 @@ Verified manually:
    marshalers) are skipped with a warning, because the rebuilt `MarshalInfo` has no room for it;
    `System.Data.dll` still loses ~100 method bodies and reports P/Invoke related verifier
    findings; PEVerify is only an oracle for an assembly that sits next to its dependencies.
-4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
+3. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
-5. `--clean` does not preserve strong-name signatures and writes without symbols.
-6. `AssemblyResolver` probes the GAC by directory layout; it does not use the Fusion API.
-7. `VbWriter.GetTypeName` prints .NET type names (`Int32`, `String`) — valid VB, not idiomatic.
-8. Output dialects currently affect the header and expose capability flags; the full
+4. `--clean` does not preserve strong-name signatures and writes without symbols.
+5. `AssemblyResolver` probes the GAC by directory layout; it does not use the Fusion API.
+6. `VbWriter.GetTypeName` prints .NET type names (`Int32`, `String`) — valid VB, not idiomatic.
+7. Output dialects currently affect the header and expose capability flags; the full
    version-specific syntax matrix is tracked in `IDEAS.md`.
-9. Music rendering takes ~15 s for a 2-minute tune on first play (cached afterwards). A
+8. Music rendering takes ~15 s for a 2-minute tune on first play (cached afterwards). A
    streaming/real-time synth would remove the wait.
 
 ## Useful commands

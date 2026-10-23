@@ -52,6 +52,8 @@ namespace ILXP
                         return ListTypes(options.Input);
                     case "decompile":
                         return Decompile(options);
+                    case "project":
+                        return ProjectCommand(options);
                     case "resources":
                         return ExtractResources(options.Input, options.Output);
                     case "ildasm":
@@ -122,6 +124,50 @@ namespace ILXP
                     Console.WriteLine("  " + type.FullName);
                 }
             }
+            return 0;
+        }
+
+        /// <summary>Exports a decompiled assembly as a project that opens in Visual Studio.</summary>
+        private static int ProjectCommand(Options options)
+        {
+            AssemblyDefinition assembly = ReadAssembly(options.Input);
+            AssemblyItem item = new AssemblyItem(Path.GetFullPath(options.Input), assembly);
+
+            string outputDirectory = options.Output;
+            if (string.IsNullOrEmpty(outputDirectory))
+            {
+                outputDirectory = Path.Combine(
+                    Path.GetDirectoryName(Path.GetFullPath(options.Input)) ?? ".",
+                    Path.GetFileNameWithoutExtension(options.Input) + ".project");
+            }
+
+            OutputDialect dialect = OutputDialect.FromId(options.Dialect);
+
+            // A project file only exists for a managed language, so "il" (the CLI default for
+            // --decompile) falls back to C# here.
+            string language = options.Language;
+            if (string.IsNullOrEmpty(language) || language == "il")
+            {
+                language = "cs";
+            }
+
+            ProjectExportResult result = ProjectExporter.Export(item, outputDirectory, language,
+                !options.NoBodies, dialect);
+
+            Console.WriteLine("project  : " + result.ProjectPath);
+            Console.WriteLine("folder   : " + Path.GetFullPath(result.OutputDirectory));
+            Console.WriteLine("contents : " + result.Summary());
+
+            foreach (string warning in result.Warnings)
+            {
+                Log.Warn(warning);
+            }
+            if (result.Warnings.Count > 0)
+            {
+                Console.WriteLine("warnings : " + result.Warnings.Count.ToString(CultureInfo.InvariantCulture) +
+                                  " (see README.md in the export)");
+            }
+
             return 0;
         }
 
@@ -1220,6 +1266,8 @@ namespace ILXP
             Console.WriteLine("  ILXP --callgraph <assembly> [--max <n>]  fan-in/fan-out, orphans, recursion cycles");
             Console.WriteLine("  ILXP --ilverify <assembly> [--max <n>]  structural check of every method body");
             Console.WriteLine("  ILXP --decompile <assembly> [options]    write generated source to disk");
+            Console.WriteLine("  ILXP --project <assembly> --output <dir> [--language cs|vb] [--no-bodies]");
+            Console.WriteLine("                                           export a project that opens in Visual Studio");
             Console.WriteLine("  ILXP --resources <assembly> --output <dir>");
             Console.WriteLine("  ILXP --ildasm <assembly> [--output <file.il>] [--bytes]");
             Console.WriteLine("  ILXP --ilasm <file.il> [--output <assembly>] [--dll] [--x86|--x64]");
@@ -1249,6 +1297,7 @@ namespace ILXP
             public bool Is64Bit { get; private set; }
             public bool Is32Bit { get; private set; }
             public bool Bodies { get; private set; }
+            public bool NoBodies { get; private set; }
             public int Offset { get; private set; }
             public int Length { get; private set; }
             public float MusicVolume { get; private set; }
@@ -1293,6 +1342,10 @@ namespace ILXP
                             break;
                         case "--decompile":
                             options.Command = "decompile";
+                            options.Input = Next(args, ref i, argument);
+                            break;
+                        case "--project":
+                            options.Command = "project";
                             options.Input = Next(args, ref i, argument);
                             break;
                         case "--resources":
@@ -1451,6 +1504,9 @@ namespace ILXP
                             break;
                         case "--bodies":
                             options.Bodies = true;
+                            break;
+                        case "--no-bodies":
+                            options.NoBodies = true;
                             break;
                         case "--dll":
                             options.IsDll = true;
