@@ -347,7 +347,7 @@ namespace ILXP
 
             foreach (MethodDefinition method in type.Methods)
             {
-                string key = type.FullName + "::" + method.Name + "(" + ParameterList(method) + ")";
+                string key = MethodKey(type, method);
                 map[key] = method.HasBody ? HashBody(method.Body) : "empty";
             }
 
@@ -375,6 +375,12 @@ namespace ILXP
             }
         }
 
+        /// <summary>Identity key of a method, shared by the diff and the fidelity metric.</summary>
+        internal static string MethodKey(TypeDefinition type, MethodDefinition method)
+        {
+            return type.FullName + "::" + method.Name + "(" + ParameterList(method) + ")";
+        }
+
         private static string ParameterList(MethodDefinition method)
         {
             StringBuilder text = new StringBuilder();
@@ -385,9 +391,10 @@ namespace ILXP
                     text.Append(',');
                 }
 
-                // The identity key stays coarse on purpose: overloads that differ only in
-                // generic arguments are rare, and a coarse key keeps the diff readable.
-                text.Append(NormalizeTypeName(method.Parameters[i].ParameterType.FullName));
+                // The key must separate overloads that differ only in generic arguments
+                // ("M<T>(List<int>)" vs "M<T>(List<string>)"), otherwise two methods share one
+                // key and their hashes overwrite each other.
+                text.Append(DescribeTypeKey(method.Parameters[i].ParameterType));
             }
             return text.ToString();
         }
@@ -566,6 +573,13 @@ namespace ILXP
             GenericInstanceType instance = type as GenericInstanceType;
             if (instance != null)
             {
+                // An instantiation with nothing but the type's own parameters ("C`1<!0>") is
+                // the open generic type: the IL may name it either way, both mean the same.
+                if (IsSelfInstantiation(instance))
+                {
+                    return DescribeTypeKey(instance.ElementType);
+                }
+
                 StringBuilder text = new StringBuilder(DescribeTypeKey(instance.ElementType)).Append('<');
                 for (int i = 0; i < instance.GenericArguments.Count; i++)
                 {
@@ -591,6 +605,127 @@ namespace ILXP
             }
 
             return NormalizeTypeName(type.FullName);
+        }
+
+        /// <summary>
+        /// True when every argument of an instantiation is the corresponding parameter of the
+        /// element type, i.e. "C`1&lt;!0&gt;" — the open form of C.
+        /// </summary>
+        private static bool IsSelfInstantiation(GenericInstanceType instance)
+        {
+            if (!instance.HasGenericArguments)
+            {
+                return false;
+            }
+
+            TypeReference element = instance.ElementType;
+            int parameters = ArityFromName(element.Name);
+            if (parameters != instance.GenericArguments.Count)
+            {
+                return false;
+            }
+
+            // Only an argument that belongs to the element type (or to one of its declaring
+            // types) is the element's own parameter. "C`1<!0>" inside another generic type may
+            // also map that type's parameter, which is a real instantiation, not the open form.
+            for (int i = 0; i < parameters; i++)
+            {
+                GenericParameter argument = instance.GenericArguments[i] as GenericParameter;
+                if (argument == null || argument.Position != i ||
+                    argument.Type != GenericParameterType.Type)
+                {
+                    return false;
+                }
+
+                if (!BelongsTo(argument, element))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>True when the parameter is declared by the type or by one of its parents.</summary>
+        private static bool BelongsTo(GenericParameter parameter, TypeReference element)
+        {
+            TypeReference owner = parameter.Owner as TypeReference;
+            if (owner == null)
+            {
+                return false;
+            }
+
+            string ownerName = NormalizeTypeName(owner.FullName);
+            for (TypeReference current = element; current != null; current = current.DeclaringType)
+            {
+                if (string.Equals(NormalizeTypeName(current.FullName), ownerName, StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static int ArityFromName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return 0;
+            }
+
+            int tick = name.LastIndexOf('`');
+            if (tick < 0 || tick == name.Length - 1)
+            {
+                return 0;
+            }
+
+            int arity;
+            return int.TryParse(name.Substring(tick + 1), NumberStyles.Integer,
+                CultureInfo.InvariantCulture, out arity) ? arity : 0;
+        }
+
+        /// <summary>
+        /// Explains where two bodies diverge, using exactly the text the diff hashes. Useful
+        /// when "body differs" is reported but the instructions look identical.
+        /// </summary>
+        internal static string ExplainDifference(MethodBody left, MethodBody right)
+        {
+            string leftText = BodyText(left);
+            string rightText = BodyText(right);
+            int limit = Math.Min(leftText.Length, rightText.Length);
+            for (int i = 0; i < limit; i++)
+            {
+                if (leftText[i] != rightText[i])
+                {
+                    int start = Math.Max(0, i - 70);
+                    int length = Math.Min(140, Math.Max(leftText.Length, rightText.Length) - start);
+                    return "at " + i +
+                           "\r\n    left : ..." + Slice(leftText, start, length) +
+                           "\r\n    right: ..." + Slice(rightText, start, length);
+                }
+            }
+
+            if (leftText.Length == rightText.Length)
+            {
+                return "identical";
+            }
+
+            int tail = Math.Min(limit, 70);
+            return "same prefix, length " + leftText.Length + " vs " + rightText.Length +
+                   "\r\n    left tail : ..." + Slice(leftText, limit - tail, tail) +
+                   "\r\n    right tail: ..." + Slice(rightText, limit - tail, tail);
+        }
+
+        private static string Slice(string text, int start, int length)
+        {
+            if (start < 0)
+            {
+                start = 0;
+            }
+            if (start >= text.Length)
+            {
+                return string.Empty;
+            }
+            return text.Substring(start, Math.Min(length, text.Length - start));
         }
 
         /// <summary>FNV-1a, stable across runs and platforms.</summary>

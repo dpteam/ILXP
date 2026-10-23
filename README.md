@@ -73,7 +73,7 @@ ILXP --bundle <assembly> --output <dir>
 ILXP --fixpoint <assembly> [--iterations <n>]
 ILXP --callgraph <assembly> [--max <n>]
 ILXP --ilverify <assembly> [--max <n>]
-ILXP --headless
+ILXP --bodydiff <left> <right> [--match <text>] [--max <n>]
 ILXP --screenshot <out.png> [--window about|main|quickopen] [--open <assembly>] [--select <type>] [--query <text>]
 ILXP --render-water <out.png> [--width <n>] [--height <n>] [--frames <n>]
 ```
@@ -213,14 +213,19 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
   and diffs the result against the original, including the exception-handler tables. Every body
   is also run through the structural verifier (stack depth, `maxstack`, branch ranges, handler
   boundaries), so a body that is textually identical but invalid for the CLR is reported:
-  **100 %** member fidelity, **100 %** body fidelity (4064 of 4064 bodies) and *0 invalid
-  bodies before and after* the round trip on `ILXP.exe`; 99.99 % / 98.15 % on `System.Core.dll`
-  (the residual diff there is a key-collision artifact of the coarse member key, and the
-  verifier reports the same 13 unusual flow-control bodies on both sides).
-* **IL verifier** (`--ilverify`) — simulates the evaluation stack through every method body and
+  **100 %** member fidelity, **100 %** body fidelity (4077 of 4077 bodies) and *0 invalid
+  bodies before and after* the round trip on `ILXP.exe`; on `System.Core.dll` 100 % member
+  fidelity and 99.30 % body fidelity (55 of 7852 bodies differ - `--bodydiff` names the exact
+  instruction where each one diverges).
+* **IL verifier** (`--ilverify`) - simulates the evaluation stack through every method body and
   reports stack underflow/overflow against `.maxstack`, a non-empty stack at `ret`, out-of-range
   or backwards branch/handler boundaries, invalid filter placement and impossible local/argument
-  indices. `ILXP.exe`: 4063 bodies, 0 invalid.
+  indices. Calibrated on real framework assemblies: **no findings** on `mscorlib.dll`
+  (25 337 bodies), `System.dll` (16 389), `System.Core.dll` (7 852) and `System.Xml.dll`
+  (12 251), none on `ILXP.exe`, while a deliberately broken body is reported by method name.
+* **Body diff** (`--bodydiff <left> <right> [--match <text>]`) - for every changed body, prints
+  the first position where the two hashed instruction streams diverge, with context; turns
+  "body differs" into something actionable.
 * **Round-trip capable IL assembler** — `.property` / `.event` directives, `.try` / `catch` /
   `finally` / `filter` / `fault` handler tables, `.override` (explicit interface
   implementations), nested types (including generic ones such as `Collection<T>.Enumerator`),

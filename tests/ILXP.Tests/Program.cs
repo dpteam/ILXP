@@ -101,6 +101,7 @@ namespace ILXP.Tests
                 TestCallGraph();
                 TestExceptionHandlers();
                 TestRebuiltToolRuns();
+                TestBodyDiff();
                 TestIlVerifier();
                 TestFixpointExceptionHandlers();
             }
@@ -529,6 +530,52 @@ namespace ILXP.Tests
             CommandResult list = RunProcess(rebuilt, "--list", ilxpPath);
             Check("rebuilt tool reads an assembly", list.ExitCode == 0, list.ToString());
             Check("rebuilt tool lists types", list.Output.Contains("ILXP.MainForm"), list.Output);
+        }
+
+        private static void TestBodyDiff()
+        {
+            Section("Body diff diagnostics");
+
+            // A changed body must be explained with the exact hashed text, otherwise
+            // "body differs" is impossible to act on.
+            string source =
+                ".assembly extern mscorlib { }\r\n" +
+                ".assembly 'BodyDiff' { }\r\n" +
+                ".class public auto ansi 'D' extends [mscorlib]System.Object\r\n" +
+                "{\r\n" +
+                "  .method public hidebysig static int32 'Value'() cil managed\r\n" +
+                "  {\r\n" +
+                "    .maxstack 1\r\n" +
+                "    IL_0000: ldc.i4.1\r\n" +
+                "    IL_0001: ret\r\n" +
+                "  }\r\n" +
+                "}\r\n";
+
+            string il = Path.Combine(workspace, "bodydiff.il");
+            File.WriteAllText(il, source);
+
+            string original = Path.Combine(workspace, "bodydiff-a.dll");
+            CommandResult asm = RunIlxp("--ilasm", il, "--output", original, "--dll");
+            Check("bodydiff fixture assembles", asm.ExitCode == 0, asm.ToString());
+
+            // Rewrite the same method with a different constant.
+            string changedIl = source.Replace("ldc.i4.1", "ldc.i4.2");
+            string changedPath = Path.Combine(workspace, "bodydiff-b.il");
+            File.WriteAllText(changedPath, changedIl);
+            string changed = Path.Combine(workspace, "bodydiff-b.dll");
+            RunIlxp("--ilasm", changedPath, "--output", changed, "--dll");
+
+            string same = Path.Combine(workspace, "bodydiff-c.dll");
+            File.Copy(original, same, true);
+
+            CommandResult identical = RunIlxp("--bodydiff", original, same);
+            Check("identical assemblies report no changed bodies",
+                identical.Output.Contains("changed bodies: 0"), identical.Output);
+
+            CommandResult differs = RunIlxp("--bodydiff", original, changed);
+            Check("changed body is reported", differs.Output.Contains("changed bodies: 1"), differs.Output);
+            Check("the differing method is named", differs.Output.Contains("Value"), differs.Output);
+            Check("the difference is located", differs.Output.Contains("left :"), differs.Output);
         }
 
         private static void TestIlVerifier()

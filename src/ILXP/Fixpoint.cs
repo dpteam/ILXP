@@ -198,7 +198,8 @@ namespace ILXP
         {
             foreach (MethodDefinition method in type.Methods)
             {
-                if ((type.FullName + "::" + method.Name).IndexOf(substring, StringComparison.Ordinal) >= 0)
+                string key = AssemblyDiff.MethodKey(type, method);
+                if (key.IndexOf(substring, StringComparison.Ordinal) >= 0)
                 {
                     return method;
                 }
@@ -276,7 +277,7 @@ namespace ILXP
                 }
 
                 total++;
-                string key = type.FullName + "::" + method.Name + "(" + BodyKeyParameters(method) + ")";
+                string key = AssemblyDiff.MethodKey(type, method);
                 if (changedKeys.Contains(key))
                 {
                     changed++;
@@ -289,19 +290,6 @@ namespace ILXP
             }
         }
 
-        private static string BodyKeyParameters(MethodDefinition method)
-        {
-            StringBuilder text = new StringBuilder();
-            for (int i = 0; i < method.Parameters.Count; i++)
-            {
-                if (i > 0)
-                {
-                    text.Append(',');
-                }
-                text.Append(AssemblyDiff.NormalizeTypeName(method.Parameters[i].ParameterType.FullName));
-            }
-            return text.ToString();
-        }
 
         public static string Format(FixpointResult result)
         {

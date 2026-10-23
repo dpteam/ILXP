@@ -80,6 +80,8 @@ namespace ILXP
                         return HealthCommand(options);
                     case "diff":
                         return DiffCommand(options);
+                    case "bodydiff":
+                        return BodyDiffCommand(options);
                     case "bundle":
                         return BundleCommand(options);
                     case "fixpoint":
@@ -763,6 +765,96 @@ namespace ILXP
         }
 
         /// <summary>Compares two assemblies by metadata identity and IL hash.</summary>
+        /// <summary>Explains why individual method bodies differ between two assemblies.</summary>
+        private static int BodyDiffCommand(Options options)
+        {
+            if (string.IsNullOrEmpty(options.Output))
+            {
+                Console.Error.WriteLine("error: --bodydiff <left> <right> [--match <text>] [--max <n>]");
+                return 2;
+            }
+
+            AssemblyDefinition left = ReadAssembly(options.Input);
+            AssemblyDefinition right = ReadAssembly(options.Output);
+            DiffReport report = AssemblyDiff.Compare(left, right);
+
+            int limit = options.MaxResults > 0 ? options.MaxResults : 10;
+            string match = options.Match;
+            int shown = 0;
+            int total = 0;
+
+            foreach (DiffEntry entry in report.Entries)
+            {
+                if (entry.Change != ChangeKind.Changed || entry.Kind != "method")
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(match) &&
+                    entry.FullName.IndexOf(match, StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                total++;
+                if (shown >= limit)
+                {
+                    continue;
+                }
+
+                shown++;
+                MethodDefinition leftMethod = FindMethodByKey(left, entry.FullName);
+                MethodDefinition rightMethod = FindMethodByKey(right, entry.FullName);
+                Console.WriteLine(entry.FullName);
+                if (leftMethod == null || rightMethod == null)
+                {
+                    Console.WriteLine("  method missing on one side");
+                    continue;
+                }
+
+                Console.WriteLine("  " + AssemblyDiff.ExplainDifference(leftMethod.Body, rightMethod.Body));
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("changed bodies: " + total.ToString(CultureInfo.InvariantCulture) +
+                              ", explained: " + shown.ToString(CultureInfo.InvariantCulture));
+            return total == 0 ? 0 : 1;
+        }
+
+        private static MethodDefinition FindMethodByKey(AssemblyDefinition assembly, string key)
+        {
+            foreach (ModuleDefinition module in assembly.Modules)
+            {
+                MethodDefinition found = FindMethodByKey(module.Types, key);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+            return null;
+        }
+
+        private static MethodDefinition FindMethodByKey(IEnumerable<TypeDefinition> types, string key)
+        {
+            foreach (TypeDefinition type in types)
+            {
+                foreach (MethodDefinition method in type.Methods)
+                {
+                    if (string.Equals(AssemblyDiff.MethodKey(type, method), key, StringComparison.Ordinal))
+                    {
+                        return method;
+                    }
+                }
+
+                MethodDefinition nested = FindMethodByKey(type.NestedTypes, key);
+                if (nested != null)
+                {
+                    return nested;
+                }
+            }
+            return null;
+        }
+
         private static int DiffCommand(Options options)
         {
             if (string.IsNullOrEmpty(options.Output))
@@ -1120,6 +1212,8 @@ namespace ILXP
             Console.WriteLine("                                           regex search over rendered IL (case-insensitive)");
             Console.WriteLine("  ILXP --health <assembly>                 PE facts, dependencies, obfuscation fingerprint");
             Console.WriteLine("  ILXP --diff <left> <right>               compare two versions (IL hashes)");
+            Console.WriteLine("  ILXP --bodydiff <left> <right> [--match <text>] [--max <n>]");
+            Console.WriteLine("                                           show where changed bodies diverge");
             Console.WriteLine("  ILXP --bundle <assembly> --output <dir>  write a preservation bundle");
             Console.WriteLine("  ILXP --fixpoint <assembly> [--iterations <n>]");
             Console.WriteLine("                                           decompile -> reassemble -> diff (quality metric)");
@@ -1165,6 +1259,7 @@ namespace ILXP
             public int Height { get; private set; }
             public int Frames { get; private set; }
             public bool VerboseOutput { get; private set; }
+            public string Match { get; private set; }
             public string Select { get; private set; }
             public string Query { get; private set; }
             public int Depth { get; private set; }
@@ -1250,6 +1345,9 @@ namespace ILXP
                         case "--select":
                             options.Select = Next(args, ref i, argument);
                             break;
+                        case "--match":
+                            options.Match = Next(args, ref i, argument);
+                            break;
                         case "--query":
                             options.Query = Next(args, ref i, argument);
                             break;
@@ -1297,6 +1395,11 @@ namespace ILXP
                             break;
                         case "--diff":
                             options.Command = "diff";
+                            options.Input = Next(args, ref i, argument);
+                            options.Output = Next(args, ref i, argument);
+                            break;
+                        case "--bodydiff":
+                            options.Command = "bodydiff";
                             options.Input = Next(args, ref i, argument);
                             options.Output = Next(args, ref i, argument);
                             break;

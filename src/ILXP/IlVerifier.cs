@@ -509,7 +509,28 @@ namespace ILXP
                 }
             }
 
+            if (TraceStack)
+            {
+                DumpDepths(body, depth, seen, offsets);
+            }
+
             return maxDepth;
+        }
+
+        /// <summary>Prints the computed depth of every instruction (debugging aid).</summary>
+        private static void DumpDepths(MethodBody body, int[] depth, bool[] seen,
+            Dictionary<Instruction, int> offsets)
+        {
+            Console.WriteLine("  --- depths");
+            for (int i = 0; i < body.Instructions.Count; i++)
+            {
+                if (!seen[i])
+                {
+                    continue;
+                }
+                Console.WriteLine("  " + offsets[body.Instructions[i]].ToString("x4") + "  d=" +
+                    depth[i].ToString(CultureInfo.InvariantCulture) + "  " + body.Instructions[i].OpCode.Name);
+            }
         }
 
         /// <summary>
@@ -673,10 +694,21 @@ namespace ILXP
                 case Code.Ldsfld:
                 case Code.Ldsflda:
                 case Code.Ldftn:
-                case Code.Ldvirtftn:
                 case Code.Arglist:
-                case Code.Localloc:
                 case Code.Sizeof:
+                    push = 1;
+                    return;
+
+                // localloc pops the size and pushes the address of the new block.
+                case Code.Localloc:
+                    pop = 1;
+                    push = 1;
+                    return;
+
+                // ldvirtftn consumes the object reference and pushes the method pointer,
+                // so the net effect is zero.
+                case Code.Ldvirtftn:
+                    pop = 1;
                     push = 1;
                     return;
 

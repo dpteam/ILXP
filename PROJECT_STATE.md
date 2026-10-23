@@ -77,10 +77,16 @@ Verified manually:
    really do run after a round trip: lambdas, LINQ, generic delegates, `switch`, `foreach` over
    `List<T>` and `try/catch/finally` were verified end to end.
    `--fixpoint` also runs the structural verifier (`--ilverify`) over both sides: **0 invalid
-   bodies before and after** on ILXP.exe. A full rebuild of ILXP.exe is now equivalent: the
-   reassembled `ilxp.exe` starts the GUI and decompiles other assemblies at 100 % accuracy, and
-   `PEVerify` reports the same 4 findings as for the original (unmanaged pointer code in
-   `WaterLogo`). The test suite covers this end to end (`Rebuilt executable is usable`).
+   bodies before and after** on ILXP.exe. The verifier is calibrated against real framework
+   assemblies - 0 findings on mscorlib (25 337 bodies), System (16 389), System.Core (7 852)
+   and System.Xml (12 251) - so a report there is trustworthy.
+   A full rebuild of ILXP.exe is now equivalent: the reassembled `ilxp.exe` starts the GUI and
+   decompiles other assemblies at 100 % accuracy, and `PEVerify` reports the same 4 findings as
+   for the original (unmanaged pointer code in `WaterLogo`). The test suite covers this end to
+   end (`Rebuilt executable is usable`).
+   Remaining fidelity gap: 55 of 7852 bodies in System.Core.dll differ after a round trip
+   (100 % member fidelity). `--bodydiff` names the exact instruction; the known causes are a
+   `Func\`2`/`Func\`3` overload pick and a dropped generic argument on a nested member reference.
 4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
 5. `--clean` does not preserve strong-name signatures and writes without symbols.
@@ -162,14 +168,13 @@ re-run on a fresh decompiled snapshot.
 2. Finish renaming `StatementDecompiler` internals.
 3. Port ILSpy/dnSpy features together with their settings, plus an ILSpy/dnSpy settings
    importer (see `IDEAS.md`, level 2).
-4. Teach the verifier to model `switch` and filter handler entries more precisely: on
-   `System.Core.dll` it still flags 13 bodies that the CLR accepts (identical on both sides of
-   the round trip), which hides real findings in that assembly.
-5. Improve the member key used by `--fixpoint` so third-party assemblies stop reporting
-   "body differs" for identical bodies (overloaded closure methods collide on the coarse key).
-6. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
+4. Finish the last round-trip gap on System.Core.dll (55 of 7852 bodies): `--bodydiff` points
+   at an overload picked by name+arity instead of exact parameter shape, and at a nested member
+   reference that loses its generic argument. Neither breaks the CLR (JIT and PEVerify accept
+   the rebuilt image), but both should be fixed for exact equivalence.
+5. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow
    flattening / string encryption so deobfuscation can be measured numerically.
-7. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.
+6. Add dnlib as `src/dnlib`, then port `de4dot.blocks` and `de4dot.code.renamer`.
 
 ## Commit style
 

@@ -2907,7 +2907,26 @@ namespace ILXP.Interop
                 clean = clean.Substring(0, open).Trim();
             }
 
-            // Generic arguments are not reconstructed: keep the arity name ("List`1").
+            // Generic arguments are reconstructed from the trailing list; a '<' inside a
+            // nested type name ("<>c") must not be mistaken for one.
+            string genericElement;
+            string genericArguments;
+            if (TrySplitGeneric(clean, out genericElement, out genericArguments))
+            {
+                TypeReference genericBase = ResolveType(module, genericElement);
+                GenericInstanceType instance = new GenericInstanceType(genericBase);
+                foreach (string argument in SplitTopLevel(genericArguments))
+                {
+                    string text = argument.Trim();
+                    if (text.Length > 0)
+                    {
+                        instance.GenericArguments.Add(ResolveTypeWithOwner(module, text, genericBase, null)
+                            ?? module.TypeSystem.Object);
+                    }
+                }
+                return WrapType(instance, ranks, byRef, pointers);
+            }
+
             int tick = clean.IndexOf('`');
             if (tick > 0)
             {
@@ -3382,6 +3401,54 @@ namespace ILXP.Interop
                 : (TypeReference)new OptionalModifierType(modifier, element);
         }
 
+        /// <summary>
+        /// Splits a trailing generic argument list: "List`1&lt;Int32&gt;" or
+        /// "Outer`1/&lt;&gt;c&lt;!0&gt;". Only the list that closes at the very end counts,
+        /// because a nested type may contain angle brackets in its own name ("&lt;&gt;c").
+        /// </summary>
+        private static bool TrySplitGeneric(string text, out string element, out string arguments)
+        {
+            element = text;
+            arguments = null;
+
+            if (text == null || text.Length < 3 || text[text.Length - 1] != '>')
+            {
+                return false;
+            }
+
+            int depth = 0;
+            for (int i = text.Length - 1; i >= 0; i--)
+            {
+                if (text[i] == '>')
+                {
+                    depth++;
+                }
+                else if (text[i] == '<')
+                {
+                    depth--;
+                    if (depth == 0)
+                    {
+                        if (i == 0)
+                        {
+                            return false;
+                        }
+
+                        string head = text.Substring(0, i).Trim();
+                        string tail = text.Substring(i + 1, text.Length - i - 2);
+                        if (head.Length == 0 || tail.Length == 0 || head.IndexOf('`') < 0)
+                        {
+                            return false;
+                        }
+
+                        element = head;
+                        arguments = tail;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         private static TypeReference ResolvePrimitiveType(ModuleDefinition module, string name)
         {
             switch (name)
@@ -3545,7 +3612,7 @@ namespace ILXP.Interop
                             }
                         }
                         MethodDefinition match = FindMethodByApproximateShape(external, methodName,
-                            parameterTypes.Count, arity);
+                            parameterTypes.Count, arity, parameterTypes);
                         if (match != null)
                         {
                             target = module.Import(match);
@@ -3594,10 +3661,12 @@ namespace ILXP.Interop
         /// name is ambiguous, because guessing an overload would produce a broken reference.
         /// </summary>
         private static MethodDefinition FindMethodByApproximateShape(TypeDefinition type, string name,
-            int parameterCount, int genericArity)
+            int parameterCount, int genericArity, List<TypeReference> parameters)
         {
             MethodDefinition single = null;
+            MethodDefinition exact = null;
             int matches = 0;
+
             foreach (MethodDefinition method in type.Methods)
             {
                 if (!string.Equals(method.Name, name, StringComparison.Ordinal) ||
@@ -3609,8 +3678,39 @@ namespace ILXP.Interop
 
                 single = method;
                 matches++;
+
+                // Among equally-shaped overloads the parameter types decide; without this an
+                // overload taking Func`2 could be picked for a call that passes Func`3.
+                if (exact == null && parameters != null && SameShape(method, parameters))
+                {
+                    exact = method;
+                }
+            }
+
+            if (exact != null)
+            {
+                return exact;
             }
             return matches == 1 ? single : null;
+        }
+
+        private static bool SameShape(MethodDefinition method, List<TypeReference> parameters)
+        {
+            if (method.Parameters.Count != parameters.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                string left = AssemblyDiff.DescribeTypeKey(method.Parameters[i].ParameterType);
+                string right = AssemblyDiff.DescribeTypeKey(parameters[i]);
+                if (!string.Equals(left, right, StringComparison.Ordinal))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>Returns the highest <c>!!N</c> position referenced by a signature text.</summary>
@@ -3718,6 +3818,7 @@ namespace ILXP.Interop
                     return Unresolved;
                 }
 
+
                 string typeText = text.Substring(0, separator).Trim();
 
                 // The field type may be written in front: "<fieldType> <owner>::<name>".
@@ -3727,6 +3828,7 @@ namespace ILXP.Interop
 
                 TypeReference declaring = ResolveTypeOperand(module, typeName, owner) as TypeReference;
                 string fieldName = text.Substring(separator + 2).Trim();
+
                 if (declaring == null || fieldName.Length == 0)
                 {
                     return Unresolved;
@@ -3767,6 +3869,7 @@ namespace ILXP.Interop
             try
             {
                 text = text.Trim();
+
 
                 // A generic parameter (!0 / !!0) belongs to the enclosing type or method.
                 if (text.StartsWith("!", StringComparison.Ordinal))
@@ -3856,45 +3959,36 @@ namespace ILXP.Interop
                 }
 
                 // Generic arguments follow the arity marker ("List`1<...>"); a '<' without
-                // one is part of the name ("<>c"). Rebuild the instance so generic
-                // parameters keep their arguments.
-                int tick = text.IndexOf('`');
-                if (tick > 0)
+                // Generic arguments come from the trailing list only: a '<' inside a nested
+                // type name ("<>c") must not be read as the start of an argument list.
+                string genericElement;
+                string genericArguments;
+                if (TrySplitGeneric(text, out genericElement, out genericArguments))
                 {
-                    int angle = text.IndexOf('<', tick);
-                    if (angle > tick)
+                    // The element keeps the scope of the whole name: recursing with the already
+                    // stripped text would lose "[System.Core]" and bind to mscorlib.
+                    int baseDot = genericElement.LastIndexOf('.');
+                    TypeReference genericBase = BuildTypeReference(module, scope,
+                        baseDot > 0 ? genericElement.Substring(0, baseDot) : string.Empty,
+                        baseDot > 0 ? genericElement.Substring(baseDot + 1) : genericElement);
+                    genericBase = MarkValueType(genericBase);
+                    if (genericBase != null)
                     {
-                        int close = MatchAngle(text, angle);
-                        if (close > angle)
+                        GenericInstanceType instance = new GenericInstanceType(genericBase);
+                        foreach (string argument in SplitTopLevel(genericArguments))
                         {
-                            // The element keeps the scope of the whole name: recursing with
-                            // the already stripped text would lose "[System.Core]" and bind
-                            // the type to mscorlib.
-                            string baseName = text.Substring(0, angle).Trim();
-                            int baseDot = baseName.LastIndexOf('.');
-                            TypeReference genericBase = BuildTypeReference(module, scope,
-                                baseDot > 0 ? baseName.Substring(0, baseDot) : string.Empty,
-                                baseDot > 0 ? baseName.Substring(baseDot + 1) : baseName);
-                            genericBase = MarkValueType(genericBase);
-                            if (genericBase != null)
+                            string part = argument.Trim();
+                            if (part.Length > 0)
                             {
-                                GenericInstanceType instance = new GenericInstanceType(genericBase);
-                                foreach (string argument in SplitTopLevel(text.Substring(angle + 1, close - angle - 1)))
-                                {
-                                    string part = argument.Trim();
-                                    if (part.Length > 0)
-                                    {
-                                        instance.GenericArguments.Add(
-                                            ResolveTypeWithOwner(module, part, genericBase, owner)
-                                                ?? module.TypeSystem.Object);
-                                    }
-                                }
-                                return WrapType(instance, ranks, byRef, pointers);
+                                instance.GenericArguments.Add(
+                                    ResolveTypeWithOwner(module, part, genericBase, owner)
+                                        ?? module.TypeSystem.Object);
                             }
                         }
-
-                        text = text.Substring(0, angle).Trim();
+                        return WrapType(instance, ranks, byRef, pointers);
                     }
+
+                    text = genericElement;
                 }
 
                 TypeReference primitive = ResolvePrimitiveType(module, text);
