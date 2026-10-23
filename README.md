@@ -213,14 +213,14 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
   and diffs the result against the original, including the exception-handler tables. Every body
   is also run through the structural verifier (stack depth, `maxstack`, branch ranges, handler
   boundaries), so a body that is textually identical but invalid for the CLR is reported:
-  **100 %** member fidelity, **100 %** body fidelity (4053 of 4053 bodies) and *0 invalid
+  **100 %** member fidelity, **100 %** body fidelity (4064 of 4064 bodies) and *0 invalid
   bodies before and after* the round trip on `ILXP.exe`; 99.99 % / 98.15 % on `System.Core.dll`
   (the residual diff there is a key-collision artifact of the coarse member key, and the
   verifier reports the same 13 unusual flow-control bodies on both sides).
 * **IL verifier** (`--ilverify`) — simulates the evaluation stack through every method body and
   reports stack underflow/overflow against `.maxstack`, a non-empty stack at `ret`, out-of-range
   or backwards branch/handler boundaries, invalid filter placement and impossible local/argument
-  indices. `ILXP.exe`: 4053 bodies, 0 invalid.
+  indices. `ILXP.exe`: 4063 bodies, 0 invalid.
 * **Round-trip capable IL assembler** — `.property` / `.event` directives, `.try` / `catch` /
   `finally` / `filter` / `fault` handler tables, `.override` (explicit interface
   implementations), nested types (including generic ones such as `Collection<T>.Enumerator`),
@@ -232,9 +232,11 @@ Measured on `ILXP.exe`: depth 3 → 608 nodes / 1.4 s, "everything" → 10 201 n
   reuse names such as `value` for temporaries and a name-based reference would bind to the
   wrong slot.
   A small program with lambdas, LINQ, generic delegates, `switch`, `foreach` over
-  `List<T>` and `try/catch/finally` round-trips into a working executable. Rebuilding ILXP.exe
-  itself still is not equivalent: `PEVerify` reports ~200 metadata/IL issues in the rebuilt
-  image (down from 437 before the generic and predeclaration fixes), so that case stays open.
+  `List<T>` and `try/catch/finally` round-trips into a working executable — and so does ILXP
+  itself: `--ildasm ILXP.exe` → `--ilasm` produces an `ilxp.exe` that starts the GUI and
+  decompiles other assemblies at 100 % accuracy. `PEVerify` reports the same 4 findings for
+  the rebuilt image as for the original (unmanaged pointer code in `WaterLogo`), i.e. the
+  round trip is now metadata-clean.
 
 ## Repository layout
 

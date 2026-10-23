@@ -11,6 +11,7 @@ using MethodAttributes = Mono.Cecil.MethodAttributes;
 using MethodBody = Mono.Cecil.Cil.MethodBody;
 using MethodImplAttributes = Mono.Cecil.MethodImplAttributes;
 using ParameterAttributes = Mono.Cecil.ParameterAttributes;
+using GenericParameterAttributes = Mono.Cecil.GenericParameterAttributes;
 using PropertyAttributes = Mono.Cecil.PropertyAttributes;
 using EventAttributes = Mono.Cecil.EventAttributes;
 using TypeAttributes = Mono.Cecil.TypeAttributes;
@@ -117,6 +118,20 @@ namespace ILXP.Interop
             // forward references deterministic.
             DeclaredTypes = new HashSet<string>(StringComparer.Ordinal);
             DeclaredValueTypes = new HashSet<string>(StringComparer.Ordinal);
+
+            // Assembly headers first: pre-declaring types creates references on demand, and
+            // those must already know the version and public key token of each assembly.
+            foreach (string rawLine in lines)
+            {
+                string line = StripComment(rawLine).Trim();
+                if (line.StartsWith(".assembly", StringComparison.OrdinalIgnoreCase) &&
+                    line.IndexOf("extern", StringComparison.OrdinalIgnoreCase) > 0)
+                {
+                    ParseAssemblyExtern(assembly, line);
+                }
+            }
+
+            Predeclaring = true;
             foreach (string rawLine in lines)
             {
                 string line = StripComment(rawLine).Trim();
@@ -140,6 +155,8 @@ namespace ILXP.Interop
 
                 // Create the skeleton now, so a reference from any method body (even one that
                 // appears earlier in the text) finds a real definition with generic parameters.
+                // Base types and interfaces are filled in by the second pass: they can refer
+                // to types declared further down, which must exist by then.
                 try
                 {
                     CreateType(assembly, line);
@@ -149,6 +166,27 @@ namespace ILXP.Interop
                     LastWarnings.Add("Unable to predeclare " + declared + ": " + ex.Message);
                 }
             }
+
+            // Second pass: resolve base types and interfaces now that every type exists.
+            foreach (string rawLine in lines)
+            {
+                string line = StripComment(rawLine).Trim();
+                if (!line.StartsWith(".class", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    Predeclaring = false;
+                    CreateType(assembly, line);
+                }
+                catch (Exception ex)
+                {
+                    LastWarnings.Add("Unable to declare " + line + ": " + ex.Message);
+                }
+            }
+            Predeclaring = false;
             foreach (string rawLine in lines)
             {
                 string line = StripComment(rawLine).Trim();
@@ -208,11 +246,27 @@ namespace ILXP.Interop
                     ApplyGenericParameterNames(currentType, line);
                     continue;
                 }
+                // Type-level generic metadata. Inside a method body the same directives
+                // describe the method's own parameters, so they are left for that branch.
+                if (currentMethod == null && line.StartsWith(".constraint", StringComparison.OrdinalIgnoreCase))
+                {
+                    ApplyGenericConstraint(assembly, currentType, line, false);
+                    continue;
+                }
+                if (currentMethod == null && line.StartsWith(".gpflags", StringComparison.OrdinalIgnoreCase))
+                {
+                    ApplyGenericFlags(currentType, line, false);
+                    continue;
+                }
                 if (line.StartsWith(".method", StringComparison.OrdinalIgnoreCase))
                 {
                     if (currentType != null)
                     {
                         currentMethod = CreateMethod(currentType, line);
+                        if (currentMethod == null)
+                        {
+                            LastWarnings.Add("Method header skipped: " + line);
+                        }
                         methodContext = currentMethod == null ? null : new MethodContext { Method = currentMethod };
                         methodDepth = open - close;
                         CurrentMethodOwner = currentMethod;
@@ -300,6 +354,17 @@ namespace ILXP.Interop
                             methodContext = null;
                             methodDepth = 0;
                         }
+                        continue;
+                    }
+
+                    if (line.StartsWith(".constraint", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ApplyGenericConstraint(assembly, currentMethod, line, true);
+                        continue;
+                    }
+                    if (line.StartsWith(".gpflags", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ApplyGenericFlags(currentMethod, line, true);
                         continue;
                     }
 
@@ -525,10 +590,19 @@ namespace ILXP.Interop
                 }
             }
 
+            // An existing reference may have been created by a type reference before the
+            // .assembly extern line was read (types are pre-declared). It then lacks the
+            // version and the public key token, which breaks binding to the real assembly -
+            // so the header always wins.
             foreach (AssemblyNameReference existing in assembly.MainModule.AssemblyReferences)
             {
                 if (string.Equals(existing.Name, name, StringComparison.OrdinalIgnoreCase))
                 {
+                    existing.Version = version;
+                    if (token != null)
+                    {
+                        existing.PublicKeyToken = token;
+                    }
                     return;
                 }
             }
@@ -992,16 +1066,14 @@ namespace ILXP.Interop
                         }
 
                         int ownArity = Arity(parts[i]);
-                        if (isInnermost)
+                        if (isInnermost && !Predeclaring)
                         {
+                            TypeReference baseType = string.IsNullOrEmpty(extends)
+                                ? (isInterface ? null : assembly.MainModule.TypeSystem.Object)
+                                : ResolveType(assembly.MainModule, extends);
+                            if (baseType != null)
                             {
-                                TypeReference baseType = string.IsNullOrEmpty(extends)
-                                    ? (isInterface ? null : assembly.MainModule.TypeSystem.Object)
-                                    : ResolveType(assembly.MainModule, extends);
-                                if (baseType != null)
-                                {
-                                    nested.BaseType = baseType;
-                                }
+                                nested.BaseType = baseType;
                             }
                             ApplyArrayInitSize(nested);
                         }
@@ -1009,9 +1081,10 @@ namespace ILXP.Interop
                         // Generic parameters must exist before the interface list is resolved,
                         // because it can refer to them ("IComparer`1<!0>").
                         ApplyGenericParameters(nested, inherited + ownArity);
-                        if (isInnermost)
+                        if (!Predeclaring && isInnermost)
                         {
                             AttachInterfaces(nested, assembly.MainModule, interfaces);
+                            ApplyArrayInitSize(nested);
                         }
                         inherited += ownArity;
                         parent = nested;
@@ -1043,6 +1116,12 @@ namespace ILXP.Interop
             // so the parameters and the owner context come first.
             ApplyGenericParameters(type, name);
             CurrentTypeOwner = type;
+
+            if (Predeclaring)
+            {
+                // Skeleton only: base type and interface list need every type to exist.
+                return type;
+            }
 
             if (!string.IsNullOrEmpty(extends))
             {
@@ -1100,7 +1179,141 @@ namespace ILXP.Interop
             }
         }
 
-        /// <summary>Reads the arity from a name such as "List`1" (0 when absent).</summary>
+        /// <summary>
+        /// Parses <c>.constraint !!1 = [mscorlib]System.IComparable</c> and attaches the
+        /// constraint to the addressed generic parameter.
+        /// </summary>
+        private static void ApplyGenericConstraint(AssemblyDefinition assembly,
+            IGenericParameterProvider owner, string line, bool methodScope)
+        {
+            if (owner == null)
+            {
+                return;
+            }
+
+            string text = line.Substring(".constraint".Length).Trim();
+            int equals = text.IndexOf('=');
+            if (equals < 0)
+            {
+                return;
+            }
+
+            string target = text.Substring(0, equals).Trim();
+            string typeName = text.Substring(equals + 1).Trim();
+            int index = GenericParameterIndex(target);
+            if (index < 0 || typeName.Length == 0)
+            {
+                return;
+            }
+
+            while (owner.GenericParameters.Count <= index)
+            {
+                owner.GenericParameters.Add(new GenericParameter(owner));
+            }
+
+            ModuleDefinition module = ModuleOf(assembly, owner);
+            TypeReference typeOwner = owner as TypeReference;
+            MethodDefinition methodOwner = owner as MethodDefinition;
+
+            object resolved = ResolveTypeOperand(module, typeName, methodOwner);
+            TypeReference constraint = resolved as TypeReference;
+            if (constraint == null || ReferenceEquals(constraint, Unresolved))
+            {
+                constraint = ResolveTypeWithOwner(module, typeName, typeOwner, methodOwner)
+                             ?? ResolveType(module, typeName);
+            }
+
+            if (constraint != null)
+            {
+                // A constraint must be encoded with the right element type: System.ValueType
+                // is a value type, and a "class" encoding makes the CLR reject the type.
+                owner.GenericParameters[index].Constraints.Add(MarkValueType(constraint));
+            }
+        }
+
+        /// <summary>Parses <c>.gpflags !0 = reference ctor</c> into generic parameter attributes.</summary>
+        private static void ApplyGenericFlags(IGenericParameterProvider owner, string line, bool methodScope)
+        {
+            if (owner == null)
+            {
+                return;
+            }
+
+            string text = line.Substring(".gpflags".Length).Trim();
+            int equals = text.IndexOf('=');
+            if (equals < 0)
+            {
+                return;
+            }
+
+            int index = GenericParameterIndex(text.Substring(0, equals).Trim());
+            if (index < 0)
+            {
+                return;
+            }
+
+            while (owner.GenericParameters.Count <= index)
+            {
+                owner.GenericParameters.Add(new GenericParameter(owner));
+            }
+
+            GenericParameter parameter = owner.GenericParameters[index];
+            GenericParameterAttributes attributes = parameter.Attributes;
+            string flags = text.Substring(equals + 1);
+
+            if (HasKeyword(flags, "covariant")) attributes |= GenericParameterAttributes.Covariant;
+            if (HasKeyword(flags, "contravariant")) attributes |= GenericParameterAttributes.Contravariant;
+            if (HasKeyword(flags, "reference")) attributes |= GenericParameterAttributes.ReferenceTypeConstraint;
+            if (HasKeyword(flags, "valuetype")) attributes |= GenericParameterAttributes.NotNullableValueTypeConstraint;
+            if (HasKeyword(flags, "ctor")) attributes |= GenericParameterAttributes.DefaultConstructorConstraint;
+
+            parameter.Attributes = attributes;
+        }
+
+        /// <summary>Reads the parameter position from "!0" / "!!1".</summary>
+        private static int GenericParameterIndex(string text)
+        {
+            int start = 0;
+            while (start < text.Length && text[start] == '!')
+            {
+                start++;
+            }
+
+            int end = start;
+            while (end < text.Length && char.IsDigit(text[end]))
+            {
+                end++;
+            }
+
+            int index;
+            if (end > start &&
+                int.TryParse(text.Substring(start, end - start), NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out index))
+            {
+                return index;
+            }
+            return -1;
+        }
+
+        private static ModuleDefinition ModuleOf(AssemblyDefinition assembly, IGenericParameterProvider owner)
+        {
+            TypeReference type = owner as TypeReference;
+            if (type != null && type.Module != null)
+            {
+                return type.Module;
+            }
+
+            MethodReference method = owner as MethodReference;
+            if (method != null && method.Module != null)
+            {
+                return method.Module;
+            }
+
+            return assembly.MainModule;
+        }
+
+        /// <summary>
+        /// Reads the arity from a name such as "List`1" (0 when absent).</summary>
         private static int Arity(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -1294,21 +1507,14 @@ namespace ILXP.Interop
 
             // The declaration is "<modifiers...> <type> <name>": take the last two tokens
             // so that any combination of attribute keywords is ignored.
-            int lastSpace = declaration.LastIndexOf(' ');
-            if (lastSpace < 0)
+            string typeText;
+            string fieldName;
+            string modifiers;
+            SplitDeclaration(declaration, out modifiers, out typeText, out fieldName);
+            if (string.IsNullOrEmpty(fieldName))
             {
                 return null;
             }
-
-            string fieldName = declaration.Substring(lastSpace + 1).Trim();
-            string beforeName = declaration.Substring(0, lastSpace).Trim();
-            int typeSpace = LastTopLevelSpace(beforeName);
-
-            string typeName = typeSpace > 0 ? beforeName.Substring(typeSpace + 1).Trim() : beforeName;
-
-            // Only the modifier part may be searched for keywords: the field name itself
-            // can be "Assembly" or "Static".
-            string modifiers = typeSpace > 0 ? beforeName.Substring(0, typeSpace).Trim() : string.Empty;
 
             FieldAttributes attributes = FieldVisibility(modifiers);
             if (HasKeyword(modifiers, "static")) attributes |= FieldAttributes.Static;
@@ -1318,7 +1524,7 @@ namespace ILXP.Interop
             if (HasKeyword(modifiers, "rtspecialname")) attributes |= FieldAttributes.RTSpecialName;
 
             FieldDefinition field = new FieldDefinition(fieldName, attributes,
-                ResolveTypeWithOwner(type.MainModule(), typeName, type, null));
+                ResolveTypeWithOwner(type.MainModule(), typeText, type, null));
             if (equals >= 0)
             {
                 string value = rest.Substring(equals + 3).Trim();
@@ -1514,6 +1720,18 @@ namespace ILXP.Interop
             int slash = typeName.IndexOf('/');
             if (slash < 0)
             {
+                // A type of this module must be referenced through its definition: a loose
+                // TypeRef would give its generic parameters a TypeRef owner, and the metadata
+                // writer then emits MemberRefs that the CLR cannot resolve.
+                if (ReferenceEquals(scope, module))
+                {
+                    TypeDefinition known = FindTopLevel(module, namespaceName, typeName);
+                    if (known != null)
+                    {
+                        return known;
+                    }
+                }
+
                 return new TypeReference(namespaceName, typeName, module, scope);
             }
 
@@ -1550,6 +1768,116 @@ namespace ILXP.Interop
                 current = nested;
             }
             return current;
+        }
+
+        /// <summary>
+        /// Splits "<visibility/other keywords> <type> <name>" where the type may carry
+        /// modreq/modopt groups: "public int32 modreq(IsVolatile) counter". Splitting on the
+        /// last space alone would cut the modifier off the type.
+        /// </summary>
+        private static void SplitDeclaration(string declaration, out string modifiers,
+            out string typeText, out string name)
+        {
+            modifiers = string.Empty;
+            typeText = string.Empty;
+            name = string.Empty;
+
+            List<string> tokens = SplitTopLevelSpaces(declaration);
+            if (tokens.Count == 0)
+            {
+                return;
+            }
+
+            name = tokens[tokens.Count - 1];
+            if (tokens.Count < 2)
+            {
+                return;
+            }
+
+            // The type is the last token that is not a modifier group, plus the modifier
+            // groups that follow it.
+            int typeIndex = -1;
+            for (int i = tokens.Count - 2; i >= 0; i--)
+            {
+                if (!IsModifierToken(tokens[i]))
+                {
+                    typeIndex = i;
+                    break;
+                }
+            }
+
+            if (typeIndex < 0)
+            {
+                return;
+            }
+
+            StringBuilder type = new StringBuilder(tokens[typeIndex]);
+            for (int i = typeIndex + 1; i < tokens.Count - 1; i++)
+            {
+                if (IsModifierToken(tokens[i]))
+                {
+                    type.Append(' ').Append(tokens[i]);
+                }
+            }
+            typeText = type.ToString();
+
+            StringBuilder keywords = new StringBuilder();
+            for (int i = 0; i < typeIndex; i++)
+            {
+                if (keywords.Length > 0)
+                {
+                    keywords.Append(' ');
+                }
+                keywords.Append(tokens[i]);
+            }
+            modifiers = keywords.ToString();
+        }
+
+        private static bool IsModifierToken(string token)
+        {
+            return token.StartsWith("modreq(", StringComparison.Ordinal) ||
+                   token.StartsWith("modopt(", StringComparison.Ordinal);
+        }
+        /// <summary>Splits on spaces that are not inside angle brackets.</summary>
+        private static List<string> SplitTopLevelSpaces(string text)
+        {
+            List<string> tokens = new List<string>();
+            if (string.IsNullOrEmpty(text))
+            {
+                return tokens;
+            }
+
+            int depth = 0;
+            int start = 0;
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                if (c == '<')
+                {
+                    depth++;
+                }
+                else if (c == '>')
+                {
+                    if (depth > 0)
+                    {
+                        depth--;
+                    }
+                }
+                else if (c == ' ' && depth == 0)
+                {
+                    if (i > start)
+                    {
+                        tokens.Add(text.Substring(start, i - start));
+                    }
+                    start = i + 1;
+                }
+            }
+
+            if (start < text.Length)
+            {
+                tokens.Add(text.Substring(start));
+            }
+            return tokens;
         }
 
         /// <summary>
@@ -2476,6 +2804,14 @@ namespace ILXP.Interop
                 return module.TypeSystem.Object;
             }
 
+            // "int32 modreq(IsVolatile)" and "void modopt(CallConvCdecl)": the modifier is
+            // part of the signature and must be rebuilt as a modifier type.
+            TypeReference modified = TryResolveModifiedType(module, name.Trim());
+            if (modified != null)
+            {
+                return modified;
+            }
+
             // "[Assembly]Namespace.Type" carries an explicit assembly scope.
             string trimmedName = name.Trim();
             if (trimmedName.StartsWith("[", StringComparison.Ordinal))
@@ -2648,6 +2984,12 @@ namespace ILXP.Interop
 
         /// <summary>Types of this module declared as structs or enums (value types).</summary>
         private static HashSet<string> DeclaredValueTypes = new HashSet<string>(StringComparer.Ordinal);
+
+        /// <summary>
+        /// True while the first pass creates type skeletons. In that pass base types and
+        /// interfaces are skipped, because the types they name may not exist yet.
+        /// </summary>
+        private static bool Predeclaring;
 
         /// <summary>Picks the module scope for a type declared in this module, else mscorlib.</summary>
         private static IMetadataScope ScopeFor(ModuleDefinition module, string name)
@@ -2836,6 +3178,13 @@ namespace ILXP.Interop
             TypeReference typeOwner, MethodReference methodOwner)
         {
             string name = text.Trim();
+
+            TypeReference modified = TryResolveModifiedType(module, name);
+            if (modified != null)
+            {
+                return modified;
+            }
+
             if (name.StartsWith("!", StringComparison.Ordinal))
             {
                 bool methodParameter = name.StartsWith("!!", StringComparison.Ordinal);
@@ -2991,6 +3340,48 @@ namespace ILXP.Interop
             return byRef ? new ByReferenceType(current) : current;
         }
 
+        /// <summary>
+        /// Parses "&lt;type&gt; modreq(&lt;modifier&gt;)" / "modopt" into a modifier type.
+        /// Returns null when the text carries no modifier.
+        /// </summary>
+        private static TypeReference TryResolveModifiedType(ModuleDefinition module, string text)
+        {
+            int modreq = text.IndexOf(" modreq(", StringComparison.Ordinal);
+            int modopt = text.IndexOf(" modopt(", StringComparison.Ordinal);
+
+            int index = modreq >= 0 && (modopt < 0 || modreq < modopt) ? modreq : modopt;
+            if (index <= 0)
+            {
+                return null;
+            }
+
+            bool required = index == modreq;
+            int open = index + (required ? " modreq".Length : " modopt".Length);
+            int close = text.IndexOf(')', open);
+            if (close < 0)
+            {
+                return null;
+            }
+
+            string elementText = text.Substring(0, index).Trim();
+            string modifierText = text.Substring(open + 1, close - open - 1).Trim();
+            if (elementText.Length == 0 || modifierText.Length == 0)
+            {
+                return null;
+            }
+
+            TypeReference element = ResolveType(module, elementText);
+            TypeReference modifier = ResolveType(module, modifierText);
+            if (element == null || modifier == null)
+            {
+                return null;
+            }
+
+            return required
+                ? new RequiredModifierType(modifier, element)
+                : (TypeReference)new OptionalModifierType(modifier, element);
+        }
+
         private static TypeReference ResolvePrimitiveType(ModuleDefinition module, string name)
         {
             switch (name)
@@ -3093,61 +3484,52 @@ namespace ILXP.Interop
                     return Unresolved;
                 }
 
-                MethodReference method = new MethodReference(methodName, module.TypeSystem.Void, declaring);
-                method.HasThis = hasThis;
-
-                // Generic method parameters must exist before the signature is resolved,
-                // because the signature can reference them (!!0, including inside generic
-                // arguments such as Func`2<!!0,!!1>).
                 List<string> parameterTexts = new List<string>();
-                int maxMethodParameter = Math.Max(
-                    MaxMethodGenericParameter(returnTypeName),
-                    MaxMethodGenericParameter(text));
-
                 foreach (string part in SplitTopLevel(parameters))
                 {
                     string parameter = part.Trim();
-                    if (parameter.Length == 0)
+                    if (parameter.Length > 0)
                     {
-                        continue;
+                        parameterTexts.Add(parameter);
                     }
-
-                    parameterTexts.Add(parameter);
                 }
 
-                for (int i = 0; i <= maxMethodParameter; i++)
+                // A scratch member reference gives "!!N" a legal owner while the signature is
+                // being resolved. Its arity comes from the parameter list only: the "!!N" of the
+                // *declaring* type arguments belong to the enclosing method and must not count,
+                // or the reference would claim generic parameters it does not have.
+                MethodReference scratch = new MethodReference(methodName, module.TypeSystem.Void, declaring);
+                scratch.HasThis = hasThis;
+                int scratchArity = Math.Max(MaxMethodGenericParameter(returnTypeName),
+                                            MaxMethodGenericParameter(string.Join(", ", parameterTexts.ToArray())));
+                for (int i = 0; i <= scratchArity; i++)
                 {
-                    method.GenericParameters.Add(new GenericParameter(method));
+                    scratch.GenericParameters.Add(new GenericParameter(scratch));
                 }
-
-                method.ReturnType = ResolveTypeWithOwner(module, returnTypeName, declaring, method)
-                    ?? module.TypeSystem.Object;
 
                 List<TypeReference> parameterTypes = new List<TypeReference>();
                 foreach (string parameter in parameterTexts)
                 {
-                    // The signature belongs to the member reference being built, so its VAR
-                    // indices refer to that method's own generic parameters.
-                    parameterTypes.Add(ResolveTypeWithOwner(module, parameter, declaring, method)
+                    parameterTypes.Add(ResolveTypeWithOwner(module, parameter, declaring, scratch)
                         ?? module.TypeSystem.Object);
                 }
 
-                // Prefer the real definition: it carries the correct static/instance flag and
-                // lets the call site reference a MethodDef token instead of a MemberRef.
+                // Prefer the real definition: it carries the correct static/instance flag, the
+                // right generic arity, and lets the call site use a MethodDef token.
                 MethodReference target = null;
                 TypeDefinition definition = declaring as TypeDefinition ?? FindTypeDefinition(module, typeName);
 
                 // A member of a generic instantiation ("Action`2<Object,EventArgs>") cannot be
-                // referenced by its open definition; the call site needs the instantiated
-                // declaring type, so a member reference is built from the text instead.
+                // referenced through its open definition; such a call needs a member reference
+                // whose declaring type is the instantiation.
                 bool instantiated = declaring is GenericInstanceType;
 
-                if (definition != null && !instantiated && maxMethodParameter < 0)
+                if (definition != null && !instantiated)
                 {
-                    target = FindMethodByShape(definition, methodName, parameterTypes);
+                    target = FindMethodByShape(definition, methodName, parameterTypes, genericArguments);
                 }
 
-                // External generic methods: match the member against the real definition so the
+                // External generic methods: match against the real definition so the
                 // signature comes from metadata instead of being reconstructed from text.
                 if (target == null && genericArguments != null)
                 {
@@ -3166,7 +3548,6 @@ namespace ILXP.Interop
                             parameterTypes.Count, arity);
                         if (match != null)
                         {
-                            // References into another module must go through ImportReference.
                             target = module.Import(match);
                         }
                     }
@@ -3174,13 +3555,16 @@ namespace ILXP.Interop
 
                 if (target == null)
                 {
+                    // No definition available: the scratch reference already carries the
+                    // generic parameters the signature needs.
+                    scratch.ReturnType = ResolveTypeWithOwner(module, returnTypeName, declaring, scratch)
+                                        ?? module.TypeSystem.Object;
                     foreach (TypeReference parameterType in parameterTypes)
                     {
-                        method.Parameters.Add(new ParameterDefinition(parameterType));
+                        scratch.Parameters.Add(new ParameterDefinition(parameterType));
                     }
-                    target = method;
+                    target = scratch;
                 }
-
                 if (genericArguments != null)
                 {
                     GenericInstanceMethod spec = new GenericInstanceMethod(target);
@@ -3189,8 +3573,9 @@ namespace ILXP.Interop
                         string argument = part.Trim();
                         if (argument.Length > 0)
                         {
-                            spec.GenericArguments.Add(ResolveTypeWithOwner(module, argument, declaring, method)
-                            ?? module.TypeSystem.Object);
+                            spec.GenericArguments.Add(
+                                ResolveTypeWithOwner(module, argument, declaring, CurrentMethodOwner)
+                                ?? module.TypeSystem.Object);
                         }
                     }
                     return spec;
@@ -3264,10 +3649,39 @@ namespace ILXP.Interop
         private static MethodDefinition FindMethodByShape(TypeDefinition type, string name,
             List<TypeReference> parameters)
         {
+            return FindMethodByShape(type, name, parameters, null);
+        }
+
+        /// <summary>
+        /// Finds a method by name, parameter shape and (optionally) generic arity. Matching on
+        /// arity matters for overloads such as <c>Read(item, fn)</c> and
+        /// <c>Read(ref item, fn)</c> that differ only in arity.
+        /// </summary>
+        private static MethodDefinition FindMethodByShape(TypeDefinition type, string name,
+            List<TypeReference> parameters, string genericArguments)
+        {
+            int arity = -1;
+            if (genericArguments != null)
+            {
+                arity = 0;
+                foreach (string part in SplitTopLevel(genericArguments))
+                {
+                    if (part.Trim().Length > 0)
+                    {
+                        arity++;
+                    }
+                }
+            }
+
             foreach (MethodDefinition method in type.Methods)
             {
                 if (!string.Equals(method.Name, name, StringComparison.Ordinal) ||
                     method.Parameters.Count != parameters.Count)
+                {
+                    continue;
+                }
+
+                if (arity >= 0 && method.GenericParameters.Count != arity)
                 {
                     continue;
                 }

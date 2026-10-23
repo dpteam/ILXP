@@ -77,10 +77,10 @@ Verified manually:
    really do run after a round trip: lambdas, LINQ, generic delegates, `switch`, `foreach` over
    `List<T>` and `try/catch/finally` were verified end to end.
    `--fixpoint` also runs the structural verifier (`--ilverify`) over both sides: **0 invalid
-   bodies before and after** on ILXP.exe. Limit: a full rebuild of ILXP.exe is textually and
-   structurally identical for every body, but `PEVerify` still reports ~204 metadata/IL issues
-   in the rebuilt image (437 before the generic and predeclaration fixes), so the rebuilt
-   binary still cannot read assemblies. That is now measurable instead of guesswork.
+   bodies before and after** on ILXP.exe. A full rebuild of ILXP.exe is now equivalent: the
+   reassembled `ilxp.exe` starts the GUI and decompiles other assemblies at 100 % accuracy, and
+   `PEVerify` reports the same 4 findings as for the original (unmanaged pointer code in
+   `WaterLogo`). The test suite covers this end to end (`Rebuilt executable is usable`).
 4. `ManagedDisassembler` resolves lengths and common mnemonics; rare opcodes appear as
    `opXX`/`sse`/`mmx` with decoded operands.
 5. `--clean` does not preserve strong-name signatures and writes without symbols.
@@ -162,9 +162,9 @@ re-run on a fresh decompiled snapshot.
 2. Finish renaming `StatementDecompiler` internals.
 3. Port ILSpy/dnSpy features together with their settings, plus an ILSpy/dnSpy settings
    importer (see `IDEAS.md`, level 2).
-4. Work through the remaining `PEVerify` findings of a rebuilt ILXP.exe (~204): the first
-   batches are metadata-scope errors on TypeRefs (`0x80131b18`) and a handful of bodies whose
-   member references still carry an unsubstituted generic parameter.
+4. Teach the verifier to model `switch` and filter handler entries more precisely: on
+   `System.Core.dll` it still flags 13 bodies that the CLR accepts (identical on both sides of
+   the round trip), which hides real findings in that assembly.
 5. Improve the member key used by `--fixpoint` so third-party assemblies stop reporting
    "body differs" for identical bodies (overloaded closure methods collide on the coarse key).
 6. Port the remaining Unscrambler passes and extend `TestObfuscator` with control-flow

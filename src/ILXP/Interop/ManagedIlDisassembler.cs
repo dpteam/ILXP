@@ -158,6 +158,7 @@ namespace ILXP.Interop
                     text.Append(type.GenericParameters[i].Name);
                 }
                 text.AppendLine(")");
+                WriteGenericConstraints(text, pad + "  ", type.GenericParameters, "!");
             }
 
             foreach (FieldDefinition field in type.Fields)
@@ -333,7 +334,6 @@ namespace ILXP.Interop
                 }
                 text.Append(')');
             }
-
             if (method.IsAbstract || method.IsPInvokeImpl)
             {
                 text.AppendLine();
@@ -357,6 +357,10 @@ namespace ILXP.Interop
             text.Append(pad).AppendLine("{");
 
             MethodBody body = method.Body;
+            if (method.HasGenericParameters)
+            {
+                WriteGenericConstraints(text, pad + "  ", method.GenericParameters, "!!");
+            }
             text.Append(pad).Append("  .maxstack ").AppendLine(body.MaxStackSize.ToString(CultureInfo.InvariantCulture));
 
             // Explicit interface implementations and method overrides live in the MethodImpl
@@ -505,6 +509,57 @@ namespace ILXP.Interop
                 text.Append(char.IsLetterOrDigit(c) || c == '_' ? c : '_');
             }
             return text.ToString();
+        }
+
+        /// <summary>
+        /// Emits generic parameter constraints and flags as <c>.constraint</c> /
+        /// <c>.gpflags</c> directives. Constraints are not decoration: without them the
+        /// verifier cannot accept <c>constrained. !0</c> followed by an interface call.
+        /// </summary>
+        private static void WriteGenericConstraints(StringBuilder text, string pad,
+            IList<GenericParameter> parameters, string prefix)
+        {
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                GenericParameter parameter = parameters[i];
+                foreach (TypeReference constraint in parameter.Constraints)
+                {
+                    text.Append(pad).Append(".constraint ").Append(prefix)
+                        .Append(i.ToString(CultureInfo.InvariantCulture))
+                        .Append(" = ").AppendLine(TypeName(constraint));
+                }
+
+                GenericParameterAttributes attributes = parameter.Attributes;
+                if (attributes != GenericParameterAttributes.NonVariant)
+                {
+                    text.Append(pad).Append(".gpflags ").Append(prefix)
+                        .Append(i.ToString(CultureInfo.InvariantCulture))
+                        .Append(" = ").AppendLine(GenericParameterFlagsText(attributes));
+                }
+            }
+        }
+
+        private static string GenericParameterFlagsText(GenericParameterAttributes attributes)
+        {
+            List<string> parts = new List<string>();
+            switch (attributes & GenericParameterAttributes.VarianceMask)
+            {
+                case GenericParameterAttributes.Covariant: parts.Add("covariant"); break;
+                case GenericParameterAttributes.Contravariant: parts.Add("contravariant"); break;
+            }
+
+            switch (attributes & GenericParameterAttributes.SpecialConstraintMask)
+            {
+                case GenericParameterAttributes.ReferenceTypeConstraint: parts.Add("reference"); break;
+                case GenericParameterAttributes.NotNullableValueTypeConstraint: parts.Add("valuetype"); break;
+            }
+
+            if ((attributes & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
+            {
+                parts.Add("ctor");
+            }
+
+            return string.Join(" ", parts.ToArray());
         }
 
         /// <summary>Emits instructions [start, end) and the protected regions nested in them.</summary>
@@ -790,6 +845,17 @@ namespace ILXP.Interop
             if (byReference != null)
             {
                 return TypeName(byReference.ElementType) + "&";
+            }
+
+            // modreq/modopt carry a modifier type in front of the element type. Without them
+            // a volatile field or an unmanaged-calling-convention modifier is lost, and the
+            // CLR rejects the signature.
+            IModifierType modifier = type as IModifierType;
+            if (modifier != null)
+            {
+                string keyword = type is RequiredModifierType ? "modreq" : "modopt";
+                return TypeName(((TypeSpecification)type).ElementType) + " " + keyword +
+                       "(" + TypeName(modifier.ModifierType) + ")";
             }
 
             PointerType pointer = type as PointerType;

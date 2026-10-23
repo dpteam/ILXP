@@ -100,6 +100,7 @@ namespace ILXP.Tests
                 TestFixpoint();
                 TestCallGraph();
                 TestExceptionHandlers();
+                TestRebuiltToolRuns();
                 TestIlVerifier();
                 TestFixpointExceptionHandlers();
             }
@@ -506,6 +507,30 @@ namespace ILXP.Tests
             Check("callgraph lists orphans", result.Output.Contains("orphans"), result.Output);
         }
 
+        private static void TestRebuiltToolRuns()
+        {
+            Section("Rebuilt executable is usable");
+
+            string il = Path.Combine(workspace, "self.il");
+            CommandResult disasm = RunIlxp("--ildasm", ilxpPath, "--output", il);
+            Check("self: --ildasm succeeds", disasm.ExitCode == 0, disasm.ToString());
+
+            // The rebuilt tool must live in its own folder with its own assembly name, so it
+            // resolves its references exactly like the original.
+            string folder = Path.Combine(workspace, "rebuilt");
+            Directory.CreateDirectory(folder);
+            string rebuilt = Path.Combine(folder, "ilxp.exe");
+
+            CommandResult asm = RunIlxp("--ilasm", il, "--output", rebuilt);
+            Check("self: --ilasm succeeds", asm.ExitCode == 0, asm.ToString());
+            Check("self: rebuilt executable exists", File.Exists(rebuilt), "no output");
+
+            // The real proof: the rebuilt decompiler can itself read an assembly.
+            CommandResult list = RunProcess(rebuilt, "--list", ilxpPath);
+            Check("rebuilt tool reads an assembly", list.ExitCode == 0, list.ToString());
+            Check("rebuilt tool lists types", list.Output.Contains("ILXP.MainForm"), list.Output);
+        }
+
         private static void TestIlVerifier()
         {
             Section("IL verifier");
@@ -834,6 +859,11 @@ namespace ILXP.Tests
         private static CommandResult RunIlxpWithInput(string inputPath, params string[] arguments)
         {
             return Run(ilxpPath, arguments, inputPath);
+        }
+
+        private static CommandResult RunProcess(string executable, params string[] arguments)
+        {
+            return Run(executable, arguments, null);
         }
 
         private static CommandResult Run(string executable, string[] arguments, string inputPath)
